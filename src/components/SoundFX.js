@@ -1,0 +1,193 @@
+// Robust Procedural Web Audio API Sound Synthesizer
+let audioCtx = null;
+let soundEnabled = true;
+
+function initAudioContext() {
+  if (typeof window === 'undefined') return null;
+  try {
+    if (!audioCtx) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) {
+        audioCtx = new AudioContextClass();
+      }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  } catch (e) {
+    console.warn('[SoundFX] AudioContext initialization notice:', e);
+  }
+  return audioCtx;
+}
+
+// Global user interaction listener to unlock Web Audio on first gesture
+if (typeof window !== 'undefined') {
+  const unlockAudio = () => {
+    const ctx = initAudioContext();
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume();
+    }
+  };
+  window.addEventListener('click', unlockAudio, { passive: true });
+  window.addEventListener('touchstart', unlockAudio, { passive: true });
+  window.addEventListener('keydown', unlockAudio, { passive: true });
+  window.addEventListener('pointerdown', unlockAudio, { passive: true });
+}
+
+export const SoundFX = {
+  isEnabled: () => soundEnabled,
+
+  toggle: () => {
+    soundEnabled = !soundEnabled;
+    return soundEnabled;
+  },
+
+  setEnabled: (val) => {
+    soundEnabled = !!val;
+  },
+
+  // Soft sci-fi blip on hover
+  playHover: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx || ctx.state !== 'running') return;
+
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(520, now);
+      osc.frequency.linearRampToValueAtTime(880, now + 0.06);
+
+      gain.gain.setValueAtTime(0.06, now);
+      gain.gain.linearRampToValueAtTime(0.0001, now + 0.06);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.06);
+    } catch (e) {
+      // Audio locked or ignored
+    }
+  },
+
+  // Crisp cyber click
+  playClick: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(750, now);
+      osc.frequency.linearRampToValueAtTime(320, now + 0.09);
+
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.linearRampToValueAtTime(0.0001, now + 0.09);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.09);
+    } catch (e) {
+      // Ignore
+    }
+  },
+
+  // Deployment launch riser sweep
+  playDeploy: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(160, now);
+      osc.frequency.exponentialRampToValueAtTime(980, now + 0.45);
+
+      gain.gain.setValueAtTime(0.09, now);
+      gain.gain.linearRampToValueAtTime(0.0001, now + 0.5);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.5);
+    } catch (e) {
+      // Ignore
+    }
+  },
+
+  // Terminal keystroke click
+  playKey: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx || ctx.state !== 'running') return;
+
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(950 + Math.random() * 250, now);
+
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.linearRampToValueAtTime(0.0001, now + 0.035);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.035);
+    } catch (e) {
+      // Ignore
+    }
+  },
+
+  // Launch celebration chime
+  playSuccess: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const startTime = now + i * 0.09;
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, startTime);
+
+        gain.gain.setValueAtTime(0.1, startTime);
+        gain.gain.linearRampToValueAtTime(0.0001, startTime + 0.28);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(startTime);
+        osc.stop(startTime + 0.28);
+      });
+    } catch (e) {
+      // Ignore
+    }
+  }
+};
