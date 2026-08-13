@@ -53,13 +53,31 @@ export default function VideoScreen({ isActive, onComplete }) {
     }
 
     // Safety timeout in case video stalls
-    fallbackTimerRef.current = setTimeout(afterVideo, 7500);
+    fallbackTimerRef.current = setTimeout(afterVideo, 8500);
   };
 
   const handleSkip = (e) => {
     e.stopPropagation();
     afterVideo();
   };
+
+  // Keyboard accessibility: ESC or Space to skip video
+  useEffect(() => {
+    if (!isActive) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+        if (!videoStarted) {
+          unmuteVideo();
+        } else {
+          afterVideo();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isActive, videoStarted]);
 
   useEffect(() => {
     if (!isActive && fallbackTimerRef.current) {
@@ -80,29 +98,58 @@ export default function VideoScreen({ isActive, onComplete }) {
         }}
       />
 
+      {/* Cyber Cinematic Scanline & Vignette Overlay */}
+      <div className="video-scanlines-overlay"></div>
+      <div className="video-vignette-overlay"></div>
+
+      {/* Futuristic HUD Corner Decors */}
       <div className="corner-dec tl"></div>
       <div className="corner-dec tr"></div>
       <div className="corner-dec bl"></div>
       <div className="corner-dec br"></div>
 
+      {/* Interactive Unmute Banner */}
       {!videoStarted && (
         <div id="unmute-overlay" className="unmute-overlay" onClick={unmuteVideo}>
           <div className="unmute-box">
-            <div className="unmute-title">
-              <span className="play-triangle">▶</span> Tap Into the Experience
+            <span className="corner tl"></span>
+            <span className="corner tr"></span>
+            <span className="corner bl"></span>
+            <span className="corner br"></span>
+
+            <div className="unmute-badge">
+              <span className="unmute-pulse-dot"></span>
+              <span>AUDIO TRANSMISSION READY</span>
             </div>
-            <div className="unmute-sub">AI NEURAL SYSTEMS · INITIALIZING HARSHIT.EXE</div>
-            <div className="unmute-hint">CLICK ANYWHERE TO UNMUTE & ENTER</div>
+
+            <div className="unmute-title">
+              <span className="play-icon-glow">▶</span>
+              <span>INITIALIZE EXPERIENCE</span>
+            </div>
+
+            <div className="unmute-sub">
+              HARSHIT SHARMA · ARTIFICIAL INTELLIGENCE · USAR (GGSIPU)
+            </div>
+
+            <div className="unmute-hint">
+              <span className="hint-bracket">[</span> CLICK ANYWHERE OR PRESS SPACE TO UNMUTE & ENTER <span className="hint-bracket">]</span>
+            </div>
           </div>
         </div>
       )}
 
+      {/* Skip Button with Cyber Glow & Keyboard Hint */}
       <button
         className="skip-btn"
         onClick={handleSkip}
         onMouseEnter={() => SoundFX.playHover()}
+        title="Skip intro video (Esc / Space)"
       >
-        SKIP ›
+        <span className="corner tl"></span>
+        <span className="corner tr"></span>
+        <span className="corner bl"></span>
+        <span className="corner br"></span>
+        <span>SKIP ›</span>
       </button>
     </div>
   );
