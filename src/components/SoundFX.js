@@ -1,4 +1,4 @@
-// Robust Procedural Web Audio API Sound Synthesizer
+// Robust Procedural Web Audio API Sound Synthesizer with High-Impact Cinematic Punch
 let audioCtx = null;
 const STORAGE_KEY = 'harshit_portfolio_sfx_enabled';
 
@@ -76,7 +76,7 @@ export const SoundFX = {
     return () => listeners.delete(fn);
   },
 
-  // Soft sci-fi blip on hover with dynamic pitch modulation
+  // Soft sci-fi blip on hover
   playHover: (type = 'normal') => {
     if (!soundEnabled) return;
     try {
@@ -120,7 +120,7 @@ export const SoundFX = {
       osc.start(now);
       osc.stop(now + duration);
     } catch (e) {
-      // Audio locked or ignored
+      // Ignore
     }
   },
 
@@ -153,7 +153,7 @@ export const SoundFX = {
     }
   },
 
-  // Deep Massive Quantum Supernova Explosion
+  // DEVASTATING CINEMATIC PROCEDURAL BOOM EXPLOSION
   playExplosion: () => {
     if (!soundEnabled) return;
     try {
@@ -163,27 +163,38 @@ export const SoundFX = {
 
       const now = ctx.currentTime;
 
-      // 1. Sub-bass shockwave drop (160Hz -> 24Hz)
+      // 1. Initial Transient Blast Snap (Instant high-energy punch at 0ms)
+      const snapOsc = ctx.createOscillator();
+      const snapGain = ctx.createGain();
+      snapOsc.type = 'square';
+      snapOsc.frequency.setValueAtTime(380, now);
+      snapOsc.frequency.exponentialRampToValueAtTime(45, now + 0.06);
+      snapGain.gain.setValueAtTime(0.4, now);
+      snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+      snapOsc.connect(snapGain);
+      snapGain.connect(ctx.destination);
+      snapOsc.start(now);
+      snapOsc.stop(now + 0.07);
+
+      // 2. Heavy Sub-Bass Shockwave Drop (220Hz -> 20Hz deep chest rumble)
       const subOsc = ctx.createOscillator();
       const subGain = ctx.createGain();
       subOsc.type = 'sine';
-      subOsc.frequency.setValueAtTime(160, now);
-      subOsc.frequency.exponentialRampToValueAtTime(24, now + 0.85);
-
-      subGain.gain.setValueAtTime(0.35, now);
-      subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
-
+      subOsc.frequency.setValueAtTime(220, now);
+      subOsc.frequency.exponentialRampToValueAtTime(20, now + 0.95);
+      subGain.gain.setValueAtTime(0.65, now);
+      subGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.1);
       subOsc.connect(subGain);
       subGain.connect(ctx.destination);
       subOsc.start(now);
-      subOsc.stop(now + 0.9);
+      subOsc.stop(now + 1.1);
 
-      // 2. White noise explosive burst (lowpass filtered)
-      const bufferSize = ctx.sampleRate * 0.7;
+      // 3. Volumetric White Noise Blast (Resonant lowpass explosion texture)
+      const bufferSize = ctx.sampleRate * 0.9;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const output = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
-        output[i] = Math.random() * 2 - 1;
+        output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.28));
       }
 
       const whiteNoise = ctx.createBufferSource();
@@ -191,34 +202,55 @@ export const SoundFX = {
 
       const filter = ctx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(1200, now);
-      filter.frequency.exponentialRampToValueAtTime(80, now + 0.7);
+      filter.frequency.setValueAtTime(2400, now);
+      filter.frequency.exponentialRampToValueAtTime(60, now + 0.85);
 
       const noiseGain = ctx.createGain();
-      noiseGain.gain.setValueAtTime(0.28, now);
-      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.75);
+      noiseGain.gain.setValueAtTime(0.55, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
 
       whiteNoise.connect(filter);
       filter.connect(noiseGain);
       noiseGain.connect(ctx.destination);
 
       whiteNoise.start(now);
-      whiteNoise.stop(now + 0.75);
+      whiteNoise.stop(now + 0.9);
 
-      // 3. High electrical crackle discharge
+      // 4. Electric Resonance Discharge (High sizzle)
       const crackleOsc = ctx.createOscillator();
       const crackleGain = ctx.createGain();
       crackleOsc.type = 'sawtooth';
-      crackleOsc.frequency.setValueAtTime(480, now);
-      crackleOsc.frequency.exponentialRampToValueAtTime(60, now + 0.4);
-
-      crackleGain.gain.setValueAtTime(0.15, now);
-      crackleGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
-
+      crackleOsc.frequency.setValueAtTime(820, now);
+      crackleOsc.frequency.exponentialRampToValueAtTime(40, now + 0.45);
+      crackleGain.gain.setValueAtTime(0.25, now);
+      crackleGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
       crackleOsc.connect(crackleGain);
       crackleGain.connect(ctx.destination);
       crackleOsc.start(now);
-      crackleOsc.stop(now + 0.45);
+      crackleOsc.stop(now + 0.5);
+
+      // 5. Magnetic Reassembly Click (Fires at 1.4s when fragments snap back)
+      setTimeout(() => {
+        try {
+          if (!soundEnabled || !audioCtx) return;
+          const reCtx = initAudioContext();
+          const reNow = reCtx.currentTime;
+          const reOsc = reCtx.createOscillator();
+          const reGain = reCtx.createGain();
+          reOsc.type = 'triangle';
+          reOsc.frequency.setValueAtTime(280, reNow);
+          reOsc.frequency.exponentialRampToValueAtTime(1120, reNow + 0.12);
+          reGain.gain.setValueAtTime(0.2, reNow);
+          reGain.gain.exponentialRampToValueAtTime(0.001, reNow + 0.14);
+          reOsc.connect(reGain);
+          reGain.connect(reCtx.destination);
+          reOsc.start(reNow);
+          reOsc.stop(reNow + 0.14);
+        } catch (e) {
+          // Ignore
+        }
+      }, 1400);
+
     } catch (e) {
       // Ignore
     }
@@ -253,7 +285,7 @@ export const SoundFX = {
     }
   },
 
-  // Rapid frequency chirp for overclock
+  // Rapid frequency chirp
   playChirp: () => {
     if (!soundEnabled) return;
     try {
@@ -308,44 +340,6 @@ export const SoundFX = {
 
       osc.start(now);
       osc.stop(now + duration);
-    } catch (e) {
-      // Ignore
-    }
-  },
-
-  // Sci-fi Warp / System Engagement Riser
-  playWarp: () => {
-    if (!soundEnabled) return;
-    try {
-      const ctx = initAudioContext();
-      if (!ctx) return;
-      if (ctx.state === 'suspended') ctx.resume();
-
-      const now = ctx.currentTime;
-
-      const oscLow = ctx.createOscillator();
-      const gainLow = ctx.createGain();
-      oscLow.type = 'sine';
-      oscLow.frequency.setValueAtTime(90, now);
-      oscLow.frequency.exponentialRampToValueAtTime(35, now + 0.35);
-      gainLow.gain.setValueAtTime(0.18, now);
-      gainLow.gain.linearRampToValueAtTime(0.0001, now + 0.35);
-      oscLow.connect(gainLow);
-      gainLow.connect(ctx.destination);
-      oscLow.start(now);
-      oscLow.stop(now + 0.35);
-
-      const oscHigh = ctx.createOscillator();
-      const gainHigh = ctx.createGain();
-      oscHigh.type = 'sawtooth';
-      oscHigh.frequency.setValueAtTime(240, now);
-      oscHigh.frequency.exponentialRampToValueAtTime(1480, now + 0.32);
-      gainHigh.gain.setValueAtTime(0.1, now);
-      gainHigh.gain.linearRampToValueAtTime(0.0001, now + 0.35);
-      oscHigh.connect(gainHigh);
-      gainHigh.connect(ctx.destination);
-      oscHigh.start(now);
-      oscHigh.stop(now + 0.35);
     } catch (e) {
       // Ignore
     }
@@ -416,7 +410,7 @@ export const SoundFX = {
       if (ctx.state === 'suspended') ctx.resume();
 
       const now = ctx.currentTime;
-      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      const notes = [523.25, 659.25, 783.99, 1046.50];
       notes.forEach((freq, i) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
