@@ -1341,7 +1341,7 @@ body::after {
 }
 
 /* =====================================================================
-   LEFT FLANK: LINUX HACKER TERMINAL STREAM
+   LEFT FLANK: REFINED LINUX HACKER TERMINAL STREAM
    ===================================================================== */
 .cyber-flank-terminal {
   position: absolute;
@@ -1351,29 +1351,30 @@ body::after {
   z-index: 6;
   pointer-events: none;
   opacity: 0.95;
-  width: 215px;
+  width: 220px;
   transition: opacity 0.3s ease;
 }
 
 .terminal-window {
   position: relative;
-  background: rgba(6, 10, 8, 0.92);
-  border: 1px solid rgba(0, 255, 136, 0.28);
-  border-radius: 4px;
-  padding: 8px 10px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), inset 0 0 18px rgba(0, 255, 136, 0.03);
-  backdrop-filter: blur(12px);
+  background: rgba(8, 12, 10, 0.94);
+  border: 1px solid rgba(0, 255, 136, 0.32);
+  border-radius: 5px;
+  padding: 9px 12px;
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.88), inset 0 0 20px rgba(0, 255, 136, 0.04);
+  backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
+  overflow: hidden;
 }
 
 .term-titlebar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(0, 255, 136, 0.16);
-  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.18);
+  padding-bottom: 5px;
 }
 .term-dots {
   display: flex;
@@ -1389,6 +1390,10 @@ body::after {
 .term-dot.red { background: #ff5f56; }
 .term-dot.yellow { background: #ffbd2e; }
 .term-dot.green { background: #27c93f; }
+.term-host-wrap {
+  display: flex;
+  align-items: center;
+}
 .term-host {
   font-family: 'Space Mono', monospace;
   font-size: 7.5px;
@@ -1396,17 +1401,39 @@ body::after {
   letter-spacing: 1px;
   font-weight: 700;
 }
+.term-status-pill {
+  font-family: 'Space Mono', monospace;
+  font-size: 6.5px;
+  color: var(--cyan);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-weight: 700;
+}
 
 .term-stream-body {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 2.5px;
+  gap: 3px;
   font-family: 'Space Mono', monospace;
-  font-size: 7px;
-  line-height: 1.35;
+  font-size: 7.5px;
+  line-height: 1.4;
   text-align: left;
   max-height: 125px;
   overflow: hidden;
+}
+.term-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 255, 136, 0.025) 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 3;
 }
 .term-line {
   display: flex;
@@ -1437,13 +1464,14 @@ body::after {
   width: 5px;
   height: 9px;
   background: var(--g);
+  box-shadow: 0 0 5px var(--g);
   animation: blink 1s steps(1) infinite;
 }
 
 /* =====================================================================
-   RIGHT FLANK: INTERACTIVE 3D WEBGL QUANTUM CORE
+   RIGHT FLANK: INTERACTIVE NEURAL SYNAPSE TOPOLOGY MATRIX
    ===================================================================== */
-.cyber-flank-3d {
+.cyber-flank-synapse {
   position: absolute;
   top: 50%;
   transform: translateY(-46%);
@@ -1451,33 +1479,38 @@ body::after {
   z-index: 6;
   pointer-events: none;
   opacity: 0.95;
-  width: 195px;
+  width: 215px;
   transition: opacity 0.3s ease;
 }
 
-.cube-window {
+.synapse-window {
   position: relative;
-  background: rgba(6, 10, 8, 0.92);
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  border-radius: 4px;
-  padding: 8px 10px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), inset 0 0 18px rgba(56, 189, 248, 0.03);
-  backdrop-filter: blur(12px);
+  background: rgba(8, 12, 10, 0.94);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  border-radius: 5px;
+  padding: 9px 12px;
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.88), inset 0 0 20px rgba(56, 189, 248, 0.04);
+  backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5px;
 }
 
-.cube-header {
+.synapse-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+  padding-bottom: 5px;
+}
+.synapse-title-left {
   display: flex;
   align-items: center;
   gap: 6px;
-  width: 100%;
-  border-bottom: 1px solid rgba(56, 189, 248, 0.16);
-  padding-bottom: 4px;
 }
-.cube-pulse-dot {
+.synapse-pulse-dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
@@ -1485,39 +1518,49 @@ body::after {
   box-shadow: 0 0 6px var(--cyan);
   animation: pulseDot 1.2s infinite;
 }
-.cube-title {
+.synapse-title {
   font-family: 'Space Mono', monospace;
   font-size: 7.5px;
   font-weight: 700;
   letter-spacing: 1.5px;
   color: var(--cyan);
 }
+.synapse-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 6.5px;
+  color: var(--g);
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.25);
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-weight: 700;
+}
 
-.cube-canvas {
-  width: 175px;
-  height: 145px;
+.synapse-canvas {
+  width: 195px;
+  height: 150px;
   display: block;
 }
 
-.cube-telemetry-row {
+.synapse-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  border-top: 1px solid rgba(56, 189, 248, 0.14);
-  padding-top: 3px;
+  border-top: 1px solid rgba(56, 189, 248, 0.16);
+  padding-top: 4px;
   font-family: 'Space Mono', monospace;
   font-size: 7px;
   letter-spacing: 1px;
   color: var(--dim-light);
 }
-.cube-stat.cyan { color: var(--cyan); font-weight: 700; }
-.cube-stat.green { color: var(--g); font-weight: 700; }
+.synapse-stat.cyan { color: var(--cyan); font-weight: 700; }
+.synapse-stat.green { color: var(--g); font-weight: 700; }
 
 /* Seamless responsive scaling */
 @media (max-width: 1180px) {
   .cyber-flank-terminal,
-  .cyber-flank-3d {
+  .cyber-flank-synapse {
     display: none;
   }
 }
