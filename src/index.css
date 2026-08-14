@@ -1171,11 +1171,11 @@ body::after {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 640px;
+  max-width: 720px;
   width: 100%;
   height: 100%;
   max-height: calc(100vh - 80px);
-  gap: 0.45rem;
+  gap: 0.4rem;
   margin: auto;
   text-align: center;
   box-sizing: border-box;
@@ -1208,21 +1208,22 @@ body::after {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  margin-top: 0.5in; /* Moved 0.5 inch down */
+  margin-top: 4px;
 }
 
 .mission-hero-name {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(4.6rem, 11vw, 7.2rem); /* 0.2 bigger */
-  line-height: 0.9;
-  letter-spacing: 8.5px;
+  font-size: clamp(3.2rem, 6.2vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: clamp(4px, 0.9vw, 7px);
+  white-space: nowrap; /* GUARANTEES single line always */
   margin: 0;
   background: linear-gradient(90deg, #ffffff 0%, var(--g) 40%, #38bdf8 70%, #ffffff 100%);
   background-size: 250% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   padding: 0 10px;
-  text-shadow: 0 0 55px rgba(0, 255, 136, 0.45);
+  text-shadow: 0 0 45px rgba(0, 255, 136, 0.4);
   animation: titleShimmer 8s ease infinite;
 }
 
@@ -1241,10 +1242,11 @@ body::after {
 
 .hero-sub-discipline {
   font-family: 'Space Mono', monospace;
-  font-size: 8.5px;
+  font-size: 8px;
   color: var(--dim-light);
-  letter-spacing: 3.2px;
-  margin-top: 2px;
+  letter-spacing: 2.8px;
+  margin-top: 1px;
+  white-space: nowrap;
 }
 
 /* Centerpiece 3D 360-Degree Rotating Quantum Hologram */
