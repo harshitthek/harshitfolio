@@ -6,6 +6,9 @@ export default function VideoScreen({ isActive, onComplete }) {
   const vidRef = useRef(null);
   const [videoStarted, setVideoStarted] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [currentTimeStr, setCurrentTimeStr] = useState('00:00');
+  const [durationStr, setDurationStr] = useState('00:08');
   const fallbackTimerRef = useRef(null);
   const { voiceEnabled, toggleVoice } = useVoice();
   const [sfxOn, setSfxOn] = useState(SoundFX.isEnabled());
@@ -77,6 +80,18 @@ export default function VideoScreen({ isActive, onComplete }) {
     afterVideo();
   };
 
+  const handleTimeUpdate = () => {
+    if (!vidRef.current) return;
+    const cur = vidRef.current.currentTime || 0;
+    const dur = vidRef.current.duration || 8;
+    setProgress(Math.min(100, (cur / dur) * 100));
+
+    const curSec = Math.floor(cur);
+    const durSec = Math.floor(dur);
+    setCurrentTimeStr(`00:0${curSec}`);
+    setDurationStr(`00:0${durSec}`);
+  };
+
   // Keyboard accessibility: ESC or Space to skip video
   useEffect(() => {
     if (!isActive) return;
@@ -108,6 +123,7 @@ export default function VideoScreen({ isActive, onComplete }) {
         id="intro-video"
         src="/videoplayback.mp4"
         ref={vidRef}
+        onTimeUpdate={handleTimeUpdate}
         onEnded={afterVideo}
         onError={() => {
           if (videoStarted) afterVideo();
@@ -126,6 +142,11 @@ export default function VideoScreen({ isActive, onComplete }) {
             <span className="brand-title">HARSHIT<span className="text-glow">.EXE</span></span>
             <span className="brand-badge">USAR_DELHI</span>
           </div>
+
+          <div className="video-telemetry-chip">
+            <span className="telemetry-dot"></span>
+            <span>FEED: ONLINE // 1080p 60FPS</span>
+          </div>
         </div>
 
         <div className="video-hud-right">
@@ -134,7 +155,7 @@ export default function VideoScreen({ isActive, onComplete }) {
             onClick={handleToggleSFX}
             title={sfxOn ? 'Disable SFX Audio' : 'Enable SFX Audio'}
           >
-            <span>{sfxOn ? '🔊 SFX' : '🔇 SFX'}</span>
+            <span>{sfxOn ? '🔊 SFX ON' : '🔇 SFX OFF'}</span>
           </button>
 
           <button
@@ -156,7 +177,7 @@ export default function VideoScreen({ isActive, onComplete }) {
               SoundFX.playClick();
             }}
           >
-            <span>🐙 GIT</span>
+            <span>🐙 GITHUB</span>
           </a>
         </div>
       </div>
@@ -178,16 +199,19 @@ export default function VideoScreen({ isActive, onComplete }) {
 
             <div className="unmute-badge">
               <span className="unmute-pulse-dot"></span>
-              <span>AUDIO TRANSMISSION READY // 48kHz</span>
+              <span>AUDIO TRANSMISSION READY // 48kHz HIGH-FIDELITY</span>
             </div>
 
-            <div className="unmute-title">
-              <span className="play-icon-glow">▶</span>
-              <span>INITIALIZE EXPERIENCE</span>
-            </div>
+            <h2 className="unmute-headline">
+              INITIALIZE THE EXPERIENCE
+            </h2>
 
             <div className="unmute-sub">
-              HARSHIT SHARMA · ARTIFICIAL INTELLIGENCE · USAR (GGSIPU)
+              <span>HARSHIT SHARMA</span>
+              <span className="dot-sep">•</span>
+              <span>ARTIFICIAL INTELLIGENCE</span>
+              <span className="dot-sep">•</span>
+              <span>USAR (GGSIPU)</span>
             </div>
 
             {/* Micro Equalizer Waveform */}
@@ -197,11 +221,37 @@ export default function VideoScreen({ isActive, onComplete }) {
               <span className="eq-bar"></span>
               <span className="eq-bar"></span>
               <span className="eq-bar"></span>
+              <span className="eq-bar"></span>
+              <span className="eq-bar"></span>
             </div>
 
+            <button className="unmute-cta-btn" onClick={unmuteVideo}>
+              <span className="corner tl"></span>
+              <span className="corner tr"></span>
+              <span className="corner bl"></span>
+              <span className="corner br"></span>
+              <span className="play-icon-glow">▶</span>
+              <span>ENGAGE AUDIO & ENTER SYSTEM</span>
+            </button>
+
             <div className="unmute-hint">
-              <span className="hint-bracket">[</span> CLICK ANYWHERE OR PRESS SPACE TO UNMUTE & ENTER <span className="hint-bracket">]</span>
+              <span className="hint-bracket">[</span> CLICK ANYWHERE OR PRESS SPACE TO UNMUTE <span className="hint-bracket">]</span>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Live Playback Telemetry Bar (when video is actively playing) */}
+      {videoStarted && (
+        <div className="video-playback-hud">
+          <div className="playback-telemetry-left">
+            <span className="telemetry-rec-dot"></span>
+            <span className="rec-label">STREAMING NEURAL RECON</span>
+            <span className="time-code">{currentTimeStr} / {durationStr}</span>
+          </div>
+
+          <div className="playback-progress-track">
+            <div className="playback-progress-fill" style={{ width: `${progress}%` }}></div>
           </div>
         </div>
       )}
