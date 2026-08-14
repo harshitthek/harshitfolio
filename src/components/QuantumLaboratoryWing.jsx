@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SoundFX } from './SoundFX';
 
-export default function QuantumLaboratoryWing({ isActive }) {
+export default function QuantumLaboratoryWing({ isActive, onExplode }) {
   const [fluxLevel, setFluxLevel] = useState(88);
   const [overclockActive, setOverclockActive] = useState(false);
   const [activeAction, setActiveAction] = useState('STANDBY');
@@ -13,6 +13,23 @@ export default function QuantumLaboratoryWing({ isActive }) {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
+
+  const handleQuantumBoom = () => {
+    SoundFX.playExplosion();
+    setOverclockActive(true);
+    setActiveAction('💥 SUPERNOVA_BOOM');
+    setFluxLevel(100);
+
+    if (onExplode) {
+      onExplode();
+    }
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setOverclockActive(false);
+      setActiveAction('STANDBY');
+    }, 2200);
+  };
 
   const handleOverclock = () => {
     SoundFX.playChirp();
@@ -97,8 +114,23 @@ export default function QuantumLaboratoryWing({ isActive }) {
           ))}
         </div>
 
-        {/* Interactive Action Trigger Buttons (Clean SVGs, No Emojis) */}
+        {/* Interactive Action Trigger Buttons */}
         <div className="lab-actions-grid">
+          {/* Primary High-Impact Quantum Boom Button */}
+          <button
+            type="button"
+            className="lab-btn boom-btn"
+            onClick={handleQuantumBoom}
+            onMouseEnter={() => SoundFX.playHover('high')}
+            aria-label="Trigger Quantum Supernova Explosion"
+            title="Explode 3D Quantum Hologram"
+          >
+            <svg className="btn-svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l2.4 6.9 7.1.3-5.5 4.6 1.8 6.9-5.8-4.2-5.8 4.2 1.8-6.9-5.5-4.6 7.1-.3z"/>
+            </svg>
+            QUANTUM BOOM
+          </button>
+
           <button
             type="button"
             className="lab-btn primary"
@@ -126,7 +158,7 @@ export default function QuantumLaboratoryWing({ isActive }) {
             onMouseEnter={() => SoundFX.playHover('soft')}
             aria-label="Trigger warp particle burst"
           >
-            <svg className="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <svg className="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/></svg>
             WARP BURST
           </button>
         </div>

@@ -1782,8 +1782,24 @@ body::after {
   display: inline-block;
   flex-shrink: 0;
 }
-.lab-btn.primary {
+
+/* Epic Quantum Boom Button */
+.lab-btn.boom-btn {
   grid-column: span 2;
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  color: #fca5a5;
+  letter-spacing: 1.2px;
+}
+.lab-btn.boom-btn:hover {
+  background: linear-gradient(90deg, #ef4444, #f97316);
+  color: #000;
+  border-color: #ef4444;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.7);
+  transform: translateY(-1px);
+}
+
+.lab-btn.primary {
   background: rgba(0, 255, 136, 0.12);
   border: 1px solid var(--g);
   color: var(--g);
@@ -1806,6 +1822,7 @@ body::after {
   transform: translateY(-1px);
 }
 .lab-btn.tertiary {
+  grid-column: span 2;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: #cbd5e1;

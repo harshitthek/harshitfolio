@@ -46,7 +46,6 @@ export function VoiceProvider({ children }) {
   }, []);
 
   const speak = useCallback((text, rate = 0.95, pitch = 0.9) => {
-    // ALWAYS check live ref directly to prevent stale closure executions from setTimeout
     if (!voiceEnabledRef.current || typeof window === 'undefined' || !window.speechSynthesis) {
       return;
     }
@@ -63,6 +62,9 @@ export function VoiceProvider({ children }) {
       utterance.pitch = pitch;
       utterance.volume = 1;
       utterance.lang = 'en-US';
+
+      // Keep a permanent window reference to prevent Chrome's garbage-collection speech freeze bug
+      window.__activeVoiceUtterance = utterance;
 
       const voices = window.speechSynthesis.getVoices();
       if (voices && voices.length > 0) {
@@ -81,7 +83,6 @@ export function VoiceProvider({ children }) {
       }
 
       utterance.onstart = () => {
-        // Double check ref in case user muted right as speech started
         if (!voiceEnabledRef.current) {
           window.speechSynthesis.cancel();
           setIsSpeaking(false);
@@ -95,19 +96,25 @@ export function VoiceProvider({ children }) {
       utterance.onend = () => {
         setIsSpeaking(false);
         setCurrentUtterance('');
+        window.__activeVoiceUtterance = null;
       };
 
       utterance.onerror = () => {
         setIsSpeaking(false);
         setCurrentUtterance('');
+        window.__activeVoiceUtterance = null;
       };
 
       window.speechSynthesis.speak(utterance);
 
-      // Failsafe auto-reset
-      const estimatedDuration = Math.max(2000, (text.split(' ').length / 2.2) * 1000 + 1000);
+      // Failsafe auto-reset timer
+      const wordCount = text.split(' ').length;
+      const estimatedDuration = Math.max(2500, (wordCount / 2.2) * 1000 + 1200);
       timeoutRef.current = setTimeout(() => {
         setIsSpeaking(false);
+        if (window.speechSynthesis.speaking) {
+          window.speechSynthesis.cancel();
+        }
       }, estimatedDuration);
 
     } catch (err) {
@@ -124,10 +131,15 @@ export function VoiceProvider({ children }) {
         window.speechSynthesis.cancel();
         setIsSpeaking(false);
         setCurrentUtterance('');
+      } else if (next) {
+        // Play brief voice confirmation when unmuting
+        setTimeout(() => {
+          speak("AI voice telemetry activated.");
+        }, 100);
       }
       return next;
     });
-  }, []);
+  }, [speak]);
 
   const stopSpeaking = useCallback(() => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {

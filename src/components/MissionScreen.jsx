@@ -1,13 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SoundFX } from './SoundFX';
 import HologramCanvas from './HologramCanvas';
 import CyberTerminalWing from './CyberTerminalWing';
 import QuantumLaboratoryWing from './QuantumLaboratoryWing';
 
 export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
+  const [explosionCount, setExplosionCount] = useState(0);
+
   const handleAccept = () => {
     SoundFX.playClick();
     onAccept();
+  };
+
+  const triggerHologramExplosion = () => {
+    setExplosionCount(prev => prev + 1);
   };
 
   // Keyboard accessibility: Press Enter or Space to proceed
@@ -33,7 +39,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
       <div className="corner-dec bl"></div>
       <div className="corner-dec br"></div>
 
-      {/* Left Flank: Fully Interactive Linux Cyber Terminal */}
+      {/* Left Flank: Autonomous Autotyping Linux Cyber Terminal */}
       <CyberTerminalWing isActive={isActive} />
 
       {/* Center Hero Column */}
@@ -54,9 +60,9 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           </div>
         </div>
 
-        {/* Centerpiece 3D 360-Degree Rotating Quantum Hologram */}
+        {/* Centerpiece 3D 360-Degree Rotating Quantum Hologram (Explosion Reactive) */}
         <div className="mission-holo-center">
-          <HologramCanvas isActive={isActive} />
+          <HologramCanvas isActive={isActive} explosionTrigger={explosionCount} />
         </div>
 
         {/* Sleek, Atmospheric Welcome & Access Pod */}
@@ -121,8 +127,8 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         </div>
       </div>
 
-      {/* Right Flank: Interactive Quantum Sound & Neural Laboratory */}
-      <QuantumLaboratoryWing isActive={isActive} />
+      {/* Right Flank: Interactive Quantum Sound & Neural Laboratory (Boom Trigger) */}
+      <QuantumLaboratoryWing isActive={isActive} onExplode={triggerHologramExplosion} />
     </div>
   );
 }

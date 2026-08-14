@@ -153,6 +153,166 @@ export const SoundFX = {
     }
   },
 
+  // Deep Massive Quantum Supernova Explosion
+  playExplosion: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+
+      // 1. Sub-bass shockwave drop (160Hz -> 24Hz)
+      const subOsc = ctx.createOscillator();
+      const subGain = ctx.createGain();
+      subOsc.type = 'sine';
+      subOsc.frequency.setValueAtTime(160, now);
+      subOsc.frequency.exponentialRampToValueAtTime(24, now + 0.85);
+
+      subGain.gain.setValueAtTime(0.35, now);
+      subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+
+      subOsc.connect(subGain);
+      subGain.connect(ctx.destination);
+      subOsc.start(now);
+      subOsc.stop(now + 0.9);
+
+      // 2. White noise explosive burst (lowpass filtered)
+      const bufferSize = ctx.sampleRate * 0.7;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+
+      const whiteNoise = ctx.createBufferSource();
+      whiteNoise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1200, now);
+      filter.frequency.exponentialRampToValueAtTime(80, now + 0.7);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.28, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.75);
+
+      whiteNoise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+
+      whiteNoise.start(now);
+      whiteNoise.stop(now + 0.75);
+
+      // 3. High electrical crackle discharge
+      const crackleOsc = ctx.createOscillator();
+      const crackleGain = ctx.createGain();
+      crackleOsc.type = 'sawtooth';
+      crackleOsc.frequency.setValueAtTime(480, now);
+      crackleOsc.frequency.exponentialRampToValueAtTime(60, now + 0.4);
+
+      crackleGain.gain.setValueAtTime(0.15, now);
+      crackleGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+
+      crackleOsc.connect(crackleGain);
+      crackleGain.connect(ctx.destination);
+      crackleOsc.start(now);
+      crackleOsc.stop(now + 0.45);
+    } catch (e) {
+      // Ignore
+    }
+  },
+
+  // High tech laser pulse
+  playLaser: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(1400, now);
+      osc.frequency.exponentialRampToValueAtTime(80, now + 0.18);
+
+      gain.gain.setValueAtTime(0.14, now);
+      gain.gain.linearRampToValueAtTime(0.0001, now + 0.18);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.18);
+    } catch (e) {
+      // Ignore
+    }
+  },
+
+  // Rapid frequency chirp for overclock
+  playChirp: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+      const freqs = [500, 900, 1400, 2000];
+      freqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const start = now + idx * 0.035;
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, start);
+
+        gain.gain.setValueAtTime(0.08, start);
+        gain.gain.linearRampToValueAtTime(0.0001, start + 0.045);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(start);
+        osc.stop(start + 0.045);
+      });
+    } catch (e) {
+      // Ignore
+    }
+  },
+
+  // Custom synthesizer harmonic tone
+  playTone: (freq = 440, type = 'sine', duration = 0.2) => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.linearRampToValueAtTime(0.0001, now + duration);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + duration);
+    } catch (e) {
+      // Ignore
+    }
+  },
+
   // Sci-fi Warp / System Engagement Riser
   playWarp: () => {
     if (!soundEnabled) return;
@@ -163,7 +323,6 @@ export const SoundFX = {
 
       const now = ctx.currentTime;
 
-      // Sub bass boom + High riser sweep
       const oscLow = ctx.createOscillator();
       const gainLow = ctx.createGain();
       oscLow.type = 'sine';

@@ -60,12 +60,11 @@ export default function ContactModal({ onClose }) {
             <div className="contact-details-col">
               <div className="comms-header-tag">// SECURE COMMS ENDPOINTS</div>
               <p className="comms-intro">
-                Open for AI/ML engineering roles, autonomous agent research collaborations, and open-source system architecture.
+                Open for AI/ML engineering roles, autonomous agent research collaborations, and creative systems architecture.
               </p>
 
               <div className="comms-endpoint-list">
                 <div className="comms-item">
-                  <span className="comms-icon">📧</span>
                   <div className="comms-info">
                     <span className="comms-lbl">DIRECT EMAIL</span>
                     <div className="email-copy-row">
@@ -76,14 +75,13 @@ export default function ContactModal({ onClose }) {
                         onClick={handleCopyEmail}
                         title="Click to copy email"
                       >
-                        {copiedEmail ? 'COPIED! ✅' : 'COPY 📋'}
+                        {copiedEmail ? 'COPIED' : 'COPY'}
                       </button>
                     </div>
                   </div>
                 </div>
 
                 <div className="comms-item">
-                  <span className="comms-icon">📍</span>
                   <div className="comms-info">
                     <span className="comms-lbl">BASE LOCATION</span>
                     <span className="comms-val">New Delhi, India (USAR, GGSIPU)</span>
@@ -91,15 +89,6 @@ export default function ContactModal({ onClose }) {
                 </div>
 
                 <div className="comms-item">
-                  <span className="comms-icon">💬</span>
-                  <div className="comms-info">
-                    <span className="comms-lbl">DISCORD USERNAME</span>
-                    <span className="comms-val">harshit0</span>
-                  </div>
-                </div>
-
-                <div className="comms-item">
-                  <span className="comms-icon">🔗</span>
                   <div className="comms-info">
                     <span className="comms-lbl">LINKEDIN PROFILE</span>
                     <a
@@ -114,7 +103,6 @@ export default function ContactModal({ onClose }) {
                 </div>
 
                 <div className="comms-item">
-                  <span className="comms-icon">🐙</span>
                   <div className="comms-info">
                     <span className="comms-lbl">GITHUB PROFILE</span>
                     <a
@@ -163,7 +151,7 @@ export default function ContactModal({ onClose }) {
                     id="user-msg"
                     rows="4"
                     required
-                    placeholder="Hi Harshit, I'd like to collaborate on an AI project..."
+                    placeholder="Hi Harshit, I'd like to connect on an AI project..."
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                   />
@@ -175,7 +163,7 @@ export default function ContactModal({ onClose }) {
 
                 {submitted && (
                   <div className="transmission-feedback-alert">
-                    <span>✅ TRANSMISSION INITIATED TO codewithharshitsharma@gmail.com. Email client opened.</span>
+                    <span>TRANSMISSION INITIATED TO codewithharshitsharma@gmail.com. Email client opened.</span>
                   </div>
                 )}
               </form>
