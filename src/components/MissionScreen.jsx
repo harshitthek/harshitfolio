@@ -35,7 +35,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         {/* Top Classified Mission Badge */}
         <div className="mission-badge-strip">
           <span className="mission-status-dot"></span>
-          <span className="mission-tag">CLASSIFIED AGENT DOSSIER // DIRECTIVE_01</span>
+          <span className="mission-tag">ENGINEER DOSSIER // HS-01</span>
         </div>
 
         {/* Grand Hero Name */}
@@ -47,7 +47,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         <div className="mission-creds-strip">
           <span className="cred-pill primary">B.TECH AI &amp; ML</span>
           <span className="cred-pill">USAR (GGSIPU), NEW DELHI</span>
-          <span className="cred-pill cyan">SYSTEMS ARCHITECT</span>
+          <span className="cred-pill cyan">AI &amp; SYSTEMS ARCHITECT</span>
         </div>
 
         {/* Centerpiece 3D Interactive Hologram */}
@@ -55,46 +55,46 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <HologramCanvas isActive={isActive} />
         </div>
 
-        {/* Redesigned Cyber Directive Hub Pod */}
+        {/* Redesigned About Me & Dossier Card */}
         <div className="mission-directive-card">
           <span className="corner tl"></span>
           <span className="corner tr"></span>
           <span className="corner bl"></span>
           <span className="corner br"></span>
 
-          {/* Card Top Telemetry Bar */}
+          {/* Card Top Header */}
           <div className="directive-top-bar">
             <div className="directive-bar-left">
               <span className="directive-pulse-dot"></span>
-              <span className="directive-heading">OPERATIONAL DIRECTIVE</span>
+              <span className="directive-heading">ABOUT ME &amp; ENGINEERING PROFILE</span>
             </div>
             <div className="directive-bar-right">
-              <span className="directive-level-badge">CLEARANCE: LEVEL-9 // AUTHORIZED</span>
+              <span className="directive-level-badge">SPECIALIZATION: AI &amp; ML</span>
             </div>
           </div>
 
-          {/* 3-Column Micro Telemetry Grid */}
+          {/* 3-Column Profile Pillars */}
           <div className="directive-grid-mini">
             <div className="mini-stat-card">
-              <span className="stat-code">01 // MULTIVERSE</span>
-              <span className="stat-val">8 Flagship AI Portals</span>
+              <span className="stat-code">01 // CORE FOCUS</span>
+              <span className="stat-val">Agentic AI &amp; Neural Nets</span>
             </div>
             <div className="mini-stat-card">
-              <span className="stat-code">02 // AGENTS</span>
-              <span className="stat-val">Yggdrasil Tree Bot</span>
+              <span className="stat-code">02 // ACADEMICS</span>
+              <span className="stat-val">USAR (GGSIPU), Delhi</span>
             </div>
             <div className="mini-stat-card">
-              <span className="stat-code">03 // ML MODELS</span>
-              <span className="stat-val">Resilient &amp; Used Bike ML</span>
+              <span className="stat-code">03 // PHILOSOPHY</span>
+              <span className="stat-val">Intelligent Scalable Code</span>
             </div>
           </div>
 
-          {/* Mission Briefing Text */}
+          {/* About Me Narrative */}
           <p className="mission-brief-text">
-            Neural uplink authorized. Infiltrate Harshit Sharma's archives to explore autonomous agentic systems, real-time ML valuation models, and interactive WebGL simulations. Select your portal and deploy.
+            I am an Artificial Intelligence &amp; Machine Learning engineer based in New Delhi, obsessed with building autonomous systems, deep learning architectures, and high-performance interactive software. Step inside to explore my engineering mindset and multiverse.
           </p>
 
-          {/* Primary Magnetic Neon Button */}
+          {/* Primary Action Button */}
           <button
             type="button"
             className="accept-mission-cta"
@@ -106,11 +106,11 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             <span className="corner bl"></span>
             <span className="corner br"></span>
             <span className="cta-icon">▶</span>
-            <span className="cta-text">ENGAGE NEURAL MULTIVERSE &amp; ACCEPT MISSION</span>
+            <span className="cta-text">ENTER HARSHIT'S MULTIVERSE</span>
           </button>
 
           <div className="mission-key-hint">
-            <span className="hint-bracket">[</span> PRESS <span className="key-badge">SPACE</span> OR <span className="key-badge">ENTER</span> TO ENGAGE <span className="hint-bracket">]</span>
+            <span className="hint-bracket">[</span> PRESS <span className="key-badge">SPACE</span> OR <span className="key-badge">ENTER</span> TO PROCEED <span className="hint-bracket">]</span>
           </div>
         </div>
       </div>
