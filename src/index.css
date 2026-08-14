@@ -336,24 +336,10 @@ body::after {
   z-index: 1;
 }
 
-.video-scanlines-overlay {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.15) 0px,
-    rgba(0, 0, 0, 0.15) 1px,
-    transparent 1px,
-    transparent 2px
-  );
-  pointer-events: none;
-  z-index: 2;
-}
-
 .video-vignette-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, transparent 35%, rgba(0, 0, 0, 0.75) 100%);
+  background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
   pointer-events: none;
   z-index: 3;
 }
@@ -658,62 +644,6 @@ body::after {
 }
 .hint-bracket {
   color: var(--g);
-}
-
-/* Playback Telemetry & Progress Hud */
-.video-playback-hud {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 14px 24px;
-  z-index: 10;
-  pointer-events: none;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
-}
-
-.playback-telemetry-left {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Space Mono', monospace;
-  font-size: 8.5px;
-  letter-spacing: 1.5px;
-}
-.telemetry-rec-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #ef4444;
-  box-shadow: 0 0 8px #ef4444;
-  animation: pulseDot 1s infinite;
-}
-.rec-label {
-  color: var(--white);
-  font-weight: 700;
-}
-.time-code {
-  color: var(--cyan);
-  background: rgba(56, 189, 248, 0.1);
-  padding: 1px 6px;
-  border-radius: 2px;
-}
-
-.playback-progress-track {
-  width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 1px;
-  overflow: hidden;
-}
-.playback-progress-fill {
-  height: 100%;
-  background: var(--g);
-  box-shadow: 0 0 8px var(--g);
-  transition: width 0.15s linear;
 }
 
 .skip-btn {
