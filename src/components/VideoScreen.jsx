@@ -10,79 +10,114 @@ export default function VideoScreen({ isActive, onComplete }) {
   const { voiceEnabled, toggleVoice } = useVoice();
   const [sfxOn, setSfxOn] = useState(SoundFX.isEnabled());
 
-  const handleToggleSFX = (e) => {
-    e.stopPropagation();
-    const next = SoundFX.toggle();
-    setSfxOn(next);
-    if (next) SoundFX.playClick();
-  };
-
-  const handleToggleVoice = (e) => {
-    e.stopPropagation();
-    SoundFX.playClick();
-    toggleVoice();
-  };
-
-  const afterVideo = () => {
-    if (videoEnded) return;
-    setVideoEnded(true);
+  const killAllAudio = () => {
     if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
 
-    // Immediately stop and mute the video so sound never lingers
+    // Stop and mute HTML5 video completely
     if (vidRef.current) {
       try {
         vidRef.current.pause();
         vidRef.current.currentTime = 0;
         vidRef.current.muted = true;
-      } catch (e) {
+        vidRef.current.volume = 0;
+      } catch (err) {
         // Ignore
       }
     }
 
-    // Immediately cancel any ongoing speech synthesis narration
+    // Cancel any queued speech synthesis audio
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       try {
         window.speechSynthesis.cancel();
-      } catch (e) {
+      } catch (err) {
         // Ignore
       }
     }
+  };
 
-    SoundFX.playClick();
+  const handleToggleSFX = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const next = SoundFX.toggle();
+    setSfxOn(next);
+    if (vidRef.current) {
+      vidRef.current.muted = !next;
+    }
+    if (next) SoundFX.playClick();
+  };
+
+  const handleToggleVoice = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (sfxOn) SoundFX.playClick();
+    toggleVoice();
+  };
+
+  const afterVideo = (e) => {
+    if (e) {
+      if (e.preventDefault) e.preventDefault();
+      if (e.stopPropagation) e.stopPropagation();
+    }
+    if (videoEnded) return;
+    setVideoEnded(true);
+    killAllAudio();
+
+    if (sfxOn) SoundFX.playClick();
     onComplete();
   };
 
-  const unmuteVideo = () => {
+  const unmuteVideo = (e) => {
+    if (e) {
+      if (e.preventDefault) e.preventDefault();
+      if (e.stopPropagation) e.stopPropagation();
+    }
     if (videoStarted) return;
     setVideoStarted(true);
-    SoundFX.playClick();
+
+    if (sfxOn) SoundFX.playClick();
 
     if (vidRef.current) {
-      vidRef.current.muted = false;
+      vidRef.current.muted = !sfxOn;
       vidRef.current.currentTime = 0;
-      vidRef.current.play().catch(() => {
-        // Autoplay restricted fallback
-        afterVideo();
-      });
+      const playPromise = vidRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn('Playback restricted, proceeding:', err);
+          afterVideo();
+        });
+      }
     } else {
       afterVideo();
     }
 
     // Safety timeout in case video stalls
-    fallbackTimerRef.current = setTimeout(afterVideo, 8500);
+    fallbackTimerRef.current = setTimeout(() => {
+      afterVideo();
+    }, 8500);
   };
 
   const handleSkip = (e) => {
+    e.preventDefault();
     e.stopPropagation();
     afterVideo();
   };
 
-  // Keyboard accessibility: ESC or Space to skip video
+  // When screen changes from active to inactive, instantly kill all audio
+  useEffect(() => {
+    if (!isActive) {
+      killAllAudio();
+    }
+  }, [isActive]);
+
+  // Keyboard accessibility: ESC, Space, or Enter to unmute or skip
   useEffect(() => {
     if (!isActive) return;
 
     const handleKeyDown = (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+
       if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
         if (!videoStarted) {
           unmuteVideo();
         } else {
@@ -93,13 +128,7 @@ export default function VideoScreen({ isActive, onComplete }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isActive, videoStarted]);
-
-  useEffect(() => {
-    if (!isActive && fallbackTimerRef.current) {
-      clearTimeout(fallbackTimerRef.current);
-    }
-  }, [isActive]);
+  }, [isActive, videoStarted, sfxOn]);
 
   return (
     <div id="s-video" className={`screen ${isActive ? 'active' : ''}`}>
@@ -118,7 +147,7 @@ export default function VideoScreen({ isActive, onComplete }) {
       <div className="video-vignette-overlay"></div>
 
       {/* Top Floating Controls Bar */}
-      <div className="video-top-hud">
+      <header className="video-top-hud">
         <div className="video-hud-left">
           <div className="video-brand-pill">
             <span className="brand-dot live"></span>
@@ -129,14 +158,16 @@ export default function VideoScreen({ isActive, onComplete }) {
 
         <div className="video-hud-right">
           <button
+            type="button"
             className={`video-hud-btn ${!sfxOn ? 'muted' : ''}`}
             onClick={handleToggleSFX}
             title={sfxOn ? 'Disable SFX Audio' : 'Enable SFX Audio'}
           >
-            <span>{sfxOn ? '🔊 SFX' : '🔇 SFX'}</span>
+            <span>{sfxOn ? '🔊 SFX ON' : '🔇 SFX OFF'}</span>
           </button>
 
           <button
+            type="button"
             className={`video-hud-btn voice ${!voiceEnabled ? 'muted' : ''}`}
             onClick={handleToggleVoice}
             title={voiceEnabled ? 'Mute AI Voice Narration' : 'Enable AI Voice Narration'}
@@ -152,13 +183,13 @@ export default function VideoScreen({ isActive, onComplete }) {
             className="video-hud-btn git"
             onClick={(e) => {
               e.stopPropagation();
-              SoundFX.playClick();
+              if (sfxOn) SoundFX.playClick();
             }}
           >
-            <span>🐙 GIT</span>
+            <span>🐙 GITHUB</span>
           </a>
         </div>
-      </div>
+      </header>
 
       {/* Futuristic HUD Corner Decors */}
       <div className="corner-dec tl"></div>
@@ -168,8 +199,14 @@ export default function VideoScreen({ isActive, onComplete }) {
 
       {/* Interactive Unmute Banner */}
       {!videoStarted && (
-        <div id="unmute-overlay" className="unmute-overlay" onClick={unmuteVideo}>
-          <div className="unmute-box">
+        <div
+          id="unmute-overlay"
+          className="unmute-overlay"
+          onClick={unmuteVideo}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="unmute-box" onClick={(e) => e.stopPropagation()}>
             <span className="corner tl"></span>
             <span className="corner tr"></span>
             <span className="corner bl"></span>
@@ -203,7 +240,12 @@ export default function VideoScreen({ isActive, onComplete }) {
               <span className="eq-bar"></span>
             </div>
 
-            <button className="unmute-cta-btn" onClick={unmuteVideo}>
+            <button
+              type="button"
+              className="unmute-cta-btn"
+              onClick={unmuteVideo}
+              onMouseEnter={() => sfxOn && SoundFX.playHover()}
+            >
               <span className="corner tl"></span>
               <span className="corner tr"></span>
               <span className="corner bl"></span>
@@ -221,9 +263,10 @@ export default function VideoScreen({ isActive, onComplete }) {
 
       {/* Skip Button with Cyber Glow & Keyboard Hint */}
       <button
+        type="button"
         className="skip-btn"
         onClick={handleSkip}
-        onMouseEnter={() => SoundFX.playHover()}
+        onMouseEnter={() => sfxOn && SoundFX.playHover()}
         title="Skip intro video (Esc / Space)"
       >
         <span className="corner tl"></span>
