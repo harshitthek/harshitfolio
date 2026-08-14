@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 export default function CyberCursor({ activeScreen }) {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const spotlightRef = useRef(null);
+  const dotWrapperRef = useRef(null);
+  const ringWrapperRef = useRef(null);
+  const spotlightWrapperRef = useRef(null);
 
   const [isHovered, setIsHovered] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
@@ -26,16 +26,16 @@ export default function CyberCursor({ activeScreen }) {
       mousePos.current = { x: e.clientX, y: e.clientY };
       if (!isVisible) setIsVisible(true);
 
-      // Direct instant reposition for center dot
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      // Direct zero-latency hardware translation on wrapper
+      if (dotWrapperRef.current) {
+        dotWrapperRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
       }
 
       // Check for interactive element hover
       const target = e.target;
       if (target) {
         const interactive = target.closest(
-          'button, a, input, textarea, select, [role="button"], .portal-card, .btn-cyber, .vibe-pill, .cmd-pill, .interactive-pad-btn, .hud-social-btn, .hud-quick-btn, .hud-toggle-btn'
+          'button, a, input, textarea, select, [role="button"], .portal-card, .btn-cyber, .vibe-pill, .cmd-pill, .lab-btn, .hud-social-btn, .hud-quick-btn, .hud-toggle-btn, .tab-btn, .action-btn'
         );
         setIsHovered(!!interactive);
       }
@@ -47,23 +47,23 @@ export default function CyberCursor({ activeScreen }) {
     const handleMouseEnter = () => setIsVisible(true);
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mousedown', handleMouseDown, { passive: true });
+    window.addEventListener('mouseup', handleMouseUp, { passive: true });
     document.body.addEventListener('mouseleave', handleMouseLeave);
     document.body.addEventListener('mouseenter', handleMouseEnter);
 
-    // Smooth spring physics loop for the trailing outer target ring
+    // Spring physics loop for smooth lagging trailing ring
     const renderLoop = () => {
-      const ease = 0.22;
+      const ease = 0.24;
       ringPos.current.x += (mousePos.current.x - ringPos.current.x) * ease;
       ringPos.current.y += (mousePos.current.y - ringPos.current.y) * ease;
 
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0)`;
+      if (ringWrapperRef.current) {
+        ringWrapperRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0)`;
       }
 
-      if (spotlightRef.current) {
-        spotlightRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0)`;
+      if (spotlightWrapperRef.current) {
+        spotlightWrapperRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0)`;
       }
 
       rafRef.current = requestAnimationFrame(renderLoop);
@@ -86,24 +86,24 @@ export default function CyberCursor({ activeScreen }) {
 
   return (
     <div className={`cyber-custom-cursor-root ${isVisible ? 'visible' : ''}`} aria-hidden="true">
-      {/* 1. Ambient Radial Spotlight */}
-      <div ref={spotlightRef} className={`cursor-spotlight-glow ${isHovered ? 'hovered' : ''}`} />
+      {/* 1. Ambient Radial Spotlight Wrapper */}
+      <div ref={spotlightWrapperRef} className="cursor-pos-wrapper">
+        <div className={`cursor-spotlight-inner ${isHovered ? 'hovered' : ''}`} />
+      </div>
 
-      {/* 2. Precision Laser Center Dot (Zero Latency) */}
-      <div
-        ref={dotRef}
-        className={`cursor-laser-dot ${isHovered ? 'hovered' : ''} ${isClicking ? 'clicking' : ''}`}
-      />
+      {/* 2. Trailing Precision Target Crosshair Ring Wrapper */}
+      <div ref={ringWrapperRef} className="cursor-pos-wrapper">
+        <div className={`cursor-reticle-inner ${isHovered ? 'hovered' : ''} ${isClicking ? 'clicking' : ''}`}>
+          <span className="reticle-pip top"></span>
+          <span className="reticle-pip right"></span>
+          <span className="reticle-pip bottom"></span>
+          <span className="reticle-pip left"></span>
+        </div>
+      </div>
 
-      {/* 3. Trailing Cyber Target Crosshair Ring */}
-      <div
-        ref={ringRef}
-        className={`cursor-reticle-ring ${isHovered ? 'hovered' : ''} ${isClicking ? 'clicking' : ''}`}
-      >
-        <span className="reticle-pip top"></span>
-        <span className="reticle-pip right"></span>
-        <span className="reticle-pip bottom"></span>
-        <span className="reticle-pip left"></span>
+      {/* 3. Precision Laser Center Dot Wrapper (Zero Latency) */}
+      <div ref={dotWrapperRef} className="cursor-pos-wrapper">
+        <div className={`cursor-dot-inner ${isHovered ? 'hovered' : ''} ${isClicking ? 'clicking' : ''}`} />
       </div>
     </div>
   );

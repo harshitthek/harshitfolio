@@ -64,7 +64,7 @@ body::after {
 }
 
 /* =====================================================================
-   FUTURISTIC DUAL-LAYER CYBER RETICLE CURSOR
+   FUTURISTIC DUAL-LAYER CYBER RETICLE CURSOR (GLITCH-FREE)
    ===================================================================== */
 .cyber-custom-cursor-root {
   position: fixed;
@@ -72,84 +72,80 @@ body::after {
   pointer-events: none;
   z-index: 99999;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 .cyber-custom-cursor-root.visible {
   opacity: 1;
 }
 
-/* 1. Precision Laser Center Dot */
-.cursor-laser-dot {
+/* Base Position Wrapper (Updated via translate3d only) */
+.cursor-pos-wrapper {
   position: fixed;
-  top: -3px;
-  left: -3px;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  will-change: transform;
+  transform: translate3d(-500px, -500px, 0);
+}
+
+/* 1. Precision Laser Center Dot (Zero-Latency) */
+.cursor-dot-inner {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--g);
   box-shadow: 0 0 8px var(--g), 0 0 16px rgba(0, 255, 136, 0.8);
   pointer-events: none;
-  will-change: transform;
-  transition: transform 0s linear, background 0.2s, box-shadow 0.2s;
-  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, box-shadow 0.2s;
 }
-.cursor-laser-dot.hovered {
+.cursor-dot-inner.hovered {
   background: var(--cyan);
   box-shadow: 0 0 10px var(--cyan), 0 0 20px rgba(56, 189, 248, 0.9);
-  transform-origin: center;
-  scale: 1.3;
+  transform: translate(-50%, -50%) scale(1.3);
 }
-.cursor-laser-dot.clicking {
-  scale: 0.8;
+.cursor-dot-inner.clicking {
+  transform: translate(-50%, -50%) scale(0.75);
   background: #ffffff;
 }
 
 /* 2. Trailing Precision Target Crosshair Ring */
-.cursor-reticle-ring {
-  position: fixed;
-  top: -14px;
-  left: -14px;
-  width: 28px;
-  height: 28px;
+.cursor-reticle-inner {
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  border: 1.5px solid rgba(0, 255, 136, 0.6);
+  border: 1.5px solid rgba(0, 255, 136, 0.65);
   pointer-events: none;
-  will-change: transform;
-  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), height 0.25s cubic-bezier(0.16, 1, 0.3, 1), top 0.25s, left 0.25s, border-color 0.25s;
-  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), height 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s, box-shadow 0.22s, transform 0.15s ease;
 }
-.cursor-reticle-ring.hovered {
-  top: -21px;
-  left: -21px;
+.cursor-reticle-inner.hovered {
   width: 42px;
   height: 42px;
-  border-color: rgba(56, 189, 248, 0.85);
-  box-shadow: 0 0 15px rgba(56, 189, 248, 0.4), inset 0 0 10px rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.9);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4), inset 0 0 10px rgba(56, 189, 248, 0.2);
 }
-.cursor-reticle-ring.clicking {
-  transform-origin: center;
-  scale: 0.9;
+.cursor-reticle-inner.clicking {
+  transform: translate(-50%, -50%) scale(0.85);
   border-color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.7);
 }
 
-/* Reticle Crosshair Ticks */
+/* Reticle Crosshair Directional Ticks */
 .reticle-pip {
   position: absolute;
-  background: rgba(0, 255, 136, 0.8);
+  background: rgba(0, 255, 136, 0.85);
 }
-.cursor-reticle-ring.hovered .reticle-pip {
+.cursor-reticle-inner.hovered .reticle-pip {
   background: var(--cyan);
 }
-.reticle-pip.top { top: -3px; left: 50%; width: 1.5px; height: 3px; transform: translateX(-50%); }
-.reticle-pip.bottom { bottom: -3px; left: 50%; width: 1.5px; height: 3px; transform: translateX(-50%); }
-.reticle-pip.left { left: -3px; top: 50%; width: 3px; height: 1.5px; transform: translateY(-50%); }
-.reticle-pip.right { right: -3px; top: 50%; width: 3px; height: 1.5px; transform: translateY(-50%); }
+.reticle-pip.top { top: -4px; left: 50%; width: 1.5px; height: 3px; transform: translateX(-50%); }
+.reticle-pip.bottom { bottom: -4px; left: 50%; width: 1.5px; height: 3px; transform: translateX(-50%); }
+.reticle-pip.left { left: -4px; top: 50%; width: 3px; height: 1.5px; transform: translateY(-50%); }
+.reticle-pip.right { right: -4px; top: 50%; width: 3px; height: 1.5px; transform: translateY(-50%); }
 
 /* 3. Ambient Radial Spotlight Glow */
-.cursor-spotlight-glow {
-  position: fixed;
-  top: -225px;
-  left: -225px;
+.cursor-spotlight-inner {
   width: 450px;
   height: 450px;
   border-radius: 50%;
@@ -160,13 +156,10 @@ body::after {
     transparent 100%
   );
   pointer-events: none;
-  will-change: transform;
-  transition: width 0.35s ease, height 0.35s ease, top 0.35s ease, left 0.35s ease, background 0.35s ease;
-  z-index: 2;
+  transform: translate(-50%, -50%);
+  transition: width 0.35s ease, height 0.35s ease, background 0.35s ease;
 }
-.cursor-spotlight-glow.hovered {
-  top: -300px;
-  left: -300px;
+.cursor-spotlight-inner.hovered {
   width: 600px;
   height: 600px;
   background: radial-gradient(
