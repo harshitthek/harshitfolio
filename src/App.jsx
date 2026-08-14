@@ -28,14 +28,16 @@ export default function App() {
 
   const { speak } = useVoice();
 
-  // Screen 1 Video -> Intermediate -> Mission
+  // Screen 1 Video -> Screen 2 Intermediate
   const handleVideoComplete = useCallback(() => {
     setCurrentScreen('s-intermediate');
     speak("Loading mission database. Stand by.");
-    setTimeout(() => {
-      setCurrentScreen('s-mission');
-      speak("Incoming classified mission. Welcome to Harshit Sharma's portfolio. Eight AI universes await. Choose wisely.");
-    }, 2400);
+  }, [speak]);
+
+  // Screen 2 Intermediate -> Screen 3 Mission (called only AFTER 100% is reached and flash completes)
+  const handleIntermediateComplete = useCallback(() => {
+    setCurrentScreen('s-mission');
+    speak("Incoming classified mission. Welcome to Harshit Sharma's portfolio. Eight AI universes await. Choose wisely.");
   }, [speak]);
 
   // Screen 3 Mission -> Cards
@@ -163,6 +165,7 @@ export default function App() {
 
       <IntermediateScreen
         isActive={currentScreen === 's-intermediate'}
+        onComplete={handleIntermediateComplete}
       />
 
       <MissionScreen

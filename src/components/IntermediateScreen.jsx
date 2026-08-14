@@ -3,18 +3,19 @@ import { SoundFX } from './SoundFX';
 
 const TELEMETRY_STEPS = [
   { time: '0.1s', text: 'INITIALIZING NEURAL UPLINK // 10.0 Gbps', status: 'OK' },
-  { time: '0.6s', text: 'AGENT IDENTITY VERIFIED: HARSHIT SHARMA [USAR_DELHI]', status: 'AUTH' },
-  { time: '1.2s', text: 'DECRYPTING CLASSIFIED PORTFOLIO DATABASE [LEVEL-9]', status: 'DONE' },
-  { time: '1.8s', text: 'INITIALIZING 8 MULTIVERSE PORTALS // ALL SYSTEMS GO', status: 'READY' }
+  { time: '0.5s', text: 'AGENT IDENTITY VERIFIED: HARSHIT SHARMA [USAR_DELHI]', status: 'AUTH' },
+  { time: '1.0s', text: 'DECRYPTING CLASSIFIED PORTFOLIO DATABASE [LEVEL-9]', status: 'DONE' },
+  { time: '1.6s', text: 'INITIALIZING 8 MULTIVERSE PORTALS // ALL SYSTEMS GO', status: 'READY' }
 ];
 
-export default function IntermediateScreen({ isActive }) {
+export default function IntermediateScreen({ isActive, onComplete }) {
   const [progress, setProgress] = useState(0);
   const [hexCode, setHexCode] = useState('0x7F...9A');
   const [logIndex, setLogIndex] = useState(0);
   const [isExitFlash, setIsExitFlash] = useState(false);
   const animIntervalRef = useRef(null);
   const prevLogRef = useRef(0);
+  const transitionTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (!isActive) {
@@ -23,6 +24,7 @@ export default function IntermediateScreen({ isActive }) {
       setIsExitFlash(false);
       prevLogRef.current = 0;
       if (animIntervalRef.current) clearInterval(animIntervalRef.current);
+      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
       return;
     }
 
@@ -32,22 +34,26 @@ export default function IntermediateScreen({ isActive }) {
     }
 
     const startTime = Date.now();
-    const duration = 2400; // Matches transition duration in App.jsx
+    const countDuration = 1850; // Reaches 100% cleanly before transition
 
     animIntervalRef.current = setInterval(() => {
       const elapsed = Date.now() - startTime;
-      const currentPct = Math.min(100, Math.floor((elapsed / duration) * 100));
+      const currentPct = Math.min(100, Math.floor((elapsed / countDuration) * 100));
       setProgress(currentPct);
 
-      // Random cycling hex hash
-      const randomHex = '0x' + Math.floor(Math.random() * 0xFFFFFF).toString(16).toUpperCase().padStart(6, '0');
-      setHexCode(randomHex);
+      // Random cycling hex hash until 100%
+      if (currentPct < 100) {
+        const randomHex = '0x' + Math.floor(Math.random() * 0xFFFFFF).toString(16).toUpperCase().padStart(6, '0');
+        setHexCode(randomHex);
+      } else {
+        setHexCode('0x00FF88 // DECRYPTED');
+      }
 
       // Update telemetry log steps with tactile key audio ticks
       let newLogIdx = 0;
-      if (elapsed > 400 && elapsed <= 900) newLogIdx = 1;
-      else if (elapsed > 900 && elapsed <= 1600) newLogIdx = 2;
-      else if (elapsed > 1600) newLogIdx = 3;
+      if (elapsed > 350 && elapsed <= 800) newLogIdx = 1;
+      else if (elapsed > 800 && elapsed <= 1400) newLogIdx = 2;
+      else if (elapsed > 1400) newLogIdx = 3;
 
       if (newLogIdx !== prevLogRef.current) {
         prevLogRef.current = newLogIdx;
@@ -57,23 +63,27 @@ export default function IntermediateScreen({ isActive }) {
         }
       }
 
-      // Trigger 100% milestone exit flash
-      if (currentPct >= 96 && !isExitFlash) {
-        setIsExitFlash(true);
-        if (SoundFX.isEnabled()) {
-          SoundFX.playClick();
-        }
-      }
-
+      // When 100% is reached
       if (currentPct >= 100) {
         clearInterval(animIntervalRef.current);
+        setIsExitFlash(true);
+
+        if (SoundFX.isEnabled()) {
+          SoundFX.playSuccess();
+        }
+
+        // Allow 380ms for the 100% milestone and flash before transitioning
+        transitionTimeoutRef.current = setTimeout(() => {
+          if (onComplete) onComplete();
+        }, 380);
       }
-    }, 45);
+    }, 35);
 
     return () => {
       if (animIntervalRef.current) clearInterval(animIntervalRef.current);
+      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
     };
-  }, [isActive, isExitFlash]);
+  }, [isActive, onComplete]);
 
   return (
     <div
