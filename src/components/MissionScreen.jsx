@@ -80,12 +80,24 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             “Step past the digital boundary. Welcome to my creative sandbox, my thoughts, and the multiverses I've brought to life. Take your time and explore.”
           </p>
 
-          {/* Cool Personality & Vibe Badges */}
+          {/* Clean Personality & Vibe Badges (Zero Emojis) */}
           <div className="welcome-vibe-strip">
-            <span className="vibe-pill">💡 CURIOSITY</span>
-            <span className="vibe-pill">⚡ CREATION</span>
-            <span className="vibe-pill cyan">🌌 MULTIVERSE</span>
-            <span className="vibe-pill green">✨ EXPLORATION</span>
+            <span className="vibe-pill">
+              <span className="vibe-dot cyan"></span>
+              CURIOSITY
+            </span>
+            <span className="vibe-pill">
+              <span className="vibe-dot green"></span>
+              CREATION
+            </span>
+            <span className="vibe-pill cyan">
+              <span className="vibe-dot cyan"></span>
+              MULTIVERSE
+            </span>
+            <span className="vibe-pill green">
+              <span className="vibe-dot green"></span>
+              EXPLORATION
+            </span>
           </div>
 
           {/* Primary Magnetic CTA Button */}
@@ -99,7 +111,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             <span className="corner tr"></span>
             <span className="corner bl"></span>
             <span className="corner br"></span>
-            <span className="cta-icon">▶</span>
+            <svg className="cta-svg-arrow" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             <span className="cta-text">ENTER THE MULTIVERSE</span>
           </button>
 

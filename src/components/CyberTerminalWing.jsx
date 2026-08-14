@@ -3,9 +3,9 @@ import { SoundFX } from './SoundFX';
 
 const INITIAL_LOGS = [
   { tag: 'SYS', text: 'booting neural_hypervisor v2.4...', color: 'cyan' },
-  { tag: 'OK', text: 'mounted /dev/nvme0n1 [64GB VRAM]', color: 'green' },
-  { tag: 'CORE', text: 'tensor_flux synced @ 3.8 TFLOPS', color: 'cyan' },
-  { tag: 'EXEC', text: 'spawn agentic_tree daemon (pid: 1337)', color: 'white' },
+  { tag: 'OK', text: 'nvme0n1 mounted [64GB VRAM]', color: 'green' },
+  { tag: 'CORE', text: 'tensor_flux synced @ 3.84 TFLOPS', color: 'cyan' },
+  { tag: 'EXEC', text: 'yggdrasil daemon online (pid: 1337)', color: 'white' },
   { tag: 'INFO', text: 'type "help" or click quick commands below', color: 'green' }
 ];
 
@@ -18,7 +18,6 @@ export default function CyberTerminalWing({ isActive }) {
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Auto scroll to bottom when logs update
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -42,30 +41,28 @@ export default function CyberTerminalWing({ isActive }) {
       reply = [];
     } else if (cmd === 'help') {
       reply = [
-        { tag: 'HELP', text: 'Available commands: whoami, skills, matrix, contact, stats, clear', color: 'cyan' }
+        { tag: 'HELP', text: 'Commands: whoami, skills, matrix, contact, stats, clear', color: 'cyan' }
       ];
     } else if (cmd === 'whoami') {
       reply = [
-        { tag: 'USER', text: 'Harshit Sharma // AI/ML & Systems Explorer @ USAR Delhi', color: 'green' }
+        { tag: 'USER', text: 'Harshit Sharma // AI/ML & Systems @ USAR Delhi', color: 'green' }
       ];
     } else if (cmd === 'skills') {
       reply = [
-        { tag: 'AI/ML', text: 'Python, PyTorch, Autonomous Agents, LLM Pipelines', color: 'cyan' },
-        { tag: 'WEB', text: 'React, WebGL, 3D Canvas, Node.js, Systems Architecture', color: 'green' }
+        { tag: 'SKILL', text: 'Python, PyTorch, Autonomous Agents, LLMs, WebGL', color: 'cyan' }
       ];
     } else if (cmd === 'matrix') {
       reply = [
-        { tag: 'MATRIX', text: '0x7FA2 :: Entropy 0.942 :: Tensor flux 3.84 TFLOPS', color: 'green' }
+        { tag: 'SYNC', text: '0x7FA2 :: Entropy 0.942 :: Flux 3.84 TFLOPS', color: 'green' }
       ];
     } else if (cmd === 'contact') {
       reply = [
-        { tag: 'EMAIL', text: 'codewithharshitsharma@gmail.com', color: 'cyan' },
+        { tag: 'MAIL', text: 'codewithharshitsharma@gmail.com', color: 'cyan' },
         { tag: 'LINK', text: 'linkedin.com/in/devharshitsharma', color: 'green' }
       ];
     } else if (cmd === 'stats') {
       reply = [
-        { tag: 'CPU', text: 'Usage: 12% // Temp: 38°C // VRAM: 64GB', color: 'cyan' },
-        { tag: 'PORTALS', text: '8 AI Universes Online & Calibrated', color: 'green' }
+        { tag: 'STAT', text: 'CPU 12% // Temp 36°C // 8 Portals Calibrated', color: 'cyan' }
       ];
     } else if (cmd === 'clear') {
       setLogs([]);
@@ -73,7 +70,7 @@ export default function CyberTerminalWing({ isActive }) {
       return;
     } else {
       reply = [
-        { tag: 'ERR', text: `Command not found: "${rawCmd}". Type "help"`, color: 'red' }
+        { tag: 'ERR', text: `Unknown command: "${rawCmd}". Type "help"`, color: 'red' }
       ];
     }
 
@@ -119,7 +116,7 @@ export default function CyberTerminalWing({ isActive }) {
         <span className="corner bl"></span>
         <span className="corner br"></span>
 
-        {/* Linux Terminal Titlebar */}
+        {/* Crisp Linux Terminal Titlebar */}
         <div className="term-titlebar">
           <div className="term-dots">
             <span className="term-dot red"></span>
@@ -127,9 +124,9 @@ export default function CyberTerminalWing({ isActive }) {
             <span className="term-dot green"></span>
           </div>
           <div className="term-host-wrap">
-            <span className="term-host">harshit@core:~# terminal</span>
+            <span className="term-host">hs@delhi:~/core</span>
           </div>
-          <span className="term-status-pill">INTERACTIVE</span>
+          <span className="term-status-pill">CLI_v2.4</span>
         </div>
 
         {/* Scrollable Terminal Stream */}
@@ -142,9 +139,9 @@ export default function CyberTerminalWing({ isActive }) {
             </div>
           ))}
 
-          {/* Real Interactive Input Line */}
+          {/* Interactive Prompt Input Line */}
           <div className="term-input-line">
-            <span className="term-prompt">root@hs:~$</span>
+            <span className="term-prompt">harshit:~$</span>
             <input
               ref={inputRef}
               type="text"

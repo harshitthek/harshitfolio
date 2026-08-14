@@ -17,7 +17,7 @@ export default function QuantumLaboratoryWing({ isActive }) {
   const handleOverclock = () => {
     SoundFX.playChirp();
     setOverclockActive(true);
-    setActiveAction('⚡ OVERCLOCKED');
+    setActiveAction('OVERCLOCKED');
     setFluxLevel(100);
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -29,7 +29,7 @@ export default function QuantumLaboratoryWing({ isActive }) {
 
   const handleSynthPulse = () => {
     SoundFX.playTone(520, 'sine', 0.25);
-    setActiveAction('🔊 SYNTH_PULSE');
+    setActiveAction('SYNTH_PULSE');
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => setActiveAction('STANDBY'), 1200);
@@ -37,7 +37,7 @@ export default function QuantumLaboratoryWing({ isActive }) {
 
   const handleWarp = () => {
     SoundFX.playLaser();
-    setActiveAction('🌌 WARP_BURST');
+    setActiveAction('WARP_BURST');
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => setActiveAction('STANDBY'), 1400);
@@ -97,7 +97,7 @@ export default function QuantumLaboratoryWing({ isActive }) {
           ))}
         </div>
 
-        {/* Interactive Action Trigger Buttons */}
+        {/* Interactive Action Trigger Buttons (Clean SVGs, No Emojis) */}
         <div className="lab-actions-grid">
           <button
             type="button"
@@ -106,7 +106,8 @@ export default function QuantumLaboratoryWing({ isActive }) {
             onMouseEnter={() => SoundFX.playHover('primary')}
             aria-label="Overclock neural core"
           >
-            ⚡ OVERCLOCK
+            <svg className="btn-svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            OVERCLOCK
           </button>
           <button
             type="button"
@@ -115,7 +116,8 @@ export default function QuantumLaboratoryWing({ isActive }) {
             onMouseEnter={() => SoundFX.playHover('soft')}
             aria-label="Trigger synth audio pulse"
           >
-            🔊 SYNTH PULSE
+            <svg className="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg>
+            SYNTH PULSE
           </button>
           <button
             type="button"
@@ -124,7 +126,8 @@ export default function QuantumLaboratoryWing({ isActive }) {
             onMouseEnter={() => SoundFX.playHover('soft')}
             aria-label="Trigger warp particle burst"
           >
-            🌌 WARP BURST
+            <svg className="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            WARP BURST
           </button>
         </div>
 

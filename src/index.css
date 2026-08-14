@@ -369,11 +369,11 @@ body::after {
   gap: 7px;
 }
 
-/* Permanent Top Social & Comms Buttons */
+/* Permanent Top Social & Comms Buttons (Zero Emojis, Pure SVGs) */
 .hud-social-btn {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   background: rgba(10, 14, 12, 0.85);
   border: 1px solid rgba(0, 255, 136, 0.22);
   color: #cbd5e1;
@@ -419,9 +419,23 @@ body::after {
   box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
 }
 
-.social-icon {
-  font-size: 9px;
-  line-height: 1;
+.social-svg-icon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.toggle-svg-icon {
+  width: 11px;
+  height: 11px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.nav-svg-icon {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .nav-divider {
@@ -1446,30 +1460,31 @@ body::after {
 }
 
 /* =====================================================================
-   LEFT FLANK: INTERACTIVE LINUX HACKER TERMINAL
+   LEFT FLANK: REFINED LINUX HACKER TERMINAL (CRAFTED & POLISHED)
    ===================================================================== */
 .cyber-flank-terminal {
   position: absolute;
   top: 50%;
   transform: translateY(-46%);
-  left: clamp(14px, 3.8vw, 55px);
+  left: clamp(14px, 3.5vw, 55px);
   z-index: 6;
-  width: 220px;
+  width: clamp(240px, 17vw, 265px);
   transition: opacity 0.3s ease;
 }
 
 .terminal-window {
   position: relative;
-  background: rgba(8, 12, 10, 0.94);
+  background: rgba(8, 12, 10, 0.95);
   border: 1px solid rgba(0, 255, 136, 0.32);
   border-radius: 5px;
-  padding: 8px 10px;
-  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.88), inset 0 0 20px rgba(0, 255, 136, 0.04);
+  padding: 10px 12px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 255, 136, 0.04);
   backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   overflow: hidden;
+  cursor: text;
 }
 
 .term-titlebar {
@@ -1477,7 +1492,7 @@ body::after {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(0, 255, 136, 0.18);
-  padding-bottom: 4px;
+  padding-bottom: 5px;
 }
 .term-dots {
   display: flex;
@@ -1499,10 +1514,11 @@ body::after {
 }
 .term-host {
   font-family: 'Space Mono', monospace;
-  font-size: 7.5px;
+  font-size: 8px;
   color: var(--g);
   letter-spacing: 1px;
   font-weight: 700;
+  white-space: nowrap;
 }
 .term-status-pill {
   font-family: 'Space Mono', monospace;
@@ -1513,18 +1529,19 @@ body::after {
   padding: 1px 4px;
   border-radius: 2px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .term-stream-body {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 2.5px;
+  gap: 3px;
   font-family: 'Space Mono', monospace;
-  font-size: 7.5px;
-  line-height: 1.35;
+  font-size: 8px;
+  line-height: 1.4;
   text-align: left;
-  height: 110px;
+  height: 118px;
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 2px;
@@ -1550,7 +1567,7 @@ body::after {
 .term-line {
   display: flex;
   align-items: flex-start;
-  gap: 4px;
+  gap: 5px;
 }
 .term-tag {
   font-weight: 700;
@@ -1568,15 +1585,16 @@ body::after {
 .term-input-line {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   border-top: 1px solid rgba(0, 255, 136, 0.15);
-  padding-top: 3px;
+  padding-top: 4px;
   margin-top: 2px;
 }
 .term-prompt {
   font-weight: 700;
   color: var(--g);
   flex-shrink: 0;
+  font-size: 8px;
 }
 .term-real-input {
   background: transparent;
@@ -1584,7 +1602,7 @@ body::after {
   outline: none;
   color: var(--white);
   font-family: 'Space Mono', monospace;
-  font-size: 7.5px;
+  font-size: 8px;
   width: 100%;
   padding: 0;
 }
@@ -1592,7 +1610,7 @@ body::after {
 .term-cmd-pills {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   border-top: 1px solid rgba(0, 255, 136, 0.12);
   padding-top: 4px;
   flex-wrap: wrap;
@@ -1602,9 +1620,9 @@ body::after {
   border: 1px solid rgba(0, 255, 136, 0.22);
   color: var(--g);
   font-family: 'Space Mono', monospace;
-  font-size: 6.5px;
+  font-size: 7px;
   font-weight: 700;
-  padding: 1.5px 5px;
+  padding: 2px 6px;
   border-radius: 2px;
   cursor: pointer;
   transition: all 0.2s;
@@ -1622,28 +1640,28 @@ body::after {
   position: absolute;
   top: 50%;
   transform: translateY(-46%);
-  right: clamp(14px, 3.8vw, 55px);
+  right: clamp(14px, 3.5vw, 55px);
   z-index: 6;
-  width: 220px;
+  width: clamp(240px, 17vw, 265px);
   transition: opacity 0.3s ease;
 }
 
 .lab-window {
   position: relative;
-  background: rgba(8, 12, 10, 0.94);
+  background: rgba(8, 12, 10, 0.95);
   border: 1px solid rgba(56, 189, 248, 0.32);
   border-radius: 5px;
-  padding: 8px 10px;
-  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.88), inset 0 0 20px rgba(56, 189, 248, 0.04);
+  padding: 10px 12px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(56, 189, 248, 0.04);
   backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   transition: all 0.3s ease;
 }
 .lab-window.overclocked {
   border-color: #00ff88;
-  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.88), 0 0 25px rgba(0, 255, 136, 0.5);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 255, 136, 0.5);
 }
 
 .lab-titlebar {
@@ -1651,7 +1669,7 @@ body::after {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(56, 189, 248, 0.18);
-  padding-bottom: 4px;
+  padding-bottom: 5px;
 }
 .lab-title-left {
   display: flex;
@@ -1695,7 +1713,7 @@ body::after {
   justify-content: space-between;
   align-items: center;
   font-family: 'Space Mono', monospace;
-  font-size: 7px;
+  font-size: 7.5px;
 }
 .slider-label {
   color: var(--dim-light);
@@ -1732,14 +1750,24 @@ body::after {
   gap: 4px;
 }
 .lab-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   font-family: 'Space Mono', monospace;
-  font-size: 7px;
+  font-size: 7.5px;
   font-weight: 700;
   letter-spacing: 0.8px;
-  padding: 4px 6px;
+  padding: 5px 6px;
   border-radius: 2px;
   cursor: pointer;
   transition: all 0.2s;
+}
+.btn-svg {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  flex-shrink: 0;
 }
 .lab-btn.primary {
   grid-column: span 2;
@@ -1777,13 +1805,36 @@ body::after {
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid rgba(56, 189, 248, 0.14);
-  padding-top: 3px;
+  padding-top: 4px;
   font-family: 'Space Mono', monospace;
-  font-size: 6.5px;
+  font-size: 7px;
   color: var(--dim-light);
 }
 .lab-stat.cyan { color: var(--cyan); font-weight: 700; }
 .lab-stat.green { color: var(--g); font-weight: 700; }
+
+/* Welcome Pod Pill Dots & CTA Arrow */
+.vibe-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+}
+.vibe-dot.cyan {
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+}
+.vibe-dot.green {
+  background: var(--g);
+  box-shadow: 0 0 6px var(--g);
+}
+.cta-svg-arrow {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 4px;
+}
 
 /* Seamless responsive scaling */
 @media (max-width: 1180px) {
