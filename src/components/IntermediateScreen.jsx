@@ -12,17 +12,21 @@ export default function IntermediateScreen({ isActive }) {
   const [progress, setProgress] = useState(0);
   const [hexCode, setHexCode] = useState('0x7F...9A');
   const [logIndex, setLogIndex] = useState(0);
+  const [isExitFlash, setIsExitFlash] = useState(false);
   const animIntervalRef = useRef(null);
+  const prevLogRef = useRef(0);
 
   useEffect(() => {
     if (!isActive) {
       setProgress(0);
       setLogIndex(0);
+      setIsExitFlash(false);
+      prevLogRef.current = 0;
       if (animIntervalRef.current) clearInterval(animIntervalRef.current);
       return;
     }
 
-    // Play initial data chirp
+    // Play initial data deploy sweep
     if (SoundFX.isEnabled()) {
       SoundFX.playDeploy();
     }
@@ -39,10 +43,27 @@ export default function IntermediateScreen({ isActive }) {
       const randomHex = '0x' + Math.floor(Math.random() * 0xFFFFFF).toString(16).toUpperCase().padStart(6, '0');
       setHexCode(randomHex);
 
-      // Update telemetry log steps
-      if (elapsed > 400 && elapsed <= 900) setLogIndex(1);
-      else if (elapsed > 900 && elapsed <= 1600) setLogIndex(2);
-      else if (elapsed > 1600) setLogIndex(3);
+      // Update telemetry log steps with tactile key audio ticks
+      let newLogIdx = 0;
+      if (elapsed > 400 && elapsed <= 900) newLogIdx = 1;
+      else if (elapsed > 900 && elapsed <= 1600) newLogIdx = 2;
+      else if (elapsed > 1600) newLogIdx = 3;
+
+      if (newLogIdx !== prevLogRef.current) {
+        prevLogRef.current = newLogIdx;
+        setLogIndex(newLogIdx);
+        if (SoundFX.isEnabled()) {
+          SoundFX.playKey();
+        }
+      }
+
+      // Trigger 100% milestone exit flash
+      if (currentPct >= 96 && !isExitFlash) {
+        setIsExitFlash(true);
+        if (SoundFX.isEnabled()) {
+          SoundFX.playClick();
+        }
+      }
 
       if (currentPct >= 100) {
         clearInterval(animIntervalRef.current);
@@ -52,10 +73,13 @@ export default function IntermediateScreen({ isActive }) {
     return () => {
       if (animIntervalRef.current) clearInterval(animIntervalRef.current);
     };
-  }, [isActive]);
+  }, [isActive, isExitFlash]);
 
   return (
-    <div id="s-intermediate" className={`screen ${isActive ? 'active' : ''}`}>
+    <div
+      id="s-intermediate"
+      className={`screen ${isActive ? 'active' : ''} ${isExitFlash ? 'glitch-exit-flash' : ''}`}
+    >
       <div className="load-grid"></div>
       <div className="load-vignette"></div>
 

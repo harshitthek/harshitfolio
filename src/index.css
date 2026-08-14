@@ -1012,6 +1012,26 @@ body::after {
   line-height: 1.4;
 }
 
+#s-intermediate.glitch-exit-flash {
+  animation: intermediateExitFlash 0.22s ease-out forwards;
+}
+
+@keyframes intermediateExitFlash {
+  0% {
+    filter: brightness(1) contrast(1);
+    transform: scale(1);
+  }
+  40% {
+    filter: brightness(2.4) contrast(1.6) drop-shadow(0 0 40px rgba(0, 255, 136, 0.9));
+    transform: scale(1.02);
+  }
+  100% {
+    filter: brightness(3) blur(6px);
+    opacity: 0;
+    transform: scale(1.04);
+  }
+}
+
 /* =====================================================================
    SCREEN 3: CLASSIFIED MISSION BRIEFING
    ===================================================================== */
