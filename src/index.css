@@ -1144,68 +1144,30 @@ body::after {
   filter: drop-shadow(0 0 25px rgba(0, 255, 136, 0.35));
 }
 
-/* Redesigned Cyber Command Capsule (Down Box) */
+/* Redesigned Cyber Command Capsule (Down Box - Streamlined & Nudged Down) */
 .mission-command-capsule {
   position: relative;
   width: 100%;
-  max-width: 530px;
+  max-width: 500px;
   background: rgba(10, 14, 12, 0.94);
-  border: 1px solid rgba(0, 255, 136, 0.28);
+  border: 1px solid rgba(0, 255, 136, 0.26);
   border-radius: 4px;
-  padding: 1.05rem 1.4rem;
+  padding: 0.72rem 1.25rem;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(0, 255, 136, 0.04);
-  text-align: left;
+  text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.45rem;
   backdrop-filter: blur(14px);
-}
-
-.capsule-top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(0, 255, 136, 0.18);
-  padding-bottom: 5px;
-}
-
-.capsule-bar-left {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.capsule-beacon-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--g);
-  box-shadow: 0 0 8px var(--g);
-  animation: pulseDot 1.2s infinite;
-}
-.capsule-title {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: var(--g);
-}
-.capsule-status-pill {
-  font-family: 'Space Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 1.5px;
-  color: var(--cyan);
-  background: rgba(56, 189, 248, 0.08);
-  padding: 2px 8px;
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  border-radius: 2px;
+  margin-top: 22px;
 }
 
 .capsule-narrative {
-  font-size: 11px;
+  font-size: 10.5px;
   color: #cbd5e1;
-  line-height: 1.65;
+  line-height: 1.55;
   margin: 0;
-  text-align: left;
+  text-align: center;
 }
 .capsule-narrative .text-highlight {
   color: var(--g);
@@ -1218,9 +1180,9 @@ body::after {
   border: 1px solid var(--g);
   color: var(--g);
   font-family: 'Space Mono', monospace;
-  font-size: 11.5px;
+  font-size: 11px;
   letter-spacing: 3px;
-  padding: 12px 24px;
+  padding: 10.5px 20px;
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1231,7 +1193,7 @@ body::after {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 .capsule-cta-btn::before {
   content: '';

@@ -111,25 +111,16 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <HologramCanvas isActive={isActive} />
         </div>
 
-        {/* Redesigned Cyber Command Capsule (Fixed Layout & Design) */}
+        {/* Streamlined Cyber Command Capsule (Cut top height for sleekness) */}
         <div className="mission-command-capsule">
           <span className="corner tl"></span>
           <span className="corner tr"></span>
           <span className="corner bl"></span>
           <span className="corner br"></span>
 
-          {/* Capsule Header Bar */}
-          <div className="capsule-top-bar">
-            <div className="capsule-bar-left">
-              <span className="capsule-beacon-dot"></span>
-              <span className="capsule-title">CREATOR DIRECTIVE</span>
-            </div>
-            <span className="capsule-status-pill">STATUS: READY</span>
-          </div>
-
           {/* Authentic Statement Body */}
           <p className="capsule-narrative">
-            Driven by curiosity and a passion for turning complex ideas into <span className="text-highlight">intelligent, living systems</span>. Step inside to explore my engineering mindset, research archives, and multiverse.
+            Driven by curiosity and a passion for turning complex ideas into <span className="text-highlight">intelligent, living systems</span>. Step inside to explore my engineering mindset and creations.
           </p>
 
           {/* Primary Magnetic CTA Button */}
