@@ -1464,7 +1464,7 @@ body::after {
 }
 
 /* =====================================================================
-   LEFT FLANK: SPACIOUS, CRAFTED LINUX TERMINAL (BIG & REFINED)
+   LEFT FLANK: CONTINUOUS AUTOTYPING LINUX TERMINAL STREAM
    ===================================================================== */
 .cyber-flank-terminal {
   position: absolute;
@@ -1488,7 +1488,6 @@ body::after {
   flex-direction: column;
   gap: 7px;
   overflow: hidden;
-  cursor: text;
 }
 
 .term-titlebar {
@@ -1524,7 +1523,9 @@ body::after {
   font-weight: 700;
   white-space: nowrap;
 }
-.term-status-pill {
+.autotype-pill {
+  display: flex;
+  align-items: center;
   font-family: 'Space Mono', monospace;
   font-size: 7px;
   color: var(--cyan);
@@ -1535,8 +1536,18 @@ body::after {
   font-weight: 700;
   white-space: nowrap;
 }
+.live-rec-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+  animation: pulseDot 1s infinite;
+  display: inline-block;
+  margin-right: 4px;
+}
 
-.term-stream-body {
+.term-stream-body.autotype-stream {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -1545,7 +1556,7 @@ body::after {
   font-size: 8.5px;
   line-height: 1.5;
   text-align: left;
-  height: 142px;
+  height: 152px;
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 4px;
@@ -1587,13 +1598,15 @@ body::after {
   word-break: break-word;
 }
 
-.term-input-line {
+.term-active-prompt-line {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   border-top: 1px solid rgba(0, 255, 136, 0.18);
-  padding-top: 6px;
+  padding-top: 5px;
   margin-top: 3px;
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px;
 }
 .term-prompt {
   font-weight: 700;
@@ -1601,46 +1614,34 @@ body::after {
   flex-shrink: 0;
   font-size: 8.5px;
 }
-.term-real-input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--white);
+.term-typed-text {
+  color: #ffffff;
+  font-weight: 700;
   font-family: 'Space Mono', monospace;
-  font-size: 8.5px;
-  width: 100%;
-  padding: 0;
 }
-.term-real-input::placeholder {
-  color: #64748b;
+.term-live-caret {
+  display: inline-block;
+  width: 6px;
+  height: 11px;
+  background: var(--g);
+  box-shadow: 0 0 8px var(--g);
+  animation: blink 0.8s steps(1) infinite;
+  margin-left: 2px;
 }
 
-.term-cmd-pills {
+.term-autotype-footer {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 5px;
-  border-top: 1px solid rgba(0, 255, 136, 0.14);
-  padding-top: 6px;
-  flex-wrap: wrap;
-}
-.cmd-pill {
-  background: rgba(0, 255, 136, 0.08);
-  border: 1px solid rgba(0, 255, 136, 0.28);
-  color: var(--g);
+  border-top: 1px solid rgba(0, 255, 136, 0.15);
+  padding-top: 5px;
   font-family: 'Space Mono', monospace;
-  font-size: 7.5px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.2s;
+  font-size: 7px;
+  color: var(--dim-light);
+  margin-top: 2px;
 }
-.cmd-pill:hover {
-  background: var(--g);
-  color: #000;
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-  transform: translateY(-1px);
-}
+.footer-stat.cyan { color: var(--cyan); font-weight: 700; }
+.footer-stat.green { color: var(--g); font-weight: 700; }
 
 /* =====================================================================
    RIGHT FLANK: SPACIOUS QUANTUM LABORATORY CONTROLLER
