@@ -1342,6 +1342,9 @@ body::after {
 /* =====================================================================
    AMBIENT CYBER HUD TELEMETRY WINGS (LEFT & RIGHT)
    ===================================================================== */
+/* =====================================================================
+   AMBIENT CYBER HUD TELEMETRY WINGS (LEFT & RIGHT)
+   ===================================================================== */
 .mission-side-hud {
   position: absolute;
   top: 50%;
@@ -1352,31 +1355,31 @@ body::after {
   transition: opacity 0.3s ease;
 }
 .mission-side-hud.left-hud {
-  left: clamp(20px, 4vw, 55px);
+  left: clamp(20px, 4.5vw, 60px);
 }
 .mission-side-hud.right-hud {
-  right: clamp(20px, 4vw, 55px);
+  right: clamp(20px, 4.5vw, 60px);
 }
 
 .side-hud-card {
   position: relative;
-  background: rgba(10, 10, 10, 0.85);
-  border: 1px solid rgba(0, 255, 136, 0.2);
+  background: rgba(8, 12, 10, 0.9);
+  border: 1px solid rgba(0, 255, 136, 0.24);
   border-radius: 4px;
   padding: 12px 14px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), inset 0 0 15px rgba(0, 255, 136, 0.03);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), inset 0 0 18px rgba(0, 255, 136, 0.03);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 175px;
-  backdrop-filter: blur(10px);
+  gap: 7px;
+  width: 195px;
+  backdrop-filter: blur(12px);
 }
 
 .side-hud-header {
   display: flex;
   align-items: center;
   gap: 6px;
-  border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+  border-bottom: 1px solid rgba(0, 255, 136, 0.16);
   padding-bottom: 4px;
 }
 .hud-pulse-dot {
@@ -1431,8 +1434,8 @@ body::after {
 .side-hud-waveform {
   display: flex;
   align-items: flex-end;
-  gap: 3px;
-  height: 18px;
+  gap: 2.5px;
+  height: 20px;
   padding-top: 4px;
   border-top: 1px solid rgba(0, 255, 136, 0.12);
 }
@@ -1450,35 +1453,53 @@ body::after {
 .wave-bar:nth-child(6) { height: 60%; animation-delay: 0.6s; }
 .wave-bar:nth-child(7) { height: 90%; animation-delay: 0.25s; }
 .wave-bar:nth-child(8) { height: 40%; animation-delay: 0.45s; }
+.wave-bar:nth-child(9) { height: 75%; animation-delay: 0.15s; }
+.wave-bar:nth-child(10) { height: 50%; animation-delay: 0.35s; }
 
 @keyframes waveFlux {
-  0% { transform: scaleY(0.4); }
+  0% { transform: scaleY(0.35); }
   100% { transform: scaleY(1); }
 }
 
-/* Ambient Reticle Graphic (Right) */
+/* Ambient Radar Reticle Graphic (Right) */
 .side-hud-reticle {
   position: relative;
   width: 100%;
-  height: 24px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-top: 1px solid rgba(0, 255, 136, 0.12);
-  padding-top: 4px;
+  padding-top: 3px;
+  margin: 1px 0;
 }
 .reticle-ring {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   border: 1px dashed rgba(56, 189, 248, 0.6);
-  animation: spin 8s linear infinite;
+  animation: spin 7s linear infinite;
 }
-.reticle-cross {
+.reticle-cross.h {
   position: absolute;
-  width: 26px;
+  width: 32px;
   height: 1px;
   background: rgba(0, 255, 136, 0.35);
+}
+.reticle-cross.v {
+  position: absolute;
+  height: 22px;
+  width: 1px;
+  background: rgba(0, 255, 136, 0.35);
+}
+.reticle-sweep {
+  position: absolute;
+  width: 11px;
+  height: 1px;
+  background: #00ff88;
+  transform-origin: left center;
+  animation: spin 2.5s linear infinite;
+  left: 50%;
 }
 .reticle-dot {
   position: absolute;
@@ -1486,7 +1507,31 @@ body::after {
   height: 4px;
   border-radius: 50%;
   background: var(--cyan);
-  box-shadow: 0 0 5px var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+  animation: pulseDot 1.2s infinite;
+}
+
+.side-hud-footer-hex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Space Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 1px;
+  color: var(--dim-light);
+  border-top: 1px solid rgba(0, 255, 136, 0.12);
+  padding-top: 4px;
+}
+.hex-prefix {
+  color: var(--g);
+  font-weight: 700;
+}
+.hex-stream {
+  color: var(--dim-light);
+}
+.hex-stream.cyan {
+  color: var(--cyan);
+  font-weight: 700;
 }
 
 /* Seamless responsive scaling */

@@ -4,6 +4,8 @@ import HologramCanvas from './HologramCanvas';
 
 export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
   const [liveEntropy, setLiveEntropy] = useState('0.942');
+  const [liveTflops, setLiveTflops] = useState('3.84');
+  const [hexCycle, setHexCycle] = useState('0x7FA2');
 
   const handleAccept = () => {
     SoundFX.playClick();
@@ -26,13 +28,15 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isActive]);
 
-  // Subtle live telemetry pulse for ambient HUD
+  // Dynamic live HUD telemetry fluctuations
   useEffect(() => {
     if (!isActive) return;
     const interval = setInterval(() => {
-      const entropy = (0.935 + Math.random() * 0.015).toFixed(3);
-      setLiveEntropy(entropy);
-    }, 1200);
+      setLiveEntropy((0.935 + Math.random() * 0.015).toFixed(3));
+      setLiveTflops((3.80 + Math.random() * 0.09).toFixed(2));
+      const hexes = ['0x7FA2', '0x99BC', '0x00F8', '0x4E1A', '0x88FF'];
+      setHexCycle(hexes[Math.floor(Math.random() * hexes.length)]);
+    }, 1100);
     return () => clearInterval(interval);
   }, [isActive]);
 
@@ -43,7 +47,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
       <div className="corner-dec bl"></div>
       <div className="corner-dec br"></div>
 
-      {/* Left Ambient Cyber HUD Telemetry Wing */}
+      {/* Left High-Tech Cyber HUD Telemetry Wing */}
       <aside className="mission-side-hud left-hud" aria-hidden="true">
         <div className="side-hud-card">
           <span className="corner tl"></span>
@@ -53,28 +57,29 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
 
           <div className="side-hud-header">
             <span className="hud-pulse-dot"></span>
-            <span className="hud-title">SYSTEM TELEMETRY</span>
+            <span className="hud-title">NEURAL ENGINE // v2.4</span>
           </div>
 
           <div className="side-hud-list">
             <div className="side-hud-row">
-              <span className="hud-k">NEURAL ENGINE</span>
-              <span className="hud-v cyan">v2.4_ONLINE</span>
+              <span className="hud-k">CORE ARCH</span>
+              <span className="hud-v green">YGGDRASIL_BOT</span>
             </div>
             <div className="side-hud-row">
-              <span className="hud-k">LATENCY</span>
-              <span className="hud-v green">0.2 ms</span>
+              <span className="hud-k">TENSOR FLUX</span>
+              <span className="hud-v cyan">{liveTflops} TFLOPS</span>
+            </div>
+            <div className="side-hud-row">
+              <span className="hud-k">SYNAPSE LINK</span>
+              <span className="hud-v">100%_SYNCED</span>
             </div>
             <div className="side-hud-row">
               <span className="hud-k">ENTROPY</span>
-              <span className="hud-v">{liveEntropy} η</span>
-            </div>
-            <div className="side-hud-row">
-              <span className="hud-k">AI PORTALS</span>
-              <span className="hud-v green">8 MOUNTED</span>
+              <span className="hud-v green">{liveEntropy} η</span>
             </div>
           </div>
 
+          {/* Dynamic 10-Bar Frequency Visualizer */}
           <div className="side-hud-waveform">
             <span className="wave-bar"></span>
             <span className="wave-bar"></span>
@@ -84,6 +89,13 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             <span className="wave-bar"></span>
             <span className="wave-bar"></span>
             <span className="wave-bar"></span>
+            <span className="wave-bar"></span>
+            <span className="wave-bar"></span>
+          </div>
+
+          <div className="side-hud-footer-hex">
+            <span className="hex-prefix">DEC:</span>
+            <span className="hex-stream">{hexCycle} // ACTIVE</span>
           </div>
         </div>
       </aside>
@@ -179,7 +191,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         </div>
       </div>
 
-      {/* Right Ambient Cyber HUD Telemetry Wing */}
+      {/* Right High-Tech Spatial Radar & Geolocation Wing */}
       <aside className="mission-side-hud right-hud" aria-hidden="true">
         <div className="side-hud-card">
           <span className="corner tl"></span>
@@ -189,7 +201,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
 
           <div className="side-hud-header">
             <span className="hud-pulse-dot cyan"></span>
-            <span className="hud-title">GEOLOCATION MATRIX</span>
+            <span className="hud-title">SPATIAL SENSORS // RADAR</span>
           </div>
 
           <div className="side-hud-list">
@@ -206,15 +218,23 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
               <span className="hud-v">USAR (GGSIPU)</span>
             </div>
             <div className="side-hud-row">
-              <span className="hud-k">CLEARANCE</span>
+              <span className="hud-k">SECURITY</span>
               <span className="hud-v green">LEVEL-9_AUTH</span>
             </div>
           </div>
 
+          {/* Animated 3D Cyber Radar Reticle */}
           <div className="side-hud-reticle">
             <span className="reticle-ring"></span>
-            <span className="reticle-cross"></span>
+            <span className="reticle-cross h"></span>
+            <span className="reticle-cross v"></span>
+            <span className="reticle-sweep"></span>
             <span className="reticle-dot"></span>
+          </div>
+
+          <div className="side-hud-footer-hex">
+            <span className="hex-prefix">UPLINK:</span>
+            <span className="hex-stream cyan">10 Gbps // 8 PORTALS</span>
           </div>
         </div>
       </aside>
