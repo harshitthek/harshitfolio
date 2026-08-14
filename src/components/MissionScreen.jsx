@@ -35,16 +35,19 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         {/* Top Classified Mission Badge */}
         <div className="mission-badge-strip">
           <span className="mission-status-dot"></span>
-          <span className="mission-tag">CLASSIFIED MISSION BRIEFING // LEVEL-9 CLEARANCE</span>
+          <span className="mission-tag">CLASSIFIED AGENT DOSSIER // DIRECTIVE_01</span>
         </div>
 
-        {/* Hero Title */}
-        <h1 className="mission-title">
-          HARSHIT <span className="text-glow">SHARMA</span>
+        {/* Grand Hero Name */}
+        <h1 className="mission-hero-name">
+          HARSHIT <span className="hero-name-glow">SHARMA</span>
         </h1>
 
-        <div className="mission-sub">
-          ARTIFICIAL INTELLIGENCE &bull; MACHINE LEARNING &bull; SYSTEMS ENGINEERING &bull; USAR (GGSIPU)
+        {/* Subtitle Credential Pills */}
+        <div className="mission-creds-strip">
+          <span className="cred-pill primary">B.TECH AI &amp; ML</span>
+          <span className="cred-pill">USAR (GGSIPU), NEW DELHI</span>
+          <span className="cred-pill cyan">SYSTEMS ARCHITECT</span>
         </div>
 
         {/* Centerpiece 3D Interactive Hologram */}
@@ -52,28 +55,49 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <HologramCanvas isActive={isActive} />
         </div>
 
-        {/* Centered Operational Directive Glass Pod */}
+        {/* Redesigned Cyber Directive Hub Pod */}
         <div className="mission-directive-card">
           <span className="corner tl"></span>
           <span className="corner tr"></span>
           <span className="corner bl"></span>
           <span className="corner br"></span>
 
-          <div className="directive-header">
-            <div className="directive-title-row">
-              <span className="directive-icon">🎯</span>
-              <span className="directive-title">OPERATIONAL DIRECTIVE</span>
+          {/* Card Top Telemetry Bar */}
+          <div className="directive-top-bar">
+            <div className="directive-bar-left">
+              <span className="directive-pulse-dot"></span>
+              <span className="directive-heading">OPERATIONAL DIRECTIVE</span>
             </div>
-            <span className="directive-telemetry-chip">8 AI UNIVERSES READY</span>
+            <div className="directive-bar-right">
+              <span className="directive-level-badge">CLEARANCE: LEVEL-9 // AUTHORIZED</span>
+            </div>
           </div>
 
-          <p className="mission-desc">
-            Your directive: <span className="highlight">infiltrate the engineering multiverse</span> of Harshit Sharma. Explore autonomous tree agents (<span className="tag-inline">Yggdrasil Bot</span>), LLM sandboxes (<span className="tag-inline">Resilient</span>), real-time valuation models (<span className="tag-inline">Used Bike ML</span>), and WebGL engines.
+          {/* 3-Column Micro Telemetry Grid */}
+          <div className="directive-grid-mini">
+            <div className="mini-stat-card">
+              <span className="stat-code">01 // MULTIVERSE</span>
+              <span className="stat-val">8 Flagship AI Portals</span>
+            </div>
+            <div className="mini-stat-card">
+              <span className="stat-code">02 // AGENTS</span>
+              <span className="stat-val">Yggdrasil Tree Bot</span>
+            </div>
+            <div className="mini-stat-card">
+              <span className="stat-code">03 // ML MODELS</span>
+              <span className="stat-val">Resilient &amp; Used Bike ML</span>
+            </div>
+          </div>
+
+          {/* Mission Briefing Text */}
+          <p className="mission-brief-text">
+            Neural uplink authorized. Infiltrate Harshit Sharma's archives to explore autonomous agentic systems, real-time ML valuation models, and interactive WebGL simulations. Select your portal and deploy.
           </p>
 
+          {/* Primary Magnetic Neon Button */}
           <button
             type="button"
-            className="accept-btn"
+            className="accept-mission-cta"
             onClick={handleAccept}
             onMouseEnter={() => SoundFX.playHover('primary')}
           >
@@ -81,8 +105,8 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             <span className="corner tr"></span>
             <span className="corner bl"></span>
             <span className="corner br"></span>
-            <span className="accept-arrow">▶</span>
-            <span>ACCEPT MISSION &amp; ENTER MULTIVERSE</span>
+            <span className="cta-icon">▶</span>
+            <span className="cta-text">ENGAGE NEURAL MULTIVERSE &amp; ACCEPT MISSION</span>
           </button>
 
           <div className="mission-key-hint">
