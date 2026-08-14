@@ -143,7 +143,7 @@ export default function App() {
   return (
     <div className="app-container">
       {/* Precision Theme-Matched Cyber Cursor */}
-      <CyberCursor />
+      <CyberCursor activeScreen={currentScreen} />
 
       {/* Interactive AI-driven neural synapse mesh canvas */}
       <NeuralBackground />

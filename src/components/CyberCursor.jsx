@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-// Style 1: Ambient Mouse Spotlight & Surface Glow
-export default function CyberCursor() {
+// Style 1: Ambient Mouse Spotlight & Surface Glow (Active on Hub Screens)
+export default function CyberCursor({ activeScreen }) {
   const spotlightRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -62,7 +62,8 @@ export default function CyberCursor() {
     };
   }, [isVisible]);
 
-  if (isTouch) return null;
+  // Keep Screen 1 100% clean and free of compositing overhead
+  if (isTouch || activeScreen === 's-video') return null;
 
   return (
     <div className={`cursor-spotlight-container ${isVisible ? 'active' : ''}`}>

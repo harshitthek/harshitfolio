@@ -5,7 +5,6 @@ import { useVoice } from './VoiceContext';
 export default function VideoScreen({ isActive, onComplete }) {
   const vidRef = useRef(null);
   const [videoStarted, setVideoStarted] = useState(false);
-  const [isWarping, setIsWarping] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const fallbackTimerRef = useRef(null);
   const { voiceEnabled, toggleVoice } = useVoice();
@@ -72,12 +71,11 @@ export default function VideoScreen({ isActive, onComplete }) {
       if (e.preventDefault) e.preventDefault();
       if (e.stopPropagation) e.stopPropagation();
     }
-    if (videoStarted || isWarping) return;
+    if (videoStarted) return;
 
-    setIsWarping(true);
-    if (sfxOn) SoundFX.playWarp();
+    setVideoStarted(true);
+    if (sfxOn) SoundFX.playClick();
 
-    // Start video playback IMMEDIATELY synchronously within user gesture
     if (vidRef.current) {
       vidRef.current.muted = !sfxOn;
       const playPromise = vidRef.current.play();
@@ -87,12 +85,9 @@ export default function VideoScreen({ isActive, onComplete }) {
           afterVideo();
         });
       }
+    } else {
+      afterVideo();
     }
-
-    // Seamlessly transition out the unmute card overlay
-    setTimeout(() => {
-      setVideoStarted(true);
-    }, 280);
 
     fallbackTimerRef.current = setTimeout(() => {
       afterVideo();
@@ -121,7 +116,7 @@ export default function VideoScreen({ isActive, onComplete }) {
 
       if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
-        if (!videoStarted && !isWarping) {
+        if (!videoStarted) {
           unmuteVideo();
         } else {
           afterVideo();
@@ -131,7 +126,7 @@ export default function VideoScreen({ isActive, onComplete }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isActive, videoStarted, isWarping, sfxOn]);
+  }, [isActive, videoStarted, sfxOn]);
 
   return (
     <div id="s-video" className={`screen ${isActive ? 'active' : ''}`}>
@@ -210,12 +205,12 @@ export default function VideoScreen({ isActive, onComplete }) {
       {!videoStarted && (
         <div
           id="unmute-overlay"
-          className={`unmute-overlay ${isWarping ? 'overlay-dissolving' : ''}`}
+          className="unmute-overlay"
           onClick={unmuteVideo}
           role="button"
           tabIndex={0}
         >
-          <div className={`unmute-box ${isWarping ? 'warping' : ''}`} onClick={(e) => e.stopPropagation()}>
+          <div className="unmute-box" onClick={(e) => e.stopPropagation()}>
             <span className="corner tl"></span>
             <span className="corner tr"></span>
             <span className="corner bl"></span>
