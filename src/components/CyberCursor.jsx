@@ -25,15 +25,17 @@ export default function CyberCursor() {
       mousePos.current = { x: e.clientX, y: e.clientY };
       if (!isVisible) setIsVisible(true);
 
-      // Snap inner dot immediately for 0ms lag
+      // Instant 1:1 hardware follow for center core
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
       }
 
-      // Check if cursor is over an interactive element
+      // Check if cursor is hovering over an interactive element
       const target = e.target;
       if (target) {
-        const interactive = target.closest('button, a, input, textarea, select, [role="button"], .portal-card, .btn-cyber, .unmute-overlay, .tab-btn, .action-btn');
+        const interactive = target.closest(
+          'button, a, input, textarea, select, [role="button"], .portal-card, .btn-cyber, .unmute-overlay, .tab-btn, .action-btn, .hud-quick-btn, .hud-toggle-btn'
+        );
         setIsHovered(!!interactive);
       }
     };
@@ -50,9 +52,9 @@ export default function CyberCursor() {
     document.body.addEventListener('mouseleave', handleMouseLeave);
     document.body.addEventListener('mouseenter', handleMouseEnter);
 
-    // Smooth RAF lerp loop for the trailing ring
+    // High-performance smooth spring interpolation
     const renderLoop = () => {
-      const ease = 0.18;
+      const ease = 0.2;
       ringPos.current.x += (mousePos.current.x - ringPos.current.x) * ease;
       ringPos.current.y += (mousePos.current.y - ringPos.current.y) * ease;
 
@@ -78,23 +80,18 @@ export default function CyberCursor() {
   if (isTouch) return null;
 
   return (
-    <div className={`cyber-cursor-container ${isVisible ? 'visible' : ''}`}>
-      {/* Precision Inner Dot */}
+    <div className={`modern-cursor-wrapper ${isVisible ? 'visible' : ''}`}>
+      {/* Precision Core Dot */}
       <div
         ref={dotRef}
-        className={`cyber-cursor-dot ${isHovered ? 'hovered' : ''} ${isClicked ? 'clicked' : ''}`}
+        className={`modern-cursor-dot ${isHovered ? 'hovered' : ''} ${isClicked ? 'clicked' : ''}`}
       />
 
-      {/* Trailing Sci-Fi Reticle Ring */}
+      {/* Modern Fluid Glass Aura Ring with Difference Blend */}
       <div
         ref={ringRef}
-        className={`cyber-cursor-ring ${isHovered ? 'hovered' : ''} ${isClicked ? 'clicked' : ''}`}
-      >
-        <span className="reticle-bracket tl"></span>
-        <span className="reticle-bracket tr"></span>
-        <span className="reticle-bracket bl"></span>
-        <span className="reticle-bracket br"></span>
-      </div>
+        className={`modern-cursor-aura ${isHovered ? 'hovered' : ''} ${isClicked ? 'clicked' : ''}`}
+      />
     </div>
   );
 }

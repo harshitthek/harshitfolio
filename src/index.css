@@ -64,7 +64,7 @@ body::after {
 }
 
 /* =====================================================================
-   CYBER RETICLE CUSTOM CURSOR
+   MODERN FLUID BLEND-MODE CURSOR
    ===================================================================== */
 @media (hover: hover) and (pointer: fine) {
   body, button, a, input, textarea, select, [role="button"], .portal-card, .btn-cyber {
@@ -72,100 +72,77 @@ body::after {
   }
 }
 
-.cyber-cursor-container {
+.modern-cursor-wrapper {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 999999;
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.2s ease;
+  mix-blend-mode: difference;
 }
-.cyber-cursor-container.visible {
+.modern-cursor-wrapper.visible {
   opacity: 1;
 }
 
-.cyber-cursor-dot {
+/* Precision Inner Core Dot */
+.modern-cursor-dot {
   position: fixed;
-  top: -4px;
-  left: -4px;
-  width: 8px;
-  height: 8px;
+  top: -3px;
+  left: -3px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: var(--g);
-  box-shadow: 0 0 8px var(--g), 0 0 16px rgba(0, 255, 136, 0.4);
+  background: #ffffff;
   pointer-events: none;
   z-index: 1000000;
   will-change: transform;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
 }
-.cyber-cursor-dot.hovered {
-  background: var(--cyan);
-  box-shadow: 0 0 10px var(--cyan), 0 0 20px rgba(56, 189, 248, 0.6);
+.modern-cursor-dot.hovered {
+  opacity: 0;
+  transform: scale(0.2);
 }
-.cyber-cursor-dot.clicked {
-  background: #ffffff;
-  box-shadow: 0 0 15px #ffffff, 0 0 30px var(--g);
+.modern-cursor-dot.clicked {
+  transform: scale(1.8);
 }
 
-.cyber-cursor-ring {
+/* Modern Fluid Outer Aura with Inversion */
+.modern-cursor-aura {
   position: fixed;
-  top: -18px;
-  left: -18px;
-  width: 36px;
-  height: 36px;
-  border: 1px dashed rgba(0, 255, 136, 0.4);
+  top: -16px;
+  left: -16px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
+  background: #ffffff;
   pointer-events: none;
   z-index: 999999;
-  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
-              height 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
-              top 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
-              left 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.22s ease,
-              box-shadow 0.22s ease,
-              background 0.22s ease;
   will-change: transform;
+  opacity: 0.85;
+  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              height 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              top 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              left 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.25s ease,
+              border-radius 0.25s ease;
 }
 
-.cyber-cursor-ring.hovered {
-  top: -25px;
-  left: -25px;
-  width: 50px;
-  height: 50px;
-  border: 1px solid rgba(56, 189, 248, 0.7);
-  background: rgba(56, 189, 248, 0.05);
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.25), inset 0 0 10px rgba(56, 189, 248, 0.1);
-}
-
-.cyber-cursor-ring.clicked {
-  top: -14px;
-  left: -14px;
-  width: 28px;
-  height: 28px;
-  border-color: var(--g);
-  background: rgba(0, 255, 136, 0.15);
-  box-shadow: 0 0 25px rgba(0, 255, 136, 0.6);
-}
-
-.reticle-bracket {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-color: var(--g);
-  border-style: solid;
-  opacity: 0.8;
-  transition: all 0.2s ease;
-}
-.cyber-cursor-ring.hovered .reticle-bracket {
-  border-color: var(--cyan);
-  width: 8px;
-  height: 8px;
+.modern-cursor-aura.hovered {
+  top: -28px;
+  left: -28px;
+  width: 56px;
+  height: 56px;
   opacity: 1;
 }
 
-.reticle-bracket.tl { top: -2px; left: -2px; border-width: 1.5px 0 0 1.5px; }
-.reticle-bracket.tr { top: -2px; right: -2px; border-width: 1.5px 1.5px 0 0; }
-.reticle-bracket.bl { bottom: -2px; left: -2px; border-width: 0 0 1.5px 1.5px; }
-.reticle-bracket.br { bottom: -2px; right: -2px; border-width: 0 1.5px 1.5px 0; }
+.modern-cursor-aura.clicked {
+  top: -12px;
+  left: -12px;
+  width: 24px;
+  height: 24px;
+  opacity: 0.9;
+}
 
 .app-container {
   min-height: 100vh;
