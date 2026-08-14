@@ -1,19 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+// Style 1: Ambient Mouse Spotlight & Surface Glow
 export default function CyberCursor() {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
+  const spotlightRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
 
-  const mousePos = useRef({ x: -100, y: -100 });
-  const ringPos = useRef({ x: -100, y: -100 });
+  const mousePos = useRef({ x: -500, y: -500 });
+  const auraPos = useRef({ x: -500, y: -500 });
   const rafRef = useRef(null);
 
   useEffect(() => {
-    // Disable on touch / mobile devices for native performance
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
         setIsTouch(true);
@@ -25,12 +23,6 @@ export default function CyberCursor() {
       mousePos.current = { x: e.clientX, y: e.clientY };
       if (!isVisible) setIsVisible(true);
 
-      // Instant 1:1 hardware synchronization for the center dot
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-      }
-
-      // Detect hover over interactive elements
       const target = e.target;
       if (target) {
         const interactive = target.closest(
@@ -40,25 +32,21 @@ export default function CyberCursor() {
       }
     };
 
-    const handleMouseDown = () => setIsClicked(true);
-    const handleMouseUp = () => setIsClicked(false);
     const handleMouseLeave = () => setIsVisible(false);
     const handleMouseEnter = () => setIsVisible(true);
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('mousedown', handleMouseDown, { passive: true });
-    window.addEventListener('mouseup', handleMouseUp, { passive: true });
     document.body.addEventListener('mouseleave', handleMouseLeave);
     document.body.addEventListener('mouseenter', handleMouseEnter);
 
-    // Smooth 120fps spring lerp for the trailing sci-fi ring
+    // Ultra-smooth 120fps spring follow loop
     const renderLoop = () => {
-      const ease = 0.22;
-      ringPos.current.x += (mousePos.current.x - ringPos.current.x) * ease;
-      ringPos.current.y += (mousePos.current.y - ringPos.current.y) * ease;
+      const ease = 0.15;
+      auraPos.current.x += (mousePos.current.x - auraPos.current.x) * ease;
+      auraPos.current.y += (mousePos.current.y - auraPos.current.y) * ease;
 
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0)`;
+      if (spotlightRef.current) {
+        spotlightRef.current.style.transform = `translate3d(${auraPos.current.x}px, ${auraPos.current.y}px, 0)`;
       }
 
       rafRef.current = requestAnimationFrame(renderLoop);
@@ -68,8 +56,6 @@ export default function CyberCursor() {
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mouseup', handleMouseUp);
       document.body.removeEventListener('mouseleave', handleMouseLeave);
       document.body.removeEventListener('mouseenter', handleMouseEnter);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -79,23 +65,12 @@ export default function CyberCursor() {
   if (isTouch) return null;
 
   return (
-    <div className={`cyber-cursor-hud ${isVisible ? 'active' : ''}`}>
-      {/* Precision 4px Neon Core Dot */}
+    <div className={`cursor-spotlight-container ${isVisible ? 'active' : ''}`}>
+      {/* Smooth Ambient Neon Radial Spotlight */}
       <div
-        ref={dotRef}
-        className={`cursor-core-dot ${isHovered ? 'hovered' : ''} ${isClicked ? 'clicked' : ''}`}
+        ref={spotlightRef}
+        className={`cursor-spotlight-aura ${isHovered ? 'hovered' : ''}`}
       />
-
-      {/* Trailing Sci-Fi Wireframe Ring */}
-      <div
-        ref={ringRef}
-        className={`cursor-trailing-ring ${isHovered ? 'hovered' : ''} ${isClicked ? 'clicked' : ''}`}
-      >
-        <span className="ring-bracket tl"></span>
-        <span className="ring-bracket tr"></span>
-        <span className="ring-bracket bl"></span>
-        <span className="ring-bracket br"></span>
-      </div>
     </div>
   );
 }

@@ -64,114 +64,51 @@ body::after {
 }
 
 /* =====================================================================
-   REFINED THEME-MATCHED CYBER CURSOR
+   STYLE 1: AMBIENT MOUSE SPOTLIGHT & SURFACE GLOW
    ===================================================================== */
-@media (hover: hover) and (pointer: fine) {
-  body, button, a, input, textarea, select, [role="button"], .portal-card, .btn-cyber, .skip-btn {
-    cursor: none !important;
-  }
-}
-
-.cyber-cursor-hud {
+.cursor-spotlight-container {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 999999;
+  z-index: 3;
+  overflow: hidden;
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.4s ease;
 }
-.cyber-cursor-hud.active {
+.cursor-spotlight-container.active {
   opacity: 1;
 }
 
-/* Precision 5px Center Core */
-.cursor-core-dot {
+.cursor-spotlight-aura {
   position: fixed;
-  top: -2.5px;
-  left: -2.5px;
-  width: 5px;
-  height: 5px;
+  top: -225px;
+  left: -225px;
+  width: 450px;
+  height: 450px;
   border-radius: 50%;
-  background: var(--g);
-  box-shadow: 0 0 8px var(--g), 0 0 16px rgba(0, 255, 136, 0.5);
+  background: radial-gradient(
+    circle closest-side,
+    rgba(0, 255, 136, 0.12) 0%,
+    rgba(0, 255, 136, 0.04) 50%,
+    transparent 100%
+  );
   pointer-events: none;
-  z-index: 1000000;
   will-change: transform;
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, box-shadow 0.2s;
-}
-.cursor-core-dot.hovered {
-  background: var(--cyan);
-  box-shadow: 0 0 10px var(--cyan), 0 0 20px rgba(56, 189, 248, 0.7);
-  transform: scale(1.4);
-}
-.cursor-core-dot.clicked {
-  transform: scale(0.6);
-  background: #ffffff;
+  transition: width 0.35s ease, height 0.35s ease, top 0.35s ease, left 0.35s ease, background 0.35s ease;
 }
 
-/* Trailing Sci-Fi Wireframe Ring */
-.cursor-trailing-ring {
-  position: fixed;
-  top: -14px;
-  left: -14px;
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgba(0, 255, 136, 0.35);
-  border-radius: 50%;
-  background: rgba(0, 255, 136, 0.03);
-  pointer-events: none;
-  z-index: 999999;
-  will-change: transform;
-  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
-              height 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
-              top 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
-              left 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.25s ease,
-              background 0.25s ease,
-              box-shadow 0.25s ease;
+.cursor-spotlight-aura.hovered {
+  top: -300px;
+  left: -300px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(56, 189, 248, 0.18) 0%,
+    rgba(0, 255, 136, 0.08) 50%,
+    transparent 100%
+  );
 }
-
-.cursor-trailing-ring.hovered {
-  top: -22px;
-  left: -22px;
-  width: 44px;
-  height: 44px;
-  border: 1px solid rgba(56, 189, 248, 0.7);
-  background: rgba(56, 189, 248, 0.06);
-  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3), inset 0 0 10px rgba(56, 189, 248, 0.08);
-}
-
-.cursor-trailing-ring.clicked {
-  top: -10px;
-  left: -10px;
-  width: 20px;
-  height: 20px;
-  border-color: var(--g);
-  background: rgba(0, 255, 136, 0.2);
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
-}
-
-/* 4 Fine Sci-Fi Reticle Brackets */
-.ring-bracket {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border-color: var(--g);
-  border-style: solid;
-  opacity: 0.6;
-  transition: all 0.2s ease;
-}
-.cursor-trailing-ring.hovered .ring-bracket {
-  border-color: var(--cyan);
-  width: 6px;
-  height: 6px;
-  opacity: 1;
-}
-
-.ring-bracket.tl { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
-.ring-bracket.tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
-.ring-bracket.bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
-.ring-bracket.br { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
 
 .app-container {
   min-height: 100vh;
