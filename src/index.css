@@ -1041,7 +1041,7 @@ body::after {
   overflow-y: auto;
   overflow-x: hidden;
   justify-content: flex-start;
-  padding: 40px 20px 50px;
+  padding: 80px 20px 50px;
   box-sizing: border-box;
 }
 
@@ -1105,15 +1105,16 @@ body::after {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0.4rem 0 1rem;
+  margin: 0.6rem 0 1.2rem;
   flex-shrink: 0;
 }
 
 .hologram-canvas {
-  width: 220px;
-  height: 150px;
-  max-width: 100%;
+  width: 340px;
+  height: 210px;
+  max-width: 95vw;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 25px rgba(0, 255, 136, 0.3));
 }
 
 .hologram-label {
@@ -1122,8 +1123,12 @@ body::after {
   gap: 6px;
   font-size: 8px;
   letter-spacing: 2px;
-  color: var(--dim-light);
-  margin-top: 4px;
+  color: var(--g);
+  background: rgba(0, 255, 136, 0.06);
+  padding: 3px 10px;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 2px;
+  margin-top: 6px;
 }
 
 .holo-dot {
