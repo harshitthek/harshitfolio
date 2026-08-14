@@ -76,8 +76,8 @@ export const SoundFX = {
     return () => listeners.delete(fn);
   },
 
-  // Soft sci-fi blip on hover
-  playHover: () => {
+  // Soft sci-fi blip on hover with dynamic pitch modulation
+  playHover: (type = 'normal') => {
     if (!soundEnabled) return;
     try {
       const ctx = initAudioContext();
@@ -87,18 +87,38 @@ export const SoundFX = {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(520, now);
-      osc.frequency.linearRampToValueAtTime(880, now + 0.06);
+      let startFreq = 520;
+      let endFreq = 880;
+      let duration = 0.055;
+      let volume = 0.06;
 
-      gain.gain.setValueAtTime(0.06, now);
-      gain.gain.linearRampToValueAtTime(0.0001, now + 0.06);
+      if (type === 'primary') {
+        startFreq = 640;
+        endFreq = 1120;
+        duration = 0.08;
+        volume = 0.08;
+        osc.type = 'triangle';
+      } else if (type === 'high') {
+        startFreq = 780;
+        endFreq = 1250;
+        duration = 0.045;
+        volume = 0.05;
+        osc.type = 'sine';
+      } else {
+        osc.type = 'sine';
+      }
+
+      osc.frequency.setValueAtTime(startFreq, now);
+      osc.frequency.linearRampToValueAtTime(endFreq, now + duration);
+
+      gain.gain.setValueAtTime(volume, now);
+      gain.gain.linearRampToValueAtTime(0.0001, now + duration);
 
       osc.connect(gain);
       gain.connect(ctx.destination);
 
       osc.start(now);
-      osc.stop(now + 0.06);
+      osc.stop(now + duration);
     } catch (e) {
       // Audio locked or ignored
     }
@@ -128,6 +148,45 @@ export const SoundFX = {
 
       osc.start(now);
       osc.stop(now + 0.09);
+    } catch (e) {
+      // Ignore
+    }
+  },
+
+  // Sci-fi Warp / System Engagement Riser
+  playWarp: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+
+      // Sub bass boom + High riser sweep
+      const oscLow = ctx.createOscillator();
+      const gainLow = ctx.createGain();
+      oscLow.type = 'sine';
+      oscLow.frequency.setValueAtTime(90, now);
+      oscLow.frequency.exponentialRampToValueAtTime(35, now + 0.35);
+      gainLow.gain.setValueAtTime(0.18, now);
+      gainLow.gain.linearRampToValueAtTime(0.0001, now + 0.35);
+      oscLow.connect(gainLow);
+      gainLow.connect(ctx.destination);
+      oscLow.start(now);
+      oscLow.stop(now + 0.35);
+
+      const oscHigh = ctx.createOscillator();
+      const gainHigh = ctx.createGain();
+      oscHigh.type = 'sawtooth';
+      oscHigh.frequency.setValueAtTime(240, now);
+      oscHigh.frequency.exponentialRampToValueAtTime(1480, now + 0.32);
+      gainHigh.gain.setValueAtTime(0.1, now);
+      gainHigh.gain.linearRampToValueAtTime(0.0001, now + 0.35);
+      oscHigh.connect(gainHigh);
+      gainHigh.connect(ctx.destination);
+      oscHigh.start(now);
+      oscHigh.stop(now + 0.35);
     } catch (e) {
       // Ignore
     }

@@ -354,7 +354,7 @@ body::after {
   align-items: center;
   justify-content: space-between;
   padding: 18px 24px;
-  z-index: 12;
+  z-index: 50;
   pointer-events: auto;
 }
 
@@ -474,6 +474,12 @@ body::after {
   z-index: 6;
   background: radial-gradient(circle, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.9) 100%);
   padding: 1.5rem;
+  transition: opacity 0.35s ease, background 0.35s ease;
+}
+
+.unmute-overlay.overlay-dissolving {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .unmute-box {
@@ -493,6 +499,29 @@ body::after {
   border-color: var(--g);
   box-shadow: 0 0 60px rgba(0, 255, 136, 0.45), inset 0 0 30px rgba(0, 255, 136, 0.09);
   transform: scale(1.015);
+}
+
+.unmute-box.warping {
+  animation: warpDissolve 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes warpDissolve {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1) drop-shadow(0 0 20px rgba(0, 255, 136, 0.5));
+  }
+  40% {
+    transform: scale(1.05);
+    opacity: 0.9;
+    filter: brightness(2.2) drop-shadow(0 0 50px rgba(0, 255, 136, 0.9));
+  }
+  100% {
+    transform: scale(1.22) translateY(-18px);
+    opacity: 0;
+    filter: brightness(3.5) blur(10px);
+  }
 }
 
 .unmute-box .corner {
