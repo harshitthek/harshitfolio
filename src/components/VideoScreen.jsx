@@ -1,11 +1,27 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { SoundFX } from './SoundFX';
+import { useVoice } from './VoiceContext';
 
 export default function VideoScreen({ isActive, onComplete }) {
   const vidRef = useRef(null);
   const [videoStarted, setVideoStarted] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const fallbackTimerRef = useRef(null);
+  const { voiceEnabled, toggleVoice } = useVoice();
+  const [sfxOn, setSfxOn] = useState(SoundFX.isEnabled());
+
+  const handleToggleSFX = (e) => {
+    e.stopPropagation();
+    const next = SoundFX.toggle();
+    setSfxOn(next);
+    if (next) SoundFX.playClick();
+  };
+
+  const handleToggleVoice = (e) => {
+    e.stopPropagation();
+    SoundFX.playClick();
+    toggleVoice();
+  };
 
   const afterVideo = () => {
     if (videoEnded) return;
@@ -102,6 +118,49 @@ export default function VideoScreen({ isActive, onComplete }) {
       <div className="video-scanlines-overlay"></div>
       <div className="video-vignette-overlay"></div>
 
+      {/* Top Floating Controls Bar */}
+      <div className="video-top-hud">
+        <div className="video-hud-left">
+          <div className="video-brand-pill">
+            <span className="brand-dot live"></span>
+            <span className="brand-title">HARSHIT<span className="text-glow">.EXE</span></span>
+            <span className="brand-badge">USAR_DELHI</span>
+          </div>
+        </div>
+
+        <div className="video-hud-right">
+          <button
+            className={`video-hud-btn ${!sfxOn ? 'muted' : ''}`}
+            onClick={handleToggleSFX}
+            title={sfxOn ? 'Disable SFX Audio' : 'Enable SFX Audio'}
+          >
+            <span>{sfxOn ? '🔊 SFX' : '🔇 SFX'}</span>
+          </button>
+
+          <button
+            className={`video-hud-btn voice ${!voiceEnabled ? 'muted' : ''}`}
+            onClick={handleToggleVoice}
+            title={voiceEnabled ? 'Mute AI Voice Narration' : 'Enable AI Voice Narration'}
+          >
+            <span className="voice-dot"></span>
+            <span>{voiceEnabled ? 'VOICE ON' : 'VOICE OFF'}</span>
+          </button>
+
+          <a
+            href="https://github.com/harshitthek"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="video-hud-btn git"
+            onClick={(e) => {
+              e.stopPropagation();
+              SoundFX.playClick();
+            }}
+          >
+            <span>🐙 GIT</span>
+          </a>
+        </div>
+      </div>
+
       {/* Futuristic HUD Corner Decors */}
       <div className="corner-dec tl"></div>
       <div className="corner-dec tr"></div>
@@ -119,7 +178,7 @@ export default function VideoScreen({ isActive, onComplete }) {
 
             <div className="unmute-badge">
               <span className="unmute-pulse-dot"></span>
-              <span>AUDIO TRANSMISSION READY</span>
+              <span>AUDIO TRANSMISSION READY // 48kHz</span>
             </div>
 
             <div className="unmute-title">
@@ -129,6 +188,15 @@ export default function VideoScreen({ isActive, onComplete }) {
 
             <div className="unmute-sub">
               HARSHIT SHARMA · ARTIFICIAL INTELLIGENCE · USAR (GGSIPU)
+            </div>
+
+            {/* Micro Equalizer Waveform */}
+            <div className="unmute-equalizer">
+              <span className="eq-bar"></span>
+              <span className="eq-bar"></span>
+              <span className="eq-bar"></span>
+              <span className="eq-bar"></span>
+              <span className="eq-bar"></span>
             </div>
 
             <div className="unmute-hint">
