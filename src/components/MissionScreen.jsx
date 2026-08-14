@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { SoundFX } from './SoundFX';
 import HologramCanvas from './HologramCanvas';
+import CyberTerminalWing from './CyberTerminalWing';
+import Interactive3DWing from './Interactive3DWing';
 
 export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
   const handleAccept = () => {
@@ -31,33 +33,8 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
       <div className="corner-dec bl"></div>
       <div className="corner-dec br"></div>
 
-      {/* Left Atmospheric Cyber Soundwave & Resonance Pillar */}
-      <aside className="ambient-cyber-pillar left-pillar" aria-hidden="true">
-        <div className="pillar-header">
-          <span className="pillar-pulse-dot green"></span>
-          <span className="pillar-tag">AUDIO RESONANCE</span>
-        </div>
-
-        <div className="pillar-bars-eq">
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-          <span className="eq-bar"></span>
-        </div>
-
-        <div className="pillar-metrics">
-          <span className="metric-chip cyan">44.1 kHz</span>
-          <span className="metric-chip green">SYNTH_ONLINE</span>
-        </div>
-      </aside>
+      {/* Left Flank: Real-Time Live Streaming Linux Cyber Terminal */}
+      <CyberTerminalWing isActive={isActive} />
 
       {/* Center Hero Column */}
       <div className="mission-content-wrapper">
@@ -132,27 +109,8 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         </div>
       </div>
 
-      {/* Right Atmospheric Gyroscopic Cyber Compass & Spatial Reticle */}
-      <aside className="ambient-cyber-pillar right-pillar" aria-hidden="true">
-        <div className="pillar-header">
-          <span className="pillar-pulse-dot cyan"></span>
-          <span className="pillar-tag">SPATIAL RADAR</span>
-        </div>
-
-        <div className="pillar-gyro-reticle">
-          <span className="gyro-ring outer"></span>
-          <span className="gyro-ring inner"></span>
-          <span className="gyro-cross h"></span>
-          <span className="gyro-cross v"></span>
-          <span className="gyro-laser-beam"></span>
-          <span className="gyro-center-dot"></span>
-        </div>
-
-        <div className="pillar-metrics">
-          <span className="metric-chip cyan">28.61° N, 77.20° E</span>
-          <span className="metric-chip green">ORBIT_STABLE</span>
-        </div>
-      </aside>
+      {/* Right Flank: Interactive 3D Wireframe Geometry Core */}
+      <Interactive3DWing isActive={isActive} />
     </div>
   );
 }

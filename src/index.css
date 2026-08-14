@@ -1341,181 +1341,185 @@ body::after {
 }
 
 /* =====================================================================
-   ATMOSPHERIC CYBER PILLARS (LEFT & RIGHT FLANKS WITH FLOATING LEVITATION)
+   LEFT FLANK: LINUX HACKER TERMINAL STREAM
    ===================================================================== */
-.ambient-cyber-pillar {
+.cyber-flank-terminal {
   position: absolute;
   top: 50%;
   transform: translateY(-46%);
+  left: clamp(16px, 4vw, 55px);
   z-index: 6;
   pointer-events: none;
   opacity: 0.95;
-  width: 170px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  width: 215px;
   transition: opacity 0.3s ease;
 }
-.ambient-cyber-pillar.left-pillar {
-  left: clamp(20px, 4.5vw, 65px);
-  text-align: left;
-  animation: pillarFloatLeft 6s ease-in-out infinite alternate;
-}
-.ambient-cyber-pillar.right-pillar {
-  right: clamp(20px, 4.5vw, 65px);
-  text-align: left;
-  animation: pillarFloatRight 6s ease-in-out infinite alternate;
-}
 
-@keyframes pillarFloatLeft {
-  0% { transform: translateY(-46%); }
-  100% { transform: translateY(-50%); }
-}
-
-@keyframes pillarFloatRight {
-  0% { transform: translateY(-46%); }
-  100% { transform: translateY(-42%); }
-}
-
-.pillar-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border-bottom: 1px solid rgba(0, 255, 136, 0.2);
-  padding-bottom: 4px;
-}
-.pillar-pulse-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--g);
-  box-shadow: 0 0 6px var(--g);
-  animation: pulseDot 1.2s infinite;
-}
-.pillar-pulse-dot.cyan {
-  background: var(--cyan);
-  box-shadow: 0 0 6px var(--cyan);
-}
-.pillar-tag {
-  font-family: 'Space Mono', monospace;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--g);
-}
-
-/* Left Audio Equalizer Bars */
-.pillar-bars-eq {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 48px;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(0, 255, 136, 0.12);
-}
-.eq-bar {
-  flex: 1;
-  background: linear-gradient(to top, var(--g), var(--cyan));
-  border-radius: 1px;
-  animation: waveFlux 1.4s ease-in-out infinite alternate;
-}
-.eq-bar:nth-child(1) { height: 35%; animation-delay: 0.1s; }
-.eq-bar:nth-child(2) { height: 75%; animation-delay: 0.3s; }
-.eq-bar:nth-child(3) { height: 100%; animation-delay: 0.5s; }
-.eq-bar:nth-child(4) { height: 45%; animation-delay: 0.2s; }
-.eq-bar:nth-child(5) { height: 85%; animation-delay: 0.4s; }
-.eq-bar:nth-child(6) { height: 60%; animation-delay: 0.6s; }
-.eq-bar:nth-child(7) { height: 95%; animation-delay: 0.25s; }
-.eq-bar:nth-child(8) { height: 40%; animation-delay: 0.45s; }
-.eq-bar:nth-child(9) { height: 70%; animation-delay: 0.15s; }
-.eq-bar:nth-child(10) { height: 50%; animation-delay: 0.35s; }
-.eq-bar:nth-child(11) { height: 80%; animation-delay: 0.55s; }
-.eq-bar:nth-child(12) { height: 30%; animation-delay: 0.2s; }
-
-/* Right Gyroscopic Compass Reticle */
-.pillar-gyro-reticle {
+.terminal-window {
   position: relative;
-  width: 100%;
-  height: 52px;
+  background: rgba(6, 10, 8, 0.92);
+  border: 1px solid rgba(0, 255, 136, 0.28);
+  border-radius: 4px;
+  padding: 8px 10px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), inset 0 0 18px rgba(0, 255, 136, 0.03);
+  backdrop-filter: blur(12px);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid rgba(0, 255, 136, 0.12);
-  padding: 4px 0;
-}
-.gyro-ring.outer {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px dashed rgba(56, 189, 248, 0.6);
-  animation: spin 9s linear infinite;
-}
-.gyro-ring.inner {
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 255, 136, 0.4);
-  animation: spin 5s linear infinite reverse;
-}
-.gyro-cross.h {
-  position: absolute;
-  width: 52px;
-  height: 1px;
-  background: rgba(0, 255, 136, 0.3);
-}
-.gyro-cross.v {
-  position: absolute;
-  height: 48px;
-  width: 1px;
-  background: rgba(0, 255, 136, 0.3);
-}
-.gyro-laser-beam {
-  position: absolute;
-  width: 22px;
-  height: 1px;
-  background: #00ff88;
-  transform-origin: left center;
-  animation: spin 2.2s linear infinite;
-  left: 50%;
-}
-.gyro-center-dot {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
-  animation: pulseDot 1s infinite;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.pillar-metrics {
+.term-titlebar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 5px;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.16);
+  padding-bottom: 4px;
 }
-.metric-chip {
+.term-dots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.term-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.term-dot.red { background: #ff5f56; }
+.term-dot.yellow { background: #ffbd2e; }
+.term-dot.green { background: #27c93f; }
+.term-host {
   font-family: 'Space Mono', monospace;
   font-size: 7.5px;
+  color: var(--g);
   letter-spacing: 1px;
-  padding: 2px 6px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+}
+
+.term-stream-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5px;
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  line-height: 1.35;
+  text-align: left;
+  max-height: 125px;
+  overflow: hidden;
+}
+.term-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+.term-tag {
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.term-tag.green { color: var(--g); }
+.term-tag.cyan { color: var(--cyan); }
+.term-tag.white { color: var(--white); }
+.term-msg {
+  color: #cbd5e1;
+  word-break: break-all;
+}
+.term-prompt-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--g);
+  margin-top: 1px;
+}
+.term-prompt { font-weight: 700; }
+.term-cursor {
+  display: inline-block;
+  width: 5px;
+  height: 9px;
+  background: var(--g);
+  animation: blink 1s steps(1) infinite;
+}
+
+/* =====================================================================
+   RIGHT FLANK: INTERACTIVE 3D WEBGL QUANTUM CORE
+   ===================================================================== */
+.cyber-flank-3d {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-46%);
+  right: clamp(16px, 4vw, 55px);
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0.95;
+  width: 195px;
+  transition: opacity 0.3s ease;
+}
+
+.cube-window {
+  position: relative;
+  background: rgba(6, 10, 8, 0.92);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 4px;
+  padding: 8px 10px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), inset 0 0 18px rgba(56, 189, 248, 0.03);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.cube-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.16);
+  padding-bottom: 4px;
+}
+.cube-pulse-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+  animation: pulseDot 1.2s infinite;
+}
+.cube-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--cyan);
+}
+
+.cube-canvas {
+  width: 175px;
+  height: 145px;
+  display: block;
+}
+
+.cube-telemetry-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-top: 1px solid rgba(56, 189, 248, 0.14);
+  padding-top: 3px;
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 1px;
   color: var(--dim-light);
 }
-.metric-chip.cyan {
-  color: var(--cyan);
-  border-color: rgba(56, 189, 248, 0.25);
-  background: rgba(56, 189, 248, 0.06);
-  font-weight: 700;
-}
-.metric-chip.green {
-  color: var(--g);
-  border-color: rgba(0, 255, 136, 0.25);
-  background: rgba(0, 255, 136, 0.06);
-  font-weight: 700;
+.cube-stat.cyan { color: var(--cyan); font-weight: 700; }
+.cube-stat.green { color: var(--g); font-weight: 700; }
+
+/* Seamless responsive scaling */
+@media (max-width: 1180px) {
+  .cyber-flank-terminal,
+  .cyber-flank-3d {
+    display: none;
+  }
 }
 
 /* Staggered Screen Entry Glide Animations */
