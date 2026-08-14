@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { SoundFX } from './SoundFX';
 import HologramCanvas from './HologramCanvas';
+import NeuralOscilloscope from './NeuralOscilloscope';
+import CyberRadarTelemetry from './CyberRadarTelemetry';
 
 export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
   const handleAccept = () => {
@@ -31,6 +33,10 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
       <div className="corner-dec bl"></div>
       <div className="corner-dec br"></div>
 
+      {/* Left Cyber Simulation: Neural Oscilloscope Spectrum */}
+      <NeuralOscilloscope isActive={isActive} />
+
+      {/* Center Cinematic Column */}
       <div className="mission-content-wrapper">
         {/* Top Badge Strip */}
         <div className="mission-badge-strip">
@@ -50,7 +56,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <span className="cred-pill cyan">AI &bull; CREATIVE COMPUTATION</span>
         </div>
 
-        {/* Centerpiece 3D Interactive Hologram */}
+        {/* Centerpiece 3D 360-Degree Interactive Hologram */}
         <div className="mission-holo-center">
           <HologramCanvas isActive={isActive} />
         </div>
@@ -103,6 +109,9 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           </div>
         </div>
       </div>
+
+      {/* Right Cyber Simulation: Orbital Radar & Tracking Grid */}
+      <CyberRadarTelemetry isActive={isActive} />
     </div>
   );
 }

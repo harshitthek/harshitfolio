@@ -1328,6 +1328,104 @@ body::after {
 }
 
 /* =====================================================================
+   SCREEN 3: LEFT & RIGHT CYBERNETIC SIMULATION FLANKS
+   ===================================================================== */
+.simulation-wing {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-46%);
+  z-index: 8;
+  pointer-events: none;
+  opacity: 0.92;
+  transition: opacity 0.3s ease;
+}
+.simulation-wing.left-wing {
+  left: clamp(16px, 3.5vw, 48px);
+}
+.simulation-wing.right-wing {
+  right: clamp(16px, 3.5vw, 48px);
+}
+
+.sim-panel-box {
+  position: relative;
+  background: rgba(8, 8, 8, 0.88);
+  border: 1px solid rgba(0, 255, 136, 0.22);
+  border-radius: 4px;
+  padding: 10px 12px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 255, 136, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 180px;
+  backdrop-filter: blur(8px);
+}
+
+.sim-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+  padding-bottom: 4px;
+}
+.sim-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--g);
+}
+.sim-dot.live {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--g);
+  box-shadow: 0 0 6px var(--g);
+  animation: pulseDot 1.2s infinite;
+}
+
+.sim-canvas {
+  width: 170px;
+  height: 210px;
+  display: block;
+}
+
+.sim-telemetry-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  font-family: 'Space Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 1px;
+  border-top: 1px solid rgba(0, 255, 136, 0.12);
+  padding-top: 4px;
+}
+
+.sim-feed-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--dim-light);
+}
+.sim-feed-val.cyan {
+  color: var(--cyan);
+  font-weight: 700;
+}
+.sim-feed-val.green {
+  color: var(--g);
+  font-weight: 700;
+}
+
+/* Hide or scale gracefully when viewport is narrow to preserve 100% zero-scroll */
+@media (max-width: 1140px) {
+  .simulation-wing {
+    display: none;
+  }
+}
+
+/* =====================================================================
    SCREEN 4: MULTIVERSE CARDS DECK
    ===================================================================== */
 #s-cards {

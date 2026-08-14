@@ -22,8 +22,10 @@ export default function HologramCanvas({ isActive }) {
     canvas.style.height = `${height}px`;
     ctx.scale(dpr, dpr);
 
-    let angleX = 0.25;
+    let time = 0;
     let angleY = 0;
+    let angleX = 0.3;
+    let angleZ = 0;
     let targetRotX = 0;
     let targetRotY = 0;
 
@@ -63,20 +65,20 @@ export default function HologramCanvas({ isActive }) {
       [0, 5], [2, 5], [1, 5], [3, 5]
     ];
 
-    // 36 Ambient Quantum Orbital Particles
-    const particles = Array.from({ length: 36 }, (_, i) => ({
-      orbitRadius: 42 + Math.random() * 26,
-      angle: (i / 36) * Math.PI * 2,
-      speed: (0.014 + Math.random() * 0.016) * (i % 2 === 0 ? 1 : -1),
-      yOffset: (Math.random() - 0.5) * 20,
+    // 40 Ambient Quantum Orbital Particles with 3D spherical paths
+    const particles = Array.from({ length: 40 }, (_, i) => ({
+      orbitRadius: 40 + Math.random() * 28,
+      angle: (i / 40) * Math.PI * 2,
+      speed: (0.016 + Math.random() * 0.016) * (i % 2 === 0 ? 1 : -1),
+      inclination: Math.random() * Math.PI,
       size: 1.1 + Math.random() * 1.6,
-      color: i % 3 === 0 ? '#38bdf8' : i % 3 === 1 ? '#00ff88' : '#a7f3d0'
+      color: i % 3 === 0 ? '#38bdf8' : i % 3 === 1 ? '#00ff88' : '#e0f2fe'
     }));
 
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
-      targetRotX = ((e.clientY - rect.top) / rect.height - 0.5) * 1.4;
-      targetRotY = ((e.clientX - rect.left) / rect.width - 0.5) * 1.4;
+      targetRotX = ((e.clientY - rect.top) / rect.height - 0.5) * 1.2;
+      targetRotY = ((e.clientX - rect.left) / rect.width - 0.5) * 1.2;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -85,25 +87,26 @@ export default function HologramCanvas({ isActive }) {
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
+      time += 0.02;
 
-      // Smooth mouse rotation spring
-      angleY += 0.014 + (targetRotY - angleY) * 0.04;
-      angleX += 0.008 + (targetRotX - angleX) * 0.04;
+      // Autonomous 360-degree continuous rotation on all 3 axes + mouse inertia
+      angleY += 0.018 + targetRotY * 0.02;
+      angleX = 0.25 + Math.sin(time * 0.7) * 0.22 + targetRotX * 0.2;
+      angleZ += 0.006;
 
-      const cosY = Math.cos(angleY);
-      const sinY = Math.sin(angleY);
-      const cosX = Math.cos(angleX);
-      const sinX = Math.sin(angleX);
+      const cosY = Math.cos(angleY), sinY = Math.sin(angleY);
+      const cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+      const cosZ = Math.cos(angleZ), sinZ = Math.sin(angleZ);
 
       const cx = width / 2;
       const cy = height / 2 - 4;
       const outerRadius = 45;
       const innerRadius = 24;
 
-      // 1. Holographic Projection Base Cone & Radial Ambient Glow
-      const glowGrad = ctx.createRadialGradient(cx, cy, 4, cx, cy, 75);
-      glowGrad.addColorStop(0, 'rgba(0, 255, 136, 0.32)');
-      glowGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.12)');
+      // 1. Holographic Center Glow
+      const glowGrad = ctx.createRadialGradient(cx, cy, 3, cx, cy, 75);
+      glowGrad.addColorStop(0, 'rgba(0, 255, 136, 0.35)');
+      glowGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.15)');
       glowGrad.addColorStop(0.8, 'rgba(0, 255, 136, 0.02)');
       glowGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = glowGrad;
@@ -111,66 +114,84 @@ export default function HologramCanvas({ isActive }) {
       ctx.arc(cx, cy, 75, 0, Math.PI * 2);
       ctx.fill();
 
-      // 2. Hologram Scanner Line Sweep
-      scanY = (scanY + 1.1) % height;
-      ctx.strokeStyle = 'rgba(0, 255, 136, 0.16)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(cx - 70, scanY);
-      ctx.lineTo(cx + 70, scanY);
-      ctx.stroke();
+      // 2. Continuous 360-degree 3D Rotation Point Projector
+      const projectPoints = (verts, rad, reverseRot = false) => {
+        const mul = reverseRot ? -1.5 : 1;
+        const curCosY = Math.cos(angleY * mul);
+        const curSinY = Math.sin(angleY * mul);
 
-      // Project vertices helper
-      const projectPoints = (verts, rad) => {
         return verts.map(([vx, vy, vz]) => {
-          let x1 = vx * cosY + vz * sinY;
+          // Rotate Y
+          let x1 = vx * curCosY + vz * curSinY;
           let y1 = vy;
-          let z1 = -vx * sinY + vz * cosY;
+          let z1 = -vx * curSinY + vz * curCosY;
 
+          // Rotate X
           let x2 = x1;
           let y2 = y1 * cosX - z1 * sinX;
           let z2 = y1 * sinX + z1 * cosX;
 
-          const scale = 180 / (180 + z2 * rad);
+          // Rotate Z
+          let x3 = x2 * cosZ - y2 * sinZ;
+          let y3 = x2 * sinZ + y2 * cosZ;
+          let z3 = z2;
+
+          const scale = 180 / (180 + z3 * rad);
           return {
-            x: cx + x2 * rad * scale,
-            y: cy + y2 * rad * scale,
-            z: z2
+            x: cx + x3 * rad * scale,
+            y: cy + y3 * rad * scale,
+            z: z3
           };
         });
       };
 
-      const outerProjected = projectPoints(rawVertices, outerRadius);
-      const innerProjected = projectPoints(innerVertices, innerRadius);
+      const outerProjected = projectPoints(rawVertices, outerRadius, false);
+      const innerProjected = projectPoints(innerVertices, innerRadius, true);
 
-      // 3. Draw Outer Icosahedron Wireframe
-      ctx.lineWidth = 1.2;
+      // 3. Counter-Rotating 3D Gimbal Ring
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let a = 0; a <= Math.PI * 2; a += 0.15) {
+        const rx = Math.cos(a) * 58;
+        const ry = Math.sin(a) * 58;
+        // rotate around X and Y
+        const gx = rx * cosY;
+        const gy = ry * cosX - rx * sinY * sinX;
+        if (a === 0) ctx.moveTo(cx + gx, cy + gy);
+        else ctx.lineTo(cx + gx, cy + gy);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      // 4. Draw Outer 360 Icosahedron Wireframe
+      ctx.lineWidth = 1.25;
       edges.forEach(([i, j]) => {
         const p1 = outerProjected[i];
         const p2 = outerProjected[j];
         const avgZ = (p1.z + p2.z) / 2;
-        const alpha = Math.max(0.25, (avgZ + 1) / 2);
+        const alpha = Math.max(0.2, (avgZ + 1) / 2);
 
-        ctx.strokeStyle = `rgba(0, 255, 136, ${alpha * 0.9})`;
+        ctx.strokeStyle = `rgba(0, 255, 136, ${alpha * 0.95})`;
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
       });
 
-      // 4. Draw Inner Core Wireframe (Cyan)
+      // 5. Draw Inner 360 Core Wireframe (Cyan)
       ctx.lineWidth = 1;
       innerEdges.forEach(([i, j]) => {
         const p1 = innerProjected[i];
         const p2 = innerProjected[j];
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.65)';
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.7)';
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
       });
 
-      // 5. Draw Glowing Nodes
+      // 6. Draw Glowing 3D Nodes
       outerProjected.forEach(p => {
         ctx.fillStyle = '#ffffff';
         ctx.shadowColor = '#00ff88';
@@ -190,11 +211,11 @@ export default function HologramCanvas({ isActive }) {
       });
       ctx.shadowBlur = 0;
 
-      // 6. Draw Orbital Quantum Particles
+      // 7. Draw 360 Orbital Quantum Particles
       particles.forEach(p => {
         p.angle += p.speed;
-        const px = cx + Math.cos(p.angle) * p.orbitRadius;
-        const py = cy + Math.sin(p.angle) * p.orbitRadius * 0.42 + Math.sin(p.angle * 2) * 4 + p.yOffset * 0.1;
+        const px = cx + Math.cos(p.angle) * p.orbitRadius * Math.cos(angleY * 0.5);
+        const py = cy + Math.sin(p.angle) * p.orbitRadius * 0.45 + Math.sin(time * 2 + p.angle) * 5;
 
         ctx.fillStyle = p.color;
         ctx.beginPath();
@@ -202,16 +223,20 @@ export default function HologramCanvas({ isActive }) {
         ctx.fill();
       });
 
-      // 7. Base Projection Ring
+      // 8. Scanning laser line sweep
+      scanY = (scanY + 1.2) % height;
+      ctx.strokeStyle = 'rgba(0, 255, 136, 0.16)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(cx - 65, scanY);
+      ctx.lineTo(cx + 65, scanY);
+      ctx.stroke();
+
+      // 9. Base projection rings
       ctx.strokeStyle = 'rgba(0, 255, 136, 0.25)';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.ellipse(cx, height - 10, 60, 9, 0, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.18)';
-      ctx.beginPath();
-      ctx.ellipse(cx, height - 10, 36, 5, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx, height - 8, 62, 8, 0, 0, Math.PI * 2);
       ctx.stroke();
 
       animId = requestAnimationFrame(render);
