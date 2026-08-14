@@ -1,29 +1,76 @@
 import React, { useRef, useEffect } from 'react';
 
+// 3D 12-vertex Icosahedron geometry definition
+const phi = (1 + Math.sqrt(5)) / 2;
+const rawVertices = [
+  [-1, phi, 0], [1, phi, 0], [-1, -phi, 0], [1, -phi, 0],
+  [0, -1, phi], [0, 1, phi], [0, -1, -phi], [0, 1, -phi],
+  [phi, 0, -1], [phi, 0, 1], [-phi, 0, -1], [-phi, 0, 1]
+].map(([x, y, z]) => {
+  const len = Math.sqrt(x * x + y * y + z * z);
+  return [x / len, y / len, z / len];
+});
+
+const edges = [
+  [0, 11], [0, 5], [0, 1], [0, 7], [0, 10],
+  [1, 5], [1, 9], [1, 8], [1, 7],
+  [2, 11], [2, 10], [2, 6], [2, 4], [2, 3],
+  [3, 9], [3, 4], [3, 8], [3, 6],
+  [4, 9], [4, 5], [4, 11],
+  [5, 9], [5, 11],
+  [6, 7], [6, 8], [6, 10],
+  [7, 8], [7, 10],
+  [8, 9],
+  [10, 11]
+];
+
+// Inner Octahedron Core
+const innerVertices = [
+  [1, 0, 0], [-1, 0, 0],
+  [0, 1, 0], [0, -1, 0],
+  [0, 0, 1], [0, 0, -1]
+];
+const innerEdges = [
+  [0, 2], [2, 1], [1, 3], [3, 0],
+  [0, 4], [2, 4], [1, 4], [3, 4],
+  [0, 5], [2, 5], [1, 5], [3, 5]
+];
+
 export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
   const canvasRef = useRef(null);
   const explosionRef = useRef({
     active: false,
     startTime: 0,
     shards: [],
+    vertexScatters: [],
     shockwaves: []
   });
 
-  // Trigger whole-screen scattering explosion on explosionTrigger change
+  // Trigger whole-screen 3D Hologram Boom explosion
   useEffect(() => {
     if (explosionTrigger > 0) {
-      const shards = Array.from({ length: 160 }, () => {
-        const phi = Math.random() * Math.PI * 2;
-        const theta = Math.random() * Math.PI;
-        // High impulse to scatter wide across the screen on top of all layers
-        const speed = 7 + Math.random() * 22;
+      // 1. Chaotic 3D scatter vectors for each of the 12 outer vertices and 6 inner vertices
+      const vertexScatters = rawVertices.map(() => {
+        const phiAngle = Math.random() * Math.PI * 2;
+        const thetaAngle = Math.random() * Math.PI;
+        const mag = 120 + Math.random() * 160;
         return {
-          x: 0,
-          y: 0,
-          z: 0,
-          vx: Math.sin(theta) * Math.cos(phi) * speed,
-          vy: Math.sin(theta) * Math.sin(phi) * speed,
-          vz: Math.cos(theta) * speed,
+          dx: Math.sin(thetaAngle) * Math.cos(phiAngle) * mag,
+          dy: Math.sin(thetaAngle) * Math.sin(phiAngle) * mag,
+          dz: Math.cos(thetaAngle) * mag
+        };
+      });
+
+      // 2. 140 Kinetic particle sparks blasting outward
+      const shards = Array.from({ length: 140 }, () => {
+        const phiAngle = Math.random() * Math.PI * 2;
+        const thetaAngle = Math.random() * Math.PI;
+        const speed = 7 + Math.random() * 20;
+        return {
+          x: 0, y: 0, z: 0,
+          vx: Math.sin(thetaAngle) * Math.cos(phiAngle) * speed,
+          vy: Math.sin(thetaAngle) * Math.sin(phiAngle) * speed,
+          vz: Math.cos(thetaAngle) * speed,
           size: 1.4 + Math.random() * 3.2,
           color: Math.random() > 0.4 ? '#00ff88' : '#38bdf8',
           alpha: 1
@@ -33,10 +80,11 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       explosionRef.current = {
         active: true,
         startTime: performance.now(),
+        vertexScatters,
         shards,
         shockwaves: [
-          { radius: 6, speed: 14, maxRadius: 650, alpha: 1, color: '#00ff88' },
-          { radius: 6, speed: 10, maxRadius: 580, alpha: 0.85, color: '#38bdf8' }
+          { radius: 6, speed: 18, maxRadius: 680, alpha: 1, color: '#00ff88', width: 3 },
+          { radius: 6, speed: 12, maxRadius: 580, alpha: 0.85, color: '#38bdf8', width: 2 }
         ]
       };
     }
@@ -51,7 +99,6 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
     if (!ctx) return;
 
     let animId;
-    // Full-span canvas (1100x600) so shards fly over top of all UI layers without clipping
     const width = 1100;
     const height = 600;
     const dpr = window.devicePixelRatio || 1;
@@ -68,42 +115,6 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
     let angleZ = 0;
     let targetRotX = 0;
     let targetRotY = 0;
-
-    // 3D 12-vertex Icosahedron geometry
-    const phi = (1 + Math.sqrt(5)) / 2;
-    const rawVertices = [
-      [-1, phi, 0], [1, phi, 0], [-1, -phi, 0], [1, -phi, 0],
-      [0, -1, phi], [0, 1, phi], [0, -1, -phi], [0, 1, -phi],
-      [phi, 0, -1], [phi, 0, 1], [-phi, 0, -1], [-phi, 0, 1]
-    ].map(([x, y, z]) => {
-      const len = Math.sqrt(x * x + y * y + z * z);
-      return [x / len, y / len, z / len];
-    });
-
-    const edges = [
-      [0, 11], [0, 5], [0, 1], [0, 7], [0, 10],
-      [1, 5], [1, 9], [1, 8], [1, 7],
-      [2, 11], [2, 10], [2, 6], [2, 4], [2, 3],
-      [3, 9], [3, 4], [3, 8], [3, 6],
-      [4, 9], [4, 5], [4, 11],
-      [5, 9], [5, 11],
-      [6, 7], [6, 8], [6, 10],
-      [7, 8], [7, 10],
-      [8, 9],
-      [10, 11]
-    ];
-
-    // Inner Core Octahedron vertices
-    const innerVertices = [
-      [1, 0, 0], [-1, 0, 0],
-      [0, 1, 0], [0, -1, 0],
-      [0, 0, 1], [0, 0, -1]
-    ];
-    const innerEdges = [
-      [0, 2], [2, 1], [1, 3], [3, 0],
-      [0, 4], [2, 4], [1, 4], [3, 4],
-      [0, 5], [2, 5], [1, 5], [3, 5]
-    ];
 
     // 40 Ambient Quantum Orbital Particles
     const particles = Array.from({ length: 40 }, (_, i) => ({
@@ -128,25 +139,32 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       ctx.clearRect(0, 0, width, height);
       time += 0.02;
 
-      // Handle Quantum Explosion Dynamics
+      let isExploding = explosionRef.current.active;
+      let explosionProgress = 0;
       let explosionExpansion = 1;
       let explosionAlpha = 1;
+      let scatterStrength = 0;
 
-      if (explosionRef.current.active) {
+      if (isExploding) {
         const elapsed = (now - explosionRef.current.startTime) / 1000;
-        if (elapsed < 2.2) {
-          // Outward blast -> Magnetic collapse & reformation
+        if (elapsed < 2.0) {
           if (elapsed < 0.65) {
-            explosionExpansion = 1 + elapsed * 4.2;
-            explosionAlpha = Math.max(0.2, 1 - elapsed * 1.1);
+            // Explosive outward expansion
+            const t = elapsed / 0.65;
+            explosionExpansion = 1 + Math.sin(t * Math.PI * 0.5) * 4.5;
+            scatterStrength = Math.sin(t * Math.PI * 0.5);
+            explosionAlpha = Math.max(0.2, 1 - t * 0.6);
           } else {
-            const reformT = (elapsed - 0.65) / 1.55;
-            const easeOutElastic = Math.sin(reformT * Math.PI * 2.5) * Math.exp(-reformT * 3);
-            explosionExpansion = 1 + easeOutElastic * 1.5;
-            explosionAlpha = Math.min(1, reformT * 1.5);
+            // Magnetic return snap
+            const reformT = (elapsed - 0.65) / 1.35;
+            const elastic = Math.sin(reformT * Math.PI * 2.5) * Math.exp(-reformT * 3.5);
+            explosionExpansion = 1 + elastic * 1.8;
+            scatterStrength = Math.max(0, (1 - reformT) * Math.exp(-reformT * 2));
+            explosionAlpha = Math.min(1, 0.4 + reformT * 0.6);
           }
         } else {
           explosionRef.current.active = false;
+          isExploding = false;
         }
       }
 
@@ -161,14 +179,14 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
 
       const cx = width / 2;
       const cy = height / 2;
-      const outerRadius = 45 * explosionExpansion;
-      const innerRadius = 24 * explosionExpansion;
+      const baseOuterRad = 45 * explosionExpansion;
+      const baseInnerRad = 24 * explosionExpansion;
 
-      // 1. Center Glow
+      // 1. Center Glowing Singularity
       const glowRadius = Math.min(220, 75 * explosionExpansion);
       const glowGrad = ctx.createRadialGradient(cx, cy, 3, cx, cy, glowRadius);
-      glowGrad.addColorStop(0, explosionRef.current.active ? 'rgba(0, 255, 136, 0.7)' : 'rgba(0, 255, 136, 0.35)');
-      glowGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.2)');
+      glowGrad.addColorStop(0, isExploding ? 'rgba(0, 255, 136, 0.85)' : 'rgba(0, 255, 136, 0.35)');
+      glowGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.25)');
       glowGrad.addColorStop(0.8, 'rgba(0, 255, 136, 0.02)');
       glowGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = glowGrad;
@@ -176,13 +194,13 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       ctx.arc(cx, cy, glowRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      // 2. 3D Rotation Point Projector
-      const projectPoints = (verts, rad, reverseRot = false) => {
+      // 2. 3D Point Projector with full-range perspective & scatter
+      const projectPoints = (verts, rad, scatters = null, reverseRot = false) => {
         const mul = reverseRot ? -1.5 : 1;
         const curCosY = Math.cos(angleY * mul);
         const curSinY = Math.sin(angleY * mul);
 
-        return verts.map(([vx, vy, vz]) => {
+        return verts.map(([vx, vy, vz], idx) => {
           let x1 = vx * curCosY + vz * curSinY;
           let y1 = vy;
           let z1 = -vx * curSinY + vz * curCosY;
@@ -195,17 +213,24 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
           let y3 = x2 * sinZ + y2 * cosZ;
           let z3 = z2;
 
-          const scale = 180 / (180 + z3 * rad);
+          let extraX = 0;
+          let extraY = 0;
+          if (scatters && scatters[idx] && scatterStrength > 0) {
+            extraX = scatters[idx].dx * scatterStrength;
+            extraY = scatters[idx].dy * scatterStrength;
+          }
+
+          const scale = 1.0 + (z3 * 0.18);
           return {
-            x: cx + x3 * rad * scale,
-            y: cy + y3 * rad * scale,
+            x: cx + x3 * rad * scale + extraX,
+            y: cy + y3 * rad * scale + extraY,
             z: z3
           };
         });
       };
 
-      const outerProjected = projectPoints(rawVertices, outerRadius, false);
-      const innerProjected = projectPoints(innerVertices, innerRadius, true);
+      const outerProjected = projectPoints(rawVertices, baseOuterRad, explosionRef.current.vertexScatters, false);
+      const innerProjected = projectPoints(innerVertices, baseInnerRad, null, true);
 
       // 3. Counter-Rotating Gimbal Ring
       ctx.strokeStyle = `rgba(56, 189, 248, ${0.3 * explosionAlpha})`;
@@ -222,8 +247,8 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       ctx.closePath();
       ctx.stroke();
 
-      // 4. Outer 360 Wireframe
-      ctx.lineWidth = 1.25;
+      // 4. Outer 360 Wireframe Lines (Expanding violently with the boom!)
+      ctx.lineWidth = isExploding ? 1.8 : 1.25;
       edges.forEach(([i, j]) => {
         const p1 = outerProjected[i];
         const p2 = outerProjected[j];
@@ -231,31 +256,34 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         const alpha = Math.max(0.2, (avgZ + 1) / 2) * explosionAlpha;
 
         ctx.strokeStyle = `rgba(0, 255, 136, ${alpha * 0.95})`;
+        ctx.shadowColor = '#00ff88';
+        ctx.shadowBlur = isExploding ? 10 : 4;
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
       });
+      ctx.shadowBlur = 0;
 
-      // 5. Inner Core Wireframe
+      // 5. Inner Core Octahedron Wireframe Lines
       ctx.lineWidth = 1;
       innerEdges.forEach(([i, j]) => {
         const p1 = innerProjected[i];
         const p2 = innerProjected[j];
-        ctx.strokeStyle = `rgba(56, 189, 248, ${0.7 * explosionAlpha})`;
+        ctx.strokeStyle = `rgba(56, 189, 248, ${0.75 * explosionAlpha})`;
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
       });
 
-      // 6. Glowing Nodes
+      // 6. Glowing 3D Nodes
       outerProjected.forEach(p => {
         ctx.fillStyle = '#ffffff';
         ctx.shadowColor = '#00ff88';
-        ctx.shadowBlur = 6;
+        ctx.shadowBlur = isExploding ? 14 : 6;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, isExploding ? 3.5 : 2.2, 0, Math.PI * 2);
         ctx.fill();
       });
 
@@ -281,11 +309,11 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         ctx.fill();
       });
 
-      // 8. Whole-Screen Explosion Shards & Shockwaves (Top of all layers)
-      if (explosionRef.current.active) {
+      // 8. Explosion Shards & Shockwaves
+      if (isExploding) {
         const elapsed = (now - explosionRef.current.startTime) / 1000;
 
-        // Shockwave rings
+        // Shockwaves
         explosionRef.current.shockwaves.forEach(sw => {
           sw.radius += sw.speed;
           sw.alpha = Math.max(0, sw.alpha - 0.016);
@@ -293,7 +321,7 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
             ctx.save();
             ctx.strokeStyle = sw.color;
             ctx.globalAlpha = sw.alpha;
-            ctx.lineWidth = 2.5;
+            ctx.lineWidth = sw.width;
             ctx.shadowColor = sw.color;
             ctx.shadowBlur = 12;
             ctx.beginPath();
@@ -303,7 +331,7 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
           }
         });
 
-        // Flying Debris Shards (Scatter outward -> Magnetic snapback)
+        // Kinetic Sparks
         explosionRef.current.shards.forEach(sh => {
           if (elapsed < 0.65) {
             sh.x += sh.vx;
@@ -312,8 +340,8 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
             sh.vx *= 0.96;
             sh.vy *= 0.96;
           } else {
-            const pullT = (elapsed - 0.65) / 1.55;
-            const pull = Math.pow(pullT, 2.4) * 0.32;
+            const pullT = (elapsed - 0.65) / 1.35;
+            const pull = Math.pow(pullT, 2.5) * 0.35;
             sh.vx += -sh.x * pull;
             sh.vy += -sh.y * pull;
             sh.x += sh.vx * 0.5;
