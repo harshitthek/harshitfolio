@@ -25,7 +25,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         <div className="mission-sub">CLASSIFIED · ARTIFICIAL INTELLIGENCE · SYSTEMS ENGINEERING</div>
 
         {/* 3D Wireframe Quantum Core */}
-        <HologramCanvas />
+        <HologramCanvas isActive={isActive} />
 
         {/* Operational Directive Card */}
         <div className="mission-directive-card">

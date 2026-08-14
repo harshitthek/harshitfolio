@@ -2473,36 +2473,6 @@ body::after {
   white-space: pre-wrap;
 }
 
-/* ── 3D Hologram Canvas ── */
-.hologram-canvas-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0.2rem 0 0.8rem;
-}
-.hologram-canvas {
-  width: 180px;
-  height: 180px;
-  max-width: 100%;
-}
-.hologram-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 8px;
-  letter-spacing: 2px;
-  color: var(--dim-light);
-  margin-top: 2px;
-}
-.holo-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--g);
-  box-shadow: 0 0 8px var(--g);
-  animation: pulseDot 1.2s infinite;
-}
-
 /* ── 60fps Arcade Canvas Snake Game ── */
 .arcade-snake-container {
   margin: 0.8rem 0;

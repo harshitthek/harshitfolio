@@ -1,9 +1,11 @@
 import React, { useRef, useEffect } from 'react';
 
-export default function HologramCanvas() {
+export default function HologramCanvas({ isActive }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    if (!isActive) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -221,7 +223,7 @@ export default function HologramCanvas() {
       cancelAnimationFrame(animId);
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [isActive]);
 
   return (
     <div className="hologram-canvas-container">
