@@ -1,6 +1,17 @@
 // Robust Procedural Web Audio API Sound Synthesizer
 let audioCtx = null;
 let soundEnabled = true;
+const listeners = new Set();
+
+function notifyListeners() {
+  listeners.forEach(fn => {
+    try {
+      fn(soundEnabled);
+    } catch (e) {
+      // Ignore
+    }
+  });
+}
 
 function initAudioContext() {
   if (typeof window === 'undefined') return null;
@@ -39,11 +50,18 @@ export const SoundFX = {
 
   toggle: () => {
     soundEnabled = !soundEnabled;
+    notifyListeners();
     return soundEnabled;
   },
 
   setEnabled: (val) => {
     soundEnabled = !!val;
+    notifyListeners();
+  },
+
+  subscribe: (fn) => {
+    listeners.add(fn);
+    return () => listeners.delete(fn);
   },
 
   // Soft sci-fi blip on hover
