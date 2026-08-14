@@ -111,22 +111,57 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <HologramCanvas isActive={isActive} />
         </div>
 
-        {/* Streamlined Cyber Command Capsule (Cut top height for sleekness) */}
-        <div className="mission-command-capsule">
+        {/* Rich, Structured Cyber Command Dossier Pod */}
+        <div className="mission-dossier-pod">
           <span className="corner tl"></span>
           <span className="corner tr"></span>
           <span className="corner bl"></span>
           <span className="corner br"></span>
 
-          {/* Authentic Statement Body */}
-          <p className="capsule-narrative">
-            Driven by curiosity and a passion for turning complex ideas into <span className="text-highlight">intelligent, living systems</span>. Step inside to explore my engineering mindset and creations.
-          </p>
+          {/* Pod Top Header Bar */}
+          <div className="dossier-top-bar">
+            <div className="dossier-bar-left">
+              <span className="dossier-pulse-dot"></span>
+              <span className="dossier-header-title">CREATOR BIOGRAPHY // AGENT_ID: HS-01</span>
+            </div>
+            <span className="dossier-clearance-badge">CLEARANCE: LEVEL-9 // DELHI, IN</span>
+          </div>
+
+          {/* Structured 2-Column Content Grid */}
+          <div className="dossier-body-grid">
+            {/* Left Quick Intel Column */}
+            <div className="dossier-intel-col">
+              <div className="intel-row">
+                <span className="intel-label">IDENTITY:</span>
+                <span className="intel-val">Harshit Sharma</span>
+              </div>
+              <div className="intel-row">
+                <span className="intel-label">FOCUS:</span>
+                <span className="intel-val cyan">Neural Nets &amp; AI Agents</span>
+              </div>
+              <div className="intel-row">
+                <span className="intel-label">CAMPUS:</span>
+                <span className="intel-val">USAR (GGSIPU), Delhi</span>
+              </div>
+            </div>
+
+            {/* Right Narrative & Philosophy Column */}
+            <div className="dossier-narrative-col">
+              <p className="dossier-quote">
+                “Fascinated by the mechanics of machine cognition, mathematical models, and interactive software. I engineer systems that think, learn, and push boundaries.”
+              </p>
+              <div className="dossier-tags-row">
+                <span className="dossier-tag">#NeuralAgents</span>
+                <span className="dossier-tag">#MachineLearning</span>
+                <span className="dossier-tag">#InteractiveWebGL</span>
+              </div>
+            </div>
+          </div>
 
           {/* Primary Magnetic CTA Button */}
           <button
             type="button"
-            className="capsule-cta-btn"
+            className="dossier-cta-btn"
             onClick={handleAccept}
             onMouseEnter={() => SoundFX.playHover('primary')}
           >
@@ -135,7 +170,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             <span className="corner bl"></span>
             <span className="corner br"></span>
             <span className="cta-icon">▶</span>
-            <span className="cta-text">STEP INSIDE MY MULTIVERSE</span>
+            <span className="cta-text">STEP INSIDE MY MULTIVERSE &amp; EXPLORE WORK</span>
           </button>
 
           <div className="mission-key-hint">
