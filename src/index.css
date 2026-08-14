@@ -797,37 +797,56 @@ body::after {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 680px;
+  max-width: 620px;
   text-align: center;
+  padding: 1.5rem;
+}
+
+.intermediate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 2px;
+  color: var(--g);
+  background: rgba(0, 255, 136, 0.08);
+  padding: 4px 12px;
+  border: 1px solid rgba(0, 255, 136, 0.25);
+  border-radius: 2px;
+  margin-bottom: 1rem;
+}
+.intermediate-badge .badge-pulse-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--g);
+  box-shadow: 0 0 6px var(--g);
+  animation: pulseDot 1.2s infinite;
 }
 
 .load-glyph {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(5rem, 18vw, 11rem);
+  font-size: clamp(3.5rem, 10vw, 6.5rem);
   line-height: 1;
   letter-spacing: 8px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(0, 255, 136, 0.4));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 30%, rgba(0, 255, 136, 0.7) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 0;
+  margin-bottom: 1.2rem;
   position: relative;
-  animation: glyphPulse 2s ease infinite;
-}
-
-@keyframes glyphPulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+  text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
 }
 
 .load-glyph::before {
   content: attr(data-text);
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0, 255, 136, 0.8), transparent);
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.9), transparent);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%);
-  animation: glitchSlice 4s steps(1) infinite;
+  animation: glitchSlice 3s steps(1) infinite;
 }
 
 @keyframes glitchSlice {
@@ -837,40 +856,161 @@ body::after {
   94% { clip-path: polygon(0 0, 100% 0, 100% 5%, 0 5%); transform: translateX(0); }
 }
 
-.load-label {
-  font-size: 11px;
-  color: var(--white);
-  letter-spacing: 6px;
-  margin-bottom: 0.3rem;
-  margin-top: 1rem;
-}
-.load-sublabel {
-  font-size: 9px;
-  color: var(--dim);
-  letter-spacing: 4px;
+/* Dual Neon Spinner HUD with Centered % */
+.intermediate-spinner-hud {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.4rem;
 }
 
 .load-ring {
-  width: 64px;
-  height: 64px;
-  border: 1px solid rgba(0, 255, 136, 0.15);
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(0, 255, 136, 0.2);
   border-top: 2px solid var(--g);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
-  position: relative;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
 }
 .load-ring::after {
   content: '';
   position: absolute;
   inset: 6px;
-  border: 1px solid rgba(0, 255, 136, 0.08);
-  border-bottom: 2px solid var(--g);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-bottom: 2px solid var(--cyan);
   border-radius: 50%;
-  animation: spin 0.6s linear infinite reverse;
+  animation: spin 0.65s linear infinite reverse;
+}
+
+.spinner-center-pct {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  color: var(--white);
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+  z-index: 2;
+}
+.spinner-center-pct .pct-num {
+  font-size: 14px;
+}
+.spinner-center-pct .pct-symbol {
+  font-size: 9px;
+  color: var(--g);
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* Live Hex Stream & Progress Bar Track */
+.intermediate-progress-container {
+  width: 100%;
+  max-width: 440px;
+  margin-bottom: 1.2rem;
+}
+
+.progress-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+.progress-label {
+  color: var(--dim-light);
+}
+.progress-hex {
+  color: var(--cyan);
+  background: rgba(56, 189, 248, 0.08);
+  padding: 1px 6px;
+  border-radius: 2px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.intermediate-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.8);
+}
+.intermediate-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff88, #38bdf8);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+  transition: width 0.08s linear;
+}
+
+/* Streaming Neural Telemetry Logs */
+.intermediate-telemetry-box {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(8, 8, 8, 0.85);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 3px;
+  padding: 10px 16px;
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  margin-bottom: 1.2rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 80px;
+  box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.03);
+}
+
+.telemetry-log-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dim-light);
+  animation: fadeInLog 0.2s ease forwards;
+}
+@keyframes fadeInLog {
+  from { opacity: 0; transform: translateX(-4px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.log-time {
+  color: var(--dim);
+  font-size: 7.5px;
+}
+.log-arrow {
+  color: var(--g);
+}
+.log-text {
+  flex: 1;
+  color: var(--white);
+}
+.log-status {
+  font-size: 8px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+.log-status.ok, .log-status.done, .log-status.ready {
+  color: var(--g);
+}
+.log-status.auth {
+  color: var(--cyan);
+}
+
+.load-sublabel {
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px;
+  color: var(--dim-light);
+  letter-spacing: 2px;
+  line-height: 1.4;
+}
 
 /* =====================================================================
    SCREEN 3: CLASSIFIED MISSION BRIEFING
