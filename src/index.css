@@ -1033,7 +1033,7 @@ body::after {
 }
 
 /* =====================================================================
-   SCREEN 3: CLASSIFIED MISSION BRIEFING (ZERO-SCROLL 100VH HUD COCKPIT)
+   SCREEN 3: CLASSIFIED MISSION BRIEFING (GRAND CENTERED HERO 100VH)
    ===================================================================== */
 #s-mission {
   background: var(--dark);
@@ -1043,7 +1043,7 @@ body::after {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 68px 24px 16px;
+  padding: 68px 20px 16px;
   box-sizing: border-box;
 }
 
@@ -1052,31 +1052,23 @@ body::after {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 1080px;
+  max-width: 660px;
   width: 100%;
   height: 100%;
   max-height: calc(100vh - 84px);
-  gap: 0.8rem;
+  gap: 0.55rem;
   margin: auto;
-  box-sizing: border-box;
-}
-
-.mission-top-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   text-align: center;
-  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .mission-badge-strip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 0.25rem;
   padding: 3px 12px;
-  background: rgba(0, 255, 136, 0.06);
-  border: 1px solid rgba(0, 255, 136, 0.22);
+  background: rgba(0, 255, 136, 0.07);
+  border: 1px solid rgba(0, 255, 136, 0.25);
   border-radius: 2px;
 }
 .mission-status-dot {
@@ -1084,12 +1076,12 @@ body::after {
   height: 6px;
   border-radius: 50%;
   background: var(--g);
-  box-shadow: 0 0 6px var(--g);
+  box-shadow: 0 0 8px var(--g);
   animation: blink 1.2s steps(1) infinite;
 }
 .mission-tag {
   font-family: 'Space Mono', monospace;
-  font-size: 8.5px;
+  font-size: 8px;
   letter-spacing: 3px;
   color: var(--g);
 }
@@ -1098,57 +1090,34 @@ body::after {
 
 .mission-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2rem, 3.8vw, 3.2rem);
-  line-height: 1;
-  letter-spacing: 4px;
-  margin: 0.1rem 0;
+  font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: 5px;
+  margin: 0;
   background: linear-gradient(135deg, #ffffff 40%, var(--g) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   padding: 0 10px;
+  text-shadow: 0 0 35px rgba(0, 255, 136, 0.25);
 }
 
 .mission-sub {
   font-family: 'Space Mono', monospace;
-  font-size: 8.5px;
+  font-size: 8px;
   color: var(--dim-light);
-  letter-spacing: 2.5px;
+  letter-spacing: 2px;
+  line-height: 1.3;
 }
 
-/* 2-Column Split Cockpit Layout */
-.mission-body-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.22fr;
-  gap: 20px;
-  width: 100%;
-  align-items: center;
-  flex: 1;
-  min-height: 0;
-}
-
-.mission-left-col {
+/* Centerpiece 3D Interactive Hologram */
+.mission-holo-center {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  flex-shrink: 0;
+  margin: 0.15rem 0;
 }
 
-.holo-pod-wrapper {
-  position: relative;
-  background: rgba(10, 10, 10, 0.75);
-  border: 1px solid rgba(0, 255, 136, 0.22);
-  border-radius: 3px;
-  padding: 10px 14px;
-  box-shadow: inset 0 0 25px rgba(0, 255, 136, 0.04), 0 12px 35px rgba(0, 0, 0, 0.7);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 370px;
-}
-
-/* 3D Hologram Container */
 .hologram-canvas-container {
   display: flex;
   flex-direction: column;
@@ -1158,56 +1127,26 @@ body::after {
 }
 
 .hologram-canvas {
-  width: 320px;
-  height: 195px;
+  width: 280px;
+  height: 140px;
   max-width: 100%;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.3));
-}
-
-.hologram-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: 'Space Mono', monospace;
-  font-size: 7.5px;
-  letter-spacing: 2px;
-  color: var(--g);
-  background: rgba(0, 255, 136, 0.06);
-  padding: 2px 8px;
-  border: 1px solid rgba(0, 255, 136, 0.2);
-  border-radius: 2px;
-  margin-top: 4px;
-}
-
-.holo-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--g);
-  box-shadow: 0 0 8px var(--g);
-  animation: pulseDot 1.2s infinite;
+  filter: drop-shadow(0 0 25px rgba(0, 255, 136, 0.35));
 }
 
 /* Operational Directive Card */
-.mission-right-col {
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-
 .mission-directive-card {
   position: relative;
   width: 100%;
-  background: rgba(14, 14, 14, 0.94);
-  border: 1px solid rgba(0, 255, 136, 0.28);
+  background: rgba(12, 12, 12, 0.95);
+  border: 1px solid rgba(0, 255, 136, 0.3);
   border-radius: 3px;
   padding: 1.1rem 1.4rem;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 255, 136, 0.03);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(0, 255, 136, 0.04);
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.5rem;
 }
 
 .directive-header {
@@ -1215,7 +1154,7 @@ body::after {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  border-bottom: 1px solid rgba(0, 255, 136, 0.18);
+  border-bottom: 1px solid rgba(0, 255, 136, 0.2);
   padding-bottom: 5px;
 }
 
@@ -1234,49 +1173,15 @@ body::after {
   letter-spacing: 2px;
   color: var(--g);
 }
-.directive-clearance {
+.directive-telemetry-chip {
   font-family: 'Space Mono', monospace;
   font-size: 8px;
   letter-spacing: 1.5px;
   color: var(--cyan);
-}
-
-.directive-telemetry-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.telemetry-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-family: 'Space Mono', monospace;
-  font-size: 7.5px;
-  letter-spacing: 1px;
-  color: var(--dim-light);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(56, 189, 248, 0.08);
   padding: 2px 7px;
+  border: 1px solid rgba(56, 189, 248, 0.25);
   border-radius: 2px;
-}
-
-.chip-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-}
-.chip-dot.ok {
-  background: var(--g);
-  box-shadow: 0 0 5px var(--g);
-}
-.chip-dot.info {
-  background: var(--cyan);
-  box-shadow: 0 0 5px var(--cyan);
-}
-.chip-dot.glow {
-  background: #f59e0b;
-  box-shadow: 0 0 5px #f59e0b;
 }
 
 .mission-desc {
@@ -1305,7 +1210,7 @@ body::after {
   font-family: 'Space Mono', monospace;
   font-size: 11px;
   letter-spacing: 3px;
-  padding: 11px 24px;
+  padding: 12px 24px;
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1369,36 +1274,6 @@ body::after {
   border-radius: 2px;
   font-weight: 700;
   border: 1px solid rgba(0, 255, 136, 0.3);
-}
-
-/* Mobile / Compact Responsive Layout for Screen 3 */
-@media (max-width: 768px) {
-  #s-mission {
-    padding: 60px 14px 12px;
-  }
-  .mission-body-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-  .hologram-canvas {
-    width: 260px;
-    height: 140px;
-  }
-  .holo-pod-wrapper {
-    padding: 6px 10px;
-  }
-  .mission-directive-card {
-    padding: 0.9rem 1rem;
-    gap: 0.4rem;
-  }
-  .mission-desc {
-    font-size: 9.5px;
-    line-height: 1.5;
-  }
-  .accept-btn {
-    padding: 9px 16px;
-    font-size: 10px;
-  }
 }
 
 /* =====================================================================

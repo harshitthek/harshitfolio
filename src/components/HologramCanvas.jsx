@@ -12,8 +12,8 @@ export default function HologramCanvas({ isActive }) {
     if (!ctx) return;
 
     let animId;
-    const width = 340;
-    const height = 210;
+    const width = 280;
+    const height = 140;
     const dpr = window.devicePixelRatio || 1;
 
     canvas.width = width * dpr;
@@ -63,20 +63,20 @@ export default function HologramCanvas({ isActive }) {
       [0, 5], [2, 5], [1, 5], [3, 5]
     ];
 
-    // 40 Ambient Quantum Orbital Particles
-    const particles = Array.from({ length: 42 }, (_, i) => ({
-      orbitRadius: 55 + Math.random() * 35,
-      angle: (i / 42) * Math.PI * 2,
-      speed: (0.012 + Math.random() * 0.015) * (i % 2 === 0 ? 1 : -1),
-      yOffset: (Math.random() - 0.5) * 30,
-      size: 1.2 + Math.random() * 2,
+    // 36 Ambient Quantum Orbital Particles
+    const particles = Array.from({ length: 36 }, (_, i) => ({
+      orbitRadius: 42 + Math.random() * 26,
+      angle: (i / 36) * Math.PI * 2,
+      speed: (0.014 + Math.random() * 0.016) * (i % 2 === 0 ? 1 : -1),
+      yOffset: (Math.random() - 0.5) * 20,
+      size: 1.1 + Math.random() * 1.6,
       color: i % 3 === 0 ? '#38bdf8' : i % 3 === 1 ? '#00ff88' : '#a7f3d0'
     }));
 
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
-      targetRotX = ((e.clientY - rect.top) / rect.height - 0.5) * 1.5;
-      targetRotY = ((e.clientX - rect.left) / rect.width - 0.5) * 1.5;
+      targetRotX = ((e.clientY - rect.top) / rect.height - 0.5) * 1.4;
+      targetRotY = ((e.clientX - rect.left) / rect.width - 0.5) * 1.4;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -96,28 +96,28 @@ export default function HologramCanvas({ isActive }) {
       const sinX = Math.sin(angleX);
 
       const cx = width / 2;
-      const cy = height / 2 - 6;
-      const outerRadius = 58;
-      const innerRadius = 30;
+      const cy = height / 2 - 4;
+      const outerRadius = 45;
+      const innerRadius = 24;
 
       // 1. Holographic Projection Base Cone & Radial Ambient Glow
-      const glowGrad = ctx.createRadialGradient(cx, cy, 5, cx, cy, 95);
-      glowGrad.addColorStop(0, 'rgba(0, 255, 136, 0.35)');
-      glowGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.15)');
-      glowGrad.addColorStop(0.8, 'rgba(0, 255, 136, 0.03)');
+      const glowGrad = ctx.createRadialGradient(cx, cy, 4, cx, cy, 75);
+      glowGrad.addColorStop(0, 'rgba(0, 255, 136, 0.32)');
+      glowGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.12)');
+      glowGrad.addColorStop(0.8, 'rgba(0, 255, 136, 0.02)');
       glowGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = glowGrad;
       ctx.beginPath();
-      ctx.arc(cx, cy, 95, 0, Math.PI * 2);
+      ctx.arc(cx, cy, 75, 0, Math.PI * 2);
       ctx.fill();
 
       // 2. Hologram Scanner Line Sweep
-      scanY = (scanY + 1.2) % height;
-      ctx.strokeStyle = 'rgba(0, 255, 136, 0.18)';
+      scanY = (scanY + 1.1) % height;
+      ctx.strokeStyle = 'rgba(0, 255, 136, 0.16)';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.moveTo(cx - 85, scanY);
-      ctx.lineTo(cx + 85, scanY);
+      ctx.moveTo(cx - 70, scanY);
+      ctx.lineTo(cx + 70, scanY);
       ctx.stroke();
 
       // Project vertices helper
@@ -131,7 +131,7 @@ export default function HologramCanvas({ isActive }) {
           let y2 = y1 * cosX - z1 * sinX;
           let z2 = y1 * sinX + z1 * cosX;
 
-          const scale = 220 / (220 + z2 * rad);
+          const scale = 180 / (180 + z2 * rad);
           return {
             x: cx + x2 * rad * scale,
             y: cy + y2 * rad * scale,
@@ -144,7 +144,7 @@ export default function HologramCanvas({ isActive }) {
       const innerProjected = projectPoints(innerVertices, innerRadius);
 
       // 3. Draw Outer Icosahedron Wireframe
-      ctx.lineWidth = 1.3;
+      ctx.lineWidth = 1.2;
       edges.forEach(([i, j]) => {
         const p1 = outerProjected[i];
         const p2 = outerProjected[j];
@@ -174,18 +174,18 @@ export default function HologramCanvas({ isActive }) {
       outerProjected.forEach(p => {
         ctx.fillStyle = '#ffffff';
         ctx.shadowColor = '#00ff88';
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 6;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2);
         ctx.fill();
       });
 
       innerProjected.forEach(p => {
         ctx.fillStyle = '#38bdf8';
         ctx.shadowColor = '#38bdf8';
-        ctx.shadowBlur = 6;
+        ctx.shadowBlur = 5;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 1.8, 0, Math.PI * 2);
         ctx.fill();
       });
       ctx.shadowBlur = 0;
@@ -194,7 +194,7 @@ export default function HologramCanvas({ isActive }) {
       particles.forEach(p => {
         p.angle += p.speed;
         const px = cx + Math.cos(p.angle) * p.orbitRadius;
-        const py = cy + Math.sin(p.angle) * p.orbitRadius * 0.45 + Math.sin(p.angle * 2) * 5 + p.yOffset * 0.1;
+        const py = cy + Math.sin(p.angle) * p.orbitRadius * 0.42 + Math.sin(p.angle * 2) * 4 + p.yOffset * 0.1;
 
         ctx.fillStyle = p.color;
         ctx.beginPath();
@@ -203,15 +203,15 @@ export default function HologramCanvas({ isActive }) {
       });
 
       // 7. Base Projection Ring
-      ctx.strokeStyle = 'rgba(0, 255, 136, 0.3)';
+      ctx.strokeStyle = 'rgba(0, 255, 136, 0.25)';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.ellipse(cx, height - 14, 75, 12, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx, height - 10, 60, 9, 0, 0, Math.PI * 2);
       ctx.stroke();
 
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.18)';
       ctx.beginPath();
-      ctx.ellipse(cx, height - 14, 45, 7, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx, height - 10, 36, 5, 0, 0, Math.PI * 2);
       ctx.stroke();
 
       animId = requestAnimationFrame(render);
@@ -231,10 +231,6 @@ export default function HologramCanvas({ isActive }) {
         ref={canvasRef}
         className="hologram-canvas"
       />
-      <div className="hologram-label">
-        <span className="holo-dot"></span>
-        <span>QUANTUM NEURAL CORE // 3D INTERACTIVE HOLOGRAM</span>
-      </div>
     </div>
   );
 }
