@@ -31,48 +31,40 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
       <div className="corner-dec bl"></div>
       <div className="corner-dec br"></div>
 
-      {/* Left Floating Cyber HUD Spine: Engineering Mindset Nodes */}
-      <aside className="mission-spine-rail left-spine" aria-hidden="true">
-        <div className="spine-header">
-          <span className="spine-dot green"></span>
-          <span className="spine-title">ENGINEERING MINDSET</span>
+      {/* Left Atmospheric Cyber Soundwave & Resonance Pillar */}
+      <aside className="ambient-cyber-pillar left-pillar" aria-hidden="true">
+        <div className="pillar-header">
+          <span className="pillar-pulse-dot green"></span>
+          <span className="pillar-tag">AUDIO RESONANCE</span>
         </div>
 
-        <div className="spine-nodes-track">
-          <div className="spine-track-line"></div>
+        <div className="pillar-bars-eq">
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+          <span className="eq-bar"></span>
+        </div>
 
-          <div className="spine-node-item">
-            <span className="node-bullet green">01</span>
-            <div className="node-text-wrap">
-              <span className="node-name">NEURAL AGENTS</span>
-              <span className="node-desc">Autonomous decision trees &amp; LLM labs</span>
-            </div>
-          </div>
-
-          <div className="spine-node-item">
-            <span className="node-bullet cyan">02</span>
-            <div className="node-text-wrap">
-              <span className="node-name">SYSTEMS &amp; ML</span>
-              <span className="node-desc">Predictive valuation &amp; scalable code</span>
-            </div>
-          </div>
-
-          <div className="spine-node-item">
-            <span className="node-bullet">03</span>
-            <div className="node-text-wrap">
-              <span className="node-name">INTERACTIVE WEBGL</span>
-              <span className="node-desc">Dynamic simulations &amp; living UI</span>
-            </div>
-          </div>
+        <div className="pillar-metrics">
+          <span className="metric-chip cyan">44.1 kHz</span>
+          <span className="metric-chip green">SYNTH_ONLINE</span>
         </div>
       </aside>
 
       {/* Center Hero Column */}
       <div className="mission-content-wrapper">
-        {/* Minimalist Top Origin Tag */}
+        {/* Minimalist Top Status Tag */}
         <div className="mission-origin-tag">
           <span className="origin-dot"></span>
-          <span>NEW DELHI &bull; USAR (GGSIPU) &bull; PORTFOLIO_V2</span>
+          <span>ENTERING HARSHIT'S UNIVERSE &bull; SYSTEM_ONLINE &bull; PORTFOLIO_V2</span>
         </div>
 
         {/* Massive Hero Name Header (Preserved Exactly) */}
@@ -81,7 +73,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             HARSHIT <span className="hero-name-glow">SHARMA</span>
           </h1>
           <div className="hero-sub-discipline">
-            ARTIFICIAL INTELLIGENCE &bull; MACHINE LEARNING &bull; SYSTEMS ARCHITECTURE
+            CREATOR &bull; THINKER &bull; MULTIVERSE ARCHITECT &bull; NEW DELHI
           </div>
         </div>
 
@@ -90,57 +82,39 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <HologramCanvas isActive={isActive} />
         </div>
 
-        {/* Rich, Structured Cyber Command Dossier Pod */}
-        <div className="mission-dossier-pod">
+        {/* Sleek, Atmospheric Welcome & Access Pod */}
+        <div className="mission-welcome-pod">
           <span className="corner tl"></span>
           <span className="corner tr"></span>
           <span className="corner bl"></span>
           <span className="corner br"></span>
 
-          {/* Pod Top Header Bar */}
-          <div className="dossier-top-bar">
-            <div className="dossier-bar-left">
-              <span className="dossier-pulse-dot"></span>
-              <span className="dossier-header-title">CREATOR BIOGRAPHY // AGENT_ID: HS-01</span>
+          {/* Pod Top Header */}
+          <div className="welcome-pod-header">
+            <div className="welcome-header-left">
+              <span className="welcome-beacon-dot"></span>
+              <span className="welcome-title">ACCESS GRANTED // PORTAL READY</span>
             </div>
-            <span className="dossier-clearance-badge">CLEARANCE: LEVEL-9 // DELHI, IN</span>
+            <span className="welcome-status-badge">CLEARANCE: LEVEL-9</span>
           </div>
 
-          {/* Structured 2-Column Content Grid */}
-          <div className="dossier-body-grid">
-            {/* Left Quick Intel Column */}
-            <div className="dossier-intel-col">
-              <div className="intel-row">
-                <span className="intel-label">IDENTITY:</span>
-                <span className="intel-val">Harshit Sharma</span>
-              </div>
-              <div className="intel-row">
-                <span className="intel-label">FOCUS:</span>
-                <span className="intel-val cyan">Neural Nets &amp; AI Agents</span>
-              </div>
-              <div className="intel-row">
-                <span className="intel-label">CAMPUS:</span>
-                <span className="intel-val">USAR (GGSIPU), Delhi</span>
-              </div>
-            </div>
+          {/* Authentic, Intriguing Welcome Quote */}
+          <p className="welcome-quote">
+            “Step past the digital boundary. Welcome to my creative sandbox, my thoughts, and the multiverses I've brought to life. Take your time and explore.”
+          </p>
 
-            {/* Right Narrative & Philosophy Column */}
-            <div className="dossier-narrative-col">
-              <p className="dossier-quote">
-                “Fascinated by the mechanics of machine cognition, mathematical models, and interactive software. I engineer systems that think, learn, and push boundaries.”
-              </p>
-              <div className="dossier-tags-row">
-                <span className="dossier-tag">#NeuralAgents</span>
-                <span className="dossier-tag">#MachineLearning</span>
-                <span className="dossier-tag">#InteractiveWebGL</span>
-              </div>
-            </div>
+          {/* Cool Personality & Vibe Badges */}
+          <div className="welcome-vibe-strip">
+            <span className="vibe-pill">💡 CURIOSITY</span>
+            <span className="vibe-pill">⚡ CREATION</span>
+            <span className="vibe-pill cyan">🌌 MULTIVERSE</span>
+            <span className="vibe-pill green">✨ EXPLORATION</span>
           </div>
 
           {/* Primary Magnetic CTA Button */}
           <button
             type="button"
-            className="dossier-cta-btn"
+            className="welcome-cta-btn"
             onClick={handleAccept}
             onMouseEnter={() => SoundFX.playHover('primary')}
           >
@@ -149,7 +123,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             <span className="corner bl"></span>
             <span className="corner br"></span>
             <span className="cta-icon">▶</span>
-            <span className="cta-text">STEP INSIDE MY MULTIVERSE &amp; EXPLORE WORK</span>
+            <span className="cta-text">ENTER THE MULTIVERSE</span>
           </button>
 
           <div className="mission-key-hint">
@@ -158,39 +132,25 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         </div>
       </div>
 
-      {/* Right Floating Cyber HUD Spine: Multiverse Expedition Sectors */}
-      <aside className="mission-spine-rail right-spine" aria-hidden="true">
-        <div className="spine-header">
-          <span className="spine-dot cyan"></span>
-          <span className="spine-title">MULTIVERSE EXPEDITION</span>
+      {/* Right Atmospheric Gyroscopic Cyber Compass & Spatial Reticle */}
+      <aside className="ambient-cyber-pillar right-pillar" aria-hidden="true">
+        <div className="pillar-header">
+          <span className="pillar-pulse-dot cyan"></span>
+          <span className="pillar-tag">SPATIAL RADAR</span>
         </div>
 
-        <div className="spine-nodes-track">
-          <div className="spine-track-line"></div>
+        <div className="pillar-gyro-reticle">
+          <span className="gyro-ring outer"></span>
+          <span className="gyro-ring inner"></span>
+          <span className="gyro-cross h"></span>
+          <span className="gyro-cross v"></span>
+          <span className="gyro-laser-beam"></span>
+          <span className="gyro-center-dot"></span>
+        </div>
 
-          <div className="spine-node-item">
-            <span className="node-bullet green">P1</span>
-            <div className="node-text-wrap">
-              <span className="node-name">YGGDRASIL LAB</span>
-              <span className="node-desc">Tree-structured autonomous bots</span>
-            </div>
-          </div>
-
-          <div className="spine-node-item">
-            <span className="node-bullet cyan">P2</span>
-            <div className="node-text-wrap">
-              <span className="node-name">RESILIENT &amp; BIKE ML</span>
-              <span className="node-desc">Algorithmic valuation engines</span>
-            </div>
-          </div>
-
-          <div className="spine-node-item">
-            <span className="node-bullet">P3</span>
-            <div className="node-text-wrap">
-              <span className="node-name">3D CANVAS WORLDS</span>
-              <span className="node-desc">Real-time graphic engines</span>
-            </div>
-          </div>
+        <div className="pillar-metrics">
+          <span className="metric-chip cyan">28.61° N, 77.20° E</span>
+          <span className="metric-chip green">ORBIT_STABLE</span>
         </div>
       </aside>
     </div>
