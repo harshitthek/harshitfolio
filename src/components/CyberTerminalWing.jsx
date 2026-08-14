@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { SoundFX } from './SoundFX';
 
 const INITIAL_LOGS = [
@@ -12,27 +12,37 @@ const INITIAL_LOGS = [
 export default function CyberTerminalWing({ isActive }) {
   const [logs, setLogs] = useState(INITIAL_LOGS);
   const [inputVal, setInputVal] = useState('');
+  const [history, setHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
 
+  // Auto scroll to bottom when logs update
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [logs]);
 
-  const executeCommand = (cmdStr) => {
-    const cmd = cmdStr.trim().toLowerCase();
+  const executeCommand = useCallback((cmdStr) => {
+    const rawCmd = cmdStr.trim();
+    const cmd = rawCmd.toLowerCase();
     SoundFX.playClick();
 
-    const userEntry = { tag: 'CMD', text: `$ ${cmdStr}`, color: 'white' };
+    if (rawCmd) {
+      setHistory(prev => [...prev, rawCmd]);
+      setHistoryIndex(-1);
+    }
+
+    const userEntry = { tag: 'CMD', text: `$ ${rawCmd || ''}`, color: 'white' };
 
     let reply = [];
     if (!cmd) {
       reply = [];
     } else if (cmd === 'help') {
       reply = [
-        { tag: 'HELP', text: 'Available: whoami, skills, matrix, contact, clear, stats', color: 'cyan' }
+        { tag: 'HELP', text: 'Available commands: whoami, skills, matrix, contact, stats, clear', color: 'cyan' }
       ];
     } else if (cmd === 'whoami') {
       reply = [
@@ -41,7 +51,7 @@ export default function CyberTerminalWing({ isActive }) {
     } else if (cmd === 'skills') {
       reply = [
         { tag: 'AI/ML', text: 'Python, PyTorch, Autonomous Agents, LLM Pipelines', color: 'cyan' },
-        { tag: 'WEB', text: 'React, WebGL, 3D Canvas, Node.js, Systems Arch', color: 'green' }
+        { tag: 'WEB', text: 'React, WebGL, 3D Canvas, Node.js, Systems Architecture', color: 'green' }
       ];
     } else if (cmd === 'matrix') {
       reply = [
@@ -63,24 +73,47 @@ export default function CyberTerminalWing({ isActive }) {
       return;
     } else {
       reply = [
-        { tag: 'ERR', text: `Command not found: "${cmd}". Type "help"`, color: 'red' }
+        { tag: 'ERR', text: `Command not found: "${rawCmd}". Type "help"`, color: 'red' }
       ];
     }
 
     setLogs(prev => [...prev, userEntry, ...reply]);
     setInputVal('');
-  };
+  }, []);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       executeCommand(inputVal);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (history.length === 0) return;
+      const nextIdx = historyIndex === -1 ? history.length - 1 : Math.max(0, historyIndex - 1);
+      setHistoryIndex(nextIdx);
+      setInputVal(history[nextIdx] || '');
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex === -1) return;
+      const nextIdx = historyIndex + 1;
+      if (nextIdx >= history.length) {
+        setHistoryIndex(-1);
+        setInputVal('');
+      } else {
+        setHistoryIndex(nextIdx);
+        setInputVal(history[nextIdx] || '');
+      }
+    }
+  };
+
+  const handleWindowClick = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
   };
 
   return (
-    <aside className="cyber-flank-terminal left-flank">
-      <div className="terminal-window">
+    <aside className="cyber-flank-terminal left-flank" aria-label="Interactive Linux Shell">
+      <div className="terminal-window" onClick={handleWindowClick} role="region" aria-label="Terminal Interface">
         <span className="corner tl"></span>
         <span className="corner tr"></span>
         <span className="corner bl"></span>
@@ -122,22 +155,23 @@ export default function CyberTerminalWing({ isActive }) {
               placeholder="type help..."
               autoComplete="off"
               spellCheck="false"
+              aria-label="Terminal input"
             />
           </div>
         </div>
 
         {/* Quick-Click Command Pills */}
         <div className="term-cmd-pills">
-          <button type="button" className="cmd-pill" onClick={() => executeCommand('whoami')}>
+          <button type="button" className="cmd-pill" onClick={(e) => { e.stopPropagation(); executeCommand('whoami'); }}>
             whoami
           </button>
-          <button type="button" className="cmd-pill" onClick={() => executeCommand('skills')}>
+          <button type="button" className="cmd-pill" onClick={(e) => { e.stopPropagation(); executeCommand('skills'); }}>
             skills
           </button>
-          <button type="button" className="cmd-pill" onClick={() => executeCommand('matrix')}>
+          <button type="button" className="cmd-pill" onClick={(e) => { e.stopPropagation(); executeCommand('matrix'); }}>
             matrix
           </button>
-          <button type="button" className="cmd-pill" onClick={() => executeCommand('clear')}>
+          <button type="button" className="cmd-pill" onClick={(e) => { e.stopPropagation(); executeCommand('clear'); }}>
             clear
           </button>
         </div>

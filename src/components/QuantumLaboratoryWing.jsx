@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SoundFX } from './SoundFX';
 
 export default function QuantumLaboratoryWing({ isActive }) {
@@ -6,12 +6,22 @@ export default function QuantumLaboratoryWing({ isActive }) {
   const [overclockActive, setOverclockActive] = useState(false);
   const [activeAction, setActiveAction] = useState('STANDBY');
 
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   const handleOverclock = () => {
     SoundFX.playChirp();
     setOverclockActive(true);
     setActiveAction('⚡ OVERCLOCKED');
     setFluxLevel(100);
-    setTimeout(() => {
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
       setOverclockActive(false);
       setActiveAction('STANDBY');
     }, 1800);
@@ -20,21 +30,25 @@ export default function QuantumLaboratoryWing({ isActive }) {
   const handleSynthPulse = () => {
     SoundFX.playTone(520, 'sine', 0.25);
     setActiveAction('🔊 SYNTH_PULSE');
-    setTimeout(() => setActiveAction('STANDBY'), 1200);
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setActiveAction('STANDBY'), 1200);
   };
 
   const handleWarp = () => {
     SoundFX.playLaser();
     setActiveAction('🌌 WARP_BURST');
-    setTimeout(() => setActiveAction('STANDBY'), 1400);
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setActiveAction('STANDBY'), 1400);
   };
 
   const calculatedTflops = ((fluxLevel / 100) * 4.2).toFixed(2);
   const calculatedTemp = (32 + (fluxLevel / 100) * 16).toFixed(0);
 
   return (
-    <aside className="cyber-flank-lab right-flank">
-      <div className={`lab-window ${overclockActive ? 'overclocked' : ''}`}>
+    <aside className="cyber-flank-lab right-flank" aria-label="Quantum Laboratory Controls">
+      <div className={`lab-window ${overclockActive ? 'overclocked' : ''}`} role="region" aria-label="Laboratory Controller">
         <span className="corner tl"></span>
         <span className="corner tr"></span>
         <span className="corner bl"></span>
@@ -65,11 +79,12 @@ export default function QuantumLaboratoryWing({ isActive }) {
               SoundFX.playHover('soft');
             }}
             className="lab-range-slider"
+            aria-label="Neural Flux Slider"
           />
         </div>
 
         {/* Live Equalizer Visualizer reacting to Flux */}
-        <div className="lab-eq-strip">
+        <div className="lab-eq-strip" aria-hidden="true">
           {Array.from({ length: 10 }).map((_, idx) => (
             <span
               key={idx}
@@ -89,6 +104,7 @@ export default function QuantumLaboratoryWing({ isActive }) {
             className="lab-btn primary"
             onClick={handleOverclock}
             onMouseEnter={() => SoundFX.playHover('primary')}
+            aria-label="Overclock neural core"
           >
             ⚡ OVERCLOCK
           </button>
@@ -97,6 +113,7 @@ export default function QuantumLaboratoryWing({ isActive }) {
             className="lab-btn secondary"
             onClick={handleSynthPulse}
             onMouseEnter={() => SoundFX.playHover('soft')}
+            aria-label="Trigger synth audio pulse"
           >
             🔊 SYNTH PULSE
           </button>
@@ -105,6 +122,7 @@ export default function QuantumLaboratoryWing({ isActive }) {
             className="lab-btn tertiary"
             onClick={handleWarp}
             onMouseEnter={() => SoundFX.playHover('soft')}
+            aria-label="Trigger warp particle burst"
           >
             🌌 WARP BURST
           </button>
