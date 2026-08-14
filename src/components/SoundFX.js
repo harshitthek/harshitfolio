@@ -1,9 +1,21 @@
 // Robust Procedural Web Audio API Sound Synthesizer
 let audioCtx = null;
+const STORAGE_KEY = 'harshit_portfolio_sfx_enabled';
+
 let soundEnabled = true;
+if (typeof window !== 'undefined') {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored !== null) {
+    soundEnabled = stored === 'true';
+  }
+}
+
 const listeners = new Set();
 
 function notifyListeners() {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(STORAGE_KEY, String(soundEnabled));
+  }
   listeners.forEach(fn => {
     try {
       fn(soundEnabled);

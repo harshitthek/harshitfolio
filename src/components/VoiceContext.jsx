@@ -2,11 +2,34 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 
 const VoiceContext = createContext();
 
+const STORAGE_KEY = 'harshit_portfolio_voice_enabled';
+
 export function VoiceProvider({ children }) {
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [voiceEnabled, setVoiceEnabled] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored !== null) return stored === 'true';
+    }
+    return true;
+  });
+
+  const voiceEnabledRef = useRef(voiceEnabled);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentUtterance, setCurrentUtterance] = useState('');
   const timeoutRef = useRef(null);
+
+  // Keep ref in sync with state at all times
+  useEffect(() => {
+    voiceEnabledRef.current = voiceEnabled;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, String(voiceEnabled));
+      if (!voiceEnabled && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+        setCurrentUtterance('');
+      }
+    }
+  }, [voiceEnabled]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
@@ -23,7 +46,10 @@ export function VoiceProvider({ children }) {
   }, []);
 
   const speak = useCallback((text, rate = 0.95, pitch = 0.9) => {
-    if (!voiceEnabled || typeof window === 'undefined' || !window.speechSynthesis) return;
+    // ALWAYS check live ref directly to prevent stale closure executions from setTimeout
+    if (!voiceEnabledRef.current || typeof window === 'undefined' || !window.speechSynthesis) {
+      return;
+    }
 
     try {
       if (window.speechSynthesis.paused) {
@@ -55,6 +81,13 @@ export function VoiceProvider({ children }) {
       }
 
       utterance.onstart = () => {
+        // Double check ref in case user muted right as speech started
+        if (!voiceEnabledRef.current) {
+          window.speechSynthesis.cancel();
+          setIsSpeaking(false);
+          setCurrentUtterance('');
+          return;
+        }
         setIsSpeaking(true);
         setCurrentUtterance(text);
       };
@@ -81,18 +114,31 @@ export function VoiceProvider({ children }) {
       console.warn('[VoiceContext] Speech error:', err);
       setIsSpeaking(false);
     }
-  }, [voiceEnabled]);
+  }, []);
 
-  const toggleVoice = () => {
-    if (voiceEnabled && typeof window !== 'undefined' && window.speechSynthesis) {
+  const toggleVoice = useCallback(() => {
+    setVoiceEnabled(prev => {
+      const next = !prev;
+      voiceEnabledRef.current = next;
+      if (!next && typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+        setCurrentUtterance('');
+      }
+      return next;
+    });
+  }, []);
+
+  const stopSpeaking = useCallback(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
+      setCurrentUtterance('');
     }
-    setVoiceEnabled(prev => !prev);
-  };
+  }, []);
 
   return (
-    <VoiceContext.Provider value={{ voiceEnabled, isSpeaking, currentUtterance, speak, toggleVoice }}>
+    <VoiceContext.Provider value={{ voiceEnabled, isSpeaking, currentUtterance, speak, toggleVoice, stopSpeaking }}>
       {children}
     </VoiceContext.Provider>
   );
