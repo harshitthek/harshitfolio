@@ -1208,14 +1208,14 @@ body::after {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  margin-top: 4px;
+  margin-top: 14px; /* Just a bit down */
 }
 
 .mission-hero-name {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(4.0rem, 7.8vw, 5.8rem);
+  font-size: clamp(4.4rem, 8.5vw, 6.4rem); /* Little bit more */
   line-height: 0.95;
-  letter-spacing: clamp(4px, 0.8vw, 7.5px);
+  letter-spacing: clamp(4px, 0.8vw, 8px);
   white-space: nowrap; /* GUARANTEES single line always */
   margin: 0;
   background: linear-gradient(90deg, #ffffff 0%, var(--g) 40%, #38bdf8 70%, #ffffff 100%);
