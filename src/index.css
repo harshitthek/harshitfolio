@@ -1340,203 +1340,124 @@ body::after {
 }
 
 /* =====================================================================
-   AMBIENT CYBER HUD TELEMETRY WINGS (LEFT & RIGHT)
+   FLOATING CYBER SPINE RAILS (LEFT & RIGHT)
    ===================================================================== */
-/* =====================================================================
-   AMBIENT CYBER HUD TELEMETRY WINGS (LEFT & RIGHT)
-   ===================================================================== */
-.mission-side-hud {
+.mission-spine-rail {
   position: absolute;
   top: 50%;
   transform: translateY(-46%);
   z-index: 6;
   pointer-events: none;
   opacity: 0.95;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   transition: opacity 0.3s ease;
 }
-.mission-side-hud.left-hud {
-  left: clamp(20px, 4.5vw, 60px);
+.mission-spine-rail.left-spine {
+  left: clamp(20px, 4.5vw, 65px);
+  text-align: left;
 }
-.mission-side-hud.right-hud {
-  right: clamp(20px, 4.5vw, 60px);
-}
-
-.side-hud-card {
-  position: relative;
-  background: rgba(8, 12, 10, 0.9);
-  border: 1px solid rgba(0, 255, 136, 0.24);
-  border-radius: 4px;
-  padding: 12px 14px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), inset 0 0 18px rgba(0, 255, 136, 0.03);
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  width: 195px;
-  backdrop-filter: blur(12px);
+.mission-spine-rail.right-spine {
+  right: clamp(20px, 4.5vw, 65px);
+  text-align: left;
 }
 
-.side-hud-header {
+.spine-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  border-bottom: 1px solid rgba(0, 255, 136, 0.16);
-  padding-bottom: 4px;
+  gap: 7px;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+  padding-bottom: 5px;
 }
-.hud-pulse-dot {
-  width: 5px;
-  height: 5px;
+.spine-dot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--g);
-  box-shadow: 0 0 6px var(--g);
+  box-shadow: 0 0 8px var(--g);
   animation: pulseDot 1.2s infinite;
 }
-.hud-pulse-dot.cyan {
+.spine-dot.cyan {
   background: var(--cyan);
-  box-shadow: 0 0 6px var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
 }
-.hud-title {
+.spine-title {
   font-family: 'Space Mono', monospace;
-  font-size: 8px;
+  font-size: 8.5px;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   color: var(--g);
 }
 
-.side-hud-list {
+.spine-nodes-track {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
+  padding-left: 4px;
+}
+.spine-track-line {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 12px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(0, 255, 136, 0.5), rgba(56, 189, 248, 0.5));
+  z-index: 1;
 }
 
-.side-hud-row {
+.spine-node-item {
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 10px;
+  z-index: 2;
+}
+.node-bullet {
   font-family: 'Space Mono', monospace;
   font-size: 7.5px;
-  letter-spacing: 1px;
-}
-.hud-k {
-  color: var(--dim-light);
-}
-.hud-v {
-  color: var(--white);
   font-weight: 700;
-}
-.hud-v.cyan {
-  color: var(--cyan);
-}
-.hud-v.green {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #080a09;
+  border: 1px solid var(--g);
   color: var(--g);
-}
-
-/* Ambient Audio Waveform Bars (Left) */
-.side-hud-waveform {
-  display: flex;
-  align-items: flex-end;
-  gap: 2.5px;
-  height: 20px;
-  padding-top: 4px;
-  border-top: 1px solid rgba(0, 255, 136, 0.12);
-}
-.wave-bar {
-  flex: 1;
-  background: linear-gradient(to top, var(--g), var(--cyan));
-  border-radius: 1px;
-  animation: waveFlux 1.4s ease-in-out infinite alternate;
-}
-.wave-bar:nth-child(1) { height: 35%; animation-delay: 0.1s; }
-.wave-bar:nth-child(2) { height: 70%; animation-delay: 0.3s; }
-.wave-bar:nth-child(3) { height: 100%; animation-delay: 0.5s; }
-.wave-bar:nth-child(4) { height: 45%; animation-delay: 0.2s; }
-.wave-bar:nth-child(5) { height: 80%; animation-delay: 0.4s; }
-.wave-bar:nth-child(6) { height: 60%; animation-delay: 0.6s; }
-.wave-bar:nth-child(7) { height: 90%; animation-delay: 0.25s; }
-.wave-bar:nth-child(8) { height: 40%; animation-delay: 0.45s; }
-.wave-bar:nth-child(9) { height: 75%; animation-delay: 0.15s; }
-.wave-bar:nth-child(10) { height: 50%; animation-delay: 0.35s; }
-
-@keyframes waveFlux {
-  0% { transform: scaleY(0.35); }
-  100% { transform: scaleY(1); }
-}
-
-/* Ambient Radar Reticle Graphic (Right) */
-.side-hud-reticle {
-  position: relative;
-  width: 100%;
-  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid rgba(0, 255, 136, 0.12);
-  padding-top: 3px;
-  margin: 1px 0;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.35);
 }
-.reticle-ring {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 1px dashed rgba(56, 189, 248, 0.6);
-  animation: spin 7s linear infinite;
-}
-.reticle-cross.h {
-  position: absolute;
-  width: 32px;
-  height: 1px;
-  background: rgba(0, 255, 136, 0.35);
-}
-.reticle-cross.v {
-  position: absolute;
-  height: 22px;
-  width: 1px;
-  background: rgba(0, 255, 136, 0.35);
-}
-.reticle-sweep {
-  position: absolute;
-  width: 11px;
-  height: 1px;
-  background: #00ff88;
-  transform-origin: left center;
-  animation: spin 2.5s linear infinite;
-  left: 50%;
-}
-.reticle-dot {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 6px var(--cyan);
-  animation: pulseDot 1.2s infinite;
+.node-bullet.cyan {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.35);
 }
 
-.side-hud-footer-hex {
+.node-text-wrap {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 2px;
+}
+.node-name {
   font-family: 'Space Mono', monospace;
-  font-size: 7.5px;
+  font-size: 8px;
+  font-weight: 700;
   letter-spacing: 1px;
+  color: var(--white);
+}
+.node-desc {
+  font-size: 8px;
   color: var(--dim-light);
-  border-top: 1px solid rgba(0, 255, 136, 0.12);
-  padding-top: 4px;
-}
-.hex-prefix {
-  color: var(--g);
-  font-weight: 700;
-}
-.hex-stream {
-  color: var(--dim-light);
-}
-.hex-stream.cyan {
-  color: var(--cyan);
-  font-weight: 700;
+  line-height: 1.35;
 }
 
 /* Seamless responsive scaling */
-@media (max-width: 1160px) {
-  .mission-side-hud {
+@media (max-width: 1180px) {
+  .mission-spine-rail {
     display: none;
   }
 }

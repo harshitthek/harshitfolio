@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { SoundFX } from './SoundFX';
 import HologramCanvas from './HologramCanvas';
 
 export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
-  const [liveEntropy, setLiveEntropy] = useState('0.942');
-  const [liveTflops, setLiveTflops] = useState('3.84');
-  const [hexCycle, setHexCycle] = useState('0x7FA2');
-
   const handleAccept = () => {
     SoundFX.playClick();
     onAccept();
@@ -28,18 +24,6 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isActive]);
 
-  // Dynamic live HUD telemetry fluctuations
-  useEffect(() => {
-    if (!isActive) return;
-    const interval = setInterval(() => {
-      setLiveEntropy((0.935 + Math.random() * 0.015).toFixed(3));
-      setLiveTflops((3.80 + Math.random() * 0.09).toFixed(2));
-      const hexes = ['0x7FA2', '0x99BC', '0x00F8', '0x4E1A', '0x88FF'];
-      setHexCycle(hexes[Math.floor(Math.random() * hexes.length)]);
-    }, 1100);
-    return () => clearInterval(interval);
-  }, [isActive]);
-
   return (
     <div id="s-mission" className={`screen ${isActive ? 'active' : ''}`}>
       <div className="corner-dec tl"></div>
@@ -47,55 +31,38 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
       <div className="corner-dec bl"></div>
       <div className="corner-dec br"></div>
 
-      {/* Left High-Tech Cyber HUD Telemetry Wing */}
-      <aside className="mission-side-hud left-hud" aria-hidden="true">
-        <div className="side-hud-card">
-          <span className="corner tl"></span>
-          <span className="corner tr"></span>
-          <span className="corner bl"></span>
-          <span className="corner br"></span>
+      {/* Left Floating Cyber HUD Spine: Engineering Mindset Nodes */}
+      <aside className="mission-spine-rail left-spine" aria-hidden="true">
+        <div className="spine-header">
+          <span className="spine-dot green"></span>
+          <span className="spine-title">ENGINEERING MINDSET</span>
+        </div>
 
-          <div className="side-hud-header">
-            <span className="hud-pulse-dot"></span>
-            <span className="hud-title">NEURAL ENGINE // v2.4</span>
-          </div>
+        <div className="spine-nodes-track">
+          <div className="spine-track-line"></div>
 
-          <div className="side-hud-list">
-            <div className="side-hud-row">
-              <span className="hud-k">CORE ARCH</span>
-              <span className="hud-v green">YGGDRASIL_BOT</span>
-            </div>
-            <div className="side-hud-row">
-              <span className="hud-k">TENSOR FLUX</span>
-              <span className="hud-v cyan">{liveTflops} TFLOPS</span>
-            </div>
-            <div className="side-hud-row">
-              <span className="hud-k">SYNAPSE LINK</span>
-              <span className="hud-v">100%_SYNCED</span>
-            </div>
-            <div className="side-hud-row">
-              <span className="hud-k">ENTROPY</span>
-              <span className="hud-v green">{liveEntropy} η</span>
+          <div className="spine-node-item">
+            <span className="node-bullet green">01</span>
+            <div className="node-text-wrap">
+              <span className="node-name">NEURAL AGENTS</span>
+              <span className="node-desc">Autonomous decision trees &amp; LLM labs</span>
             </div>
           </div>
 
-          {/* Dynamic 10-Bar Frequency Visualizer */}
-          <div className="side-hud-waveform">
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
+          <div className="spine-node-item">
+            <span className="node-bullet cyan">02</span>
+            <div className="node-text-wrap">
+              <span className="node-name">SYSTEMS &amp; ML</span>
+              <span className="node-desc">Predictive valuation &amp; scalable code</span>
+            </div>
           </div>
 
-          <div className="side-hud-footer-hex">
-            <span className="hex-prefix">DEC:</span>
-            <span className="hex-stream">{hexCycle} // ACTIVE</span>
+          <div className="spine-node-item">
+            <span className="node-bullet">03</span>
+            <div className="node-text-wrap">
+              <span className="node-name">INTERACTIVE WEBGL</span>
+              <span className="node-desc">Dynamic simulations &amp; living UI</span>
+            </div>
           </div>
         </div>
       </aside>
@@ -191,50 +158,38 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         </div>
       </div>
 
-      {/* Right High-Tech Spatial Radar & Geolocation Wing */}
-      <aside className="mission-side-hud right-hud" aria-hidden="true">
-        <div className="side-hud-card">
-          <span className="corner tl"></span>
-          <span className="corner tr"></span>
-          <span className="corner bl"></span>
-          <span className="corner br"></span>
+      {/* Right Floating Cyber HUD Spine: Multiverse Expedition Sectors */}
+      <aside className="mission-spine-rail right-spine" aria-hidden="true">
+        <div className="spine-header">
+          <span className="spine-dot cyan"></span>
+          <span className="spine-title">MULTIVERSE EXPEDITION</span>
+        </div>
 
-          <div className="side-hud-header">
-            <span className="hud-pulse-dot cyan"></span>
-            <span className="hud-title">SPATIAL SENSORS // RADAR</span>
-          </div>
+        <div className="spine-nodes-track">
+          <div className="spine-track-line"></div>
 
-          <div className="side-hud-list">
-            <div className="side-hud-row">
-              <span className="hud-k">LOCATION</span>
-              <span className="hud-v">NEW DELHI, IN</span>
-            </div>
-            <div className="side-hud-row">
-              <span className="hud-k">COORDINATES</span>
-              <span className="hud-v cyan">28.61° N, 77.20° E</span>
-            </div>
-            <div className="side-hud-row">
-              <span className="hud-k">INSTITUTION</span>
-              <span className="hud-v">USAR (GGSIPU)</span>
-            </div>
-            <div className="side-hud-row">
-              <span className="hud-k">SECURITY</span>
-              <span className="hud-v green">LEVEL-9_AUTH</span>
+          <div className="spine-node-item">
+            <span className="node-bullet green">P1</span>
+            <div className="node-text-wrap">
+              <span className="node-name">YGGDRASIL LAB</span>
+              <span className="node-desc">Tree-structured autonomous bots</span>
             </div>
           </div>
 
-          {/* Animated 3D Cyber Radar Reticle */}
-          <div className="side-hud-reticle">
-            <span className="reticle-ring"></span>
-            <span className="reticle-cross h"></span>
-            <span className="reticle-cross v"></span>
-            <span className="reticle-sweep"></span>
-            <span className="reticle-dot"></span>
+          <div className="spine-node-item">
+            <span className="node-bullet cyan">P2</span>
+            <div className="node-text-wrap">
+              <span className="node-name">RESILIENT &amp; BIKE ML</span>
+              <span className="node-desc">Algorithmic valuation engines</span>
+            </div>
           </div>
 
-          <div className="side-hud-footer-hex">
-            <span className="hex-prefix">UPLINK:</span>
-            <span className="hex-stream cyan">10 Gbps // 8 PORTALS</span>
+          <div className="spine-node-item">
+            <span className="node-bullet">P3</span>
+            <div className="node-text-wrap">
+              <span className="node-name">3D CANVAS WORLDS</span>
+              <span className="node-desc">Real-time graphic engines</span>
+            </div>
           </div>
         </div>
       </aside>
