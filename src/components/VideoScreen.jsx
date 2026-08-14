@@ -67,29 +67,6 @@ export default function VideoScreen({ isActive, onComplete }) {
     onComplete();
   };
 
-  const startPlayback = () => {
-    setVideoStarted(true);
-    setIsWarping(false);
-
-    if (vidRef.current) {
-      vidRef.current.muted = !sfxOn;
-      vidRef.current.currentTime = 0;
-      const playPromise = vidRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          console.warn('Playback restricted, proceeding:', err);
-          afterVideo();
-        });
-      }
-    } else {
-      afterVideo();
-    }
-
-    fallbackTimerRef.current = setTimeout(() => {
-      afterVideo();
-    }, 8500);
-  };
-
   const unmuteVideo = (e) => {
     if (e) {
       if (e.preventDefault) e.preventDefault();
@@ -100,10 +77,26 @@ export default function VideoScreen({ isActive, onComplete }) {
     setIsWarping(true);
     if (sfxOn) SoundFX.playWarp();
 
-    // Trigger futuristic warp dissolve transition into full video
+    // Start video playback IMMEDIATELY synchronously within user gesture
+    if (vidRef.current) {
+      vidRef.current.muted = !sfxOn;
+      const playPromise = vidRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn('Playback error fallback:', err);
+          afterVideo();
+        });
+      }
+    }
+
+    // Seamlessly transition out the unmute card overlay
     setTimeout(() => {
-      startPlayback();
-    }, 320);
+      setVideoStarted(true);
+    }, 280);
+
+    fallbackTimerRef.current = setTimeout(() => {
+      afterVideo();
+    }, 8500);
   };
 
   const handleSkip = (e) => {
@@ -144,6 +137,9 @@ export default function VideoScreen({ isActive, onComplete }) {
     <div id="s-video" className={`screen ${isActive ? 'active' : ''}`}>
       <video
         playsInline
+        webkit-playsinline="true"
+        preload="auto"
+        muted
         id="intro-video"
         src="/videoplayback.mp4"
         ref={vidRef}
