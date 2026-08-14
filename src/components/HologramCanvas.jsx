@@ -12,11 +12,11 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
   // Trigger whole-screen scattering explosion on explosionTrigger change
   useEffect(() => {
     if (explosionTrigger > 0) {
-      const shards = Array.from({ length: 140 }, () => {
+      const shards = Array.from({ length: 160 }, () => {
         const phi = Math.random() * Math.PI * 2;
         const theta = Math.random() * Math.PI;
-        // High speed to scatter wide across the screen
-        const speed = 5 + Math.random() * 15;
+        // High impulse to scatter wide across the screen on top of all layers
+        const speed = 7 + Math.random() * 22;
         return {
           x: 0,
           y: 0,
@@ -24,8 +24,8 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
           vx: Math.sin(theta) * Math.cos(phi) * speed,
           vy: Math.sin(theta) * Math.sin(phi) * speed,
           vz: Math.cos(theta) * speed,
-          size: 1.2 + Math.random() * 2.8,
-          color: Math.random() > 0.45 ? '#00ff88' : '#38bdf8',
+          size: 1.4 + Math.random() * 3.2,
+          color: Math.random() > 0.4 ? '#00ff88' : '#38bdf8',
           alpha: 1
         };
       });
@@ -35,8 +35,8 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         startTime: performance.now(),
         shards,
         shockwaves: [
-          { radius: 4, speed: 8.5, maxRadius: 360, alpha: 1, color: '#00ff88' },
-          { radius: 4, speed: 6.2, maxRadius: 320, alpha: 0.85, color: '#38bdf8' }
+          { radius: 6, speed: 14, maxRadius: 650, alpha: 1, color: '#00ff88' },
+          { radius: 6, speed: 10, maxRadius: 580, alpha: 0.85, color: '#38bdf8' }
         ]
       };
     }
@@ -51,9 +51,9 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
     if (!ctx) return;
 
     let animId;
-    // Large unclipped canvas dimensions (600x320) so explosion scatters widely across the screen
-    const width = 600;
-    const height = 320;
+    // Full-span canvas (1100x600) so shards fly over top of all UI layers without clipping
+    const width = 1100;
+    const height = 600;
     const dpr = window.devicePixelRatio || 1;
 
     canvas.width = width * dpr;
@@ -165,7 +165,7 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       const innerRadius = 24 * explosionExpansion;
 
       // 1. Center Glow
-      const glowRadius = Math.min(180, 75 * explosionExpansion);
+      const glowRadius = Math.min(220, 75 * explosionExpansion);
       const glowGrad = ctx.createRadialGradient(cx, cy, 3, cx, cy, glowRadius);
       glowGrad.addColorStop(0, explosionRef.current.active ? 'rgba(0, 255, 136, 0.7)' : 'rgba(0, 255, 136, 0.35)');
       glowGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.2)');
@@ -281,7 +281,7 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         ctx.fill();
       });
 
-      // 8. Whole-Screen Explosion Shards & Shockwaves
+      // 8. Whole-Screen Explosion Shards & Shockwaves (Top of all layers)
       if (explosionRef.current.active) {
         const elapsed = (now - explosionRef.current.startTime) / 1000;
 
@@ -293,7 +293,9 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
             ctx.save();
             ctx.strokeStyle = sw.color;
             ctx.globalAlpha = sw.alpha;
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2.5;
+            ctx.shadowColor = sw.color;
+            ctx.shadowBlur = 12;
             ctx.beginPath();
             ctx.arc(cx, cy, sw.radius, 0, Math.PI * 2);
             ctx.stroke();
@@ -301,17 +303,15 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
           }
         });
 
-        // Flying Debris Shards (Explosive Scatter -> Magnetic Snapback)
+        // Flying Debris Shards (Scatter outward -> Magnetic snapback)
         explosionRef.current.shards.forEach(sh => {
           if (elapsed < 0.65) {
-            // Outward blast
             sh.x += sh.vx;
             sh.y += sh.vy;
             sh.z += sh.vz;
             sh.vx *= 0.96;
             sh.vy *= 0.96;
           } else {
-            // Magnetic return pull
             const pullT = (elapsed - 0.65) / 1.55;
             const pull = Math.pow(pullT, 2.4) * 0.32;
             sh.vx += -sh.x * pull;
@@ -325,7 +325,7 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
             ctx.fillStyle = sh.color;
             ctx.globalAlpha = sh.alpha;
             ctx.shadowColor = sh.color;
-            ctx.shadowBlur = 6;
+            ctx.shadowBlur = 8;
             ctx.beginPath();
             ctx.arc(cx + sh.x, cy + sh.y, sh.size, 0, Math.PI * 2);
             ctx.fill();

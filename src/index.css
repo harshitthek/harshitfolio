@@ -1257,6 +1257,8 @@ body::after {
   align-items: center;
   flex-shrink: 0;
   margin: 0.1rem 0;
+  position: relative;
+  z-index: 50; /* On top of all layers */
 }
 
 .hologram-canvas-container {
@@ -1270,6 +1272,7 @@ body::after {
   flex-shrink: 0;
   overflow: visible;
   pointer-events: none;
+  z-index: 50;
 }
 
 .hologram-canvas {
@@ -1277,12 +1280,13 @@ body::after {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 600px;
-  height: 320px;
+  width: 1100px;
+  height: 600px;
   max-width: none;
   flex-shrink: 0;
   filter: drop-shadow(0 0 25px rgba(0, 255, 136, 0.35));
-  pointer-events: auto;
+  pointer-events: none;
+  z-index: 50;
 }
 
 /* Sleek, Atmospheric Welcome & Access Pod */
