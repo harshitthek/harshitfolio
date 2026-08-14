@@ -372,6 +372,7 @@ body::after {
 #s-video {
   background: #000;
   padding: 0;
+  z-index: 100;
 }
 
 #s-video video {

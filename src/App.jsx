@@ -145,8 +145,8 @@ export default function App() {
       {/* Precision Theme-Matched Cyber Cursor */}
       <CyberCursor activeScreen={currentScreen} />
 
-      {/* Interactive AI-driven neural synapse mesh canvas */}
-      <NeuralBackground />
+      {/* Interactive AI-driven neural synapse mesh canvas (runs only on Hub screens) */}
+      {currentScreen !== 's-video' && <NeuralBackground />}
 
       {/* Futuristic Cyber Top HUD Navigation */}
       <Navbar
