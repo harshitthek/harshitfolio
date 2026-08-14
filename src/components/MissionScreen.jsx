@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { SoundFX } from './SoundFX';
 import HologramCanvas from './HologramCanvas';
 import CyberTerminalWing from './CyberTerminalWing';
-import NeuralSynapseWing from './NeuralSynapseWing';
+import QuantumLaboratoryWing from './QuantumLaboratoryWing';
 
 export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
   const handleAccept = () => {
@@ -33,7 +33,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
       <div className="corner-dec bl"></div>
       <div className="corner-dec br"></div>
 
-      {/* Left Flank: Refined Linux Cyber Terminal Stream */}
+      {/* Left Flank: Fully Interactive Linux Cyber Terminal */}
       <CyberTerminalWing isActive={isActive} />
 
       {/* Center Hero Column */}
@@ -109,8 +109,8 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         </div>
       </div>
 
-      {/* Right Flank: Interactive Neural Synapse Topology Network */}
-      <NeuralSynapseWing isActive={isActive} />
+      {/* Right Flank: Interactive Quantum Sound & Neural Laboratory */}
+      <QuantumLaboratoryWing isActive={isActive} />
     </div>
   );
 }

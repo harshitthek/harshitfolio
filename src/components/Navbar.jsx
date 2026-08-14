@@ -33,6 +33,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
 
   return (
     <header className="cyber-hud-nav">
+      {/* Brand Identity & AI Voice Transceiver */}
       <div className="nav-left">
         <button
           className="brand-badge-btn"
@@ -60,7 +61,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
         </div>
       </div>
 
-      {/* Quick Modal Actions on Cards Screen */}
+      {/* Center Quick Multiverse Modal Triggers (Cards Screen) */}
       <div className="nav-center">
         {isCardsScreen && (
           <div className="quick-modal-actions">
@@ -103,17 +104,49 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
         )}
       </div>
 
+      {/* Permanent Social & Comms Channels (GitHub, LinkedIn, Email, Audio Toggles) */}
       <div className="nav-right">
+        {/* Permanent GitHub Link */}
+        <a
+          href="https://github.com/harshitthek"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hud-social-btn git"
+          title="Open Harshit's GitHub (@harshitthek)"
+          onClick={() => { if (sfxOn) SoundFX.playClick(); }}
+        >
+          <span className="social-icon">🐙</span>
+          <span className="social-text">GITHUB</span>
+        </a>
+
+        {/* Permanent LinkedIn Link */}
+        <a
+          href="https://www.linkedin.com/in/devharshitsharma"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hud-social-btn linkedin"
+          title="Connect with Harshit on LinkedIn"
+          onClick={() => { if (sfxOn) SoundFX.playClick(); }}
+        >
+          <span className="social-icon">💼</span>
+          <span className="social-text">LINKEDIN</span>
+        </a>
+
+        {/* Permanent Direct Comms Modal */}
         {onOpenModal && (
           <button
-            className="hud-contact-btn"
+            className="hud-social-btn comms"
             onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('contact'); }}
-            title="Open Direct Comms Channel"
+            title="Open Direct Comms / Email Channel"
           >
-            <span>COMMS</span> →
+            <span className="social-icon">⚡</span>
+            <span className="social-text">COMMS</span>
           </button>
         )}
 
+        <div className="nav-divider"></div>
+
+        {/* Sound Effects Toggle */}
         <button
           className={`hud-toggle-btn ${!sfxOn ? 'muted' : ''}`}
           onClick={handleToggleSFX}
@@ -123,6 +156,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
           <span>{sfxOn ? '🔊 SFX' : '🔇 SFX'}</span>
         </button>
 
+        {/* AI Voice Toggle */}
         <button
           className={`hud-toggle-btn voice ${!voiceEnabled ? 'muted' : ''}`}
           onClick={handleToggleVoice}
@@ -132,17 +166,6 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
           <span className="voice-dot"></span>
           <span>{voiceEnabled ? 'VOICE' : 'MUTED'}</span>
         </button>
-
-        <a
-          href="https://github.com/harshitthek"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hud-toggle-btn git"
-          title="Open Harshit's GitHub"
-          onClick={() => { if (sfxOn) SoundFX.playClick(); }}
-        >
-          <span>🐙 GIT</span>
-        </a>
       </div>
     </header>
   );
