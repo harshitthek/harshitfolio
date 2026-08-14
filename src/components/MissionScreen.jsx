@@ -3,9 +3,11 @@ import { SoundFX } from './SoundFX';
 import HologramCanvas from './HologramCanvas';
 import CyberTerminalWing from './CyberTerminalWing';
 import QuantumLaboratoryWing from './QuantumLaboratoryWing';
+import FullscreenQuantumSupernova from './FullscreenQuantumSupernova';
 
 export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
   const [explosionCount, setExplosionCount] = useState(0);
+  const [isShaking, setIsShaking] = useState(false);
 
   const handleAccept = () => {
     SoundFX.playClick();
@@ -14,6 +16,10 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
 
   const triggerHologramExplosion = () => {
     setExplosionCount(prev => prev + 1);
+    setIsShaking(true);
+    setTimeout(() => {
+      setIsShaking(false);
+    }, 600);
   };
 
   // Keyboard accessibility: Press Enter or Space to proceed
@@ -33,7 +39,10 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
   }, [isActive]);
 
   return (
-    <div id="s-mission" className={`screen ${isActive ? 'active' : ''}`}>
+    <div id="s-mission" className={`screen ${isActive ? 'active' : ''} ${isShaking ? 'quantum-screen-shaking' : ''}`}>
+      {/* Fullscreen 360-Degree Quantum Supernova Blast Canvas */}
+      <FullscreenQuantumSupernova triggerCount={explosionCount} />
+
       <div className="corner-dec tl"></div>
       <div className="corner-dec tr"></div>
       <div className="corner-dec bl"></div>
@@ -50,7 +59,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <span>ENTERING HARSHIT'S UNIVERSE &bull; SYSTEM_ONLINE &bull; PORTFOLIO_V2</span>
         </div>
 
-        {/* Massive Hero Name Header (Preserved Exactly) */}
+        {/* Massive Hero Name Header */}
         <div className="hero-name-container">
           <h1 className="mission-hero-name">
             HARSHIT <span className="hero-name-glow">SHARMA</span>
@@ -60,7 +69,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           </div>
         </div>
 
-        {/* Centerpiece 3D 360-Degree Rotating Quantum Hologram (Explosion Reactive) */}
+        {/* Centerpiece 3D 360-Degree Rotating Quantum Hologram */}
         <div className="mission-holo-center">
           <HologramCanvas isActive={isActive} explosionTrigger={explosionCount} />
         </div>
@@ -81,12 +90,12 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             <span className="welcome-status-badge">CLEARANCE: LEVEL-9</span>
           </div>
 
-          {/* Authentic, Intriguing Welcome Quote */}
+          {/* Authentic Welcome Quote */}
           <p className="welcome-quote">
             “Step past the digital boundary. Welcome to my creative sandbox, my thoughts, and the multiverses I've brought to life. Take your time and explore.”
           </p>
 
-          {/* Clean Personality & Vibe Badges (Zero Emojis) */}
+          {/* Clean Personality & Vibe Badges */}
           <div className="welcome-vibe-strip">
             <span className="vibe-pill">
               <span className="vibe-dot cyan"></span>
