@@ -1144,28 +1144,28 @@ body::after {
   filter: drop-shadow(0 0 25px rgba(0, 255, 136, 0.35));
 }
 
-/* Redesigned Cyber Command Capsule (Down Box - Streamlined & Nudged Down) */
+/* Redesigned Cyber Command Capsule (Down Box - Generous & Nudged Down) */
 .mission-command-capsule {
   position: relative;
   width: 100%;
-  max-width: 500px;
+  max-width: 580px;
   background: rgba(10, 14, 12, 0.94);
-  border: 1px solid rgba(0, 255, 136, 0.26);
+  border: 1px solid rgba(0, 255, 136, 0.28);
   border-radius: 4px;
-  padding: 0.72rem 1.25rem;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(0, 255, 136, 0.04);
+  padding: 0.95rem 1.6rem;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(0, 255, 136, 0.04);
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.55rem;
   backdrop-filter: blur(14px);
-  margin-top: 22px;
+  margin-top: 34px;
 }
 
 .capsule-narrative {
-  font-size: 10.5px;
+  font-size: 11px;
   color: #cbd5e1;
-  line-height: 1.55;
+  line-height: 1.65;
   margin: 0;
   text-align: center;
 }
@@ -1180,9 +1180,9 @@ body::after {
   border: 1px solid var(--g);
   color: var(--g);
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 3px;
-  padding: 10.5px 20px;
+  font-size: 12px;
+  letter-spacing: 3.2px;
+  padding: 12.5px 26px;
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1193,7 +1193,7 @@ body::after {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 .capsule-cta-btn::before {
   content: '';
