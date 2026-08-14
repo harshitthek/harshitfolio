@@ -1260,19 +1260,29 @@ body::after {
 }
 
 .hologram-canvas-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 280px;
+  height: 130px;
   flex-shrink: 0;
+  overflow: visible;
+  pointer-events: none;
 }
 
 .hologram-canvas {
-  width: 260px;
-  height: 125px;
-  max-width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 320px;
+  max-width: none;
   flex-shrink: 0;
   filter: drop-shadow(0 0 25px rgba(0, 255, 136, 0.35));
+  pointer-events: auto;
 }
 
 /* Sleek, Atmospheric Welcome & Access Pod */
