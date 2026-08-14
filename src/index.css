@@ -1474,6 +1474,8 @@ body::after {
   z-index: 6;
   width: clamp(280px, 20vw, 325px);
   transition: opacity 0.3s ease;
+  pointer-events: none; /* Strictly read-only / non-interactive */
+  user-select: none;
 }
 
 .terminal-window {
@@ -1488,6 +1490,7 @@ body::after {
   flex-direction: column;
   gap: 7px;
   overflow: hidden;
+  cursor: default;
 }
 
 .term-titlebar {

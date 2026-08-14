@@ -11,8 +11,8 @@ const SCRIPT_SEQUENCE = [
   {
     cmd: 'cat about_me.txt',
     outputs: [
-      { tag: 'PASSION', text: 'Curiosity-driven creator & multiverse architect.', color: 'white' },
-      { tag: 'FOCUS', text: 'Building neural systems, agentic flows & WebGL 3D.', color: 'cyan' }
+      { tag: 'MISSION', text: 'Curiosity-driven creator & multiverse architect.', color: 'white' },
+      { tag: 'PASSION', text: 'Building neural systems, agentic flows & WebGL 3D.', color: 'cyan' }
     ]
   },
   {
@@ -50,14 +50,13 @@ export default function CyberTerminalWing({ isActive }) {
   const scrollRef = useRef(null);
   const timeoutsRef = useRef([]);
 
-  // Auto-scroll on log changes or typing
+  // Auto-scroll instantly on log updates
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [logs, currentTyping]);
 
-  // Clean timeout registration helper
   const addTimeout = (fn, delay) => {
     const id = setTimeout(fn, delay);
     timeoutsRef.current.push(id);
@@ -81,35 +80,34 @@ export default function CyberTerminalWing({ isActive }) {
       let charIdx = 0;
       setCurrentTyping('');
 
-      // Type the command character by character
+      // Fast, snappy character typing (30ms-50ms)
       const typeChar = () => {
         if (isCancelled) return;
 
         if (charIdx <= cmdText.length) {
           setCurrentTyping(cmdText.slice(0, charIdx));
           charIdx++;
-          addTimeout(typeChar, 45 + Math.random() * 30);
+          addTimeout(typeChar, 35 + Math.random() * 25);
         } else {
-          // Finished typing command -> Pause briefly then execute
+          // Finished typing command -> short pause then execute
           addTimeout(() => {
             if (isCancelled) return;
 
             if (cmdText === 'clear') {
               setLogs([
-                { tag: 'SYS', text: 'terminal cleared // stream active', color: 'cyan' }
+                { tag: 'SYS', text: 'terminal buffer reset // telemetry live', color: 'cyan' }
               ]);
               setCurrentTyping('');
               stepIndex = (stepIndex + 1) % SCRIPT_SEQUENCE.length;
-              addTimeout(playSequenceStep, 1000);
+              addTimeout(playSequenceStep, 800);
             } else {
-              // Add executed command to logs
               setLogs(prev => [
                 ...prev,
                 { tag: 'CMD', text: `$ ${cmdText}`, color: 'white' }
               ]);
               setCurrentTyping('');
 
-              // Emit outputs sequentially
+              // Emit outputs with fast cadence
               let outIdx = 0;
               const emitOutput = () => {
                 if (isCancelled) return;
@@ -118,24 +116,25 @@ export default function CyberTerminalWing({ isActive }) {
                   const outLine = item.outputs[outIdx];
                   setLogs(prev => [...prev, outLine]);
                   outIdx++;
-                  addTimeout(emitOutput, 280);
+                  addTimeout(emitOutput, 220);
                 } else {
-                  // Wait for user to read before typing next command
+                  // Pause to let user read the response
                   stepIndex = (stepIndex + 1) % SCRIPT_SEQUENCE.length;
-                  addTimeout(playSequenceStep, 2600);
+                  addTimeout(playSequenceStep, 2200);
                 }
               };
 
-              addTimeout(emitOutput, 200);
+              addTimeout(emitOutput, 150);
             }
-          }, 350);
+          }, 250);
         }
       };
 
-      addTimeout(typeChar, 400);
+      addTimeout(typeChar, 250);
     };
 
-    addTimeout(playSequenceStep, 1200);
+    // Begin autotyping immediately on load
+    addTimeout(playSequenceStep, 350);
 
     return () => {
       isCancelled = true;
@@ -144,8 +143,8 @@ export default function CyberTerminalWing({ isActive }) {
   }, []);
 
   return (
-    <aside className="cyber-flank-terminal left-flank" aria-label="Automated Linux Shell Stream">
-      <div className="terminal-window" role="region" aria-label="Harshit Terminal Telemetry">
+    <aside className="cyber-flank-terminal left-flank read-only-feed" aria-label="Autonomous Terminal Feed">
+      <div className="terminal-window non-interactive" role="region" aria-label="Harshit Terminal Feed">
         <span className="corner tl"></span>
         <span className="corner tr"></span>
         <span className="corner bl"></span>
@@ -161,13 +160,13 @@ export default function CyberTerminalWing({ isActive }) {
           <div className="term-host-wrap">
             <span className="term-host">harshit@core:~# telemetry</span>
           </div>
-          <span className="term-status-pill autotype-pill">
+          <span className="autotype-pill">
             <span className="live-rec-dot"></span>
             AUTOTYPE
           </span>
         </div>
 
-        {/* Scrollable Auto-Typing Terminal Stream */}
+        {/* Continuous Autotyping Terminal Feed */}
         <div ref={scrollRef} className="term-stream-body autotype-stream">
           <div className="term-scanline"></div>
 
@@ -178,7 +177,7 @@ export default function CyberTerminalWing({ isActive }) {
             </div>
           ))}
 
-          {/* Active Live Prompt with Blinking Cursor */}
+          {/* Active Autotyping Cursor Line */}
           <div className="term-active-prompt-line">
             <span className="term-prompt">harshit:~$</span>
             <span className="term-typed-text">{currentTyping}</span>
@@ -186,9 +185,9 @@ export default function CyberTerminalWing({ isActive }) {
           </div>
         </div>
 
-        {/* Bottom Status Bar */}
+        {/* Terminal Telemetry Footer */}
         <div className="term-autotype-footer">
-          <span className="footer-stat cyan">FEED: LIVE_LOG</span>
+          <span className="footer-stat cyan">FEED: LIVE_TELEMETRY</span>
           <span className="footer-stat green">STATUS: STREAMING</span>
         </div>
       </div>
