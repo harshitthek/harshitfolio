@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { SoundFX } from './SoundFX';
 import HologramCanvas from './HologramCanvas';
-import NeuralOscilloscope from './NeuralOscilloscope';
-import CyberRadarTelemetry from './CyberRadarTelemetry';
 
 export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
   const handleAccept = () => {
@@ -33,63 +31,39 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
       <div className="corner-dec bl"></div>
       <div className="corner-dec br"></div>
 
-      {/* Left Cyber Simulation: Neural Oscilloscope Spectrum */}
-      <NeuralOscilloscope isActive={isActive} />
-
-      {/* Center Cinematic Column */}
       <div className="mission-content-wrapper">
-        {/* Top Badge Strip */}
-        <div className="mission-badge-strip">
-          <span className="mission-status-dot"></span>
-          <span className="mission-tag">EXPLORER DOSSIER // HARSHIT'S SPACE</span>
+        {/* Minimalist Top Origin Tag */}
+        <div className="mission-origin-tag">
+          <span className="origin-dot"></span>
+          <span>NEW DELHI &bull; USAR (GGSIPU) &bull; PORTFOLIO_V2</span>
         </div>
 
-        {/* Grand Hero Name */}
-        <h1 className="mission-hero-name">
-          HARSHIT <span className="hero-name-glow">SHARMA</span>
-        </h1>
-
-        {/* Subtitle Identity Badges */}
-        <div className="mission-creds-strip">
-          <span className="cred-pill primary">BUILDER &bull; RESEARCHER</span>
-          <span className="cred-pill">USAR (GGSIPU), NEW DELHI</span>
-          <span className="cred-pill cyan">AI &bull; CREATIVE COMPUTATION</span>
+        {/* Massive Hero Name Header */}
+        <div className="hero-name-container">
+          <h1 className="mission-hero-name">
+            HARSHIT <span className="hero-name-glow">SHARMA</span>
+          </h1>
+          <div className="hero-sub-discipline">
+            ARTIFICIAL INTELLIGENCE &bull; MACHINE LEARNING &bull; SYSTEMS ARCHITECTURE
+          </div>
         </div>
 
-        {/* Centerpiece 3D 360-Degree Interactive Hologram */}
+        {/* Centerpiece 3D 360-Degree Rotating Quantum Hologram */}
         <div className="mission-holo-center">
           <HologramCanvas isActive={isActive} />
         </div>
 
-        {/* Redesigned Personal Statement Card */}
-        <div className="mission-personal-card">
+        {/* Compact, Ultra-Sleek Glass Action Pod */}
+        <div className="mission-action-pod">
           <span className="corner tl"></span>
           <span className="corner tr"></span>
           <span className="corner bl"></span>
           <span className="corner br"></span>
 
-          {/* Header Bar */}
-          <div className="personal-card-header">
-            <div className="personal-header-left">
-              <span className="personal-sparkle-dot"></span>
-              <span className="personal-heading">A GLIMPSE INTO MY WORLD</span>
-            </div>
-            <span className="personal-location-tag">📍 NEW DELHI, INDIA</span>
-          </div>
+          <p className="pod-personal-quote">
+            Driven by curiosity and a passion for turning complex ideas into intelligent, living systems. Step inside to explore my engineering mindset and creations.
+          </p>
 
-          {/* Authentic Personal Story */}
-          <div className="personal-narrative">
-            <p className="narrative-lead">
-              Driven by curiosity and a relentless desire to turn bold thoughts into reality. I love exploring how intelligent systems learn, deconstructing complex ideas, and crafting digital creations that feel alive, intuitive, and meaningful.
-            </p>
-            <div className="narrative-invitation">
-              <span className="invite-quote-symbol">“</span>
-              <span>This space is an unfiltered window into my mindset, experiments, and creative journey.</span>
-              <span className="invite-quote-symbol">”</span>
-            </div>
-          </div>
-
-          {/* Primary Warm Magnetic Button */}
           <button
             type="button"
             className="step-inside-cta"
@@ -101,17 +75,14 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             <span className="corner bl"></span>
             <span className="corner br"></span>
             <span className="cta-icon">▶</span>
-            <span className="cta-text">STEP INSIDE MY UNIVERSE</span>
+            <span className="cta-text">STEP INSIDE MY MULTIVERSE</span>
           </button>
 
           <div className="mission-key-hint">
-            <span className="hint-bracket">[</span> PRESS <span className="key-badge">SPACE</span> OR <span className="key-badge">ENTER</span> TO EXPLORE <span className="hint-bracket">]</span>
+            <span className="hint-bracket">[</span> PRESS <span className="key-badge">SPACE</span> OR <span className="key-badge">ENTER</span> TO ENGAGE <span className="hint-bracket">]</span>
           </div>
         </div>
       </div>
-
-      {/* Right Cyber Simulation: Orbital Radar & Tracking Grid */}
-      <CyberRadarTelemetry isActive={isActive} />
     </div>
   );
 }
