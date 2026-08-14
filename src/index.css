@@ -1213,9 +1213,9 @@ body::after {
 
 .mission-hero-name {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3.6rem, 7.2vw, 5.2rem);
+  font-size: clamp(4.0rem, 7.8vw, 5.8rem);
   line-height: 0.95;
-  letter-spacing: clamp(4px, 0.8vw, 7px);
+  letter-spacing: clamp(4px, 0.8vw, 7.5px);
   white-space: nowrap; /* GUARANTEES single line always */
   margin: 0;
   background: linear-gradient(90deg, #ffffff 0%, var(--g) 40%, #38bdf8 70%, #ffffff 100%);
@@ -1223,7 +1223,7 @@ body::after {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   padding: 0 10px;
-  text-shadow: 0 0 50px rgba(0, 255, 136, 0.45);
+  text-shadow: 0 0 55px rgba(0, 255, 136, 0.45);
   animation: titleShimmer 8s ease infinite;
 }
 
