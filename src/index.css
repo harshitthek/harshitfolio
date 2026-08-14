@@ -1097,11 +1097,19 @@ body::after {
   line-height: 0.9;
   letter-spacing: 8px;
   margin: 0;
-  background: linear-gradient(135deg, #ffffff 30%, var(--g) 100%);
+  background: linear-gradient(90deg, #ffffff 0%, var(--g) 40%, #38bdf8 70%, #ffffff 100%);
+  background-size: 250% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   padding: 0 10px;
   text-shadow: 0 0 50px rgba(0, 255, 136, 0.45);
+  animation: titleShimmer 8s ease infinite;
+}
+
+@keyframes titleShimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .hero-name-glow {
@@ -1160,6 +1168,18 @@ body::after {
   gap: 0.55rem;
   backdrop-filter: blur(14px);
   margin-top: 14px;
+  animation: podNeonPulse 6s ease-in-out infinite;
+}
+
+@keyframes podNeonPulse {
+  0%, 100% {
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(0, 255, 136, 0.04), 0 0 15px rgba(0, 255, 136, 0.06);
+    border-color: rgba(0, 255, 136, 0.28);
+  }
+  50% {
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.9), inset 0 0 35px rgba(56, 189, 248, 0.06), 0 0 25px rgba(56, 189, 248, 0.2);
+    border-color: rgba(56, 189, 248, 0.45);
+  }
 }
 
 .welcome-pod-header {
@@ -1227,11 +1247,23 @@ body::after {
   border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 2px 8px;
   border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+}
+.vibe-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.35);
+  border-color: var(--g);
+  color: var(--white);
 }
 .vibe-pill.cyan {
   color: var(--cyan);
   border-color: rgba(56, 189, 248, 0.3);
   background: rgba(56, 189, 248, 0.07);
+}
+.vibe-pill.cyan:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
 }
 .vibe-pill.green {
   color: var(--g);
@@ -1309,7 +1341,7 @@ body::after {
 }
 
 /* =====================================================================
-   ATMOSPHERIC CYBER PILLARS (LEFT & RIGHT FLANKS)
+   ATMOSPHERIC CYBER PILLARS (LEFT & RIGHT FLANKS WITH FLOATING LEVITATION)
    ===================================================================== */
 .ambient-cyber-pillar {
   position: absolute;
@@ -1327,10 +1359,22 @@ body::after {
 .ambient-cyber-pillar.left-pillar {
   left: clamp(20px, 4.5vw, 65px);
   text-align: left;
+  animation: pillarFloatLeft 6s ease-in-out infinite alternate;
 }
 .ambient-cyber-pillar.right-pillar {
   right: clamp(20px, 4.5vw, 65px);
   text-align: left;
+  animation: pillarFloatRight 6s ease-in-out infinite alternate;
+}
+
+@keyframes pillarFloatLeft {
+  0% { transform: translateY(-46%); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes pillarFloatRight {
+  0% { transform: translateY(-46%); }
+  100% { transform: translateY(-42%); }
 }
 
 .pillar-header {
@@ -1474,11 +1518,30 @@ body::after {
   font-weight: 700;
 }
 
-/* Seamless responsive scaling */
-@media (max-width: 1180px) {
-  .ambient-cyber-pillar {
-    display: none;
-  }
+/* Staggered Screen Entry Glide Animations */
+#s-mission.active .mission-hero-name {
+  animation: titleShimmer 8s ease infinite, heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+#s-mission.active .mission-holo-center {
+  animation: holoEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 0.12s;
+}
+#s-mission.active .mission-welcome-pod {
+  animation: podNeonPulse 6s ease-in-out infinite, podEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 0.2s;
+}
+
+@keyframes heroEntrance {
+  0% { opacity: 0; transform: translateY(-16px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes holoEntrance {
+  0% { opacity: 0; transform: scale(0.82); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes podEntrance {
+  0% { opacity: 0; transform: translateY(22px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* =====================================================================
