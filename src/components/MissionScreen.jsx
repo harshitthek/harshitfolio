@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SoundFX } from './SoundFX';
 import HologramCanvas from './HologramCanvas';
 
 export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
+  const [liveEntropy, setLiveEntropy] = useState('0.942');
+
   const handleAccept = () => {
     SoundFX.playClick();
     onAccept();
@@ -24,6 +26,16 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isActive]);
 
+  // Subtle live telemetry pulse for ambient HUD
+  useEffect(() => {
+    if (!isActive) return;
+    const interval = setInterval(() => {
+      const entropy = (0.935 + Math.random() * 0.015).toFixed(3);
+      setLiveEntropy(entropy);
+    }, 1200);
+    return () => clearInterval(interval);
+  }, [isActive]);
+
   return (
     <div id="s-mission" className={`screen ${isActive ? 'active' : ''}`}>
       <div className="corner-dec tl"></div>
@@ -31,6 +43,52 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
       <div className="corner-dec bl"></div>
       <div className="corner-dec br"></div>
 
+      {/* Left Ambient Cyber HUD Telemetry Wing */}
+      <aside className="mission-side-hud left-hud" aria-hidden="true">
+        <div className="side-hud-card">
+          <span className="corner tl"></span>
+          <span className="corner tr"></span>
+          <span className="corner bl"></span>
+          <span className="corner br"></span>
+
+          <div className="side-hud-header">
+            <span className="hud-pulse-dot"></span>
+            <span className="hud-title">SYSTEM TELEMETRY</span>
+          </div>
+
+          <div className="side-hud-list">
+            <div className="side-hud-row">
+              <span className="hud-k">NEURAL ENGINE</span>
+              <span className="hud-v cyan">v2.4_ONLINE</span>
+            </div>
+            <div className="side-hud-row">
+              <span className="hud-k">LATENCY</span>
+              <span className="hud-v green">0.2 ms</span>
+            </div>
+            <div className="side-hud-row">
+              <span className="hud-k">ENTROPY</span>
+              <span className="hud-v">{liveEntropy} η</span>
+            </div>
+            <div className="side-hud-row">
+              <span className="hud-k">AI PORTALS</span>
+              <span className="hud-v green">8 MOUNTED</span>
+            </div>
+          </div>
+
+          <div className="side-hud-waveform">
+            <span className="wave-bar"></span>
+            <span className="wave-bar"></span>
+            <span className="wave-bar"></span>
+            <span className="wave-bar"></span>
+            <span className="wave-bar"></span>
+            <span className="wave-bar"></span>
+            <span className="wave-bar"></span>
+            <span className="wave-bar"></span>
+          </div>
+        </div>
+      </aside>
+
+      {/* Center Hero Column */}
       <div className="mission-content-wrapper">
         {/* Minimalist Top Origin Tag */}
         <div className="mission-origin-tag">
@@ -38,7 +96,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <span>NEW DELHI &bull; USAR (GGSIPU) &bull; PORTFOLIO_V2</span>
         </div>
 
-        {/* Massive Hero Name Header */}
+        {/* Massive Hero Name Header (Preserved Exactly) */}
         <div className="hero-name-container">
           <h1 className="mission-hero-name">
             HARSHIT <span className="hero-name-glow">SHARMA</span>
@@ -53,20 +111,31 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <HologramCanvas isActive={isActive} />
         </div>
 
-        {/* Compact, Ultra-Sleek Glass Action Pod */}
-        <div className="mission-action-pod">
+        {/* Redesigned Cyber Command Capsule (Fixed Layout & Design) */}
+        <div className="mission-command-capsule">
           <span className="corner tl"></span>
           <span className="corner tr"></span>
           <span className="corner bl"></span>
           <span className="corner br"></span>
 
-          <p className="pod-personal-quote">
-            Driven by curiosity and a passion for turning complex ideas into intelligent, living systems. Step inside to explore my engineering mindset and creations.
+          {/* Capsule Header Bar */}
+          <div className="capsule-top-bar">
+            <div className="capsule-bar-left">
+              <span className="capsule-beacon-dot"></span>
+              <span className="capsule-title">CREATOR DIRECTIVE</span>
+            </div>
+            <span className="capsule-status-pill">STATUS: READY</span>
+          </div>
+
+          {/* Authentic Statement Body */}
+          <p className="capsule-narrative">
+            Driven by curiosity and a passion for turning complex ideas into <span className="text-highlight">intelligent, living systems</span>. Step inside to explore my engineering mindset, research archives, and multiverse.
           </p>
 
+          {/* Primary Magnetic CTA Button */}
           <button
             type="button"
-            className="step-inside-cta"
+            className="capsule-cta-btn"
             onClick={handleAccept}
             onMouseEnter={() => SoundFX.playHover('primary')}
           >
@@ -83,6 +152,46 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           </div>
         </div>
       </div>
+
+      {/* Right Ambient Cyber HUD Telemetry Wing */}
+      <aside className="mission-side-hud right-hud" aria-hidden="true">
+        <div className="side-hud-card">
+          <span className="corner tl"></span>
+          <span className="corner tr"></span>
+          <span className="corner bl"></span>
+          <span className="corner br"></span>
+
+          <div className="side-hud-header">
+            <span className="hud-pulse-dot cyan"></span>
+            <span className="hud-title">GEOLOCATION MATRIX</span>
+          </div>
+
+          <div className="side-hud-list">
+            <div className="side-hud-row">
+              <span className="hud-k">LOCATION</span>
+              <span className="hud-v">NEW DELHI, IN</span>
+            </div>
+            <div className="side-hud-row">
+              <span className="hud-k">COORDINATES</span>
+              <span className="hud-v cyan">28.61° N, 77.20° E</span>
+            </div>
+            <div className="side-hud-row">
+              <span className="hud-k">INSTITUTION</span>
+              <span className="hud-v">USAR (GGSIPU)</span>
+            </div>
+            <div className="side-hud-row">
+              <span className="hud-k">CLEARANCE</span>
+              <span className="hud-v green">LEVEL-9_AUTH</span>
+            </div>
+          </div>
+
+          <div className="side-hud-reticle">
+            <span className="reticle-ring"></span>
+            <span className="reticle-cross"></span>
+            <span className="reticle-dot"></span>
+          </div>
+        </div>
+      </aside>
     </div>
   );
 }
