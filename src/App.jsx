@@ -18,6 +18,7 @@ import ArchitectureModal from './components/modals/ArchitectureModal';
 import TerminalModal from './components/modals/TerminalModal';
 import DossierModal from './components/modals/DossierModal';
 import ContactModal from './components/modals/ContactModal';
+import CyberCursor from './components/CyberCursor';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('s-video');
@@ -141,6 +142,9 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {/* Sci-Fi Precision Reticle Custom Cursor */}
+      <CyberCursor />
+
       {/* Interactive AI-driven neural synapse mesh canvas */}
       <NeuralBackground />
 
