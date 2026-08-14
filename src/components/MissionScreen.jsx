@@ -8,7 +8,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
     onAccept();
   };
 
-  // Keyboard accessibility: Press Enter or Space to Accept Mission
+  // Keyboard accessibility: Press Enter or Space to proceed
   useEffect(() => {
     if (!isActive) return;
 
@@ -32,10 +32,10 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
       <div className="corner-dec br"></div>
 
       <div className="mission-content-wrapper">
-        {/* Top Classified Mission Badge */}
+        {/* Top Badge Strip */}
         <div className="mission-badge-strip">
           <span className="mission-status-dot"></span>
-          <span className="mission-tag">ENGINEER DOSSIER // HS-01</span>
+          <span className="mission-tag">EXPLORER DOSSIER // HARSHIT'S SPACE</span>
         </div>
 
         {/* Grand Hero Name */}
@@ -43,11 +43,11 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           HARSHIT <span className="hero-name-glow">SHARMA</span>
         </h1>
 
-        {/* Subtitle Credential Pills */}
+        {/* Subtitle Identity Badges */}
         <div className="mission-creds-strip">
-          <span className="cred-pill primary">B.TECH AI &amp; ML</span>
+          <span className="cred-pill primary">BUILDER &bull; RESEARCHER</span>
           <span className="cred-pill">USAR (GGSIPU), NEW DELHI</span>
-          <span className="cred-pill cyan">AI &amp; SYSTEMS ARCHITECT</span>
+          <span className="cred-pill cyan">AI &bull; CREATIVE COMPUTATION</span>
         </div>
 
         {/* Centerpiece 3D Interactive Hologram */}
@@ -55,49 +55,38 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <HologramCanvas isActive={isActive} />
         </div>
 
-        {/* Redesigned About Me & Dossier Card */}
-        <div className="mission-directive-card">
+        {/* Redesigned Personal Statement Card */}
+        <div className="mission-personal-card">
           <span className="corner tl"></span>
           <span className="corner tr"></span>
           <span className="corner bl"></span>
           <span className="corner br"></span>
 
-          {/* Card Top Header */}
-          <div className="directive-top-bar">
-            <div className="directive-bar-left">
-              <span className="directive-pulse-dot"></span>
-              <span className="directive-heading">ABOUT ME &amp; ENGINEERING PROFILE</span>
+          {/* Header Bar */}
+          <div className="personal-card-header">
+            <div className="personal-header-left">
+              <span className="personal-sparkle-dot"></span>
+              <span className="personal-heading">A GLIMPSE INTO MY WORLD</span>
             </div>
-            <div className="directive-bar-right">
-              <span className="directive-level-badge">SPECIALIZATION: AI &amp; ML</span>
+            <span className="personal-location-tag">📍 NEW DELHI, INDIA</span>
+          </div>
+
+          {/* Authentic Personal Story */}
+          <div className="personal-narrative">
+            <p className="narrative-lead">
+              Driven by curiosity and a relentless desire to turn bold thoughts into reality. I love exploring how intelligent systems learn, deconstructing complex ideas, and crafting digital creations that feel alive, intuitive, and meaningful.
+            </p>
+            <div className="narrative-invitation">
+              <span className="invite-quote-symbol">“</span>
+              <span>This space is an unfiltered window into my mindset, experiments, and creative journey.</span>
+              <span className="invite-quote-symbol">”</span>
             </div>
           </div>
 
-          {/* 3-Column Profile Pillars */}
-          <div className="directive-grid-mini">
-            <div className="mini-stat-card">
-              <span className="stat-code">01 // CORE FOCUS</span>
-              <span className="stat-val">Agentic AI &amp; Neural Nets</span>
-            </div>
-            <div className="mini-stat-card">
-              <span className="stat-code">02 // ACADEMICS</span>
-              <span className="stat-val">USAR (GGSIPU), Delhi</span>
-            </div>
-            <div className="mini-stat-card">
-              <span className="stat-code">03 // PHILOSOPHY</span>
-              <span className="stat-val">Intelligent Scalable Code</span>
-            </div>
-          </div>
-
-          {/* About Me Narrative */}
-          <p className="mission-brief-text">
-            I am an Artificial Intelligence &amp; Machine Learning engineer based in New Delhi, obsessed with building autonomous systems, deep learning architectures, and high-performance interactive software. Step inside to explore my engineering mindset and multiverse.
-          </p>
-
-          {/* Primary Action Button */}
+          {/* Primary Warm Magnetic Button */}
           <button
             type="button"
-            className="accept-mission-cta"
+            className="step-inside-cta"
             onClick={handleAccept}
             onMouseEnter={() => SoundFX.playHover('primary')}
           >
@@ -106,11 +95,11 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
             <span className="corner bl"></span>
             <span className="corner br"></span>
             <span className="cta-icon">▶</span>
-            <span className="cta-text">ENTER HARSHIT'S MULTIVERSE</span>
+            <span className="cta-text">STEP INSIDE MY UNIVERSE</span>
           </button>
 
           <div className="mission-key-hint">
-            <span className="hint-bracket">[</span> PRESS <span className="key-badge">SPACE</span> OR <span className="key-badge">ENTER</span> TO PROCEED <span className="hint-bracket">]</span>
+            <span className="hint-bracket">[</span> PRESS <span className="key-badge">SPACE</span> OR <span className="key-badge">ENTER</span> TO EXPLORE <span className="hint-bracket">]</span>
           </div>
         </div>
       </div>
