@@ -69,17 +69,18 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         };
       });
 
-      // 2. 120 Optimized Kinetic Sparks
+      // 2. 120 Quantum Photons with Swirling Magnetic Spin
       const shards = Array.from({ length: 120 }, () => {
         const phiAngle = Math.random() * Math.PI * 2;
         const thetaAngle = Math.random() * Math.PI;
-        const speed = 12 + Math.random() * 26;
+        const speed = 14 + Math.random() * 28;
         return {
           x: 0, y: 0, z: 0,
           vx: Math.sin(thetaAngle) * Math.cos(phiAngle) * speed,
           vy: Math.sin(thetaAngle) * Math.sin(phiAngle) * speed,
           vz: Math.cos(thetaAngle) * speed,
-          size: 1.8 + Math.random() * 3.0,
+          spinDir: Math.random() > 0.5 ? 1 : -1,
+          size: 1.6 + Math.random() * 2.6,
           color: Math.random() > 0.4 ? '#00ff88' : '#38bdf8',
           alpha: 1,
           tail: []
@@ -92,8 +93,8 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         vertexScatters,
         shards,
         shockwaves: [
-          { radius: 8, speed: 26, maxRadius: maxScreenDim * 1.05, alpha: 1, color: '#00ff88', width: 3.5 },
-          { radius: 8, speed: 18, maxRadius: maxScreenDim * 0.9, alpha: 0.85, color: '#38bdf8', width: 2.5 }
+          { radius: 10, speed: 30, maxRadius: maxScreenDim * 1.15, alpha: 1, color: '#00ff88', width: 3.5 },
+          { radius: 10, speed: 20, maxRadius: maxScreenDim * 0.95, alpha: 0.85, color: '#38bdf8', width: 2.5 }
         ]
       };
     }
@@ -359,7 +360,7 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
           }
         });
 
-        // Kinetic Sparks
+        // Quantum Photons with Smooth Swirling Magnetic Convergence
         explosionRef.current.shards.forEach(sh => {
           if (elapsed < 0.65) {
             sh.x += sh.vx;
@@ -368,12 +369,15 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
             sh.vx *= 0.96;
             sh.vy *= 0.96;
           } else {
+            // Smooth curved magnetic vortex acceleration (prevents straight needle lines)
             const pullT = (elapsed - 0.65) / 1.55;
-            const pull = Math.pow(pullT, 2.5) * 0.36;
-            sh.vx += -sh.x * pull;
-            sh.vy += -sh.y * pull;
-            sh.x += sh.vx * 0.5;
-            sh.y += sh.vy * 0.5;
+            const pull = Math.pow(pullT, 2.2) * 0.28;
+            const spin = (1 - pullT) * 0.14 * (sh.spinDir || 1);
+            
+            sh.vx += -sh.x * pull - sh.y * spin;
+            sh.vy += -sh.y * pull + sh.x * spin;
+            sh.x += sh.vx * 0.55;
+            sh.y += sh.vy * 0.55;
           }
 
           sh.tail.unshift({ x: sh.x, y: sh.y });
@@ -381,19 +385,27 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
 
           if (sh.alpha > 0) {
             ctx.save();
+            // Soft gradient energy trail
             if (sh.tail.length > 1) {
-              ctx.strokeStyle = sh.color;
-              ctx.lineWidth = sh.size * 0.6;
-              ctx.beginPath();
-              ctx.moveTo(cx + sh.tail[0].x, cy + sh.tail[0].y);
-              for (let i = 1; i < sh.tail.length; i++) {
-                ctx.lineTo(cx + sh.tail[i].x, cy + sh.tail[i].y);
+              for (let i = 0; i < sh.tail.length - 1; i++) {
+                const segAlpha = (1 - i / sh.tail.length) * 0.5 * explosionAlpha;
+                ctx.strokeStyle = sh.color;
+                ctx.globalAlpha = segAlpha;
+                ctx.lineWidth = Math.max(0.7, sh.size * (1 - i / sh.tail.length) * 0.6);
+                ctx.beginPath();
+                ctx.moveTo(cx + sh.tail[i].x, cy + sh.tail[i].y);
+                ctx.lineTo(cx + sh.tail[i + 1].x, cy + sh.tail[i + 1].y);
+                ctx.stroke();
               }
-              ctx.stroke();
             }
+
+            // Glowing photon bead
+            ctx.globalAlpha = explosionAlpha;
             ctx.fillStyle = sh.color;
+            ctx.shadowColor = sh.color;
+            ctx.shadowBlur = 6;
             ctx.beginPath();
-            ctx.arc(cx + sh.x, cy + sh.y, sh.size, 0, Math.PI * 2);
+            ctx.arc(cx + sh.x, cy + sh.y, sh.size * 0.85, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
           }
