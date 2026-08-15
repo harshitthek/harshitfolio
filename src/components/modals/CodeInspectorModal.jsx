@@ -52,7 +52,7 @@ export default function CodeInspectorModal({ onClose }) {
             className={`code-tab-btn ${activeTab === 'ml' ? 'active' : ''}`}
             onClick={() => { SoundFX.playClick(); setActiveTab('ml'); }}
           >
-            <span>📊</span> used_bike_model.py
+            <span>📊</span> autovaluate_stacking_model.py
           </button>
           <button
             className={`code-tab-btn ${activeTab === 'schema' ? 'active' : ''}`}

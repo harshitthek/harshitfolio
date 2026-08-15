@@ -44,23 +44,23 @@ export const architectureData = {
   },
 
   bike: {
-    title: 'Used Bike ML Regressor Flow',
-    subtitle: 'Continuous Training & Low-Latency Valuation Endpoint',
+    title: 'AutoValuate AI — Dual-Engine Stacking Regressor',
+    subtitle: 'CatBoost + XGBoost Stacking Ensembles on 40,000+ Real Transactions',
     steps: [
       {
         step: '01',
-        title: 'Feature Imputation & Encoding',
-        desc: 'Cleans transaction telemetry, clips extreme odometer outliers, and applies one-hot categorical brand matrix encoding.'
+        title: 'Multi-Source Dataset & Outlier Cleaning',
+        desc: 'Preprocesses 32,000+ Indian motorcycle and 8,000+ passenger car listings with strict IQR outlier boundaries and OOD validation.'
       },
       {
         step: '02',
-        title: 'Random Forest Ensemble',
-        desc: '150-tree regression model maps non-linear depreciation curves across age, mileage, displacement, and brand tiers.'
+        title: 'Dual Stacking Regressors (97.4% R²)',
+        desc: 'Combines CatBoost native categorical embeddings with XGBoost & LightGBM meta-regressors achieving 97.4% R² across 23+ manufacturers.'
       },
       {
         step: '03',
-        title: 'REST Microservice & Client',
-        desc: 'Exposes ultra-fast JSON REST API endpoint with sub-12ms response latency powering the interactive client simulator.'
+        title: '5-Year TCO & Cryptographic Certificates',
+        desc: 'Computes forward TCO depreciation curves, fleet batch appraisals (50 vehicles), and persists immutable SHA-256 verified appraisal certificates.'
       }
     ]
   },

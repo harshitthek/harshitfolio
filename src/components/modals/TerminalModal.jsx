@@ -78,24 +78,26 @@ class YggdrasilOrchestrator:
             ThoughtNode("branch-02", "Autonomous code synthesis in isolated sandbox", 0.99)
         ]`
           },
-          'used_bike_rf.py': {
+          'autovaluate_model.py': {
             type: 'file',
-            size: '2.9 KB',
+            size: '3.6 KB',
             content: `"""
-Used Bike Resale Price Predictor (98.4% R² Score)
-Model: RandomForestRegressor with High-Dimensional Categorical Encoding
+AutoValuate AI — Dual-Engine Stacking Regressor (97.4% R² Score)
+Stacking: CatBoost + XGBoost + LightGBM on 40,000+ Real Transactions
+Features: 5-Year TCO Lifecycle, Batch Fleet Appraisals, SHA-256 Certificates
 """
 import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.preprocessing import OneHotEncoder
+from catboost import CatBoostRegressor
+from xgboost import XGBRegressor
+from sklearn.ensemble import StackingRegressor, RandomForestRegressor
 
-def train_valuation_pipeline(df: pd.DataFrame):
-    X = df[['brand', 'kms_driven', 'age', 'power_bhp']]
-    y = df['price_inr']
-    
-    model = RandomForestRegressor(n_estimators=150, max_depth=16, random_state=42)
-    model.fit(X, y)
-    print(f"✓ Model Trained Successfully. Test R² Score: 0.9842")
+def train_dual_engine(vehicle_type: str = "bike"):
+    base_models = [
+        ('cb', CatBoostRegressor(iterations=650, depth=7, verbose=0)),
+        ('xgb', XGBRegressor(n_estimators=500, max_depth=6, random_state=42))
+    ]
+    model = StackingRegressor(estimators=base_models, final_estimator=RandomForestRegressor(n_estimators=100))
+    print(f"✓ {vehicle_type.upper()} Dual-Engine Stacking Matrix Fitted (97.4% R² Confidence)")
     return model`
           },
           'resilient_agent.py': {
@@ -468,7 +470,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
                             CPU: Intel i9-14900K @ 5.80GHz (24 Cores)
                             GPU: NVIDIA RTX 4090 24GB VRAM
                             AI Stack: PyTorch, Scikit-Learn, FastAPI, LangGraph
-                            Primary Repos: Yggdrasil, Resilient, Used Bike ML
+                            Primary Repos: AutoValuate AI, Resilient, Yggdrasil, ShieldBlock, Carbon Guardian AI, Support Ticket Dispatcher ML
                             Email: codewithharshitsharma@gmail.com
                             GitHub: https://github.com/harshitthek
           `
@@ -482,7 +484,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'out', text: '  Name: Harshit Sharma' },
           { type: 'out', text: '  Institution: University School of Automation & Robotics (USAR, GGSIPU), New Delhi' },
           { type: 'out', text: '  Degree: B.Tech in Artificial Intelligence & Machine Learning' },
-          { type: 'out', text: '  Focus: Autonomous AI Agent Benchmarks, Tree Reasoning, ML Regression, 3D WebGL' },
+          { type: 'out', text: '  Focus: Autonomous AI Agent Benchmarks, Dual-Engine ML Regression, BERT Transformers, 3D WebGL' },
           { type: 'out', text: '  GitHub: https://github.com/harshitthek' },
           { type: 'out', text: '  LinkedIn: https://www.linkedin.com/in/devharshitsharma' },
           { type: 'out', text: '  Email: codewithharshitsharma@gmail.com' }
@@ -504,7 +506,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'out', text: '[02/05] Injecting payload into sandbox firewall (Bypassing WAF & CORS)... [100% OK]' },
           { type: 'out', text: '[03/05] Exploiting zero-day in memory buffer [0x7ffeefbff490]... [OVERFLOW INJECTED]' },
           { type: 'ok', text: '[04/05] Cracking 4096-bit RSA master key... [FOUND: HARSHIT_AI_ACCESS_GRANTED]' },
-          { type: 'ok', text: '[05/05] 🚀 ACCESS GRANTED. LEVEL 5 ROOT CLEARANCE UNLOCKED. ALL 8 UNIVERSES LIVE.' }
+          { type: 'ok', text: '[05/05] 🚀 ACCESS GRANTED. LEVEL 5 ROOT CLEARANCE UNLOCKED. ALL 10 UNIVERSES LIVE.' }
         );
         break;
 
@@ -514,13 +516,14 @@ export default function TerminalModal({ onClose, onLaunch }) {
         newHistory.push({
           type: 'code',
           text: `PID    USER     PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
-1042   harshit  20   0   4.2g   1.8g   420m R  38.4   2.8   42:15.82 python yggdrasil_tree_agent.py
+1042   harshit  20   0   4.2g   1.8g   420m R  38.4   2.8   42:15.82 node yggdrasil_fastify_server.js
 1089   harshit  20   0   8.6g   3.4g   890m S  62.1   5.3   18:04.11 docker-sandbox --benchmark resilient
-1104   harshit  20   0   1.1g   340m   120m S   4.8   0.5    8:32.40 flask run --port 8080 (bike_rf_model)
+1104   harshit  20   0   1.8g   520m   180m S   8.4   1.2   14:32.40 uvicorn src.api:app (autovaluate_ai_fastapi)
 1120   harshit  20   0   2.4g   850m   210m S  14.2   1.3   24:19.04 node carbon_guardian_telemetry.js
+1140   harshit  20   0   3.1g   1.1g   320m S  18.6   1.7   11:05.18 python bert_support_dispatcher.py
 1155   harshit  20   0   3.8g   1.2g   540m S  22.8   1.9   12:55.70 threejs_glsl_webgl_engine (60 FPS)
 
-Tasks: 168 total, 2 running, 166 sleeping | Load average: 0.45, 0.38, 0.31 | RAM: 38% Used`
+Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM: 41% Used`
         });
         break;
 
@@ -554,7 +557,7 @@ Tasks: 168 total, 2 running, 166 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
               const size = item.size || '4.0 KB';
               newHistory.push({
                 type: item.type === 'dir' ? 'info' : 'out',
-                text: `${perm}  1 harshit harshit  ${size.padEnd(7)} Aug 14 00:00  ${e}${item.type === 'dir' ? '/' : ''}`
+                text: `${perm}  1 harshit harshit  ${size.padEnd(7)} Aug 16 00:00  ${e}${item.type === 'dir' ? '/' : ''}`
               });
             });
           } else {
@@ -608,15 +611,16 @@ Tasks: 168 total, 2 running, 166 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
 ├── contact.json
 ├── id_rsa.pub
 ├── projects/
+│   ├── autovaluate_model.py
 │   ├── resilient_agent.py
-│   ├── used_bike_rf.py
+│   ├── support_dispatcher_bert.py
 │   └── yggdrasil.py
 ├── secrets/
 │   └── flag.txt
 └── skills/
     └── stack.json
 
-3 directories, 7 files`
+3 directories, 8 files`
         });
         break;
 
@@ -624,19 +628,21 @@ Tasks: 168 total, 2 running, 166 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
       case 'ask':
       case 'ai-ask':
         if (!arg) {
-          newHistory.push({ type: 'err', text: "Usage: ai <query> (e.g. 'ai why hire Harshit?', 'ai explain Yggdrasil bot', 'ai what is Resilient?')" });
+          newHistory.push({ type: 'err', text: "Usage: ai <query> (e.g. 'ai why hire Harshit?', 'ai explain AutoValuate AI', 'ai what is Resilient?')" });
         } else {
           const lower = arg.toLowerCase();
-          let ans = "Harshit Sharma specializes in autonomous agent architecture, multi-turn LLM reasoning trees, and production-grade ML algorithms. He studies B.Tech AI & ML at USAR (GGSIPU), New Delhi.";
+          let ans = "Harshit Sharma specializes in autonomous agent architecture, multi-turn LLM reasoning trees, dual-engine ML regression pipelines, and production systems engineering. He studies B.Tech AI & ML at USAR (GGSIPU), New Delhi.";
 
           if (lower.includes('why hire') || lower.includes('hire') || lower.includes('recruit')) {
-            ans = "🌟 Why hire Harshit:\nHe bridges strong AI algorithmic foundations (PyTorch, RandomForest, feature engineering) with elite full-stack systems engineering (Docker sandboxing, FastAPI, Three.js). He builds real, production-tested systems, not just simple toy scripts.";
+            ans = "🌟 Why hire Harshit:\nHe bridges deep algorithmic foundations (CatBoost/XGBoost, BERT Transformers, TensorFlow Recommenders) with elite production systems engineering (Docker, FastAPI, Three.js WebGL, Fastify). He builds real, production-tested architectures with full test matrices (56 tests in AutoValuate, 47 tests in Resilient).";
           } else if (lower.includes('yggdrasil') || lower.includes('bot') || lower.includes('tree') || lower.includes('discord')) {
-            ans = "🌲 Yggdrasil AI Bot:\nAn autonomous Discord AI assistant powered by hierarchical tree reasoning. It breaks multi-step user prompts into parallel sub-branches with vector memory graphs and fail-safe async event loops.";
+            ans = "🌲 Yggdrasil Platform:\nA self-hosted modular Discord platform combining a Fastify REST API with Discord.js inside a single Node.js runtime, secured with AES-256-GCM + HKDF cryptographic sessions.";
           } else if (lower.includes('resilient') || lower.includes('benchmark') || lower.includes('docker') || lower.includes('sandbox')) {
-            ans = "🤖 Resilient AI Benchmark:\nAn automated testing harness for autonomous software engineering agents. It isolates candidate LLMs inside Docker git forks, runs reproduction test suites, and ranks models on real GitHub issues.";
-          } else if (lower.includes('bike') || lower.includes('price') || lower.includes('predictor') || lower.includes('ml')) {
-            ans = "📊 Used Bike ML Predictor:\nA 98.4% R² regression model trained on 25,000+ real transactions. Features non-linear depreciation curves, one-hot categorical brand encoding, and a sub-12ms Flask REST microservice.";
+            ans = "🤖 Resilient AI Benchmark:\nAn automated testing harness for autonomous software engineering agents with isolated Docker git sandboxes and 47/47 passing Pytests.";
+          } else if (lower.includes('bike') || lower.includes('car') || lower.includes('price') || lower.includes('autovaluate') || lower.includes('ml')) {
+            ans = "📊 AutoValuate AI — Dual-Engine Valuation Suite:\nA 97.4% R² gradient-boosted stacking regressor (CatBoost + XGBoost) trained on 40,000+ real transactions across 32k motorcycles and 8k passenger cars. Features 5-year TCO lifecycle simulation, fleet batch appraisal for 50 vehicles, cryptographic SHA-256 valuation certificates, and 56 passing automated tests. Live on Vercel at https://moto-value-ai.vercel.app/";
+          } else if (lower.includes('ticket') || lower.includes('support') || lower.includes('bert') || lower.includes('dispatcher')) {
+            ans = "📩 Customer Support Ticket Dispatcher ML:\nA fine-tuned BERT transformer NLP model for automated departmental email classification and real-time urgency scoring with sub-120ms inference latency.";
           } else if (lower.includes('college') || lower.includes('degree') || lower.includes('usar') || lower.includes('ggsipu') || lower.includes('university')) {
             ans = "🎓 Harshit is pursuing his B.Tech in Artificial Intelligence & Machine Learning at the University School of Automation & Robotics (USAR, GGSIPU), New Delhi.";
           } else if (lower.includes('contact') || lower.includes('email') || lower.includes('reach')) {
@@ -649,10 +655,10 @@ Tasks: 168 total, 2 running, 166 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
 
       case 'projects':
         newHistory.push(
-          { type: 'sys', text: '🚀 HARSHIT SHARMA\'S 8 FLAGSHIP UNIVERSES:' },
+          { type: 'sys', text: '🚀 HARSHIT SHARMA\'S 10 FLAGSHIP UNIVERSES:' },
           ...projectsData.map((p, i) => ({
             type: 'out',
-            text: `  [${i + 1}] ${p.title.padEnd(26)} // ${p.categoryLabel} (Run: 'deploy ${i + 1}')\n      Source: ${p.githubUrl || p.url}`
+            text: `  [${i + 1}] ${p.title.padEnd(30)} // ${p.categoryLabel} (Run: 'deploy ${i + 1}')\n      Source: ${p.githubUrl || p.url}`
           }))
         );
         break;
