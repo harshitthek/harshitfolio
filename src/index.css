@@ -1351,97 +1351,105 @@ body::after {
 
 /* 1. Letter 'I' Rubber Pancake Squash */
 @keyframes pixarLetterSquash {
-  0%, 30% {
+  0%, 28% {
     transform: scaleY(1) scaleX(1);
   }
-  38% {
+  36% {
     /* Hop 1 light squash */
-    transform: scaleY(0.68) scaleX(1.15);
+    transform: scaleY(0.65) scaleX(1.18);
   }
-  46% {
+  44% {
     /* Elastic rebound */
-    transform: scaleY(1.05) scaleX(0.96);
+    transform: scaleY(1.04) scaleX(0.96);
   }
-  56%, 66% {
+  54%, 64% {
     transform: scaleY(1) scaleX(1);
   }
-  70% {
-    /* The High Stomp impact -> squashed into glowing pancake plate */
-    transform: scaleY(0.28) scaleX(1.48);
-    filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.9));
+  68% {
+    /* High Stomp impact -> squashed into glowing pancake plate */
+    transform: scaleY(0.25) scaleX(1.52);
+    filter: drop-shadow(0 0 14px rgba(0, 255, 136, 0.95));
   }
-  75%, 100% {
-    /* Retains visible flattened glowing pancake presence under lamp */
-    transform: scaleY(0.28) scaleX(1.48);
-    filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.7));
+  74%, 100% {
+    /* Retains visible flattened glowing pancake presence under lamp base */
+    transform: scaleY(0.25) scaleX(1.52);
+    filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.75));
   }
 }
 
-/* 2. Lamp Trajectory (Hops in from right -> Stomps down -> Capped below top tag) */
+/* 2. Lamp Trajectory & Impact Squash (In exact vertical lockstep with letter I top) */
 @keyframes pixarLampHopCourse {
   0% {
     opacity: 0;
     transform: translate(220%, -30%) scale(0.9) rotate(25deg);
   }
-  15% {
+  14% {
     opacity: 1;
-    transform: translate(160%, -85%) scale(1) rotate(-15deg);
+    transform: translate(140%, -120%) scale(1.05, 0.95) rotate(-12deg);
   }
-  30% {
-    /* Lands on top of I */
-    transform: translate(-50%, -88%) scale(1) rotate(0deg);
+  28% {
+    /* Touchdown on top of letter I */
+    transform: translate(-50%, -96%) scale(1, 1) rotate(0deg);
   }
-  38% {
-    /* Hop 1 squash on top of I */
-    transform: translate(-50%, -60%) scale(0.95, 0.85);
+  36% {
+    /* Hop 1 squash with letter I */
+    transform: translate(-50%, -64%) scale(1.15, 0.85);
   }
-  48% {
+  44% {
     /* Rebound jump */
-    transform: translate(-50%, -105%) scale(1.05, 0.95);
+    transform: translate(-50%, -102%) scale(0.95, 1.05);
   }
-  58% {
-    /* Peak of high stomp jump (Cleanly below top tag!) */
-    transform: translate(-50%, -115%) scale(0.95, 1.1) rotate(5deg);
+  56% {
+    /* High stomp jump peak (Capped cleanly below top tag!) */
+    transform: translate(-50%, -115%) scale(0.9, 1.15) rotate(4deg);
   }
-  69% {
-    /* Downward Stomp slam directly to font baseline */
-    transform: translate(-50%, 0) scale(1.15, 0.75) rotate(0deg);
+  68% {
+    /* Downward Stomp slam directly on top of squashed pancake */
+    transform: translate(-50%, -24%) scale(1.22, 0.72) rotate(0deg);
   }
-  75%, 100% {
-    /* Resting proudly on the squashed letter baseline */
-    transform: translate(-50%, 0) scale(1, 1) rotate(0deg);
+  74% {
+    /* Recoil recovery */
+    transform: translate(-50%, -24%) scale(0.96, 1.04) rotate(0deg);
+  }
+  78%, 100% {
+    /* Resting firmly on the squashed pancake baseline */
+    transform: translate(-50%, -24%) scale(1, 1) rotate(0deg);
   }
 }
 
-/* 3. Head Swivel (Inspects flattened pancake, then looks at viewer!) */
+/* 3. Head Swivel (Inspects flattened pancake, does double-take, looks at viewer!) */
 @keyframes luxoHeadLookViewer {
-  0%, 68% {
+  0%, 74% {
     transform: rotate(0deg);
   }
-  74% {
-    /* Tilts down to inspect squashed letter */
-    transform: rotate(42deg);
+  78% {
+    /* Tilts down to inspect squashed pancake */
+    transform: rotate(46deg);
   }
   84% {
-    /* Pauses while looking down */
-    transform: rotate(40deg);
+    /* Double-take twitch */
+    transform: rotate(38deg);
   }
-  92%, 100% {
+  88% {
+    /* Inspects again */
+    transform: rotate(48deg);
+  }
+  94%, 100% {
     /* Swivels up facing straight forward at user */
-    transform: rotate(-18deg) scaleX(1.08);
+    transform: rotate(-16deg) scaleX(1.06);
   }
 }
 
 /* 4. Conical Spotlight Beam Radiating to User */
 @keyframes luxoConeBeamShine {
-  0%, 88% {
+  0%, 92% {
     opacity: 0;
   }
-  94% {
-    opacity: 0.85;
+  96% {
+    opacity: 0.9;
   }
   100% {
-    opacity: 0.75;
+    opacity: 0.8;
   }
 }
 
