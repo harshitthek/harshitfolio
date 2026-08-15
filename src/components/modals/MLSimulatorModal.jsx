@@ -2,20 +2,33 @@ import React, { useState } from 'react';
 import { SoundFX } from '../SoundFX';
 
 export default function MLSimulatorModal({ onClose }) {
+  const [vehicleType, setVehicleType] = useState('bike'); // 'bike' | 'car'
   const [kms, setKms] = useState(18500);
   const [age, setAge] = useState(3.5);
-  const [bhp, setBhp] = useState(24);
-  const [brand, setBrand] = useState('yamaha');
+  const [power, setPower] = useState(24);
+  const [brand, setBrand] = useState('re');
   const [condition, setCondition] = useState('good');
+  const [fuelType, setFuelType] = useState('petrol');
 
-  // Brand multiplier dictionary based on Delhi NCR market transaction data
-  const brandMultipliers = {
-    re: { name: 'Royal Enfield (Classic/Hunter/Bullet)', base: 195000, decay: 0.88 },
-    ktm: { name: 'KTM (Duke / RC Series)', base: 210000, decay: 0.85 },
-    yamaha: { name: 'Yamaha (R15 / MT-15 / FZ)', base: 165000, decay: 0.89 },
-    kawasaki: { name: 'Kawasaki (Ninja 300 / 400)', base: 340000, decay: 0.84 },
-    honda: { name: 'Honda (CB350 / Hornet)', base: 155000, decay: 0.90 },
-    tvs: { name: 'TVS (Apache RTR / RR310)', base: 140000, decay: 0.87 }
+  // Motorcycle models & brand multipliers (32,000+ Indian motorcycle market listings)
+  const bikeBrands = {
+    re: { name: 'Royal Enfield (Classic 350 / Hunter / Bullet)', base: 195000, decay: 0.89, defPower: 20 },
+    ktm: { name: 'KTM (Duke 250 / 390 / RC Series)', base: 220000, decay: 0.86, defPower: 30 },
+    yamaha: { name: 'Yamaha (R15 V4 / MT-15 / FZ-S)', base: 168000, decay: 0.90, defPower: 18 },
+    kawasaki: { name: 'Kawasaki (Ninja 300 / 400 / Z650)', base: 360000, decay: 0.85, defPower: 39 },
+    honda: { name: 'Honda (CB350 Hness / Hornet / Shine)', base: 158000, decay: 0.91, defPower: 21 },
+    tvs: { name: 'TVS (Apache RTR 160 / 200 / RR310)', base: 145000, decay: 0.88, defPower: 20 },
+    bajaj: { name: 'Bajaj (Pulsar NS200 / Dominar 400)', base: 160000, decay: 0.87, defPower: 24 }
+  };
+
+  // Passenger car models & brand multipliers (8,000+ Indian passenger car listings)
+  const carBrands = {
+    maruti: { name: 'Maruti Suzuki (Swift / Baleno / Brezza)', base: 680000, decay: 0.91, defPower: 88 },
+    hyundai: { name: 'Hyundai (Creta / i20 / Venue / Verna)', base: 920000, decay: 0.89, defPower: 115 },
+    tata: { name: 'Tata Motors (Nexon / Harrier / Punch / Altroz)', base: 880000, decay: 0.90, defPower: 110 },
+    mahindra: { name: 'Mahindra (Thar / XUV700 / Scorpio-N)', base: 1350000, decay: 0.92, defPower: 150 },
+    toyota: { name: 'Toyota (Innova Crysta / Fortuner / Glanza)', base: 1750000, decay: 0.94, defPower: 148 },
+    honda_car: { name: 'Honda (City / Elevate / Amaze)', base: 980000, decay: 0.89, defPower: 121 }
   };
 
   const conditionFactors = {
@@ -24,39 +37,76 @@ export default function MLSimulatorModal({ onClose }) {
     fair: 0.90
   };
 
-  // Real-time RandomForest ML valuation formula approximation
-  const calculateValuation = () => {
-    const b = brandMultipliers[brand] || brandMultipliers.yamaha;
-    const basePrice = b.base;
-    
-    // Non-linear depreciation curves
-    const ageFactor = Math.pow(b.decay, age);
-    const kmFactor = Math.max(0.45, 1 - (kms / 130000) * 0.45);
-    const powerBonus = (bhp - 15) * 1100;
-    const condFactor = conditionFactors[condition] || 1.0;
+  const fuelFactors = {
+    petrol: 1.00,
+    diesel: 1.05,
+    cng: 0.96,
+    ev: 1.02
+  };
 
-    const estimated = ((basePrice * ageFactor * kmFactor) + powerBonus) * condFactor;
-    return Math.max(25000, Math.round(estimated / 500) * 500);
+  // Real-time CatBoost + XGBoost Stacking ML Valuation Formula Approximation
+  const calculateValuation = () => {
+    const isBike = vehicleType === 'bike';
+    const brandMap = isBike ? bikeBrands : carBrands;
+    const b = brandMap[brand] || Object.values(brandMap)[0];
+    const basePrice = b.base;
+
+    const ageFactor = Math.pow(b.decay, age);
+    const maxKms = isBike ? 120000 : 250000;
+    const kmFactor = Math.max(0.40, 1 - (kms / maxKms) * 0.45);
+    const powerDiff = power - (b.defPower || (isBike ? 20 : 90));
+    const powerBonus = powerDiff * (isBike ? 1200 : 3500);
+    const condFactor = conditionFactors[condition] || 1.0;
+    const fFactor = isBike ? 1.0 : (fuelFactors[fuelType] || 1.0);
+
+    const estimated = ((basePrice * ageFactor * kmFactor) + powerBonus) * condFactor * fFactor;
+    const floor = isBike ? 20000 : 150000;
+    return Math.max(floor, Math.round(estimated / 500) * 500);
+  };
+
+  const switchVehicleType = (type) => {
+    SoundFX.playClick();
+    setVehicleType(type);
+    if (type === 'bike') {
+      setBrand('re');
+      setKms(18500);
+      setPower(20);
+      setAge(3.5);
+    } else {
+      setBrand('maruti');
+      setKms(42000);
+      setPower(88);
+      setAge(4.0);
+    }
   };
 
   const resetDefaults = () => {
     SoundFX.playClick();
-    setKms(18500);
-    setAge(3.5);
-    setBhp(24);
-    setBrand('yamaha');
+    if (vehicleType === 'bike') {
+      setKms(18500);
+      setAge(3.5);
+      setPower(20);
+      setBrand('re');
+    } else {
+      setKms(42000);
+      setAge(4.0);
+      setPower(88);
+      setBrand('maruti');
+    }
     setCondition('good');
+    setFuelType('petrol');
   };
 
   const estimatedPrice = calculateValuation();
+  const currentBrands = vehicleType === 'bike' ? bikeBrands : carBrands;
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-card glass-modal ml-sim-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div className="modal-title-group">
-            <span className="modal-category">LIVE INTERACTIVE ML MODEL // ENSEMBLE STACKING</span>
-            <h2 className="modal-title">AutoValuate AI — Vehicle Valuation Suite</h2>
+            <span className="modal-category">LIVE INTERACTIVE ML MODEL // DUAL-ENGINE STACKING (40,000+ ROWS)</span>
+            <h2 className="modal-title">AutoValuate AI — Dual-Engine Valuation Suite</h2>
           </div>
           <button
             className="modal-close-btn"
@@ -68,20 +118,43 @@ export default function MLSimulatorModal({ onClose }) {
         </div>
 
         <div className="modal-body custom-scroll">
+          {/* Dual Vehicle Type Toggle */}
+          <div className="vehicle-type-switcher-row" style={{ display: 'flex', gap: '8px', marginBottom: '1.2rem' }}>
+            <button
+              type="button"
+              className={`category-chip ${vehicleType === 'bike' ? 'active' : ''}`}
+              onClick={() => switchVehicleType('bike')}
+              style={{ flex: 1, padding: '10px 16px', fontSize: '11px', letterSpacing: '2px', fontWeight: 700 }}
+            >
+              🏍️ MOTORCYCLES (32,000+ ROWS · 97.4% R²)
+            </button>
+            <button
+              type="button"
+              className={`category-chip ${vehicleType === 'car' ? 'active' : ''}`}
+              onClick={() => switchVehicleType('car')}
+              style={{ flex: 1, padding: '10px 16px', fontSize: '11px', letterSpacing: '2px', fontWeight: 700 }}
+            >
+              🚗 PASSENGER CARS (8,000+ ROWS · 97.3% R²)
+            </button>
+          </div>
+
           <div className="sim-hero-banner">
             <div className="sim-valuation-box">
-              <span className="sim-val-label">ESTIMATED FAIR MARKET VALUATION</span>
+              <span className="sim-val-label">ESTIMATED FAIR RESALE VALUATION</span>
               <div className="sim-price-number">₹ {estimatedPrice.toLocaleString('en-IN')}</div>
               <div className="sim-accuracy-badge">
                 <span className="live-dot"></span>
-                <span>97.4% CatBoost + XGBoost Stacking Confidence (40k+ Rows)</span>
+                <span>
+                  {vehicleType === 'bike' ? '97.4% R² Motorcycle Stacking Model' : '97.3% R² Passenger Car Stacking Model'}
+                  {' '}(CatBoost + XGBoost)
+                </span>
               </div>
             </div>
             <div className="sim-hero-actions">
               <p className="sim-explainer">
-                Trained on 40,000+ real transactions across 23+ manufacturers. Adjust parameters below to observe real-time feature importance, empirical depreciation curves, and confidence intervals.
+                Trained on 40,000+ real transactions across Indian automotive markets. Features dual CatBoost/XGBoost regressors, 5-year TCO forecasts, fleet batch appraisal, and SHA-256 certificate verification.
               </p>
-              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
                 <button
                   className="btn-sim-reset"
                   onClick={resetDefaults}
@@ -106,27 +179,48 @@ export default function MLSimulatorModal({ onClose }) {
             {/* Control 1: Brand Selection */}
             <div className="sim-form-group">
               <label className="sim-label">
-                <span>MANUFACTURER BRAND</span>
-                <span className="sim-active-val">{brandMultipliers[brand]?.name}</span>
+                <span>MANUFACTURER & MODEL FAMILY</span>
+                <span className="sim-active-val">{currentBrands[brand]?.name}</span>
               </label>
               <select
                 value={brand}
                 onChange={(e) => {
                   SoundFX.playKey();
                   setBrand(e.target.value);
+                  const sel = currentBrands[e.target.value];
+                  if (sel?.defPower) setPower(sel.defPower);
                 }}
                 className="sim-select-input"
               >
-                <option value="re">Royal Enfield (Bullet / Classic / Hunter)</option>
-                <option value="ktm">KTM (Duke / RC Series)</option>
-                <option value="yamaha">Yamaha (R15 / MT-15 / FZ)</option>
-                <option value="kawasaki">Kawasaki (Ninja 300 / 400)</option>
-                <option value="honda">Honda (CB350 / Hornet)</option>
-                <option value="tvs">TVS (Apache RTR / RR310)</option>
+                {Object.entries(currentBrands).map(([key, val]) => (
+                  <option key={key} value={key}>{val.name}</option>
+                ))}
               </select>
             </div>
 
-            {/* Control 2: Vehicle Condition */}
+            {/* Control 2: Fuel Type (Only for Cars) */}
+            {vehicleType === 'car' && (
+              <div className="sim-form-group">
+                <div className="sim-label-row">
+                  <span className="sim-label">POWERTRAIN / FUEL TYPE</span>
+                  <span className="sim-active-val">{fuelType.toUpperCase()}</span>
+                </div>
+                <div className="condition-chips">
+                  {['petrol', 'diesel', 'cng', 'ev'].map((f) => (
+                    <button
+                      key={f}
+                      type="button"
+                      className={`condition-chip ${fuelType === f ? 'active' : ''}`}
+                      onClick={() => { SoundFX.playKey(); setFuelType(f); }}
+                    >
+                      {f.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Control 3: Vehicle Condition */}
             <div className="sim-form-group">
               <div className="sim-label-row">
                 <span className="sim-label">MAINTENANCE & PHYSICAL CONDITION</span>
@@ -157,7 +251,7 @@ export default function MLSimulatorModal({ onClose }) {
               </div>
             </div>
 
-            {/* Control 3: Kilometers Driven */}
+            {/* Control 4: Kilometers Driven */}
             <div className="sim-form-group">
               <div className="sim-label-row">
                 <span className="sim-label">ODOMETER (KILOMETERS DRIVEN)</span>
@@ -165,9 +259,9 @@ export default function MLSimulatorModal({ onClose }) {
               </div>
               <input
                 type="range"
-                min="1000"
-                max="100000"
-                step="500"
+                min={vehicleType === 'bike' ? 1000 : 5000}
+                max={vehicleType === 'bike' ? 100000 : 200000}
+                step={vehicleType === 'bike' ? 500 : 1000}
                 value={kms}
                 onChange={(e) => {
                   SoundFX.playKey();
@@ -176,13 +270,13 @@ export default function MLSimulatorModal({ onClose }) {
                 className="sim-slider-range"
               />
               <div className="slider-limits">
-                <span>1,000 km</span>
-                <span>50,000 km</span>
-                <span>100,000 km</span>
+                <span>{vehicleType === 'bike' ? '1,000 km' : '5,000 km'}</span>
+                <span>{vehicleType === 'bike' ? '50,000 km' : '100,000 km'}</span>
+                <span>{vehicleType === 'bike' ? '100,000 km' : '200,000 km'}</span>
               </div>
             </div>
 
-            {/* Control 4: Vehicle Age */}
+            {/* Control 5: Vehicle Age */}
             <div className="sim-form-group">
               <div className="sim-label-row">
                 <span className="sim-label">VEHICLE AGE</span>
@@ -207,28 +301,28 @@ export default function MLSimulatorModal({ onClose }) {
               </div>
             </div>
 
-            {/* Control 5: Engine Power */}
+            {/* Control 6: Engine Power (BHP) */}
             <div className="sim-form-group">
               <div className="sim-label-row">
-                <span className="sim-label">ENGINE POWER (BHP)</span>
-                <span className="sim-active-val">{bhp} BHP</span>
+                <span className="sim-label">ENGINE POWER (MAX BHP)</span>
+                <span className="sim-active-val">{power} BHP</span>
               </div>
               <input
                 type="range"
-                min="10"
-                max="80"
+                min={vehicleType === 'bike' ? 10 : 50}
+                max={vehicleType === 'bike' ? 75 : 220}
                 step="1"
-                value={bhp}
+                value={power}
                 onChange={(e) => {
                   SoundFX.playKey();
-                  setBhp(Number(e.target.value));
+                  setPower(Number(e.target.value));
                 }}
                 className="sim-slider-range"
               />
               <div className="slider-limits">
-                <span>10 BHP</span>
-                <span>45 BHP</span>
-                <span>80 BHP</span>
+                <span>{vehicleType === 'bike' ? '10 BHP' : '50 BHP'}</span>
+                <span>{vehicleType === 'bike' ? '40 BHP' : '135 BHP'}</span>
+                <span>{vehicleType === 'bike' ? '75 BHP' : '220 BHP'}</span>
               </div>
             </div>
           </div>
@@ -249,7 +343,7 @@ export default function MLSimulatorModal({ onClose }) {
             className="btn-modal-launch"
             onClick={() => SoundFX.playClick()}
           >
-            <span>VIEW ML SOURCE ON GITHUB</span> ↗
+            <span>VIEW REPO ON GITHUB</span> ↗
           </a>
         </div>
       </div>

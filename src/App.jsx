@@ -128,8 +128,8 @@ export default function App() {
           SoundFX.playClick();
           setActiveModal('dossier');
         }
-      } else if (e.key >= '1' && e.key <= '8' && currentScreen === 's-cards' && !activeModal) {
-        const index = parseInt(e.key, 10) - 1;
+      } else if (((e.key >= '1' && e.key <= '9') || e.key === '0') && currentScreen === 's-cards' && !activeModal) {
+        const index = e.key === '0' ? 9 : parseInt(e.key, 10) - 1;
         const project = projectsData[index];
         if (project) {
           SoundFX.playClick();

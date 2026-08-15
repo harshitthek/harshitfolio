@@ -105,11 +105,11 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
   const [searchQuery, setSearchQuery] = useState('');
 
   const categories = [
-    { id: 'all', label: 'ALL PORTALS [8]' },
-    { id: 'ai-agents', label: '🤖 AI AGENTS & DISCORD' },
-    { id: 'ml-models', label: '📊 ML & PREDICTIONS' },
-    { id: 'web-3d', label: '🌌 3D WEBGL & UTILITIES' },
-    { id: 'systems', label: '⚙️ SYSTEMS & BACKEND' }
+    { id: 'all', label: `ALL PORTALS [${projectsData.length}]` },
+    { id: 'ai-agents', label: `🤖 AI & AGENTS [${projectsData.filter(c => c.category === 'ai-agents').length}]` },
+    { id: 'ml-models', label: `📊 ML & DEEP LEARNING [${projectsData.filter(c => c.category === 'ml-models').length}]` },
+    { id: 'systems', label: `⚙️ SYSTEMS & SECURITY [${projectsData.filter(c => c.category === 'systems').length}]` },
+    { id: 'web-3d', label: `🌌 3D & GRAPHICS [${projectsData.filter(c => c.category === 'web-3d').length}]` }
   ];
 
   const filteredCards = projectsData.filter(card => {
@@ -141,7 +141,7 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
             onClick={() => { SoundFX.playClick(); onOpenModal('ml-sim'); }}
             onMouseEnter={() => SoundFX.playHover()}
           >
-            <span className="icon">🚲</span> LIVE ML SIMULATOR
+            <span className="icon">🏍️</span> LIVE ML SIMULATOR
           </button>
           <button
             className="top-action-btn terminal"
@@ -155,7 +155,7 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
         <div className="top-bar-right">
           <div className="telemetry-chip">
             <span className="telemetry-dot"></span>
-            <span>8/8 PORTALS ONLINE</span>
+            <span>{projectsData.length}/{projectsData.length} PORTALS ONLINE</span>
           </div>
         </div>
       </div>
@@ -206,7 +206,7 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
 
         <div className="cards-hotkey-hint">
           <span>HOTKEYS:</span>
-          <span>Press <kbd>1</kbd>–<kbd>8</kbd> to launch portal</span>
+          <span>Press <kbd>1</kbd>–<kbd>9</kbd>, <kbd>0</kbd> to launch portal</span>
           <span>·</span>
           <span><kbd>T</kbd> Terminal</span>
           <span>·</span>
