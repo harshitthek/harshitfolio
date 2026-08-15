@@ -140,7 +140,7 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
 
   return (
     <div id="s-cards" className={`screen ${isActive ? 'active' : ''}`}>
-      {/* Top Banner Navigation */}
+      {/* Top Banner Navigation with Quick Search & Telemetry */}
       <div className="cards-top-bar">
         <div className="top-bar-left">
           <a
@@ -170,9 +170,29 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
         </div>
 
         <div className="top-bar-right">
+          <div className="search-filter-box top-search">
+            <span className="search-icon">🔍</span>
+            <input
+              type="text"
+              placeholder="Search portals by name, tag, stack..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+            {searchQuery && (
+              <button
+                className="clear-search-btn"
+                onClick={() => setSearchQuery('')}
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
           <div className="telemetry-chip">
             <span className="telemetry-dot"></span>
-            <span>{projectsData.length}/{projectsData.length} PORTALS ONLINE</span>
+            <span>{filteredCards.length}/{projectsData.length} PORTALS ONLINE</span>
           </div>
         </div>
       </div>
@@ -183,7 +203,7 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
         <h2>SELECT YOUR DESTINATION</h2>
         <p>// AI neural pipelines ready. Pick a flagship universe to deploy or inspect intel</p>
 
-        {/* Filter Controls & Search */}
+        {/* Category Filter Chips */}
         <div className="cards-filter-wrapper">
           <div className="category-chips">
             {categories.map(cat => (
@@ -199,25 +219,6 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
                 {cat.label}
               </button>
             ))}
-          </div>
-
-          <div className="search-filter-box">
-            <span className="search-icon">🔍</span>
-            <input
-              type="text"
-              placeholder="Search portals by name, tag, stack..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-            {searchQuery && (
-              <button
-                className="clear-search-btn"
-                onClick={() => setSearchQuery('')}
-              >
-                ✕
-              </button>
-            )}
           </div>
         </div>
 

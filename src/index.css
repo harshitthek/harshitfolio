@@ -2303,6 +2303,8 @@ body::after {
 .top-bar-right {
   display: flex;
   align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .telemetry-chip {
@@ -2315,6 +2317,7 @@ body::after {
   display: flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
 }
 .telemetry-dot {
   width: 6px;
@@ -2355,21 +2358,22 @@ body::after {
   margin-top: 4px;
 }
 
-/* Category Filter Chips & Search */
+/* Category Filter Chips */
 .cards-filter-wrapper {
   max-width: 1320px;
   margin: 1.2rem auto 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: center;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .category-chips {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .category-chip {
@@ -2399,10 +2403,15 @@ body::after {
   display: flex;
   align-items: center;
   background: rgba(0, 0, 0, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 4px 12px;
+  border: 1px solid rgba(0, 255, 136, 0.25);
+  padding: 5px 12px;
   border-radius: 2px;
   min-width: 280px;
+  transition: all 0.3s;
+}
+.search-filter-box:focus-within {
+  border-color: var(--g);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.25);
 }
 .search-icon {
   font-size: 11px;
