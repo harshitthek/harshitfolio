@@ -69,19 +69,23 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         };
       });
 
-      // 2. 120 Quantum Photons with Swirling Magnetic Spin
-      const shards = Array.from({ length: 120 }, () => {
+      // 2. 140 Quantum Photons with Orbital Re-entry parameters
+      const shards = Array.from({ length: 140 }, () => {
         const phiAngle = Math.random() * Math.PI * 2;
         const thetaAngle = Math.random() * Math.PI;
-        const speed = 14 + Math.random() * 28;
+        const speed = 16 + Math.random() * 32;
         return {
           x: 0, y: 0, z: 0,
           vx: Math.sin(thetaAngle) * Math.cos(phiAngle) * speed,
           vy: Math.sin(thetaAngle) * Math.sin(phiAngle) * speed,
           vz: Math.cos(thetaAngle) * speed,
           spinDir: Math.random() > 0.5 ? 1 : -1,
-          size: 1.6 + Math.random() * 2.6,
-          color: Math.random() > 0.4 ? '#00ff88' : '#38bdf8',
+          orbitTargetRad: 40 + Math.random() * 32, // 40px to 72px (matching hologram gimbal rings!)
+          orbitAngle: phiAngle,
+          orbitSpeed: (0.045 + Math.random() * 0.035) * (Math.random() > 0.5 ? 1 : -1),
+          inclination: (Math.random() - 0.5) * 0.5,
+          size: 1.6 + Math.random() * 2.4,
+          color: Math.random() > 0.45 ? '#00ff88' : '#38bdf8',
           alpha: 1,
           tail: []
         };
@@ -93,8 +97,8 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         vertexScatters,
         shards,
         shockwaves: [
-          { radius: 10, speed: 30, maxRadius: maxScreenDim * 1.15, alpha: 1, color: '#00ff88', width: 3.5 },
-          { radius: 10, speed: 20, maxRadius: maxScreenDim * 0.95, alpha: 0.85, color: '#38bdf8', width: 2.5 }
+          { radius: 10, speed: 32, maxRadius: maxScreenDim * 1.25, alpha: 1, color: '#00ff88', width: 4.0 },
+          { radius: 10, speed: 22, maxRadius: maxScreenDim * 1.05, alpha: 0.9, color: '#38bdf8', width: 3.0 }
         ]
       };
     }
@@ -360,38 +364,51 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
           }
         });
 
-        // Quantum Photons with Smooth Swirling Magnetic Convergence
+        // Quantum Photons: Blast Outward -> Spiral into Circular 3D Orbit around Hologram -> Reintegrate
         explosionRef.current.shards.forEach(sh => {
-          if (elapsed < 0.65) {
+          if (elapsed < 0.55) {
+            // Phase 1: Fast radial blast across entire screen
             sh.x += sh.vx;
             sh.y += sh.vy;
             sh.z += sh.vz;
-            sh.vx *= 0.96;
-            sh.vy *= 0.96;
+            sh.vx *= 0.95;
+            sh.vy *= 0.95;
           } else {
-            // Smooth curved magnetic vortex acceleration (prevents straight needle lines)
-            const pullT = (elapsed - 0.65) / 1.55;
-            const pull = Math.pow(pullT, 2.2) * 0.28;
-            const spin = (1 - pullT) * 0.14 * (sh.spinDir || 1);
+            // Phase 2: Smooth Spiral into Circular 3D Orbit around the Hologram!
+            const t = (elapsed - 0.55) / 1.65;
+            const currentDist = Math.sqrt(sh.x * sh.x + sh.y * sh.y);
             
-            sh.vx += -sh.x * pull - sh.y * spin;
-            sh.vy += -sh.y * pull + sh.x * spin;
-            sh.x += sh.vx * 0.55;
-            sh.y += sh.vy * 0.55;
+            // Advance orbital angle (circles the hologram continuously in 3D)
+            sh.orbitAngle += sh.orbitSpeed * (1 + (1 - Math.min(1, t)) * 0.9);
+            
+            // Target distance decays towards hologram orbital gimbal ring radius (40px-70px)
+            const targetDist = sh.orbitTargetRad * (1 + (1 - Math.min(1, t)) * 2.8);
+            const newDist = currentDist * 0.88 + targetDist * 0.12;
+            
+            // 3D Orbital Projection around cx, cy
+            const cosAngle = Math.cos(sh.orbitAngle);
+            const sinAngle = Math.sin(sh.orbitAngle);
+            
+            const targetX = newDist * cosAngle;
+            const targetY = newDist * sinAngle * (0.55 + sh.inclination);
+            
+            // Smoothly move towards orbital path
+            sh.x = sh.x * 0.76 + targetX * 0.24;
+            sh.y = sh.y * 0.76 + targetY * 0.24;
           }
 
           sh.tail.unshift({ x: sh.x, y: sh.y });
-          if (sh.tail.length > 5) sh.tail.pop();
+          if (sh.tail.length > 7) sh.tail.pop();
 
           if (sh.alpha > 0) {
             ctx.save();
-            // Soft gradient energy trail
+            // Smooth glowing particle stream orbiting the hologram
             if (sh.tail.length > 1) {
               for (let i = 0; i < sh.tail.length - 1; i++) {
-                const segAlpha = (1 - i / sh.tail.length) * 0.5 * explosionAlpha;
+                const segAlpha = (1 - i / sh.tail.length) * 0.6 * explosionAlpha;
                 ctx.strokeStyle = sh.color;
                 ctx.globalAlpha = segAlpha;
-                ctx.lineWidth = Math.max(0.7, sh.size * (1 - i / sh.tail.length) * 0.6);
+                ctx.lineWidth = Math.max(0.75, sh.size * (1 - i / sh.tail.length) * 0.7);
                 ctx.beginPath();
                 ctx.moveTo(cx + sh.tail[i].x, cy + sh.tail[i].y);
                 ctx.lineTo(cx + sh.tail[i + 1].x, cy + sh.tail[i + 1].y);
@@ -399,13 +416,13 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
               }
             }
 
-            // Glowing photon bead
+            // Glowing orbital photon bead
             ctx.globalAlpha = explosionAlpha;
             ctx.fillStyle = sh.color;
             ctx.shadowColor = sh.color;
-            ctx.shadowBlur = 6;
+            ctx.shadowBlur = 8;
             ctx.beginPath();
-            ctx.arc(cx + sh.x, cy + sh.y, sh.size * 0.85, 0, Math.PI * 2);
+            ctx.arc(cx + sh.x, cy + sh.y, sh.size * 0.9, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
           }
