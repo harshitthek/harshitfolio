@@ -454,6 +454,10 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
     };
   }, [isActive]);
 
+  if (!isActive) {
+    return null;
+  }
+
   return (
     <>
       {/* Anchor placeholder in layout flow */}
