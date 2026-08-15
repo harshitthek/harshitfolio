@@ -189,21 +189,19 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         const totalDuration = 2.8;
         if (elapsed < totalDuration) {
           if (elapsed < 0.65) {
-            // Rapid high-energy outward expansion blast (peaking at 8.5x original size!)
+            // Rapid high-energy outward expansion blast (peaking smoothly at 8.5x original size)
             const t = elapsed / 0.65;
             explosionExpansion = 1 + Math.sin(t * Math.PI * 0.5) * 7.5;
             scatterStrength = Math.sin(t * Math.PI * 0.5);
             explosionAlpha = 1;
           } else {
-            // Smooth gravitational vortex return & continuous settling (No stalls, full animation)
+            // Smooth continuous return from 8.5x down to 1.0x (100% continuous, zero mid-flight snap!)
             const reformT = (elapsed - 0.65) / (totalDuration - 0.65); // 0 to 1 over 2.15s
             
-            // Asymptotic smooth decay to 0 (continuous return without stall)
-            scatterStrength = Math.pow(Math.max(0, 1 - reformT), 2.4);
-            
-            // Elastic damping that settles smoothly into 1.0
-            const settle = Math.sin(reformT * Math.PI * 2.2) * Math.exp(-reformT * 3.8);
-            explosionExpansion = 1 + settle * 2.2;
+            // Continuous smooth decay from 8.5 -> 1.0
+            const returnCurve = Math.cos(reformT * Math.PI * 0.5) * Math.exp(-reformT * 1.5);
+            explosionExpansion = 1 + returnCurve * 7.5;
+            scatterStrength = returnCurve;
             
             // Smooth fade-out of extra explosion sparks into the permanent orbital ring
             explosionAlpha = reformT < 0.65 ? 1 : Math.max(0, 1 - (reformT - 0.65) / 0.35);
