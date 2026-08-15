@@ -37,7 +37,7 @@ export default function App() {
   // Screen 2 Intermediate -> Screen 3 Mission (called only AFTER 100% is reached and flash completes)
   const handleIntermediateComplete = useCallback(() => {
     setCurrentScreen('s-mission');
-    speak("Incoming classified mission. Welcome to Harshit Sharma's portfolio. Eight AI universes await. Choose wisely.");
+    speak(`Incoming classified mission. Welcome to Harshit Sharma's portfolio. Thirteen neural universes await. Choose wisely.`);
   }, [speak]);
 
   // Screen 3 Mission -> Cards

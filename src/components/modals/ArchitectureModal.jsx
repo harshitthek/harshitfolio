@@ -3,9 +3,9 @@ import { architectureData } from '../../data/architectureData';
 import { SoundFX } from '../SoundFX';
 
 export default function ArchitectureModal({ onClose }) {
-  const [activeArch, setActiveArch] = useState('yggdrasil');
+  const [activeArch, setActiveArch] = useState('bike');
 
-  const current = architectureData[activeArch] || architectureData.yggdrasil;
+  const current = architectureData[activeArch] || architectureData.bike;
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -27,10 +27,10 @@ export default function ArchitectureModal({ onClose }) {
         {/* Tab Switcher */}
         <div className="arch-tabs-bar">
           <button
-            className={`arch-tab-btn ${activeArch === 'yggdrasil' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveArch('yggdrasil'); }}
+            className={`arch-tab-btn ${activeArch === 'bike' ? 'active' : ''}`}
+            onClick={() => { SoundFX.playClick(); setActiveArch('bike'); }}
           >
-            <span>🌲</span> Yggdrasil Bot
+            <span>🏎️</span> AutoValuate ML
           </button>
           <button
             className={`arch-tab-btn ${activeArch === 'resilient' ? 'active' : ''}`}
@@ -39,16 +39,34 @@ export default function ArchitectureModal({ onClose }) {
             <span>🤖</span> Resilient Pipeline
           </button>
           <button
-            className={`arch-tab-btn ${activeArch === 'bike' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveArch('bike'); }}
+            className={`arch-tab-btn ${activeArch === 'phishshield' ? 'active' : ''}`}
+            onClick={() => { SoundFX.playClick(); setActiveArch('phishshield'); }}
           >
-            <span>🚲</span> ML Regressor
+            <span>🛡️</span> PhishShield AI
+          </button>
+          <button
+            className={`arch-tab-btn ${activeArch === 'finvaria' ? 'active' : ''}`}
+            onClick={() => { SoundFX.playClick(); setActiveArch('finvaria'); }}
+          >
+            <span>📱</span> Finvaria On-Device
+          </button>
+          <button
+            className={`arch-tab-btn ${activeArch === 'pageshield' ? 'active' : ''}`}
+            onClick={() => { SoundFX.playClick(); setActiveArch('pageshield'); }}
+          >
+            <span>🥷</span> Page Shield AI
+          </button>
+          <button
+            className={`arch-tab-btn ${activeArch === 'yggdrasil' ? 'active' : ''}`}
+            onClick={() => { SoundFX.playClick(); setActiveArch('yggdrasil'); }}
+          >
+            <span>🌲</span> Yggdrasil Platform
           </button>
           <button
             className={`arch-tab-btn ${activeArch === 'carbon' ? 'active' : ''}`}
             onClick={() => { SoundFX.playClick(); setActiveArch('carbon'); }}
           >
-            <span>🌿</span> Carbon Guardian
+            <span>🌱</span> Carbon Guardian
           </button>
         </div>
 

@@ -18,8 +18,17 @@ const SCRIPT_SEQUENCE = [
   {
     cmd: 'cat skills.env',
     outputs: [
-      { tag: 'AI/ML', text: 'PyTorch, Autonomous Agent Trees, Deep Learning', color: 'green' },
-      { tag: 'STACK', text: 'React, WebGL Shaders, Node.js, Systems Arch', color: 'cyan' }
+      { tag: 'AI/ML', text: 'CatBoost, XGBoost, On-Device Llama.cpp, Scikit-Learn', color: 'green' },
+      { tag: 'STACK', text: 'React 19, FastAPI, Kotlin Jetpack Compose, Canvas 2D', color: 'cyan' }
+    ]
+  },
+  {
+    cmd: 'cat projects.status',
+    outputs: [
+      { tag: 'ML_97.4%', text: 'AutoValuate AI: Stacking Valuation Suite (102 Tests)', color: 'green' },
+      { tag: 'AGENT_CI', text: 'Resilient: Autonomous AI Benchmark Pipeline', color: 'cyan' },
+      { tag: 'SECURITY', text: 'PhishShield: Real-Time Phishing Threat Engine', color: 'green' },
+      { tag: 'ON_DEVICE', text: 'Finvaria: Offline Local LLM Youth Empowerment', color: 'cyan' }
     ]
   },
   {

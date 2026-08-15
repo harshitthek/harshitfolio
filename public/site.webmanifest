@@ -1,0 +1,25 @@
+{
+  "name": "HARSHIT.EXE — AI & Systems Engineer Portfolio",
+  "short_name": "HARSHIT.EXE",
+  "description": "Cinematic cyberpunk developer portfolio and multiverse command hub of Harshit Sharma.",
+  "start_url": "/harshitfolio/",
+  "scope": "/harshitfolio/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#05080e",
+  "theme_color": "#00ff88",
+  "categories": ["portfolio", "technology", "developer", "artificial-intelligence"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "banner.jpg",
+      "sizes": "1200x630",
+      "type": "image/jpeg"
+    }
+  ]
+}

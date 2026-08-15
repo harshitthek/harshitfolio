@@ -626,21 +626,26 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
 
       case 'ai':
       case 'ask':
-      case 'ai-ask':
         if (!arg) {
-          newHistory.push({ type: 'err', text: "Usage: ai <query> (e.g. 'ai why hire Harshit?', 'ai explain AutoValuate AI', 'ai what is Resilient?')" });
+          newHistory.push({ type: 'err', text: "Usage: ai <query> (e.g. 'ai why hire Harshit?', 'ai explain AutoValuate AI', 'ai what is PhishShield?')" });
         } else {
           const lower = arg.toLowerCase();
-          let ans = "Harshit Sharma specializes in autonomous agent architecture, multi-turn LLM reasoning trees, dual-engine ML regression pipelines, and production systems engineering. He studies B.Tech AI & ML at USAR (GGSIPU), New Delhi.";
+          let ans = "Harshit Sharma specializes in autonomous agent architecture, on-device LLMs, dual-engine ML regression stacking, Chrome Manifest V3 privacy engines, and production systems engineering. He studies B.Tech AI & ML at USAR (GGSIPU), New Delhi.";
 
           if (lower.includes('why hire') || lower.includes('hire') || lower.includes('recruit')) {
-            ans = "🌟 Why hire Harshit:\nHe bridges deep algorithmic foundations (CatBoost/XGBoost, BERT Transformers, TensorFlow Recommenders) with elite production systems engineering (Docker, FastAPI, Three.js WebGL, Fastify). He builds real, production-tested architectures with full test matrices (56 tests in AutoValuate, 47 tests in Resilient).";
+            ans = "🌟 Why hire Harshit:\nHe bridges deep algorithmic machine learning (CatBoost/XGBoost, Random Forest, BERT Transformers, TensorFlow Recommenders) with elite production systems engineering (Docker, FastAPI, Kotlin Jetpack Compose, Three.js WebGL, Fastify). He builds real, production-tested architectures with full test matrices (102 tests in AutoValuate, 47 tests in Resilient).";
+          } else if (lower.includes('phish') || lower.includes('security') || lower.includes('threat') || lower.includes('entropy')) {
+            ans = "🛡️ PhishShield AI — Enterprise Threat Intelligence Engine:\nA real-time security analysis system combining Random Forest (250 estimators) & TF-IDF N-grams with a 15-dimensional heuristic feature matrix (raw IP URLs, high-risk TLDs, typosquatting on 50+ global brands, Shannon domain entropy). Achieves 94.29% 5-fold CV accuracy and 100% holdout test accuracy with explainable diagnostics.";
+          } else if (lower.includes('finvaria') || lower.includes('loan') || lower.includes('legal') || lower.includes('kotlin') || lower.includes('android')) {
+            ans = "📱 Finvaria — Youth Empowerment & On-Device AI Mentor:\nBuilt for Startup Hackathon 2.0 with 100% Kotlin & Jetpack Compose. Runs private, on-device local LLM inferences (RunAnywhere SDK / Llama.cpp ARM64) with dynamic knowledge base injection providing offline guidance on loans, legal rights, and education across 11 Indian languages.";
+          } else if (lower.includes('pageshield') || lower.includes('form') || lower.includes('groq') || lower.includes('stealth')) {
+            ans = "🥷 Page Shield — Privacy Defender & Stealth Form AI:\nDual-layer Manifest V3 Chrome Extension disguised as a glassmorphic ad-blocker popup with a secret triple-click configuration drawer. Houses an ultra-stealthy Google Forms solver powered by Groq Llama 3.3 70B & Gemini 2.0 Flash Lite with dual-speed human typing simulation and zero DevTools console logs.";
           } else if (lower.includes('yggdrasil') || lower.includes('bot') || lower.includes('tree') || lower.includes('discord')) {
             ans = "🌲 Yggdrasil Platform:\nA self-hosted modular Discord platform combining a Fastify REST API with Discord.js inside a single Node.js runtime, secured with AES-256-GCM + HKDF cryptographic sessions.";
           } else if (lower.includes('resilient') || lower.includes('benchmark') || lower.includes('docker') || lower.includes('sandbox')) {
             ans = "🤖 Resilient AI Benchmark:\nAn automated testing harness for autonomous software engineering agents with isolated Docker git sandboxes and 47/47 passing Pytests.";
           } else if (lower.includes('bike') || lower.includes('car') || lower.includes('price') || lower.includes('autovaluate') || lower.includes('ml')) {
-            ans = "📊 AutoValuate AI — Dual-Engine Valuation Suite:\nA 97.4% R² gradient-boosted stacking regressor (CatBoost + XGBoost) trained on 40,000+ real transactions across 32k motorcycles and 8k passenger cars. Features 5-year TCO lifecycle simulation, fleet batch appraisal for 50 vehicles, cryptographic SHA-256 valuation certificates, and 56 passing automated tests. Live on Vercel at https://moto-value-ai.vercel.app/";
+            ans = "📊 AutoValuate AI — Dual-Engine Valuation Suite:\nA 97.4% R² (bikes) / 97.3% R² (cars) gradient-boosted stacking regressor (CatBoost + XGBoost) trained on 40,000+ real transactions. Features 5-year TCO lifecycle simulation, fleet batch appraisal for 50 vehicles, cryptographic SHA-256 valuation certificates, and 102 passing automated tests (58 Pytest + 44 Vitest). Live on Vercel at https://moto-value-ai.vercel.app/";
           } else if (lower.includes('ticket') || lower.includes('support') || lower.includes('bert') || lower.includes('dispatcher')) {
             ans = "📩 Customer Support Ticket Dispatcher ML:\nA fine-tuned BERT transformer NLP model for automated departmental email classification and real-time urgency scoring with sub-120ms inference latency.";
           } else if (lower.includes('college') || lower.includes('degree') || lower.includes('usar') || lower.includes('ggsipu') || lower.includes('university')) {
@@ -655,7 +660,7 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
 
       case 'projects':
         newHistory.push(
-          { type: 'sys', text: '🚀 HARSHIT SHARMA\'S 10 FLAGSHIP UNIVERSES:' },
+          { type: 'sys', text: `🚀 HARSHIT SHARMA'S ${projectsData.length} FLAGSHIP UNIVERSES:` },
           ...projectsData.map((p, i) => ({
             type: 'out',
             text: `  [${i + 1}] ${p.title.padEnd(30)} // ${p.categoryLabel} (Run: 'deploy ${i + 1}')\n      Source: ${p.githubUrl || p.url}`
@@ -666,7 +671,7 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
       case 'deploy':
       case 'launch':
         if (!arg) {
-          newHistory.push({ type: 'err', text: "Usage: deploy <1-8> or deploy <name> (e.g. 'deploy 1' or 'deploy yggdrasil')" });
+          newHistory.push({ type: 'err', text: `Usage: deploy <1-${projectsData.length}> or deploy <name> (e.g. 'deploy 1' or 'deploy autovaluate')` });
         } else {
           const num = parseInt(arg, 10);
           let target = null;
@@ -692,11 +697,11 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
       case 'skills':
       case 'stack':
         newHistory.push(
-          { type: 'sys', text: '🛠️ HARSHIT\'S TECHNICAL ARSENAL:' },
-          { type: 'out', text: '  Languages: Python 3.12, JavaScript (ES6+), TypeScript, C/C++, Bash, SQL' },
-          { type: 'out', text: '  AI & ML: PyTorch, Scikit-Learn, Pandas, NumPy, FastAPI, Flask, HuggingFace' },
-          { type: 'out', text: '  Frontend & 3D: React 18, Next.js, Three.js / WebGL, CSS3, Tailwind' },
-          { type: 'out', text: '  DevOps & DBs: Docker, PostgreSQL, Redis, Linux/Ubuntu, Git Actions' }
+          { type: 'sys', text: "🛠️ HARSHIT'S TECHNICAL ARSENAL:" },
+          { type: 'out', text: '  Languages: Python 3.12, Kotlin, JavaScript (ES6+), TypeScript, C/C++, Bash, SQL' },
+          { type: 'out', text: '  AI & ML: CatBoost, XGBoost, Scikit-Learn, PyTorch, BERT, On-Device Llama.cpp, FastAPI' },
+          { type: 'out', text: '  Frontend & Mobile: React 19/18, Jetpack Compose, Three.js / Canvas 2D, Tailwind CSS' },
+          { type: 'out', text: '  DevOps & Systems: Docker, Manifest V3, PostgreSQL, Async SQLite, Linux/antiX, Git Actions' }
         );
         break;
 

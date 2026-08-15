@@ -3,10 +3,10 @@ import { snippetsData } from '../../data/snippetsData';
 import { SoundFX } from '../SoundFX';
 
 export default function CodeInspectorModal({ onClose }) {
-  const [activeTab, setActiveTab] = useState('yggdrasil');
+  const [activeTab, setActiveTab] = useState('ml');
   const [copied, setCopied] = useState(false);
 
-  const snippet = snippetsData[activeTab] || snippetsData.webhook;
+  const snippet = snippetsData[activeTab] || snippetsData.ml;
 
   const handleCopy = () => {
     SoundFX.playClick();
@@ -37,22 +37,34 @@ export default function CodeInspectorModal({ onClose }) {
         {/* Tab Switcher */}
         <div className="code-tabs-bar">
           <button
-            className={`code-tab-btn ${activeTab === 'yggdrasil' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveTab('yggdrasil'); }}
+            className={`code-tab-btn ${activeTab === 'ml' ? 'active' : ''}`}
+            onClick={() => { SoundFX.playClick(); setActiveTab('ml'); }}
           >
-            <span>🌲</span> yggdrasil_tree_agent.py
+            <span>🏎️</span> autovaluate_stacking.py
+          </button>
+          <button
+            className={`code-tab-btn ${activeTab === 'phish' ? 'active' : ''}`}
+            onClick={() => { SoundFX.playClick(); setActiveTab('phish'); }}
+          >
+            <span>🛡️</span> custom_transformers.py
+          </button>
+          <button
+            className={`code-tab-btn ${activeTab === 'pageshield' ? 'active' : ''}`}
+            onClick={() => { SoundFX.playClick(); setActiveTab('pageshield'); }}
+          >
+            <span>🥷</span> background.js
           </button>
           <button
             className={`code-tab-btn ${activeTab === 'webhook' ? 'active' : ''}`}
             onClick={() => { SoundFX.playClick(); setActiveTab('webhook'); }}
           >
-            <span>🛡️</span> webhook_receiver.py
+            <span>🤖</span> webhook_receiver.py
           </button>
           <button
-            className={`code-tab-btn ${activeTab === 'ml' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveTab('ml'); }}
+            className={`code-tab-btn ${activeTab === 'yggdrasil' ? 'active' : ''}`}
+            onClick={() => { SoundFX.playClick(); setActiveTab('yggdrasil'); }}
           >
-            <span>📊</span> autovaluate_stacking_model.py
+            <span>🌲</span> yggdrasil_tree.py
           </button>
           <button
             className={`code-tab-btn ${activeTab === 'schema' ? 'active' : ''}`}
