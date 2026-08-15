@@ -1260,6 +1260,8 @@ body::after {
   vertical-align: baseline;
   cursor: pointer;
   z-index: 2;
+  margin: 0;
+  padding: 0;
   -webkit-background-clip: border-box !important;
   -webkit-text-fill-color: initial !important;
 }
@@ -1272,7 +1274,7 @@ body::after {
   background-size: 250% auto;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  animation: pixarLetterSquash 4.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: pixarLetterSquash 4.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .pixar-lamp-rig {
@@ -1280,13 +1282,13 @@ body::after {
   left: 50%;
   bottom: 0;
   transform: translateX(-50%);
-  width: 0.85em;
-  height: 1.05em;
+  width: 0.64em;
+  height: 0.84em;
   pointer-events: none;
   z-index: 3;
   -webkit-background-clip: border-box !important;
   -webkit-text-fill-color: initial !important;
-  animation: pixarLampHopCourse 4.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: pixarLampHopCourse 4.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .pixar-lamp-rig * {
@@ -1302,19 +1304,19 @@ body::after {
   -webkit-text-fill-color: initial !important;
 }
 
-/* Luxo Jr. Cyber Materials */
+/* Luxo Jr. Metallic Cyber Materials */
 .luxo-base {
-  fill: #00ff88;
-  stroke: #ffffff;
-  stroke-width: 1.5;
-  filter: drop-shadow(0 0 4px rgba(0, 255, 136, 0.6));
+  fill: #0f172a;
+  stroke: #38bdf8;
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.6));
 }
 .luxo-base-rim {
   fill: #38bdf8;
 }
 .luxo-strut {
-  stroke: #e0f2fe;
-  stroke-width: 2.2;
+  stroke: #f8fafc;
+  stroke-width: 2.4;
   stroke-linecap: round;
 }
 .luxo-joint {
@@ -1329,51 +1331,51 @@ body::after {
   fill: #00ff88;
   stroke: #ffffff;
   stroke-width: 1.6;
-  filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.7));
+  filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.8));
 }
 .luxo-bulb {
   fill: #ffffff;
-  filter: drop-shadow(0 0 8px #00ff88);
+  filter: drop-shadow(0 0 10px #ffffff);
 }
 
 /* Articulated Head Swivel Animation */
 .luxo-head-group {
-  transform-origin: 52px 36px;
-  animation: luxoHeadLookViewer 4.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  transform-origin: 52px 34px;
+  animation: luxoHeadLookViewer 4.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 /* Volumetric Forward Spotlight Cone */
 .luxo-spotlight-cone {
   fill: url(#luxoSpotlightGrad);
   opacity: 0;
-  animation: luxoConeBeamShine 4.2s ease forwards;
+  animation: luxoConeBeamShine 4.4s ease forwards;
 }
 
 /* 1. Letter 'I' Rubber Pancake Squash */
 @keyframes pixarLetterSquash {
-  0%, 28% {
+  0%, 26% {
     transform: scaleY(1) scaleX(1);
   }
-  36% {
+  34% {
     /* Hop 1 light squash */
     transform: scaleY(0.65) scaleX(1.18);
   }
-  44% {
+  42% {
     /* Elastic rebound */
     transform: scaleY(1.04) scaleX(0.96);
   }
-  54%, 64% {
+  52%, 62% {
     transform: scaleY(1) scaleX(1);
   }
-  68% {
+  66% {
     /* High Stomp impact -> squashed into glowing pancake plate */
-    transform: scaleY(0.25) scaleX(1.52);
-    filter: drop-shadow(0 0 14px rgba(0, 255, 136, 0.95));
+    transform: scaleY(0.20) scaleX(1.55);
+    filter: drop-shadow(0 0 16px rgba(0, 255, 136, 1));
   }
-  74%, 100% {
-    /* Retains visible flattened glowing pancake presence under lamp base */
-    transform: scaleY(0.25) scaleX(1.52);
-    filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.75));
+  72%, 100% {
+    /* Retains clean flattened glowing pancake presence under lamp base */
+    transform: scaleY(0.20) scaleX(1.55);
+    filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.8));
   }
 }
 
@@ -1381,39 +1383,39 @@ body::after {
 @keyframes pixarLampHopCourse {
   0% {
     opacity: 0;
-    transform: translate(220%, -30%) scale(0.9) rotate(25deg);
+    transform: translate(200%, -40%) scale(0.9) rotate(25deg);
   }
   14% {
     opacity: 1;
-    transform: translate(140%, -120%) scale(1.05, 0.95) rotate(-12deg);
+    transform: translate(120%, -120%) scale(1.05, 0.95) rotate(-12deg);
   }
-  28% {
+  26% {
     /* Touchdown on top of letter I */
     transform: translate(-50%, -96%) scale(1, 1) rotate(0deg);
   }
-  36% {
+  34% {
     /* Hop 1 squash with letter I */
-    transform: translate(-50%, -64%) scale(1.15, 0.85);
+    transform: translate(-50%, -64%) scale(1.12, 0.86);
   }
-  44% {
+  42% {
     /* Rebound jump */
-    transform: translate(-50%, -102%) scale(0.95, 1.05);
+    transform: translate(-50%, -100%) scale(0.96, 1.04);
   }
-  56% {
+  54% {
     /* High stomp jump peak (Capped cleanly below top tag!) */
-    transform: translate(-50%, -115%) scale(0.9, 1.15) rotate(4deg);
+    transform: translate(-50%, -112%) scale(0.9, 1.14) rotate(4deg);
   }
-  68% {
-    /* Downward Stomp slam directly on top of squashed pancake */
-    transform: translate(-50%, -24%) scale(1.22, 0.72) rotate(0deg);
+  66% {
+    /* Downward Stomp slam directly flushed on top of squashed pancake */
+    transform: translate(-50%, -18%) scale(1.22, 0.72) rotate(0deg);
   }
-  74% {
+  72% {
     /* Recoil recovery */
-    transform: translate(-50%, -24%) scale(0.96, 1.04) rotate(0deg);
+    transform: translate(-50%, -18%) scale(0.96, 1.04) rotate(0deg);
   }
-  78%, 100% {
-    /* Resting firmly on the squashed pancake baseline */
-    transform: translate(-50%, -24%) scale(1, 1) rotate(0deg);
+  76%, 100% {
+    /* Resting firmly flushed on the squashed pancake baseline */
+    transform: translate(-50%, -18%) scale(1, 1) rotate(0deg);
   }
 }
 
@@ -1424,11 +1426,11 @@ body::after {
   }
   78% {
     /* Tilts down to inspect squashed pancake */
-    transform: rotate(46deg);
+    transform: rotate(45deg);
   }
   84% {
     /* Double-take twitch */
-    transform: rotate(38deg);
+    transform: rotate(36deg);
   }
   88% {
     /* Inspects again */
@@ -1436,7 +1438,7 @@ body::after {
   }
   94%, 100% {
     /* Swivels up facing straight forward at user */
-    transform: rotate(-16deg) scaleX(1.06);
+    transform: rotate(-14deg) scaleX(1.06);
   }
 }
 
