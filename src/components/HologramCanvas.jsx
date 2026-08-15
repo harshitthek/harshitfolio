@@ -57,11 +57,11 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       const h = window.innerHeight;
       const maxScreenDim = Math.max(w, h);
 
-      // 1. Massive 3D scatter vectors for the 12 vertices
+      // 1. Massive 3D scatter vectors for the 12 vertices (Whole screen explosion)
       const vertexScatters = rawVertices.map(() => {
         const phiAngle = Math.random() * Math.PI * 2;
         const thetaAngle = Math.random() * Math.PI;
-        const mag = maxScreenDim * (0.35 + Math.random() * 0.3); // 350px - 650px radius
+        const mag = maxScreenDim * (0.45 + Math.random() * 0.4); // 450px - 850px radius
         return {
           dx: Math.sin(thetaAngle) * Math.cos(phiAngle) * mag,
           dy: Math.sin(thetaAngle) * Math.sin(phiAngle) * mag,
@@ -69,23 +69,21 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         };
       });
 
-      // 2. 140 Quantum Photons with Orbital Re-entry parameters
-      const shards = Array.from({ length: 140 }, () => {
+      // 2. 180 High-Velocity Relativistic Quantum Photons
+      const shards = Array.from({ length: 180 }, () => {
         const phiAngle = Math.random() * Math.PI * 2;
         const thetaAngle = Math.random() * Math.PI;
-        const speed = 16 + Math.random() * 32;
+        const speed = 26 + Math.random() * 48; // High-energy blast across full viewport
         return {
           x: 0, y: 0, z: 0,
           vx: Math.sin(thetaAngle) * Math.cos(phiAngle) * speed,
           vy: Math.sin(thetaAngle) * Math.sin(phiAngle) * speed,
           vz: Math.cos(thetaAngle) * speed,
           spinDir: Math.random() > 0.5 ? 1 : -1,
-          orbitTargetRad: 40 + Math.random() * 32, // 40px to 72px (matching hologram gimbal rings!)
+          orbitTargetRad: 40 + Math.random() * 32,
           orbitAngle: phiAngle,
-          orbitSpeed: (0.045 + Math.random() * 0.035) * (Math.random() > 0.5 ? 1 : -1),
-          inclination: (Math.random() - 0.5) * 0.5,
-          size: 1.6 + Math.random() * 2.4,
-          color: Math.random() > 0.45 ? '#00ff88' : '#38bdf8',
+          size: 2.0 + Math.random() * 3.0,
+          color: Math.random() > 0.4 ? '#00ff88' : '#38bdf8',
           alpha: 1,
           tail: []
         };
@@ -97,8 +95,9 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         vertexScatters,
         shards,
         shockwaves: [
-          { radius: 10, speed: 32, maxRadius: maxScreenDim * 1.25, alpha: 1, color: '#00ff88', width: 4.0 },
-          { radius: 10, speed: 22, maxRadius: maxScreenDim * 1.05, alpha: 0.9, color: '#38bdf8', width: 3.0 }
+          { radius: 10, speed: 45, maxRadius: maxScreenDim * 1.5, alpha: 1, color: '#00ff88', width: 4.5 },
+          { radius: 10, speed: 30, maxRadius: maxScreenDim * 1.25, alpha: 0.9, color: '#38bdf8', width: 3.5 },
+          { radius: 10, speed: 20, maxRadius: maxScreenDim * 0.95, alpha: 0.8, color: '#ffffff', width: 2.5 }
         ]
       };
     }
@@ -189,15 +188,26 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         const elapsed = (now - explosionRef.current.startTime) / 1000;
         const totalDuration = 2.8;
         if (elapsed < totalDuration) {
-          const normT = elapsed / totalDuration; // 0 to 1 smoothly across 2.8s
-          
-          // 100% Continuous fluid expansion envelope (no dead zones or inflection stalls)
-          const envelope = Math.sin(normT * Math.PI) * Math.exp(-normT * 1.85);
-          explosionExpansion = 1 + envelope * 5.5;
-          scatterStrength = envelope * 1.15;
-
-          // Soft seamless fade-out into permanent orbit at the end
-          explosionAlpha = normT < 0.65 ? 1 : Math.max(0, 1 - (normT - 0.65) / 0.35);
+          if (elapsed < 0.65) {
+            // Rapid high-energy outward expansion blast (peaking at 8.5x original size!)
+            const t = elapsed / 0.65;
+            explosionExpansion = 1 + Math.sin(t * Math.PI * 0.5) * 7.5;
+            scatterStrength = Math.sin(t * Math.PI * 0.5);
+            explosionAlpha = 1;
+          } else {
+            // Smooth gravitational vortex return & continuous settling (No stalls, full animation)
+            const reformT = (elapsed - 0.65) / (totalDuration - 0.65); // 0 to 1 over 2.15s
+            
+            // Asymptotic smooth decay to 0 (continuous return without stall)
+            scatterStrength = Math.pow(Math.max(0, 1 - reformT), 2.4);
+            
+            // Elastic damping that settles smoothly into 1.0
+            const settle = Math.sin(reformT * Math.PI * 2.2) * Math.exp(-reformT * 3.8);
+            explosionExpansion = 1 + settle * 2.2;
+            
+            // Smooth fade-out of extra explosion sparks into the permanent orbital ring
+            explosionAlpha = reformT < 0.65 ? 1 : Math.max(0, 1 - (reformT - 0.65) / 0.35);
+          }
         } else {
           explosionRef.current.active = false;
           isExploding = false;
@@ -362,24 +372,25 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
 
         // Quantum Photons: Blast Outward -> Spiral into Circular 3D Orbit around Hologram -> Reintegrate
         explosionRef.current.shards.forEach(sh => {
-          // Continuous Fluid Gravitational + Vortex Flow (Zero Stalls / Pauses in Motion)
+          // Continuous Fluid Gravitational + Vortex Flow (Full screen blast -> Smooth orbit)
           const normDist = Math.sqrt(sh.x * sh.x + sh.y * sh.y) || 1;
           const dirX = sh.x / normDist;
           const dirY = sh.y / normDist;
 
-          // Inward gravitational pull smoothly builds up after initial expansion
-          const gravityPull = Math.min(1.6, Math.max(0, elapsed - 0.2) * 0.75);
+          // Outward explosive blast for first 0.55s, then inward gravity engages smoothly
+          const gravityPull = Math.min(2.0, Math.max(0, elapsed - 0.55) * 1.1);
           
           // Tangential swirling vortex acceleration (creates circular orbits around hologram)
-          const vortexForce = Math.min(1.2, Math.max(0, elapsed - 0.25) * 0.65) * (sh.spinDir || 1);
+          const vortexForce = Math.min(1.5, Math.max(0, elapsed - 0.6) * 0.9) * (sh.spinDir || 1);
 
           // Force integration (dv = a * dt)
           sh.vx += -dirX * gravityPull - dirY * vortexForce;
           sh.vy += -dirY * gravityPull + dirX * vortexForce;
           
-          // Smooth aerodynamic damping
-          sh.vx *= 0.965;
-          sh.vy *= 0.965;
+          // Damping (starts low during blast, increases during orbit)
+          const damp = elapsed < 0.55 ? 0.98 : 0.962;
+          sh.vx *= damp;
+          sh.vy *= damp;
 
           // Continuous position integration (dx = v * dt)
           sh.x += sh.vx;
