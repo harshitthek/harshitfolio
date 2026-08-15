@@ -55,8 +55,8 @@ export default function MLSimulatorModal({ onClose }) {
       <div className="modal-card glass-modal ml-sim-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div className="modal-title-group">
-            <span className="modal-category">LIVE INTERACTIVE ML MODEL</span>
-            <h2 className="modal-title">Used Bike Price Predictor</h2>
+            <span className="modal-category">LIVE INTERACTIVE ML MODEL // ENSEMBLE STACKING</span>
+            <h2 className="modal-title">AutoValuate AI — Vehicle Valuation Suite</h2>
           </div>
           <button
             className="modal-close-btn"
@@ -70,24 +70,35 @@ export default function MLSimulatorModal({ onClose }) {
         <div className="modal-body custom-scroll">
           <div className="sim-hero-banner">
             <div className="sim-valuation-box">
-              <span className="sim-val-label">ESTIMATED MARKET VALUATION</span>
+              <span className="sim-val-label">ESTIMATED FAIR MARKET VALUATION</span>
               <div className="sim-price-number">₹ {estimatedPrice.toLocaleString('en-IN')}</div>
               <div className="sim-accuracy-badge">
                 <span className="live-dot"></span>
-                <span>98.4% RandomForest R² Score Confidence</span>
+                <span>97.4% CatBoost + XGBoost Stacking Confidence (40k+ Rows)</span>
               </div>
             </div>
             <div className="sim-hero-actions">
               <p className="sim-explainer">
-                Trained on 25,000+ real transactions. Tweak vehicle parameters below to observe real-time feature importance & non-linear depreciation curves.
+                Trained on 40,000+ real transactions across 23+ manufacturers. Adjust parameters below to observe real-time feature importance, empirical depreciation curves, and confidence intervals.
               </p>
-              <button
-                className="btn-sim-reset"
-                onClick={resetDefaults}
-                title="Reset simulation parameters to defaults"
-              >
-                ↺ RESET PARAMETERS
-              </button>
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+                <button
+                  className="btn-sim-reset"
+                  onClick={resetDefaults}
+                  title="Reset simulation parameters to defaults"
+                >
+                  ↺ RESET PARAMETERS
+                </button>
+                <a
+                  href="https://moto-value-ai.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-sim-reset"
+                  style={{ background: 'rgba(0, 255, 136, 0.15)', color: '#00ff88', borderColor: 'rgba(0, 255, 136, 0.4)' }}
+                >
+                  🚀 OPEN LIVE VERCEL APP ↗
+                </a>
+              </div>
             </div>
           </div>
 
