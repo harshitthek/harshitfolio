@@ -430,38 +430,5 @@ export const projectsData = [
     ],
     hasInteractiveModal: 'terminal',
     statusTag: 'LIVE_WORKSTATION'
-  },
-  {
-    id: 'hackathon-web-designs',
-    title: 'CyberNexus & Secure Bharat Summit UI',
-    url: 'https://github.com/harshitthek/Web-designs-for-hackathon_website',
-    githubUrl: 'https://github.com/harshitthek/Web-designs-for-hackathon_website',
-    demoUrl: 'https://github.com/harshitthek/Web-designs-for-hackathon_website',
-    hasLiveDemo: false,
-    img: `${BASE_PATH}projects/hackathon-web-designs.jpg`,
-    blueprintIcon: '🎨',
-    num: 'PORT_14 / UI_UX',
-    category: 'web-3d',
-    categoryLabel: 'EVENT UI & CYBERSECURITY DESIGN',
-    desc: 'Official event web interfaces, responsive layouts, and branding design systems crafted for the CyberNexus National Hackathon and Secure Bharat Summit.',
-    longDesc: 'Complete responsive event design system and web layouts engineered for national cybersecurity hackathons and summits. Features clean semantic HTML5/CSS3 structures, event registration flows, speaker timelines, sponsorship showcase matrices, and high-resolution official posters and visual brand collateral.',
-    tags: ['HTML5', 'CSS3', 'UI/UX', 'RESPONSIVE WEB', 'EVENT PLATFORM', 'BRANDING'],
-    badge: '🎨 PORT_14',
-    stats: {
-      stat1: 'HTML5 / CSS3',
-      stat1Lbl: 'STACK',
-      stat2: 'CyberNexus',
-      stat2Lbl: 'HACKATHON',
-      stat3: 'Open Source',
-      stat3Lbl: 'DESIGNS'
-    },
-    highlights: [
-      'Responsive web interfaces for the CyberNexus National Cybersecurity Hackathon',
-      'Event schedule, speaker keynote timelines, and sponsorship grid architecture',
-      'Secure Bharat Summit official branding assets, posters, and typography systems',
-      'Zero-dependency pure HTML/CSS layouts optimized for lightning-fast mobile and desktop viewing'
-    ],
-    hasInteractiveModal: 'dossier',
-    statusTag: 'EVENT_DESIGNS'
   }
 ];
