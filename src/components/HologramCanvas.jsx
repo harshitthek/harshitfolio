@@ -187,20 +187,27 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
 
       if (isExploding) {
         const elapsed = (now - explosionRef.current.startTime) / 1000;
-        if (elapsed < 2.2) {
-          if (elapsed < 0.65) {
-            // Explosive outward expansion
-            const t = elapsed / 0.65;
-            explosionExpansion = 1 + Math.sin(t * Math.PI * 0.5) * 7.5; // Huge expansion
+        const totalDuration = 2.8;
+        if (elapsed < totalDuration) {
+          if (elapsed < 0.55) {
+            // Phase 1: Outward blast
+            const t = elapsed / 0.55;
+            explosionExpansion = 1 + Math.sin(t * Math.PI * 0.5) * 6.5;
             scatterStrength = Math.sin(t * Math.PI * 0.5);
-            explosionAlpha = Math.max(0.2, 1 - t * 0.5);
+            explosionAlpha = 1;
           } else {
-            // Magnetic return snap
-            const reformT = (elapsed - 0.65) / 1.55;
-            const elastic = Math.sin(reformT * Math.PI * 2.5) * Math.exp(-reformT * 3.5);
-            explosionExpansion = 1 + elastic * 2.0;
-            scatterStrength = Math.max(0, (1 - reformT) * Math.exp(-reformT * 2));
-            explosionAlpha = Math.min(1, 0.4 + reformT * 0.6);
+            // Phase 2: Smooth orbital reassembly and soft settling fade (Full continuous animation)
+            const reformT = (elapsed - 0.55) / (totalDuration - 0.55); // 0 to 1 over 2.25s
+            
+            // Asymptotic smooth decay to 0 (no abrupt snap)
+            scatterStrength = Math.pow(Math.max(0, 1 - reformT), 2.8);
+            
+            // Damped spring settling to exact 1.0
+            const settle = Math.sin(reformT * Math.PI * 2.0) * Math.exp(-reformT * 4.0);
+            explosionExpansion = 1 + settle * 1.2;
+            
+            // Silky smooth fade out of explosion photon streams into the permanent orbit
+            explosionAlpha = reformT < 0.6 ? 1 : Math.max(0, 1 - (reformT - 0.6) / 0.4);
           }
         } else {
           explosionRef.current.active = false;
