@@ -1,168 +1,123 @@
 <div align="center">
+  <img src="public/banner.jpg" alt="HarshitFolio — Sci-Fi HUD Portfolio" width="100%"/>
+</div>
 
-```
-██╗  ██╗ █████╗ ██████╗ ███████╗██╗  ██╗██╗████████╗    ███████╗ ██████╗ ██╗     ██╗ ██████╗
-██║  ██║██╔══██╗██╔══██╗██╔════╝██║  ██║██║╚══██╔══╝    ██╔════╝██╔═══██╗██║     ██║██╔═══██╗
-███████║███████║██████╔╝███████╗███████║██║   ██║       █████╗  ██║   ██║██║     ██║██║   ██║
-██╔══██║██╔══██║██╔══██╗╚════██║██╔══██║██║   ██║       ██╔══╝  ██║   ██║██║     ██║██║   ██║
-██║  ██║██║  ██║██║  ██║███████║██║  ██║██║   ██║       ██║     ╚██████╔╝███████╗██║╚██████╔╝
-╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝       ╚═╝      ╚═════╝ ╚══════╝╚═╝ ╚═════╝
-```
+<br/>
 
-**`HARSHIT SHARMA // v2.0.0 // AI & ML ENGINEER`**
+<div align="center">
 
-[![React](https://img.shields.io/badge/React-18.3-61dafb?style=flat-square&logo=react&logoColor=61dafb&labelColor=0d1117)](https://react.dev)
-[![Vite](https://img.shields.io/badge/Vite-5.4-646cff?style=flat-square&logo=vite&logoColor=646cff&labelColor=0d1117)](https://vitejs.dev)
-[![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-f7df1e?style=flat-square&logo=javascript&logoColor=f7df1e&labelColor=0d1117)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Canvas API](https://img.shields.io/badge/Canvas_API-WebGL_2D-00ff88?style=flat-square&labelColor=0d1117)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
-[![Web Audio](https://img.shields.io/badge/Web_Audio-Procedural-38bdf8?style=flat-square&labelColor=0d1117)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+[![React](https://img.shields.io/badge/React_18-61dafb?style=for-the-badge&logo=react&logoColor=000)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite_5-646cff?style=for-the-badge&logo=vite&logoColor=fff)](https://vitejs.dev)
+[![Canvas API](https://img.shields.io/badge/Canvas_2D-Custom_3D_Engine-00ff88?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+[![Web Audio](https://img.shields.io/badge/Web_Audio-Procedural_Synth-38bdf8?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
 
-*A sci-fi HUD portfolio experience — built like mission control, not a webpage.*
+**A sci-fi HUD portfolio experience — built like mission control, not a webpage.**
 
-[Live Demo](https://harshitthek.github.io/harshitfolio) &nbsp;·&nbsp; [LinkedIn](https://www.linkedin.com/in/devharshitsharma) &nbsp;·&nbsp; [GitHub](https://github.com/harshitthek)
+[View Live](https://harshitthek.github.io/harshitfolio) &nbsp;·&nbsp;
+[LinkedIn](https://www.linkedin.com/in/devharshitsharma) &nbsp;·&nbsp;
+[GitHub](https://github.com/harshitthek)
 
 </div>
 
 ---
 
-## Overview
+## What is this?
 
-**HarshitFolio** is not a portfolio — it's an **operational command interface**. Designed as a fictional AI mission control terminal, it immerses visitors in a cinematic sci-fi experience while presenting real information about Harshit Sharma: B.Tech student in Artificial Intelligence & Machine Learning at USAR, GGSIPU, New Delhi.
+HarshitFolio is not a portfolio. It is an **operational command interface**.
 
-Every element has a purpose. Every animation has physics. Every panel transmits data.
+Designed as a fictional AI mission control terminal, it immerses visitors in a cinematic sci-fi experience while transmitting real information about Harshit Sharma — B.Tech student in Artificial Intelligence & Machine Learning at USAR, GGSIPU, New Delhi.
 
----
-
-## Architecture
-
-```
-src/
-├── App.jsx                      — Screen orchestrator & route state machine
-├── index.css                    — Full design system (tokens, animations, layout)
-├── main.jsx                     — React entrypoint
-│
-└── components/
-    ├── LoadingScreen.jsx         — Boot sequence with system diagnostics
-    ├── IntermediateScreen.jsx    — Transition gateway between screens
-    ├── MissionScreen.jsx         — Primary HUD: terminal + hologram + lab controller
-    │
-    ├── CyberTerminalWing.jsx     — Left: autonomous autotyping Linux telemetry stream
-    ├── HologramCanvas.jsx        — Center: live 3D icosahedron hologram (Canvas 2D)
-    ├── QuantumLaboratoryWing.jsx — Right: interactive lab controls (BOOM, Overclock...)
-    │
-    ├── Navbar.jsx                — Top HUD navigation with AI voice transmission
-    ├── NeuralBackground.jsx      — Animated neural network background layer
-    ├── NeuralSynapseWing.jsx     — Synaptic pulse visualizer wing
-    ├── CyberRadarTelemetry.jsx   — Radar sweep telemetry display
-    ├── NeuralOscilloscope.jsx    — Live oscilloscope waveform display
-    ├── CyberCursor.jsx           — Custom cyber cursor with trail
-    │
-    ├── VideoScreen.jsx           — Screen 2: project showcase
-    ├── CardsScreen.jsx           — Screen 3: AI Multiverse portals hub
-    │
-    ├── VoiceContext.jsx          — AI speech synthesis engine (Chromium-safe)
-    ├── SoundFX.js                — Procedural Web Audio synthesizer
-    │
-    └── modals/
-        └── ContactModal.jsx      — COMMS direct transmission modal
-```
+Every panel has a function. Every animation has physics. Every element earns its place.
 
 ---
 
 ## Features
 
-### Holographic 3D Render Engine
-A real-time 3D **icosahedron wireframe** rendered on the HTML5 Canvas API — no WebGL, no Three.js. Pure matrix math: Y-axis, X-axis, and Z-axis rotation computed from scratch every frame at 60fps with mouse-reactive parallax and perspective projection.
+### Live 3D Hologram — No WebGL, No Three.js
+A real-time 3D **icosahedron wireframe** rendered entirely on the HTML5 Canvas 2D API. Pure matrix math from scratch — Y/X/Z axis rotation, perspective projection, depth-sorted luminance — running at locked 60fps with mouse-reactive parallax.
 
-- 12-vertex icosahedron outer shell with 30 wireframe edges
-- 6-vertex octahedron inner core with counter-rotation
-- Glowing vertex nodes with depth-sorted luminance
-- 36 ambient quantum orbital particles in elliptical paths
-- Gimbal stabilizer ring with independent axis rotation
-- Scanning laser sweep line with radial base projection rings
+```
+12-vertex icosahedron outer shell  ·  30 wireframe edges
+6-vertex octahedron inner core     ·  counter-rotating axis
+36 ambient quantum orbital particles  ·  gimbal stabilizer ring
+Scanning laser sweep  ·  radial base projection rings
+```
 
-### Quantum BOOM Explosion System
-Clicking `[ QUANTUM BOOM ]` triggers a physics-based detonation sequence:
-
-- The actual 3D hologram **expands 7.5× to fullscreen** — no overlays, no fakes
-- 12 vertex scatter vectors computed with full spherical distribution
-- 120 kinetic sparks with tail trails fly across the entire viewport
-- 2 concentric shockwave rings expand outward at different speeds
-- Smooth cubic ease-out reassembly — the hologram locks back into place
-- Rendered on a `position: fixed; z-index: 9999` canvas, on top of all UI layers
+### Quantum BOOM Explosion
+One button. The entire 3D hologram **detonates fullscreen** — 7.5× expansion across the whole viewport, 120 kinetic spark trails, dual shockwave rings, then smooth lock-in reassembly. Rendered at `z-index: 9999`, on top of every UI layer.
 
 ### Autonomous Telemetry Terminal
-The left terminal is a **100% read-only, non-interactive** live stream. No typing, no input. It autotypes at 35–50ms cadence streaming Harshit's identity, education, skills, and mindset like a live system feed. `pointer-events: none` — purely cinematic.
+The left terminal is 100% read-only. No input. No cursor. It autotypes Harshit's identity, education, skills, and mindset as a live system feed at 35–50ms cadence — purely cinematic.
 
 ### AI Voice Synthesis
-The navbar AI transmission system uses the Web Speech Synthesis API with Chromium GC freeze protection — pinned to `window.__activeVoiceUtterance` to prevent the browser's garbage collector from silently killing the audio pipeline mid-sentence.
+Web Speech API with Chromium GC freeze protection. Utterances are pinned to `window.__activeVoiceUtterance` so the browser's garbage collector can't silently kill the audio pipeline mid-sentence.
 
 ### Procedural Audio Engine
-`SoundFX.js` synthesizes all sounds in real time using the Web Audio API:
-- Sub-bass explosion drops (oscillator + gain envelope)
-- Laser chirps (frequency sweep)
-- Interface clicks and synth pulses
-- Zero external audio files — everything computed on demand
-
-### Cyber Cursor
-Custom cursor system with a trailing plasma dot that follows mouse movement with spring physics, replacing the OS cursor entirely for maximum immersion.
+All sound synthesized live via the Web Audio API. Sub-bass explosion drops, laser chirps, interface clicks — zero external audio files.
 
 ---
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
+| | Technology |
+|:--|:--|
 | Framework | React 18 + Vite 5 |
-| Rendering | Canvas 2D API (custom 3D engine) |
-| Audio | Web Audio API (procedural synthesis) |
+| 3D Rendering | Canvas 2D API — custom matrix projection engine |
+| Audio | Web Audio API — procedural synthesis |
 | Speech | Web Speech Synthesis API |
-| Styling | Vanilla CSS (HSL design tokens, no Tailwind) |
+| Styling | Vanilla CSS — HSL design tokens |
 | Animations | `requestAnimationFrame` + CSS keyframes |
-| Build | Vite (ESM, HMR, tree-shaking) |
+
+---
+
+## Project Structure
+
+```
+src/
+├── App.jsx                       Screen orchestrator & state machine
+├── index.css                     Full design system
+│
+└── components/
+    ├── LoadingScreen.jsx          Boot sequence diagnostics
+    ├── MissionScreen.jsx          Primary HUD layout
+    │
+    ├── CyberTerminalWing.jsx      Autonomous autotyping telemetry stream
+    ├── HologramCanvas.jsx         Live 3D icosahedron (Canvas 2D engine)
+    ├── QuantumLaboratoryWing.jsx  Lab controller — BOOM, Overclock, Synth
+    │
+    ├── Navbar.jsx                 AI voice transmission nav
+    ├── NeuralBackground.jsx       Animated neural network layer
+    ├── CyberCursor.jsx            Custom plasma cursor with trail
+    │
+    ├── VoiceContext.jsx           Speech synthesis engine
+    ├── SoundFX.js                 Procedural Web Audio synthesizer
+    └── modals/ContactModal.jsx    COMMS direct transmission modal
+```
 
 ---
 
 ## Getting Started
 
 ```bash
-# Clone the repository
 git clone https://github.com/harshitthek/harshitfolio.git
 cd harshitfolio
-
-# Install dependencies
 npm install
-
-# Start the dev server
 npm run dev
-
-# Build for production
-npm run build
 ```
 
-Open **`http://localhost:5173`** in your browser.
-
-> Recommended: Chrome or Edge for best Web Speech Synthesis and Canvas performance.
-
----
-
-## About
-
-**Harshit Sharma**
-B.Tech — Artificial Intelligence & Machine Learning
-USAR, GGSIPU, New Delhi
-
-| | |
-|---|---|
-| Email | codewithharshitsharma@gmail.com |
-| GitHub | [@harshitthek](https://github.com/harshitthek) |
-| LinkedIn | [devharshitsharma](https://www.linkedin.com/in/devharshitsharma) |
+Open `http://localhost:5173` — Chrome or Edge recommended for best Canvas + Speech performance.
 
 ---
 
 <div align="center">
 
-*"The interface is the message."*
+**Harshit Sharma** &nbsp;|&nbsp; B.Tech AI & ML &nbsp;|&nbsp; USAR, GGSIPU, New Delhi
+
+[codewithharshitsharma@gmail.com](mailto:codewithharshitsharma@gmail.com) &nbsp;·&nbsp;
+[LinkedIn](https://www.linkedin.com/in/devharshitsharma) &nbsp;·&nbsp;
+[GitHub @harshitthek](https://github.com/harshitthek)
+
+<br/>
 
 `SYSTEM ONLINE // ALL CHANNELS OPERATIONAL // STANDING BY`
 
