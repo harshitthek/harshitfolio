@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 
 // 3D 12-vertex Icosahedron geometry definition
 const phi = (1 + Math.sqrt(5)) / 2;
@@ -433,20 +434,23 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       {/* Anchor placeholder in layout flow */}
       <div ref={anchorRef} className="hologram-anchor-box" style={{ width: '280px', height: '130px' }} />
 
-      {/* Top-Level Fullscreen Canvas (Zero-lag, top of all layers z-index: 9999) */}
-      <canvas
-        ref={canvasRef}
-        className="fullscreen-hologram-canvas"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          pointerEvents: 'none',
-          zIndex: 9999
-        }}
-      />
+      {/* Top-Level Fullscreen Canvas rendered via Body Portal (Flies OVER Top Header Bar!) */}
+      {typeof document !== 'undefined' && ReactDOM.createPortal(
+        <canvas
+          ref={canvasRef}
+          className="fullscreen-hologram-canvas"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            pointerEvents: 'none',
+            zIndex: 99999
+          }}
+        />,
+        document.body
+      )}
     </>
   );
 }
