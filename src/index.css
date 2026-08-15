@@ -1274,7 +1274,7 @@ body::after {
   background-size: 250% auto;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  animation: pixarLetterSquash 4.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: pixarLetterSquash 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .pixar-lamp-rig {
@@ -1288,7 +1288,7 @@ body::after {
   z-index: 3;
   -webkit-background-clip: border-box !important;
   -webkit-text-fill-color: initial !important;
-  animation: pixarLampHopCourse 4.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: pixarLampHopCourse 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .pixar-lamp-rig * {
@@ -1306,137 +1306,124 @@ body::after {
 
 /* Luxo Jr. Metallic Cyber Materials */
 .luxo-base {
-  fill: #0f172a;
-  stroke: #38bdf8;
-  stroke-width: 1.8;
-  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.6));
+  filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.7));
 }
 .luxo-base-rim {
   fill: #38bdf8;
-}
-.luxo-strut {
-  stroke: #f8fafc;
-  stroke-width: 2.4;
-  stroke-linecap: round;
-}
-.luxo-joint {
-  fill: #0f172a;
-  stroke: #00ff88;
-  stroke-width: 1.8;
-}
-.luxo-joint-core {
-  fill: #38bdf8;
-}
-.luxo-shade {
-  fill: #00ff88;
-  stroke: #ffffff;
-  stroke-width: 1.6;
-  filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.8));
+  opacity: 0.85;
 }
 .luxo-bulb {
   fill: #ffffff;
-  filter: drop-shadow(0 0 10px #ffffff);
+  filter: drop-shadow(0 0 12px #ffffff);
 }
 
 /* Articulated Side Profile Head (Hops, stomps, inspects pancake) */
 .luxo-side-head {
   transform-origin: 52px 34px;
-  animation: luxoSideHeadAction 4.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: luxoSideHeadAction 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 /* Front-Facing Aperture Head (Swivels smoothly to look directly forward at viewer!) */
 .luxo-front-head {
   transform-origin: 50px 30px;
   opacity: 0;
-  animation: luxoFrontHeadAction 4.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: luxoFrontHeadAction 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 /* Volumetric Forward Spotlight Cone */
 .luxo-spotlight-cone {
   fill: url(#luxoSpotlightGrad);
-  transform-origin: 50px 32px;
+  transform-origin: 50px 30px;
   opacity: 0;
-  animation: luxoConeBeamShine 4.4s ease forwards;
+  animation: luxoConeBeamShine 4.8s ease forwards;
 }
 
-/* 1. Letter 'I' Rubber Pancake Squash */
+/* 1. Letter 'I' Rubber Pancake Squash (3 Progressive Bounces) */
 @keyframes pixarLetterSquash {
-  0%, 25% {
+  0%, 18% {
     transform: scaleY(1) scaleX(1);
   }
-  32% {
-    /* Hop 1 light squash */
-    transform: scaleY(0.65) scaleX(1.18);
+  /* Bounce 1: Light Squash (82% height) */
+  23% {
+    transform: scaleY(0.82) scaleX(1.08);
   }
-  38% {
-    /* Elastic rebound */
+  28% {
+    transform: scaleY(1.02) scaleX(0.98);
+  }
+  34% {
+    transform: scaleY(1) scaleX(1);
+  }
+  /* Bounce 2: Medium Squash (55% height) */
+  41% {
+    transform: scaleY(0.55) scaleX(1.24);
+  }
+  47% {
     transform: scaleY(1.03) scaleX(0.97);
   }
-  44%, 63% {
-    /* Stays 100% solid until the exact instant of stomp contact */
+  53%, 63% {
     transform: scaleY(1) scaleX(1);
   }
-  65% {
-    /* High Stomp slam impact -> instantaneous smash into glowing pancake plate */
+  /* Bounce 3: Massive Heavy Stomp Impact -> Smashed into glowing pancake plate */
+  66% {
     transform: scaleY(0.20) scaleX(1.55);
     filter: drop-shadow(0 0 16px rgba(0, 255, 136, 1));
   }
   72%, 100% {
-    /* Retains clean flattened glowing pancake presence under lamp base */
     transform: scaleY(0.20) scaleX(1.55);
     filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.8));
   }
 }
 
-/* 2. Lamp Trajectory & Impact Squash (In exact vertical lockstep with letter I top) */
+/* 2. Lamp Trajectory & Impact Squash (3 Progressive Bounces in exact vertical sync) */
 @keyframes pixarLampHopCourse {
   0% {
     opacity: 0;
-    transform: translate(180%, -40%) scale(0.9) rotate(20deg);
+    transform: translate(170%, -40%) scale(0.9) rotate(20deg);
   }
-  14% {
+  12% {
     opacity: 1;
-    transform: translate(100%, -102%) scale(1.04, 0.96) rotate(-8deg);
+    transform: translate(80%, -96%) scale(1.02, 0.98) rotate(-6deg);
   }
-  26% {
-    /* Touchdown on top of letter I */
+  /* Bounce 1: Light Touchdown & Squash */
+  18% {
     transform: translate(-50%, -96%) scale(1, 1) rotate(0deg);
   }
-  32% {
-    /* Hop 1 squash with letter I */
-    transform: translate(-50%, -64%) scale(1.12, 0.86);
+  23% {
+    transform: translate(-50%, -82%) scale(1.06, 0.92);
   }
-  38% {
-    /* Rebound jump */
-    transform: translate(-50%, -98%) scale(0.96, 1.04);
+  28% {
+    transform: translate(-50%, -98%) scale(0.98, 1.02);
   }
-  46% {
-    /* Stand upright on top of I */
-    transform: translate(-50%, -96%) scale(1, 1);
+  /* Bounce 2: Medium Jump & Squash */
+  35% {
+    transform: translate(-50%, -104%) scale(0.95, 1.06) rotate(1deg);
   }
-  54% {
-    /* High stomp jump peak (Capped cleanly below top tag!) */
-    transform: translate(-50%, -106%) scale(0.92, 1.1) rotate(2deg);
+  41% {
+    transform: translate(-50%, -55%) scale(1.14, 0.84);
   }
-  63% {
-    /* Falling down to touch top of letter I */
+  47% {
+    transform: translate(-50%, -100%) scale(0.96, 1.04);
+  }
+  /* Bounce 3: High Stomp Leap Peak (Capped cleanly below top tag!) */
+  55% {
+    transform: translate(-50%, -106%) scale(0.92, 1.10) rotate(2deg);
+  }
+  64% {
     transform: translate(-50%, -96%) scale(0.96, 1.04) rotate(0deg);
   }
-  65% {
-    /* Downward Stomp slam directly flushed on top of squashed pancake */
-    transform: translate(-50%, -18%) scale(1.24, 0.72) rotate(0deg);
+  /* Downward Smash Slam on Pancake */
+  66% {
+    transform: translate(-50%, -18%) scale(1.26, 0.70) rotate(0deg);
   }
-  70% {
-    /* Recoil recovery */
+  71% {
     transform: translate(-50%, -18%) scale(0.96, 1.04) rotate(0deg);
   }
-  74%, 100% {
-    /* Resting firmly flushed on the squashed pancake baseline */
+  75%, 100% {
     transform: translate(-50%, -18%) scale(1, 1) rotate(0deg);
   }
 }
 
-/* 3. Side Head Action: Hopping, Stomp, Look Down at Pancake, Double Take, then Fades to Front */
+/* 3. Side Head Action: 3 Bounces, Look Down at Pancake, Double Take, Swivel to Front */
 @keyframes luxoSideHeadAction {
   0%, 74% {
     transform: rotate(0deg);
@@ -1447,22 +1434,22 @@ body::after {
     transform: rotate(45deg);
     opacity: 1;
   }
-  84% {
-    /* Double-take curiosity twitch */
-    transform: rotate(36deg);
+  83% {
+    /* Playful double-take curiosity twitch */
+    transform: rotate(34deg);
     opacity: 1;
   }
-  88% {
+  87% {
     /* Inspects pancake again */
     transform: rotate(48deg);
     opacity: 1;
   }
-  92% {
+  91% {
     /* Swivels to front */
-    transform: rotate(10deg) scaleX(0.7);
-    opacity: 1;
+    transform: rotate(15deg) scaleX(0.5);
+    opacity: 0.8;
   }
-  96%, 100% {
+  95%, 100% {
     transform: rotate(0deg) scaleX(0);
     opacity: 0;
   }
@@ -1470,11 +1457,11 @@ body::after {
 
 /* Front Head Action: Fades in facing camera and turns forward */
 @keyframes luxoFrontHeadAction {
-  0%, 91% {
+  0%, 90% {
     opacity: 0;
     transform: scale(0.6) rotate(-15deg);
   }
-  95% {
+  94% {
     opacity: 1;
     transform: scale(1.05) rotate(0deg);
   }
@@ -1486,11 +1473,11 @@ body::after {
 
 /* 4. Conical Spotlight Beam Radiating to User */
 @keyframes luxoConeBeamShine {
-  0%, 93% {
+  0%, 92% {
     opacity: 0;
     transform: scaleY(0.4);
   }
-  96% {
+  95% {
     opacity: 0.95;
     transform: scaleY(1.05);
   }
