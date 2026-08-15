@@ -6,6 +6,18 @@ import QuantumLaboratoryWing from './QuantumLaboratoryWing';
 
 export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
   const [explosionCount, setExplosionCount] = useState(0);
+  const [pixarKey, setPixarKey] = useState(0);
+
+  useEffect(() => {
+    if (isActive) {
+      setPixarKey(prev => prev + 1);
+    }
+  }, [isActive]);
+
+  const replayPixar = () => {
+    SoundFX.playChirp();
+    setPixarKey(prev => prev + 1);
+  };
 
   const handleAccept = () => {
     SoundFX.playClick();
@@ -53,7 +65,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         {/* Massive Hero Name Header (Preserved Exactly with Layered Pixar Animation) */}
         <div className="hero-name-container">
           <h1 className="mission-hero-name">
-            HARSH<span className="pixar-i-layer" title="Pixar Luxo Jr. Stomp">
+            HARSH<span key={pixarKey} className="pixar-i-layer" onClick={replayPixar} title="Click to replay Pixar stomp!">
               <span className="pixar-i-text">I</span>
               <span className="pixar-lamp-rig" aria-hidden="true">
                 <svg className="luxo-lamp-svg" viewBox="0 0 100 120" fill="none">
