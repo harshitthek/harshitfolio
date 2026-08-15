@@ -1392,11 +1392,11 @@ body::after {
 @keyframes pixarLampHopCourse {
   0% {
     opacity: 0;
-    transform: translate(200%, -40%) scale(0.9) rotate(25deg);
+    transform: translate(180%, -40%) scale(0.9) rotate(20deg);
   }
   14% {
     opacity: 1;
-    transform: translate(120%, -120%) scale(1.05, 0.95) rotate(-12deg);
+    transform: translate(100%, -102%) scale(1.04, 0.96) rotate(-8deg);
   }
   26% {
     /* Touchdown on top of letter I */
@@ -1408,7 +1408,7 @@ body::after {
   }
   38% {
     /* Rebound jump */
-    transform: translate(-50%, -100%) scale(0.96, 1.04);
+    transform: translate(-50%, -98%) scale(0.96, 1.04);
   }
   46% {
     /* Stand upright on top of I */
@@ -1416,15 +1416,15 @@ body::after {
   }
   54% {
     /* High stomp jump peak (Capped cleanly below top tag!) */
-    transform: translate(-50%, -115%) scale(0.9, 1.15) rotate(4deg);
+    transform: translate(-50%, -106%) scale(0.92, 1.1) rotate(2deg);
   }
   63% {
     /* Falling down to touch top of letter I */
-    transform: translate(-50%, -96%) scale(0.95, 1.05) rotate(0deg);
+    transform: translate(-50%, -96%) scale(0.96, 1.04) rotate(0deg);
   }
   65% {
     /* Downward Stomp slam directly flushed on top of squashed pancake */
-    transform: translate(-50%, -18%) scale(1.25, 0.70) rotate(0deg);
+    transform: translate(-50%, -18%) scale(1.24, 0.72) rotate(0deg);
   }
   70% {
     /* Recoil recovery */

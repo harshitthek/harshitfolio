@@ -70,73 +70,66 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
               <span className="pixar-lamp-rig" aria-hidden="true">
                 <svg className="luxo-lamp-svg" viewBox="0 0 100 120" fill="none">
                   <defs>
+                    {/* Forward Spotlight Volumetric Beam */}
                     <linearGradient id="luxoSpotlightGrad" x1="50%" y1="0%" x2="50%" y2="100%">
-                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-                      <stop offset="25%" stopColor="#00ff88" stopOpacity="0.5" />
+                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+                      <stop offset="25%" stopColor="#00ff88" stopOpacity="0.45" />
                       <stop offset="70%" stopColor="#38bdf8" stopOpacity="0.15" />
                       <stop offset="100%" stopColor="#00ff88" stopOpacity="0" />
                     </linearGradient>
-                    <radialGradient id="luxoReflectorCone" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#1e293b" />
-                      <stop offset="70%" stopColor="#0f172a" />
-                      <stop offset="100%" stopColor="#38bdf8" />
-                    </radialGradient>
+                    
+                    {/* Radiant Bulb Glow */}
                     <radialGradient id="luxoBulbGlow" cx="50%" cy="50%" r="50%">
                       <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                      <stop offset="35%" stopColor="#00ff88" stopOpacity="0.75" />
-                      <stop offset="75%" stopColor="#38bdf8" stopOpacity="0.25" />
+                      <stop offset="40%" stopColor="#00ff88" stopOpacity="0.75" />
+                      <stop offset="80%" stopColor="#38bdf8" stopOpacity="0.2" />
                       <stop offset="100%" stopColor="transparent" stopOpacity="0" />
                     </radialGradient>
                   </defs>
                   
                   {/* Forward Volumetric Spotlight Beam */}
-                  <polygon className="luxo-spotlight-cone" points="36,32 64,32 120,130 -20,130" />
+                  <polygon className="luxo-spotlight-cone" points="36,30 64,30 115,130 -15,130" />
                   
                   {/* Luxo Jr. Articulated Lamp Body */}
                   <g className="luxo-body-group">
-                    {/* Stepped Weighted Base */}
-                    <path className="luxo-base" d="M22,112 C22,105 78,105 78,112 L82,116 L18,116 Z" />
-                    <ellipse className="luxo-base-rim" cx="50" cy="116" rx="28" ry="3" />
-                    <circle className="luxo-joint" cx="50" cy="107" r="4.5" />
+                    {/* Weighted Base Plate */}
+                    <path className="luxo-base" d="M22,112 C22,106 78,106 78,112 L82,116 L18,116 Z" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.8" />
+                    <circle cx="50" cy="108" r="3.5" fill="#38bdf8" />
                     
-                    {/* Lower Articulated Parallel Arm Struts & Tension Spring */}
-                    <line className="luxo-strut" x1="45" y1="107" x2="35" y2="68" />
-                    <line className="luxo-strut" x1="55" y1="107" x2="45" y2="68" />
-                    <path d="M47,100 Q39,85 47,72" fill="none" stroke="#38bdf8" strokeWidth="1.6" opacity="0.9" />
+                    {/* Lower Parallel Chrome Struts */}
+                    <line x1="45" y1="108" x2="35" y2="70" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+                    <line x1="55" y1="108" x2="45" y2="70" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
                     
                     {/* Middle Elbow Pivot Joint */}
-                    <circle className="luxo-joint" cx="40" cy="68" r="6" />
-                    <circle className="luxo-joint-core" cx="40" cy="68" r="2.5" />
+                    <circle cx="40" cy="70" r="5" fill="#0f172a" stroke="#00ff88" strokeWidth="2" />
+                    <circle cx="40" cy="70" r="2" fill="#38bdf8" />
                     
-                    {/* Upper Arm Struts */}
-                    <line className="luxo-strut" x1="40" y1="68" x2="50" y2="34" />
-                    <line className="luxo-strut" x1="42" y1="65" x2="52" y2="31" />
-                    <path d="M43,62 Q49,49 43,36" fill="none" stroke="#38bdf8" strokeWidth="1.4" opacity="0.85" />
+                    {/* Upper Parallel Chrome Struts */}
+                    <line x1="40" y1="70" x2="52" y2="34" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+                    <line x1="42" y1="67" x2="54" y2="31" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
                     
-                    {/* 1. Side Profile Head (Active during hops & stomps) */}
+                    {/* 1. Side Profile Head (Classic Downward-Angled Bell Shade) */}
                     <g className="luxo-side-head">
-                      <circle className="luxo-joint" cx="52" cy="34" r="4.5" />
-                      <circle className="luxo-joint-core" cx="52" cy="34" r="2" />
-                      {/* Rear Socket Casing & Vents */}
-                      <path d="M52,34 C58,34 60,30 58,24 L48,24 C46,30 48,34 52,34 Z" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.2" />
-                      <line x1="50" y1="28" x2="56" y2="28" stroke="#00ff88" strokeWidth="1" />
-                      {/* Bell Shade Silhouette */}
-                      <path className="luxo-shade" d="M50,34 C46,18 34,14 18,20 C28,36 40,44 54,38 Z" />
-                      <ellipse cx="19" cy="21" rx="4" ry="8" transform="rotate(-30 19 21)" fill="#0f172a" stroke="#ffffff" strokeWidth="1.4" />
-                      <ellipse className="luxo-bulb" cx="20" cy="21" rx="3.8" ry="3.8" />
+                      <rect x="46" y="24" width="12" height="12" rx="3" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.4" />
+                      <circle cx="52" cy="34" r="4.5" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+                      {/* Bell Lampshade */}
+                      <path d="M48,30 C44,16 32,12 14,18 C24,36 38,44 54,34 Z" fill="#0f172a" stroke="#00ff88" strokeWidth="2" filter="drop-shadow(0 0 8px rgba(0,255,136,0.7))" />
+                      {/* Bezel Rim */}
+                      <ellipse cx="16" cy="19" rx="4.5" ry="9" transform="rotate(-30 16 19)" fill="#1e293b" stroke="#ffffff" strokeWidth="1.6" />
+                      {/* Incandescent Bulb */}
+                      <circle cx="17" cy="19" r="4" fill="#ffffff" filter="drop-shadow(0 0 10px #ffffff)" />
                     </g>
                     
-                    {/* 2. Front-Facing Head Aperture (Swivels to face viewer directly at the end!) */}
+                    {/* 2. Front-Facing Head Aperture (Clean Concentric Reflector) */}
                     <g className="luxo-front-head">
-                      {/* Top Socket Dome */}
-                      <ellipse cx="50" cy="18" rx="8" ry="3.5" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.4" />
-                      <circle className="luxo-joint" cx="50" cy="32" r="5" />
+                      <ellipse cx="50" cy="14" rx="8" ry="4" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.4" />
+                      <circle cx="50" cy="30" r="4.5" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.4" />
                       {/* Concentric Bell Shade Aperture facing camera */}
-                      <circle cx="50" cy="32" r="16" fill="#0f172a" stroke="#00ff88" strokeWidth="2.4" />
-                      <circle cx="50" cy="32" r="12" fill="url(#luxoReflectorCone)" stroke="#38bdf8" strokeWidth="1.2" />
-                      {/* Brilliant White-Hot Glowing Bulb */}
-                      <circle className="luxo-bulb" cx="50" cy="32" r="6" />
-                      <circle cx="50" cy="32" r="24" fill="url(#luxoBulbGlow)" opacity="0.85" />
+                      <circle cx="50" cy="30" r="16" fill="#0f172a" stroke="#00ff88" strokeWidth="2.4" filter="drop-shadow(0 0 12px rgba(0,255,136,0.85))" />
+                      <circle cx="50" cy="30" r="11" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                      {/* Glowing Bulb Core */}
+                      <circle className="luxo-bulb" cx="50" cy="30" r="5.5" />
+                      <circle cx="50" cy="30" r="22" fill="url(#luxoBulbGlow)" opacity="0.85" />
                     </g>
                   </g>
                 </svg>
