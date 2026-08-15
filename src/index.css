@@ -1338,15 +1338,23 @@ body::after {
   filter: drop-shadow(0 0 10px #ffffff);
 }
 
-/* Articulated Head Swivel Animation */
-.luxo-head-group {
+/* Articulated Side Profile Head (Hops, stomps, inspects pancake) */
+.luxo-side-head {
   transform-origin: 52px 34px;
-  animation: luxoHeadLookViewer 4.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: luxoSideHeadAction 4.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Front-Facing Aperture Head (Swivels smoothly to look directly forward at viewer!) */
+.luxo-front-head {
+  transform-origin: 50px 30px;
+  opacity: 0;
+  animation: luxoFrontHeadAction 4.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 /* Volumetric Forward Spotlight Cone */
 .luxo-spotlight-cone {
   fill: url(#luxoSpotlightGrad);
+  transform-origin: 50px 30px;
   opacity: 0;
   animation: luxoConeBeamShine 4.4s ease forwards;
 }
@@ -1419,39 +1427,67 @@ body::after {
   }
 }
 
-/* 3. Head Swivel (Inspects flattened pancake, does double-take, looks at viewer!) */
-@keyframes luxoHeadLookViewer {
+/* 3. Side Head Action: Hopping, Stomp, Look Down at Pancake, Double Take, then Fades to Front */
+@keyframes luxoSideHeadAction {
   0%, 74% {
     transform: rotate(0deg);
+    opacity: 1;
   }
   78% {
     /* Tilts down to inspect squashed pancake */
     transform: rotate(45deg);
+    opacity: 1;
   }
   84% {
-    /* Double-take twitch */
+    /* Double-take curiosity twitch */
     transform: rotate(36deg);
+    opacity: 1;
   }
   88% {
-    /* Inspects again */
+    /* Inspects pancake again */
     transform: rotate(48deg);
+    opacity: 1;
   }
-  94%, 100% {
-    /* Swivels up facing straight forward at user */
-    transform: rotate(-14deg) scaleX(1.06);
+  92% {
+    /* Swivels to front */
+    transform: rotate(10deg) scaleX(0.7);
+    opacity: 1;
+  }
+  96%, 100% {
+    transform: rotate(0deg) scaleX(0);
+    opacity: 0;
+  }
+}
+
+/* Front Head Action: Fades in facing camera and turns forward */
+@keyframes luxoFrontHeadAction {
+  0%, 91% {
+    opacity: 0;
+    transform: scale(0.6) rotate(-15deg);
+  }
+  95% {
+    opacity: 1;
+    transform: scale(1.05) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
   }
 }
 
 /* 4. Conical Spotlight Beam Radiating to User */
 @keyframes luxoConeBeamShine {
-  0%, 92% {
+  0%, 93% {
     opacity: 0;
+    transform: scaleY(0.4);
   }
   96% {
-    opacity: 0.9;
+    opacity: 0.95;
+    transform: scaleY(1.05);
   }
   100% {
-    opacity: 0.8;
+    opacity: 0.85;
+    transform: scaleY(1);
   }
 }
 
