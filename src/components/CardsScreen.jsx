@@ -20,13 +20,19 @@ function PortCard({ card, onLaunch, onQuickIntel }) {
     >
       <div className={`card-img ${imgLoaded || imgError ? 'img-loaded' : ''}`}>
         {!imgError ? (
-          <img
-            src={card.img}
-            alt={card.title}
-            loading="lazy"
-            onLoad={() => setImgLoaded(true)}
-            onError={() => setImgError(true)}
-          />
+          <picture>
+            <source srcSet={card.img.replace(/\.jpg$/, '.webp')} type="image/webp" />
+            <img
+              src={card.img}
+              alt={card.title}
+              loading="lazy"
+              decoding="async"
+              width="800"
+              height="448"
+              onLoad={() => setImgLoaded(true)}
+              onError={() => setImgError(true)}
+            />
+          </picture>
         ) : (
           <div className="card-img-fallback">
             <span className="fallback-glyph">{card.blueprintIcon || '⚡'}</span>
