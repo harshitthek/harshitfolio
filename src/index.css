@@ -1250,6 +1250,185 @@ body::after {
   white-space: nowrap;
 }
 
+/* ==========================================================================
+   PIXAR LUXO JR. LAMP & SQUASHED 'I' ANIMATION (LAYERED CONTINUITY)
+   ========================================================================== */
+
+.pixar-i-layer {
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+  z-index: 2;
+}
+
+.pixar-i-text {
+  display: inline-block;
+  transform-origin: 50% 90%;
+  will-change: transform, filter;
+  animation: pixarLetterSquash 4.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.pixar-lamp-rig {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 0.82em;
+  height: 1.02em;
+  pointer-events: none;
+  z-index: 3;
+  animation: pixarLampHopCourse 4.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.luxo-lamp-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Luxo Jr. Cyber Materials */
+.luxo-base {
+  fill: #00ff88;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 4px rgba(0, 255, 136, 0.6));
+}
+.luxo-base-rim {
+  fill: #38bdf8;
+}
+.luxo-strut {
+  stroke: #e0f2fe;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+.luxo-joint {
+  fill: #0f172a;
+  stroke: #00ff88;
+  stroke-width: 1.8;
+}
+.luxo-joint-core {
+  fill: #38bdf8;
+}
+.luxo-shade {
+  fill: #00ff88;
+  stroke: #ffffff;
+  stroke-width: 1.6;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.7));
+}
+.luxo-bulb {
+  fill: #ffffff;
+  filter: drop-shadow(0 0 8px #00ff88);
+}
+
+/* Articulated Head Swivel Animation */
+.luxo-head-group {
+  transform-origin: 52px 36px;
+  animation: luxoHeadLookViewer 4.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Volumetric Forward Spotlight Cone */
+.luxo-spotlight-cone {
+  fill: url(#luxoSpotlightGrad);
+  opacity: 0;
+  animation: luxoConeBeamShine 4.2s ease forwards;
+}
+
+/* 1. Letter 'I' Rubber Pancake Squash */
+@keyframes pixarLetterSquash {
+  0%, 30% {
+    transform: scaleY(1) scaleX(1);
+  }
+  38% {
+    /* Hop 1 light squash */
+    transform: scaleY(0.68) scaleX(1.15);
+  }
+  46% {
+    /* Elastic rebound */
+    transform: scaleY(1.05) scaleX(0.96);
+  }
+  56%, 66% {
+    transform: scaleY(1) scaleX(1);
+  }
+  70% {
+    /* The High Stomp impact -> squashed into glowing pancake plate */
+    transform: scaleY(0.28) scaleX(1.48);
+    filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.9));
+  }
+  75%, 100% {
+    /* Retains visible flattened glowing pancake presence under lamp */
+    transform: scaleY(0.28) scaleX(1.48);
+    filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.7));
+  }
+}
+
+/* 2. Lamp Trajectory (Hops in from right -> Stomps down -> Capped below top tag) */
+@keyframes pixarLampHopCourse {
+  0% {
+    opacity: 0;
+    transform: translate(220%, -30%) scale(0.9) rotate(25deg);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(160%, -85%) scale(1) rotate(-15deg);
+  }
+  30% {
+    /* Lands on top of I */
+    transform: translate(-50%, -88%) scale(1) rotate(0deg);
+  }
+  38% {
+    /* Hop 1 squash on top of I */
+    transform: translate(-50%, -60%) scale(0.95, 0.85);
+  }
+  48% {
+    /* Rebound jump */
+    transform: translate(-50%, -105%) scale(1.05, 0.95);
+  }
+  58% {
+    /* Peak of high stomp jump (Cleanly below top tag!) */
+    transform: translate(-50%, -115%) scale(0.95, 1.1) rotate(5deg);
+  }
+  69% {
+    /* Downward Stomp slam directly to font baseline */
+    transform: translate(-50%, 0) scale(1.15, 0.75) rotate(0deg);
+  }
+  75%, 100% {
+    /* Resting proudly on the squashed letter baseline */
+    transform: translate(-50%, 0) scale(1, 1) rotate(0deg);
+  }
+}
+
+/* 3. Head Swivel (Inspects flattened pancake, then looks at viewer!) */
+@keyframes luxoHeadLookViewer {
+  0%, 68% {
+    transform: rotate(0deg);
+  }
+  74% {
+    /* Tilts down to inspect squashed letter */
+    transform: rotate(42deg);
+  }
+  84% {
+    /* Pauses while looking down */
+    transform: rotate(40deg);
+  }
+  92%, 100% {
+    /* Swivels up facing straight forward at user */
+    transform: rotate(-18deg) scaleX(1.08);
+  }
+}
+
+/* 4. Conical Spotlight Beam Radiating to User */
+@keyframes luxoConeBeamShine {
+  0%, 88% {
+    opacity: 0;
+  }
+  94% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0.75;
+  }
+}
+
 /* Centerpiece 3D 360-Degree Rotating Quantum Hologram */
 .mission-holo-center {
   display: flex;

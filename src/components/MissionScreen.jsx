@@ -50,10 +50,50 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
           <span>ENTERING HARSHIT'S UNIVERSE &bull; SYSTEM_ONLINE &bull; PORTFOLIO_V2</span>
         </div>
 
-        {/* Massive Hero Name Header (Preserved Exactly) */}
+        {/* Massive Hero Name Header (Preserved Exactly with Layered Pixar Animation) */}
         <div className="hero-name-container">
           <h1 className="mission-hero-name">
-            HARSHIT <span className="hero-name-glow">SHARMA</span>
+            HARSH<span className="pixar-i-layer" title="Pixar Luxo Jr. Stomp">
+              <span className="pixar-i-text">I</span>
+              <span className="pixar-lamp-rig" aria-hidden="true">
+                <svg className="luxo-lamp-svg" viewBox="0 0 100 120" fill="none">
+                  <defs>
+                    <linearGradient id="luxoSpotlightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
+                      <stop offset="35%" stopColor="#00ff88" stopOpacity="0.35" />
+                      <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  {/* Forward Conical Spotlight Beam */}
+                  <polygon className="luxo-spotlight-cone" points="30,22 -30,120 90,120" />
+                  
+                  {/* Luxo Jr. Articulated Lamp Body */}
+                  <g className="luxo-body-group">
+                    {/* Weighted Base */}
+                    <path className="luxo-base" d="M28,112 C28,106 72,106 72,112 L76,116 L24,116 Z" />
+                    <ellipse className="luxo-base-rim" cx="50" cy="116" rx="26" ry="3" />
+                    
+                    {/* Lower Articulated Parallel Arm Struts */}
+                    <line className="luxo-strut" x1="44" y1="108" x2="34" y2="72" />
+                    <line className="luxo-strut" x1="56" y1="108" x2="46" y2="72" />
+                    
+                    {/* Middle Elbow Pivot Joint */}
+                    <circle className="luxo-joint" cx="40" cy="72" r="5.5" />
+                    <circle className="luxo-joint-core" cx="40" cy="72" r="2.2" />
+                    
+                    {/* Upper Arm Struts */}
+                    <line className="luxo-strut" x1="40" y1="72" x2="52" y2="36" />
+                    
+                    {/* Articulated Head & Lampshade (Swivels to Viewer) */}
+                    <g className="luxo-head-group">
+                      <circle className="luxo-joint" cx="52" cy="36" r="4.5" />
+                      <path className="luxo-shade" d="M48,34 C44,22 36,18 26,22 C34,36 44,42 56,38 Z" />
+                      <ellipse className="luxo-bulb" cx="30" cy="22" rx="5" ry="3" />
+                    </g>
+                  </g>
+                </svg>
+              </span>
+            </span>T <span className="hero-name-glow">SHARMA</span>
           </h1>
           <div className="hero-sub-discipline">
             CREATOR &bull; THINKER &bull; MULTIVERSE ARCHITECT &bull; NEW DELHI
