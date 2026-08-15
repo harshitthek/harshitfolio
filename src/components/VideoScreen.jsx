@@ -136,7 +136,7 @@ export default function VideoScreen({ isActive, onComplete }) {
         preload="auto"
         muted
         id="intro-video"
-        src="/videoplayback.mp4"
+        src={`${import.meta.env.BASE_URL}videoplayback.mp4`}
         ref={vidRef}
         onEnded={afterVideo}
         onError={() => {
