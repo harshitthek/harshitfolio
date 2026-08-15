@@ -1260,8 +1260,8 @@ body::after {
   vertical-align: baseline;
   cursor: pointer;
   z-index: 2;
-  margin: 0;
-  padding: 0;
+  margin: 0 0.05em;
+  padding: 0 0.02em;
   -webkit-background-clip: border-box !important;
   -webkit-text-fill-color: initial !important;
 }
@@ -1282,8 +1282,8 @@ body::after {
   left: 50%;
   bottom: 0;
   transform: translateX(-50%);
-  width: 0.78em;
-  height: 1.02em;
+  width: 0.62em;
+  height: 0.96em;
   pointer-events: none;
   z-index: 3;
   -webkit-background-clip: border-box !important;
