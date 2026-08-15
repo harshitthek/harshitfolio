@@ -1254,14 +1254,30 @@ body::after {
    PIXAR LUXO JR. LAMP & SQUASHED 'I' ANIMATION (LAYERED CONTINUITY)
    ========================================================================== */
 
+.pixar-adjacent-letter {
+  display: inline-block;
+  vertical-align: baseline;
+  will-change: transform;
+}
+
+.pixar-letter-h {
+  transform-origin: 20% 90%;
+  animation: pixarPushLetterH 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.pixar-letter-t {
+  transform-origin: 80% 90%;
+  animation: pixarPushLetterT 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
 .pixar-i-layer {
   position: relative;
   display: inline-block;
   vertical-align: baseline;
   cursor: pointer;
   z-index: 2;
-  margin: 0 0.05em;
-  padding: 0 0.02em;
+  margin: 0;
+  padding: 0;
   -webkit-background-clip: border-box !important;
   -webkit-text-fill-color: initial !important;
 }
@@ -1282,8 +1298,8 @@ body::after {
   left: 50%;
   bottom: 0;
   transform: translateX(-50%);
-  width: 0.62em;
-  height: 0.96em;
+  width: 0.78em;
+  height: 1.02em;
   pointer-events: none;
   z-index: 3;
   -webkit-background-clip: border-box !important;
@@ -1484,6 +1500,82 @@ body::after {
   100% {
     opacity: 0.85;
     transform: scaleY(1);
+  }
+}
+
+/* 5. Left Adjacent Letter 'H' Physical Collision & Pushing Reaction */
+@keyframes pixarPushLetterH {
+  0%, 18% {
+    transform: translateX(0) rotate(0deg);
+  }
+  /* Bounce 1: Light tap nudge */
+  23% {
+    transform: translateX(-0.04em) rotate(-1.5deg);
+  }
+  28% {
+    transform: translateX(0) rotate(0deg);
+  }
+  /* Bounce 2: Medium push */
+  41% {
+    transform: translateX(-0.08em) rotate(-3deg);
+  }
+  47% {
+    transform: translateX(-0.01em) rotate(-0.5deg);
+  }
+  53%, 63% {
+    transform: translateX(0) rotate(0deg);
+  }
+  /* Bounce 3: Massive Heavy Stomp Smash Impact -> Outward physical push */
+  66% {
+    transform: translateX(-0.14em) rotate(-5.5deg);
+  }
+  71% {
+    transform: translateX(-0.06em) rotate(-2deg);
+  }
+  76% {
+    transform: translateX(-0.03em) rotate(-0.8deg);
+  }
+  84%, 100% {
+    /* Settles naturally around the squashed pancake and lamp */
+    transform: translateX(-0.02em) rotate(0deg);
+  }
+}
+
+/* 6. Right Adjacent Letter 'T' Physical Collision & Pushing Reaction */
+@keyframes pixarPushLetterT {
+  0%, 18% {
+    transform: translateX(0) rotate(0deg);
+  }
+  /* Bounce 1: Light tap nudge */
+  23% {
+    transform: translateX(0.04em) rotate(1.5deg);
+  }
+  28% {
+    transform: translateX(0) rotate(0deg);
+  }
+  /* Bounce 2: Medium push */
+  41% {
+    transform: translateX(0.08em) rotate(3deg);
+  }
+  47% {
+    transform: translateX(0.01em) rotate(0.5deg);
+  }
+  53%, 63% {
+    transform: translateX(0) rotate(0deg);
+  }
+  /* Bounce 3: Massive Heavy Stomp Smash Impact -> Outward physical push */
+  66% {
+    transform: translateX(0.14em) rotate(5.5deg);
+  }
+  71% {
+    transform: translateX(0.06em) rotate(2deg);
+  }
+  76% {
+    transform: translateX(0.03em) rotate(0.8deg);
+  }
+  84%, 100% {
+    /* Settles naturally around the squashed pancake and lamp */
+    transform: translateX(0.02em) rotate(0deg);
   }
 }
 
