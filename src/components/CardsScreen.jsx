@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { projectsData } from '../data/projectsData';
 import { SoundFX } from './SoundFX';
 
@@ -109,6 +109,17 @@ function PortCard({ card, onLaunch, onQuickIntel }) {
 export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIntel }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Automatically reset scroll position to top whenever this screen activates
+  useEffect(() => {
+    if (isActive) {
+      const el = document.getElementById('s-cards');
+      if (el) {
+        el.scrollTop = 0;
+      }
+      window.scrollTo(0, 0);
+    }
+  }, [isActive]);
 
   const categories = [
     { id: 'all', label: `ALL PORTALS [${projectsData.length}]` },
