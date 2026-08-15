@@ -57,17 +57,12 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       const h = window.innerHeight;
       const maxScreenDim = Math.max(w, h);
 
-      // 1. Massive 3D scatter vectors for the 12 vertices (Whole screen explosion)
-      const vertexScatters = rawVertices.map(() => {
-        const phiAngle = Math.random() * Math.PI * 2;
-        const thetaAngle = Math.random() * Math.PI;
-        const mag = maxScreenDim * (0.45 + Math.random() * 0.4); // 450px - 850px radius
-        return {
-          dx: Math.sin(thetaAngle) * Math.cos(phiAngle) * mag,
-          dy: Math.sin(thetaAngle) * Math.sin(phiAngle) * mag,
-          dz: Math.cos(thetaAngle) * mag
-        };
-      });
+      // 1. Coherent 3D model-space scatter vectors for the 12 vertices (Zero jitter / zero shearing)
+      const vertexScatters = rawVertices.map(([vx, vy, vz]) => ({
+        sx: vx * (1.0 + Math.random() * 0.8),
+        sy: vy * (1.0 + Math.random() * 0.8),
+        sz: vz * (1.0 + Math.random() * 0.8)
+      }));
 
       // 2. 180 High-Velocity Relativistic Quantum Photons
       const shards = Array.from({ length: 180 }, () => {
@@ -236,16 +231,27 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       ctx.arc(cx, cy, glowRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      // 2. 3D Point Projector with full-screen perspective & massive scatter
+      // 2. 3D Point Projector with coherent 3D rotation (Zero glitching / zero wire twisting)
       const projectPoints = (verts, rad, scatters = null, reverseRot = false) => {
         const mul = reverseRot ? -1.5 : 1;
         const curCosY = Math.cos(angleY * mul);
         const curSinY = Math.sin(angleY * mul);
 
         return verts.map(([vx, vy, vz], idx) => {
-          let x1 = vx * curCosY + vz * curSinY;
-          let y1 = vy;
-          let z1 = -vx * curSinY + vz * curCosY;
+          // Displace vertex in 3D model space so rotation is 100% smooth and continuous
+          let px = vx;
+          let py = vy;
+          let pz = vz;
+
+          if (scatters && scatters[idx] && scatterStrength > 0) {
+            px += scatters[idx].sx * scatterStrength;
+            py += scatters[idx].sy * scatterStrength;
+            pz += scatters[idx].sz * scatterStrength;
+          }
+
+          let x1 = px * curCosY + pz * curSinY;
+          let y1 = py;
+          let z1 = -px * curSinY + pz * curCosY;
 
           let x2 = x1;
           let y2 = y1 * cosX - z1 * sinX;
@@ -255,17 +261,10 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
           let y3 = x2 * sinZ + y2 * cosZ;
           let z3 = z2;
 
-          let extraX = 0;
-          let extraY = 0;
-          if (scatters && scatters[idx] && scatterStrength > 0) {
-            extraX = scatters[idx].dx * scatterStrength;
-            extraY = scatters[idx].dy * scatterStrength;
-          }
-
-          const scale = 1.0 + (z3 * 0.18);
+          const scale = 180 / (180 + z3 * rad * 0.4);
           return {
-            x: cx + x3 * rad * scale + extraX,
-            y: cy + y3 * rad * scale + extraY,
+            x: cx + x3 * rad * scale,
+            y: cy + y3 * rad * scale,
             z: z3
           };
         });
