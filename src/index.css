@@ -2257,7 +2257,7 @@ body::after {
   background: var(--dark);
   justify-content: flex-start;
   overflow-y: auto;
-  padding: 68px 0 2rem;
+  padding: 70px 0 2rem;
   scroll-behavior: smooth;
 }
 
@@ -2265,7 +2265,7 @@ body::after {
   width: 100%;
   max-width: 1320px;
   margin: 0 auto;
-  padding: 0.4rem 1.5rem 0.2rem;
+  padding: 1rem 2rem 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2274,7 +2274,7 @@ body::after {
 .top-bar-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -2283,9 +2283,9 @@ body::after {
   border: 1px solid rgba(0, 255, 136, 0.4);
   color: var(--g);
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 8px 16px;
   cursor: pointer;
   border-radius: 2px;
   text-decoration: none;
@@ -2308,13 +2308,13 @@ body::after {
 .telemetry-chip {
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(0, 255, 136, 0.2);
-  padding: 5px 10px;
-  font-size: 9.5px;
-  letter-spacing: 1.5px;
+  padding: 6px 12px;
+  font-size: 10px;
+  letter-spacing: 2px;
   color: var(--g);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 .telemetry-dot {
   width: 6px;
@@ -2328,41 +2328,41 @@ body::after {
   width: 100%;
   max-width: 1320px;
   margin: 0 auto;
-  padding: 0.5rem 1.5rem 0.25rem;
+  padding: 1.5rem 2rem 1rem;
   text-align: center;
   position: relative;
 }
 
 .header-badge-tag {
-  font-size: 9.5px;
-  letter-spacing: 3px;
+  font-size: 10px;
+  letter-spacing: 4px;
   color: var(--g);
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .cards-header h2 {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
-  letter-spacing: 4px;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  letter-spacing: 5px;
   color: var(--white);
   margin: 0;
-  line-height: 1.05;
+  line-height: 1.1;
 }
 .cards-header p {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--dim-light);
-  letter-spacing: 2.5px;
-  margin-top: 2px;
+  letter-spacing: 4px;
+  margin-top: 4px;
 }
 
 /* Category Filter Chips & Search */
 .cards-filter-wrapper {
   max-width: 1320px;
-  margin: 0.6rem auto 0;
+  margin: 1.2rem auto 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -2377,9 +2377,9 @@ body::after {
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--dim-light);
   font-family: 'Space Mono', monospace;
-  font-size: 9.5px;
-  letter-spacing: 1.5px;
-  padding: 6px 12px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 7px 14px;
   cursor: pointer;
   transition: all 0.25s;
 }
@@ -2400,13 +2400,13 @@ body::after {
   align-items: center;
   background: rgba(0, 0, 0, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 2px;
-  min-width: 260px;
+  min-width: 280px;
 }
 .search-icon {
-  font-size: 10px;
-  margin-right: 6px;
+  font-size: 11px;
+  margin-right: 8px;
   color: var(--dim);
 }
 .search-input {
@@ -2414,7 +2414,7 @@ body::after {
   border: none;
   color: var(--white);
   font-family: 'Space Mono', monospace;
-  font-size: 10.5px;
+  font-size: 11px;
   outline: none;
   width: 100%;
 }
@@ -2426,7 +2426,7 @@ body::after {
   border: none;
   color: var(--dim);
   cursor: pointer;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .cards-hotkey-hint {
@@ -2434,9 +2434,9 @@ body::after {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 6px;
-  font-size: 8px;
-  letter-spacing: 1.2px;
+  margin-top: 12px;
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
   color: var(--dim-light);
   flex-wrap: wrap;
 }
@@ -2444,9 +2444,9 @@ body::after {
   background: rgba(0, 255, 136, 0.1);
   border: 1px solid rgba(0, 255, 136, 0.35);
   color: var(--g);
-  padding: 1px 4px;
+  padding: 1px 5px;
   border-radius: 2px;
-  font-size: 8px;
+  font-size: 8.5px;
 }
 
 /* Cards Grid */
@@ -2454,7 +2454,7 @@ body::after {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 16px;
-  padding: 0.8rem 1.5rem 3rem;
+  padding: 1.5rem 2rem 4rem;
   width: 100%;
   max-width: 1320px;
   margin: 0 auto;
