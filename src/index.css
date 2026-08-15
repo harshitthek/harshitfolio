@@ -1282,8 +1282,8 @@ body::after {
   left: 50%;
   bottom: 0;
   transform: translateX(-50%);
-  width: 0.64em;
-  height: 0.84em;
+  width: 0.78em;
+  height: 1.02em;
   pointer-events: none;
   z-index: 3;
   -webkit-background-clip: border-box !important;
@@ -1319,7 +1319,7 @@ body::after {
 
 /* Articulated Side Profile Head (Hops, stomps, inspects pancake) */
 .luxo-side-head {
-  transform-origin: 52px 34px;
+  transform-origin: 52px 30px;
   animation: luxoSideHeadAction 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
@@ -1382,44 +1382,44 @@ body::after {
   }
   12% {
     opacity: 1;
-    transform: translate(80%, -96%) scale(1.02, 0.98) rotate(-6deg);
+    transform: translate(80%, -84%) scale(1.02, 0.98) rotate(-6deg);
   }
   /* Bounce 1: Light Touchdown & Squash */
   18% {
-    transform: translate(-50%, -96%) scale(1, 1) rotate(0deg);
+    transform: translate(-50%, -84%) scale(1, 1) rotate(0deg);
   }
   23% {
-    transform: translate(-50%, -82%) scale(1.06, 0.92);
+    transform: translate(-50%, -70%) scale(1.06, 0.92);
   }
   28% {
-    transform: translate(-50%, -98%) scale(0.98, 1.02);
+    transform: translate(-50%, -86%) scale(0.98, 1.02);
   }
   /* Bounce 2: Medium Jump & Squash */
   35% {
-    transform: translate(-50%, -104%) scale(0.95, 1.06) rotate(1deg);
+    transform: translate(-50%, -92%) scale(0.95, 1.06) rotate(1deg);
   }
   41% {
-    transform: translate(-50%, -55%) scale(1.14, 0.84);
+    transform: translate(-50%, -46%) scale(1.14, 0.84);
   }
   47% {
-    transform: translate(-50%, -100%) scale(0.96, 1.04);
+    transform: translate(-50%, -88%) scale(0.96, 1.04);
   }
   /* Bounce 3: High Stomp Leap Peak (Capped cleanly below top tag!) */
   55% {
-    transform: translate(-50%, -106%) scale(0.92, 1.10) rotate(2deg);
+    transform: translate(-50%, -96%) scale(0.92, 1.10) rotate(2deg);
   }
   64% {
-    transform: translate(-50%, -96%) scale(0.96, 1.04) rotate(0deg);
+    transform: translate(-50%, -84%) scale(0.96, 1.04) rotate(0deg);
   }
   /* Downward Smash Slam on Pancake */
   66% {
-    transform: translate(-50%, -18%) scale(1.26, 0.70) rotate(0deg);
+    transform: translate(-50%, -12%) scale(1.26, 0.70) rotate(0deg);
   }
   71% {
-    transform: translate(-50%, -18%) scale(0.96, 1.04) rotate(0deg);
+    transform: translate(-50%, -12%) scale(0.96, 1.04) rotate(0deg);
   }
   75%, 100% {
-    transform: translate(-50%, -18%) scale(1, 1) rotate(0deg);
+    transform: translate(-50%, -12%) scale(1, 1) rotate(0deg);
   }
 }
 
