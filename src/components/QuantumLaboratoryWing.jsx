@@ -120,7 +120,10 @@ export default function QuantumLaboratoryWing({ isActive, onExplode }) {
           <button
             type="button"
             className="lab-btn boom-btn"
-            onClick={handleQuantumBoom}
+            onClick={(e) => {
+              e.currentTarget?.blur();
+              handleQuantumBoom();
+            }}
             onMouseEnter={() => SoundFX.playHover('high')}
             aria-label="Trigger Quantum Supernova Explosion"
             title="Explode 3D Quantum Hologram"
