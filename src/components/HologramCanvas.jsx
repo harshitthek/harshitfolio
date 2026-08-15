@@ -189,26 +189,15 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         const elapsed = (now - explosionRef.current.startTime) / 1000;
         const totalDuration = 2.8;
         if (elapsed < totalDuration) {
-          if (elapsed < 0.55) {
-            // Phase 1: Outward blast
-            const t = elapsed / 0.55;
-            explosionExpansion = 1 + Math.sin(t * Math.PI * 0.5) * 6.5;
-            scatterStrength = Math.sin(t * Math.PI * 0.5);
-            explosionAlpha = 1;
-          } else {
-            // Phase 2: Smooth orbital reassembly and soft settling fade (Full continuous animation)
-            const reformT = (elapsed - 0.55) / (totalDuration - 0.55); // 0 to 1 over 2.25s
-            
-            // Asymptotic smooth decay to 0 (no abrupt snap)
-            scatterStrength = Math.pow(Math.max(0, 1 - reformT), 2.8);
-            
-            // Damped spring settling to exact 1.0
-            const settle = Math.sin(reformT * Math.PI * 2.0) * Math.exp(-reformT * 4.0);
-            explosionExpansion = 1 + settle * 1.2;
-            
-            // Silky smooth fade out of explosion photon streams into the permanent orbit
-            explosionAlpha = reformT < 0.6 ? 1 : Math.max(0, 1 - (reformT - 0.6) / 0.4);
-          }
+          const normT = elapsed / totalDuration; // 0 to 1 smoothly across 2.8s
+          
+          // 100% Continuous fluid expansion envelope (no dead zones or inflection stalls)
+          const envelope = Math.sin(normT * Math.PI) * Math.exp(-normT * 1.85);
+          explosionExpansion = 1 + envelope * 5.5;
+          scatterStrength = envelope * 1.15;
+
+          // Soft seamless fade-out into permanent orbit at the end
+          explosionAlpha = normT < 0.65 ? 1 : Math.max(0, 1 - (normT - 0.65) / 0.35);
         } else {
           explosionRef.current.active = false;
           isExploding = false;
@@ -373,36 +362,28 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
 
         // Quantum Photons: Blast Outward -> Spiral into Circular 3D Orbit around Hologram -> Reintegrate
         explosionRef.current.shards.forEach(sh => {
-          if (elapsed < 0.55) {
-            // Phase 1: Fast radial blast across entire screen
-            sh.x += sh.vx;
-            sh.y += sh.vy;
-            sh.z += sh.vz;
-            sh.vx *= 0.95;
-            sh.vy *= 0.95;
-          } else {
-            // Phase 2: Smooth Spiral into Circular 3D Orbit around the Hologram!
-            const t = (elapsed - 0.55) / 1.65;
-            const currentDist = Math.sqrt(sh.x * sh.x + sh.y * sh.y);
-            
-            // Advance orbital angle (circles the hologram continuously in 3D)
-            sh.orbitAngle += sh.orbitSpeed * (1 + (1 - Math.min(1, t)) * 0.9);
-            
-            // Target distance decays towards hologram orbital gimbal ring radius (40px-70px)
-            const targetDist = sh.orbitTargetRad * (1 + (1 - Math.min(1, t)) * 2.8);
-            const newDist = currentDist * 0.88 + targetDist * 0.12;
-            
-            // 3D Orbital Projection around cx, cy
-            const cosAngle = Math.cos(sh.orbitAngle);
-            const sinAngle = Math.sin(sh.orbitAngle);
-            
-            const targetX = newDist * cosAngle;
-            const targetY = newDist * sinAngle * (0.55 + sh.inclination);
-            
-            // Smoothly move towards orbital path
-            sh.x = sh.x * 0.76 + targetX * 0.24;
-            sh.y = sh.y * 0.76 + targetY * 0.24;
-          }
+          // Continuous Fluid Gravitational + Vortex Flow (Zero Stalls / Pauses in Motion)
+          const normDist = Math.sqrt(sh.x * sh.x + sh.y * sh.y) || 1;
+          const dirX = sh.x / normDist;
+          const dirY = sh.y / normDist;
+
+          // Inward gravitational pull smoothly builds up after initial expansion
+          const gravityPull = Math.min(1.6, Math.max(0, elapsed - 0.2) * 0.75);
+          
+          // Tangential swirling vortex acceleration (creates circular orbits around hologram)
+          const vortexForce = Math.min(1.2, Math.max(0, elapsed - 0.25) * 0.65) * (sh.spinDir || 1);
+
+          // Force integration (dv = a * dt)
+          sh.vx += -dirX * gravityPull - dirY * vortexForce;
+          sh.vy += -dirY * gravityPull + dirX * vortexForce;
+          
+          // Smooth aerodynamic damping
+          sh.vx *= 0.965;
+          sh.vy *= 0.965;
+
+          // Continuous position integration (dx = v * dt)
+          sh.x += sh.vx;
+          sh.y += sh.vy;
 
           sh.tail.unshift({ x: sh.x, y: sh.y });
           if (sh.tail.length > 7) sh.tail.pop();
