@@ -992,33 +992,79 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
     setHistory(newHistory);
   };
 
-  const handleKeyDown = (e) => {
-    // If inside Snake Game, intercept all game keys and ESC so ESC does NOT close modal!
-    if (snakeGameActive) {
-      if (['ArrowUp', 'w', 'W'].includes(e.key)) {
-        e.preventDefault();
-        changeSnakeDirection('UP');
-      } else if (['ArrowDown', 's', 'S'].includes(e.key)) {
-        e.preventDefault();
-        changeSnakeDirection('DOWN');
-      } else if (['ArrowLeft', 'a', 'A'].includes(e.key)) {
-        e.preventDefault();
-        changeSnakeDirection('LEFT');
-      } else if (['ArrowRight', 'd', 'D'].includes(e.key)) {
-        e.preventDefault();
-        changeSnakeDirection('RIGHT');
-      } else if (['Escape', 'q', 'Q'].includes(e.key)) {
-        e.preventDefault();
-        e.stopPropagation();
-        setSnakeGameActive(false);
-        setHistory(h => [...h, { type: 'info', text: `🎮 Snake session exited. Final Score: ${snakeScore} PTS` }]);
-      } else if (snakeGameOver && (e.key === 'r' || e.key === 'R' || e.key === 'Enter')) {
-        e.preventDefault();
-        startSnakeGame();
+  // Window-level keydown listener to capture Snake keys and general terminal input
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      // 1. If Snake Game is Active: Intercept all control keys completely
+      if (snakeGameActive) {
+        const k = e.key.toLowerCase();
+        if (k === 'arrowup' || k === 'w') {
+          e.preventDefault();
+          e.stopPropagation();
+          changeSnakeDirection('UP');
+          return;
+        }
+        if (k === 'arrowdown' || k === 's') {
+          e.preventDefault();
+          e.stopPropagation();
+          changeSnakeDirection('DOWN');
+          return;
+        }
+        if (k === 'arrowleft' || k === 'a') {
+          e.preventDefault();
+          e.stopPropagation();
+          changeSnakeDirection('LEFT');
+          return;
+        }
+        if (k === 'arrowright' || k === 'd') {
+          e.preventDefault();
+          e.stopPropagation();
+          changeSnakeDirection('RIGHT');
+          return;
+        }
+        if (k === 'escape' || k === 'q') {
+          e.preventDefault();
+          e.stopPropagation();
+          setSnakeGameActive(false);
+          setHistory(h => [...h, { type: 'info', text: `🎮 Snake session exited. Final Score: ${snakeScore} PTS` }]);
+          return;
+        }
+        if (snakeGameOver && (k === 'r' || k === 'enter' || k === ' ')) {
+          e.preventDefault();
+          e.stopPropagation();
+          startSnakeGame();
+          return;
+        }
+        // Prevent default scrolling on space or arrows during game
+        if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'pageup', 'pagedown'].includes(k)) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        return;
       }
-      return;
-    }
 
+      // 2. If user is in terminal mode and presses keys outside of input, auto-focus input
+      if (inputRef.current && document.activeElement !== inputRef.current) {
+        if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1) {
+          inputRef.current.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown, true);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown, true);
+  }, [snakeGameActive, snakeGameOver, snakeScore, changeSnakeDirection]);
+
+  // Auto-focus canvas when snake game starts, or focus input when snake game ends
+  useEffect(() => {
+    if (snakeGameActive) {
+      snakeCanvasRef.current?.focus();
+    } else {
+      inputRef.current?.focus();
+    }
+  }, [snakeGameActive]);
+
+  const handleKeyDown = (e) => {
     // Handle Ctrl+C inside terminal to cancel active line without opening Code modal
     if (e.ctrlKey && (e.key === 'c' || e.key === 'C')) {
       e.preventDefault();
@@ -1190,7 +1236,12 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
 
           {/* Arcade Canvas Snake Game */}
           {snakeGameActive && (
-            <div className="arcade-snake-container" style={{ borderColor: activeThemeObj.primary }}>
+            <div
+              className="arcade-snake-container"
+              style={{ borderColor: activeThemeObj.primary }}
+              tabIndex={0}
+              onClick={() => snakeCanvasRef.current?.focus()}
+            >
               <div className="snake-arcade-hud">
                 <div className="snake-stats-left">
                   <span className="snake-badge" style={{ color: activeThemeObj.primary }}>🐍 ARCADE CANVAS ENGINE</span>
@@ -1215,6 +1266,8 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                 <canvas
                   ref={snakeCanvasRef}
                   className="snake-game-canvas"
+                  tabIndex={0}
+                  onClick={(e) => e.stopPropagation()}
                 />
 
                 {/* On-Screen D-Pad Controls for Touch / Mouse */}

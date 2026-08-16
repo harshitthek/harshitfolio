@@ -3504,6 +3504,10 @@ body::after {
   flex-direction: column;
   align-items: center;
   border-radius: 2px;
+  outline: none;
+}
+.arcade-snake-container:focus {
+  outline: none;
 }
 .snake-arcade-hud {
   display: flex;
@@ -3562,6 +3566,10 @@ body::after {
   background: #040404;
   box-shadow: 0 0 15px rgba(0, 255, 136, 0.15);
   max-width: 100%;
+  outline: none;
+}
+.snake-game-canvas:focus {
+  outline: none;
 }
 .snake-dpad-controls {
   display: none;
