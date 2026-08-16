@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { SoundFX } from '../SoundFX';
 import { projectsData } from '../../data/projectsData';
 
-// Virtual Filesystem Structure
+// Full Virtual Filesystem Structure
 const VIRTUAL_FS = {
   '~': {
     type: 'dir',
     children: {
       'bio.txt': {
         type: 'file',
-        size: '1.4 KB',
+        size: '1.6 KB',
         content: `=====================================================
 HARSHIT SHARMA // ARTIFICIAL INTELLIGENCE & SYSTEMS ENGINEER
 =====================================================
@@ -20,24 +20,27 @@ GitHub      : https://github.com/harshitthek
 LinkedIn    : https://www.linkedin.com/in/devharshitsharma
 Email       : codewithharshitsharma@gmail.com
 
-Core Focus  :
-- Autonomous Multi-Agent LLM Orchestration & Reasoning Trees
-- High-Accuracy Machine Learning Valuations & Feature Engineering
-- Production Sandboxing, Docker Isolation & Benchmarking
-- GPU-Accelerated 3D WebGL / Three.js Visual Engines`
+Core Technical Arsenal:
+- Autonomous Multi-Agent LLM Orchestration & Evaluation Pipelines
+- CatBoost & XGBoost Stacking ML Ensembles with 97.4% R² Confidence
+- Fine-Tuned BERT NLP Deep Learning Departmental Classifiers
+- High-Performance Chrome Manifest V3 Network Engines (DeclarativeNetRequest)
+- Deterministic Constraint Reducers & Search-Space Budgeting
+- GPU-Accelerated 3D WebGL / Three.js Visual Engines (60 FPS)`
       },
       'contact.json': {
         type: 'file',
-        size: '520 B',
+        size: '560 B',
         content: JSON.stringify({
           name: "Harshit Sharma",
-          role: "AI Engineer & ML Architect",
+          role: "AI Engineer & ML Systems Architect",
+          institution: "USAR (GGSIPU), New Delhi",
+          degree: "B.Tech AI & ML",
           email: "codewithharshitsharma@gmail.com",
           github: "https://github.com/harshitthek",
           linkedin: "https://www.linkedin.com/in/devharshitsharma",
           discord: "harshit0",
-          location: "New Delhi, India",
-          status: "Available for AI/ML Engineering roles & Autonomous Agent research"
+          status: "Open to AI/ML Research, LLM Agent Engineering & Systems Roles"
         }, null, 2)
       },
       'id_rsa.pub': {
@@ -48,12 +51,13 @@ Core Focus  :
       'projects': {
         type: 'dir',
         children: {
-          'yggdrasil.py': {
+          '01_yggdrasil.py': {
             type: 'file',
             size: '3.6 KB',
             content: `"""
-Yggdrasil AI Bot — Hierarchical Tree Reasoning Discord Engine
-Author: Harshit Sharma [USAR (GGSIPU), New Delhi]
+PORT_01: Yggdrasil (World Tree) Platform
+Architecture: Discord.js + Fastify Single-Process Backend on antiX Linux
+Crypto: AES-256-GCM Session Encryption with HKDF Key Derivation
 """
 import asyncio
 from typing import List, Dict, Any
@@ -71,41 +75,21 @@ class YggdrasilOrchestrator:
         self.memory_graph: Dict[str, Any] = {}
 
     async def evaluate_tree(self, user_prompt: str) -> List[ThoughtNode]:
-        print(f"[*] Parsing multi-turn query through Yggdrasil Tree: {user_prompt}")
+        print(f"[*] Parsing query through Yggdrasil Memory Graph: {user_prompt}")
         await asyncio.sleep(0.04)
         return [
             ThoughtNode("branch-01", "Vector similarity retrieval across knowledge base", 0.96),
             ThoughtNode("branch-02", "Autonomous code synthesis in isolated sandbox", 0.99)
         ]`
           },
-          'autovaluate_model.py': {
-            type: 'file',
-            size: '3.6 KB',
-            content: `"""
-AutoValuate AI — Dual-Engine Stacking Regressor (97.4% R² Score)
-Stacking: CatBoost + XGBoost + LightGBM on 40,000+ Real Transactions
-Features: 5-Year TCO Lifecycle, Batch Fleet Appraisals, SHA-256 Certificates
-"""
-import pandas as pd
-from catboost import CatBoostRegressor
-from xgboost import XGBRegressor
-from sklearn.ensemble import StackingRegressor, RandomForestRegressor
-
-def train_dual_engine(vehicle_type: str = "bike"):
-    base_models = [
-        ('cb', CatBoostRegressor(iterations=650, depth=7, verbose=0)),
-        ('xgb', XGBRegressor(n_estimators=500, max_depth=6, random_state=42))
-    ]
-    model = StackingRegressor(estimators=base_models, final_estimator=RandomForestRegressor(n_estimators=100))
-    print(f"✓ {vehicle_type.upper()} Dual-Engine Stacking Matrix Fitted (97.4% R² Confidence)")
-    return model`
-          },
-          'resilient_agent.py': {
+          '02_resilient_agent.py': {
             type: 'file',
             size: '4.2 KB',
             content: `"""
-Resilient — Autonomous Coding Agent Evaluation Pipeline
-Orchestrates multi-model git sandboxes against strict unit tests
+PORT_02: Resilient AI Benchmark — Autonomous Agent Leaderboard
+Isolation: Ephemeral Docker Git Sandboxes
+Auth: RS256 JWT Authenticated GitHub App (resilient-bot)
+Test Matrix: 47/47 Passing Pytests
 """
 import docker
 import jwt
@@ -123,7 +107,179 @@ class ResilientSandboxRunner:
             network_mode="none",  # Strict zero-leak isolation
             mem_limit="4g"
         )
+        print(f"[✓] Isolated container spawned for Issue #{self.issue_id}")
         return container`
+          },
+          '03_autovaluate_model.py': {
+            type: 'file',
+            size: '4.8 KB',
+            content: `"""
+PORT_03: AutoValuate AI — Dual-Engine Vehicle Resale Valuation Suite
+Trained On: 40,000+ Real Transactions (32k Bikes + 8k Cars, 23+ Brands)
+Stacking: CatBoost + XGBoost + LightGBM (97.4% R² Confidence)
+Features: 5-Year TCO Lifecycle, Batch Appraisals, SHA-256 Certificates
+Tests: 56 Automated Tests (37 Pytest + 19 Vitest)
+"""
+import pandas as pd
+from catboost import CatBoostRegressor
+from xgboost import XGBRegressor
+from sklearn.ensemble import StackingRegressor, RandomForestRegressor
+
+class AutoValuateDualEngine:
+    def __init__(self, vehicle_type: str = "bike"):
+        self.vehicle_type = vehicle_type
+        self.base_estimators = [
+            ("catboost", CatBoostRegressor(iterations=650, depth=7, learning_rate=0.04, verbose=0)),
+            ("xgboost", XGBRegressor(n_estimators=500, max_depth=6, learning_rate=0.03, random_state=42))
+        ]
+        self.meta_regressor = RandomForestRegressor(n_estimators=120, max_depth=8, random_state=42)
+        self.model = StackingRegressor(
+            estimators=self.base_estimators,
+            final_estimator=self.meta_regressor,
+            cv=5
+        )
+
+    def predict_valuation(self, X):
+        return self.model.predict(X)`
+          },
+          '04_support_dispatcher_bert.py': {
+            type: 'file',
+            size: '3.8 KB',
+            content: `"""
+PORT_04: Customer Support Ticket Dispatcher ML
+NLP Model: Fine-Tuned BERT Self-Attention Transformer
+Classification: Multi-Department Routing (Technical, Billing, Logistics, Accounts)
+Latency: Sub-120ms Real-Time Inference
+"""
+import torch
+from transformers import BertForSequenceClassification, BertTokenizer
+
+class TicketDispatcher:
+    def __init__(self):
+        self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+        self.model = BertForSequenceClassification.from_pretrained("./saved_models/ticket_bert")
+        self.departments = ["Technical", "Billing", "Logistics", "Accounts"]
+
+    def route_ticket(self, email_body: str):
+        inputs = self.tokenizer(email_body, return_tensors="pt", truncation=True, max_length=512)
+        with torch.no_grad():
+            logits = self.model(**inputs).logits
+            probs = torch.softmax(logits, dim=-1)
+            pred_idx = torch.argmax(probs, dim=-1).item()
+            urgency_score = float(probs[0][pred_idx])
+            
+        return {
+            "department": self.departments[pred_idx],
+            "confidence": urgency_score,
+            "sla_priority": "CRITICAL" if urgency_score > 0.85 else "NORMAL"
+        }`
+          },
+          '05_shieldblock_mv3.js': {
+            type: 'file',
+            size: '3.1 KB',
+            content: `// PORT_05: ShieldBlock — Next-Gen Manifest V3 Extension
+// Engine: Native declarativeNetRequest (DNR) Zero-CPU Blocking
+// Features: 16x Audio Ad Acceleration, Live Network Streaming Logger
+
+chrome.declarativeNetRequest.updateDynamicRules({
+  addRules: [
+    {
+      id: 101,
+      priority: 1,
+      action: { type: 'block' },
+      condition: {
+        urlFilter: '||doubleclick.net^',
+        resourceTypes: ['script', 'image', 'xmlhttprequest']
+      }
+    }
+  ]
+});
+console.log('[✓] ShieldBlock DNR Core Active. Zero main-thread CPU overhead.');`
+          },
+          '06_carbon_guardian.py': {
+            type: 'file',
+            size: '3.4 KB',
+            content: `"""
+PORT_06: Carbon Guardian AI — Enterprise ESG Telemetry Platform
+Engine: TensorFlow Recommenders + FastAPI + React 19
+Features: Hardware Telemetry, Grid Shift Insights, Dynamic RBAC Economy
+"""
+import tensorflow as tf
+import numpy as np
+
+class CarbonRecommender(tf.keras.Model):
+    def __init__(self):
+        super().__init__()
+        self.user_embedding = tf.keras.layers.Embedding(1000, 32)
+        self.action_embedding = tf.keras.layers.Embedding(250, 32)
+        
+    def call(self, inputs):
+        user_vector = self.user_embedding(inputs["user_id"])
+        action_vector = self.action_embedding(inputs["action_id"])
+        return tf.reduce_sum(user_vector * action_vector, axis=1)`
+          },
+          '07_letter_guess_engine.py': {
+            type: 'file',
+            size: '3.2 KB',
+            content: `"""
+PORT_07: LetterGuess — Deterministic Constraint Analysis Engine
+Architecture: Offline Python / SQLite Desktop Engine
+Algorithms: Search-Space Budgeting, Conservative Regex Extraction, Replay Provenance
+"""
+import sqlite3
+import re
+from typing import List, Set
+
+class ConstraintSolver:
+    def __init__(self, db_path: str = "letter_guess.db"):
+        self.conn = sqlite3.connect(db_path)
+        
+    def filter_candidates(self, pattern: str, excluded_chars: Set[str]) -> List[str]:
+        regex_pattern = f"^{pattern.replace('_', '[a-zA-Z]')}$"
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT word FROM dictionary WHERE length = ?", (len(pattern),))
+        words = [row[0] for row in cursor.fetchall()]
+        
+        valid = [
+            w for w in words 
+            if re.match(regex_pattern, w) and not any(c in w for c in excluded_chars)
+        ]
+        return valid`
+          },
+          '08_browser_startpage.js': {
+            type: 'file',
+            size: '2.5 KB',
+            content: `// PORT_08: Custom Browser Startpage v2.0
+// Features: 13 Premium Themes, CSP Security, OpenWeatherMap Telemetry
+// Bundle Size: <15KB Zero-Dependency Vanilla JavaScript
+
+const THEMES = ['cyberpunk', 'aurora', 'northern-lights', 'sunset', 'midnight', 'dark-slate'];
+function applyTheme(themeName) {
+  document.documentElement.setAttribute('data-theme', themeName);
+  localStorage.setItem('startpage_theme', themeName);
+}`
+          },
+          '09_cosmic_webgl.js': {
+            type: 'file',
+            size: '3.0 KB',
+            content: `// PORT_09: 3D Cosmic WebGL Engine
+// Library: Three.js r128 + Custom GLSL Particle Vertex Shaders
+// Performance: Locked 60 FPS across Desktop and Mobile
+
+import * as THREE from 'three';
+
+const scene = new THREE.Scene();
+const geometry = new THREE.BufferGeometry();
+const particleCount = 1200;
+const positions = new Float32Array(particleCount * 3);
+// Steered by mouse raycasting in real-time`
+          },
+          '10_cyber_terminal.js': {
+            type: 'file',
+            size: '2.8 KB',
+            content: `// PORT_10: Harshit's Cyber Terminal & Inspector
+// Emulation: Interactive Zsh Shell with 16+ Built-in Commands
+// Features: 60fps Arcade Canvas Snake, HMAC-SHA256 Verifier, PostgreSQL Schema Viewer`
           }
         }
       },
@@ -132,12 +288,12 @@ class ResilientSandboxRunner:
         children: {
           'stack.json': {
             type: 'file',
-            size: '880 B',
+            size: '980 B',
             content: JSON.stringify({
-              languages: ["Python 3.12", "JavaScript (ES6+)", "TypeScript", "C++", "SQL", "Bash"],
-              ai_machine_learning: ["PyTorch", "Scikit-Learn", "Pandas", "NumPy", "FastAPI", "Flask", "HuggingFace"],
-              frontend_3d: ["React 18", "Next.js", "Three.js", "WebGL / GLSL", "Vite", "Tailwind CSS"],
-              devops_databases: ["Docker", "PostgreSQL", "Redis", "Linux (Ubuntu)", "Git & CI/CD Actions"]
+              languages: ["Python 3.12", "JavaScript (ES6+)", "TypeScript", "C/C++", "SQL", "Bash"],
+              ai_machine_learning: ["CatBoost", "XGBoost", "Scikit-Learn", "PyTorch", "BERT Transformers", "TensorFlow", "FastAPI"],
+              frontend_3d: ["React 19 / 18", "Three.js / WebGL", "HTML5 Canvas 2D", "Vite", "Tailwind CSS"],
+              devops_systems: ["Docker Containers", "PostgreSQL", "Async SQLite", "Manifest V3", "Linux (Ubuntu / antiX)", "GitHub CI/CD"]
             }, null, 2)
           }
         }
@@ -148,7 +304,7 @@ class ResilientSandboxRunner:
           'flag.txt': {
             type: 'file',
             size: '64 B',
-            content: 'FLAG{HARSHIT_SHARMA_AI_MASTER_AGENT_2026_VERIFIED}'
+            content: 'FLAG{HARSHIT_SHARMA_AI_SYSTEMS_ENGINEER_2026_VERIFIED}'
           }
         }
       }
@@ -169,13 +325,55 @@ const FORTUNES = [
   "\"The best way to predict the future is to invent it.\" — Alan Kay",
   "\"Autonomous agents will write code, verify code, and deploy code — engineer the harness.\" — Harshit Sharma",
   "\"Programs must be written for people to read, and only incidentally for machines to execute.\" — Hal Abelson",
-  "\"Talk is cheap. Show me the code.\" — Linus Torvalds"
+  "\"Talk is cheap. Show me the code.\" — Linus Torvalds",
+  "\"Any sufficiently advanced technology is indistinguishable from magic.\" — Arthur C. Clarke"
 ];
+
+// Helper: Normalize Unix-like path relative to virtual filesystem
+function resolvePath(targetPath, currentPath) {
+  if (!targetPath || targetPath === '~' || targetPath === '/') return '~';
+  
+  let parts;
+  if (targetPath.startsWith('~/')) {
+    parts = targetPath.slice(2).split('/').filter(Boolean);
+  } else if (targetPath.startsWith('/')) {
+    parts = targetPath.slice(1).split('/').filter(Boolean);
+  } else {
+    const base = currentPath === '~' ? [] : currentPath.slice(2).split('/').filter(Boolean);
+    const targetParts = targetPath.split('/').filter(Boolean);
+    parts = [...base];
+    for (const p of targetParts) {
+      if (p === '.') continue;
+      if (p === '..') {
+        if (parts.length > 0) parts.pop();
+      } else {
+        parts.push(p);
+      }
+    }
+  }
+
+  if (parts.length === 0) return '~';
+  return `~/${parts.join('/')}`;
+}
+
+// Helper: Get node in VFS from normalized path
+function getNodeFromVFS(normalizedPath) {
+  if (normalizedPath === '~') return VIRTUAL_FS['~'];
+  const parts = normalizedPath.slice(2).split('/').filter(Boolean);
+  let curr = VIRTUAL_FS['~'];
+  for (const part of parts) {
+    if (!curr || curr.type !== 'dir' || !curr.children || !curr.children[part]) {
+      return null;
+    }
+    curr = curr.children[part];
+  }
+  return curr;
+}
 
 export default function TerminalModal({ onClose, onLaunch }) {
   const [history, setHistory] = useState([
     { type: 'sys', text: '╔══════════════════════════════════════════════════════════════════════╗' },
-    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.4.0-PRO]      ║' },
+    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.5.0-PRO]      ║' },
     { type: 'sys', text: '║     Host: USAR (GGSIPU) Neural Engine · Clearance: LEVEL 5 ROOT      ║' },
     { type: 'sys', text: '╚══════════════════════════════════════════════════════════════════════╝' },
     { type: 'info', text: "Type 'help' for full command suite, or try: 'neofetch', 'ai <query>', 'snake', 'hack', 'top'." },
@@ -185,6 +383,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const [inputVal, setInputVal] = useState('');
   const [cmdHistory, setCmdHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [draftInput, setDraftInput] = useState('');
   const [currentPath, setCurrentPath] = useState('~');
   const [currentTheme, setCurrentTheme] = useState('green');
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -200,7 +399,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
     }
   });
   const [snakeGameOver, setSnakeGameOver] = useState(false);
-  const [snakeSpeed, setSnakeSpeed] = useState('normal'); // normal: 120ms, fast: 80ms, insane: 50ms
+  const [snakeSpeed, setSnakeSpeed] = useState('normal'); // normal: 110ms, fast: 75ms, insane: 48ms
 
   const snakeCanvasRef = useRef(null);
   const snakeStateRef = useRef({
@@ -213,17 +412,24 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  const modalBodyRef = useRef(null);
   const snakeLoopRef = useRef(null);
 
+  // Focus input automatically on mount
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
   }, []);
 
-  useEffect(() => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+  // Auto scroll to bottom
+  const scrollToBottom = useCallback(() => {
+    if (modalBodyRef.current) {
+      modalBodyRef.current.scrollTop = modalBodyRef.current.scrollHeight;
     }
-  }, [history, snakeGameActive]);
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [history, snakeGameActive, scrollToBottom]);
 
   // ── ARCADE CANVAS SNAKE GAME ENGINE ──
   useEffect(() => {
@@ -237,7 +443,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const gridSize = 20; // 20x15 grid
+    const gridSize = 20;
     const cols = 20;
     const rows = 15;
     canvas.width = cols * gridSize;
@@ -283,7 +489,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           return next;
         });
 
-        // Spawn food particles
+        // Spawn food particle bursts
         for (let i = 0; i < 8; i++) {
           state.particles.push({
             x: head.x * gridSize + gridSize / 2,
@@ -399,20 +605,13 @@ export default function TerminalModal({ onClose, onLaunch }) {
     SoundFX.playClick();
   };
 
-  const getDirNode = useCallback((path) => {
-    if (path === '~') return VIRTUAL_FS['~'];
-    if (path === '~/projects') return VIRTUAL_FS['~'].children.projects;
-    if (path === '~/skills') return VIRTUAL_FS['~'].children.skills;
-    if (path === '~/secrets') return VIRTUAL_FS['~'].children.secrets;
-    return null;
-  }, []);
-
   const handleCommand = (raw) => {
     const trimmed = raw.trim();
     if (!trimmed) return;
 
     setCmdHistory(prev => [...prev, trimmed]);
     setHistoryIndex(-1);
+    setDraftInput('');
 
     const parts = trimmed.split(/\s+/);
     const cmd = parts[0].toLowerCase();
@@ -428,24 +627,24 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'info', text: '── SYSTEM TELEMETRY & PROFILE ──' },
           { type: 'out', text: '  neofetch          - Hardware specs, OS telemetry & Harshit\'s ASCII crest' },
           { type: 'out', text: '  bio / about       - Full personal bio, degree program & university background' },
-          { type: 'out', text: '  skills / stack    - Breakdown of AI/ML, full-stack, and DevOps proficiencies' },
-          { type: 'out', text: '  projects          - List all 8 flagship engineering universes with live links' },
+          { type: 'out', text: '  skills / stack    - Breakdown of AI/ML, full-stack, and systems proficiencies' },
+          { type: 'out', text: `  projects          - List all ${projectsData.length} flagship engineering universes with live links` },
           { type: 'out', text: '  contact / socials - Direct email, GitHub, LinkedIn, and Discord endpoints' },
           { type: 'out', text: '  top / ps          - Real-time running background daemon telemetry' },
           { type: 'out', text: '  weather           - Live telemetry weather radar for New Delhi' },
           { type: 'info', text: '── FILESYSTEM NAVIGATION ──' },
-          { type: 'out', text: '  ls [-l]           - List directory contents (files & folders)' },
-          { type: 'out', text: '  cd <dir>          - Change directory (e.g. cd projects, cd skills, cd ..)' },
+          { type: 'out', text: '  ls [-l] [<path>]  - List directory contents (e.g. ls, ls -l, ls projects)' },
+          { type: 'out', text: '  cd <dir>          - Change directory (e.g. cd projects, cd .., cd ~)' },
           { type: 'out', text: '  pwd               - Print current working directory path' },
-          { type: 'out', text: '  cat <file>        - Inspect formatted source code files' },
+          { type: 'out', text: '  cat <file>        - Inspect formatted source code files (e.g. cat bio.txt, cat 03_autovaluate_model.py)' },
           { type: 'out', text: '  tree              - Render complete hierarchical directory tree' },
           { type: 'info', text: '── AI ASSISTANT & LAUNCHER ──' },
           { type: 'out', text: '  ai / ask <query>  - Ask the built-in AI reasoning engine technical questions' },
-          { type: 'out', text: '  deploy <1-8|name> - Initiate deployment sequence for a target universe' },
+          { type: 'out', text: `  deploy <1-${projectsData.length}|name> - Initiate deployment sequence for a target universe` },
           { type: 'info', text: '── GAMES, CYBER FX & CUSTOMIZATION ──' },
           { type: 'out', text: '  snake             - Play the 60fps Arcade Canvas Snake Game' },
           { type: 'out', text: '  hack / pwn        - Cinematic Hollywood cyber penetration sequence' },
-          { type: 'out', text: '  matrix            - Digital green cascading code stream' },
+          { type: 'out', text: '  matrix            - Digital cascading neural code stream' },
           { type: 'out', text: '  cowsay <text>     - Classic ASCII cow wisdom speech' },
           { type: 'out', text: '  fortune           - Random developer & AI aphorism' },
           { type: 'out', text: '  theme <name>      - Switch palette (green, cyan, amber, purple, red)' },
@@ -466,11 +665,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
       ╚═╝  ╚═╝╚══════╝      Kernel: Linux 6.8.0-ai-custom-rt
                             Uptime: 4+ Years Continuous Engineering
                             Shell: zsh 5.9 (harshit-powerlevel10k)
-                            Theme: ${THEMES[currentTheme].label}
+                            Theme: ${THEMES[currentTheme]?.label || 'CLASSIC MATRIX GREEN'}
                             CPU: Intel i9-14900K @ 5.80GHz (24 Cores)
                             GPU: NVIDIA RTX 4090 24GB VRAM
-                            AI Stack: PyTorch, Scikit-Learn, FastAPI, LangGraph
-                            Primary Repos: AutoValuate AI, Resilient, Yggdrasil, ShieldBlock, Carbon Guardian AI, Support Ticket Dispatcher ML
+                            AI Stack: CatBoost, XGBoost, PyTorch, BERT, FastAPI, Three.js
+                            Primary Repos: AutoValuate AI, Resilient, Yggdrasil, Ticket Dispatcher ML
                             Email: codewithharshitsharma@gmail.com
                             GitHub: https://github.com/harshitthek
           `
@@ -506,7 +705,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'out', text: '[02/05] Injecting payload into sandbox firewall (Bypassing WAF & CORS)... [100% OK]' },
           { type: 'out', text: '[03/05] Exploiting zero-day in memory buffer [0x7ffeefbff490]... [OVERFLOW INJECTED]' },
           { type: 'ok', text: '[04/05] Cracking 4096-bit RSA master key... [FOUND: HARSHIT_AI_ACCESS_GRANTED]' },
-          { type: 'ok', text: '[05/05] 🚀 ACCESS GRANTED. LEVEL 5 ROOT CLEARANCE UNLOCKED. ALL 10 UNIVERSES LIVE.' }
+          { type: 'ok', text: `[05/05] 🚀 ACCESS GRANTED. LEVEL 5 ROOT CLEARANCE UNLOCKED. ALL ${projectsData.length} UNIVERSES LIVE.` }
         );
         break;
 
@@ -531,7 +730,7 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
         if (!arg || !THEMES[arg.toLowerCase()]) {
           newHistory.push({
             type: 'info',
-            text: `Usage: theme <name>. Available themes: ${Object.keys(THEMES).join(', ')}`
+            text: `Usage: theme <name>. Available palettes: ${Object.keys(THEMES).join(', ')}`
           });
         } else {
           const t = arg.toLowerCase();
@@ -542,19 +741,24 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
         break;
 
       case 'ls':
-      case 'dir':
-        const dirNode = getDirNode(currentPath);
-        if (!dirNode || dirNode.type !== 'dir') {
-          newHistory.push({ type: 'err', text: 'ls: cannot access directory' });
+      case 'dir': {
+        const isLong = parts.includes('-l');
+        const targetArg = parts.slice(1).find(p => !p.startsWith('-')) || '';
+        const targetPath = targetArg ? resolvePath(targetArg, currentPath) : currentPath;
+        const dirNode = getNodeFromVFS(targetPath);
+
+        if (!dirNode) {
+          newHistory.push({ type: 'err', text: `ls: cannot access '${targetArg || currentPath}': No such file or directory` });
+        } else if (dirNode.type === 'file') {
+          newHistory.push({ type: 'out', text: `📄 ${targetArg} (${dirNode.size || '1.0 KB'})` });
         } else {
-          const isLong = arg.includes('-l');
-          const entries = Object.keys(dirNode.children);
+          const entries = Object.keys(dirNode.children || {});
           if (isLong) {
             newHistory.push({ type: 'info', text: `total ${entries.length * 4}` });
             entries.forEach(e => {
               const item = dirNode.children[e];
               const perm = item.type === 'dir' ? 'drwxr-xr-x' : '-rw-r--r--';
-              const size = item.size || '4.0 KB';
+              const size = item.size || (item.type === 'dir' ? '4.0 KB' : '1.2 KB');
               newHistory.push({
                 type: item.type === 'dir' ? 'info' : 'out',
                 text: `${perm}  1 harshit harshit  ${size.padEnd(7)} Aug 16 00:00  ${e}${item.type === 'dir' ? '/' : ''}`
@@ -562,46 +766,50 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
             });
           } else {
             const list = entries.map(e => dirNode.children[e].type === 'dir' ? `📁 ${e}/` : `📄 ${e}`).join('   ');
-            newHistory.push({ type: 'out', text: list });
+            newHistory.push({ type: 'out', text: list || '(empty directory)' });
           }
         }
         break;
+      }
 
-      case 'cd':
+      case 'cd': {
         if (!arg || arg === '~' || arg === '/') {
           setCurrentPath('~');
-        } else if (arg === '..') {
-          setCurrentPath('~');
-        } else if (arg === 'projects' || arg === './projects' || arg === '~/projects') {
-          setCurrentPath('~/projects');
-        } else if (arg === 'skills' || arg === './skills' || arg === '~/skills') {
-          setCurrentPath('~/skills');
-        } else if (arg === 'secrets' || arg === './secrets' || arg === '~/secrets') {
-          setCurrentPath('~/secrets');
         } else {
-          newHistory.push({ type: 'err', text: `cd: no such file or directory: ${arg}` });
-        }
-        break;
-
-      case 'pwd':
-        newHistory.push({ type: 'out', text: `/home/harshit/${currentPath.replace('~/', '')}` });
-        break;
-
-      case 'cat':
-        if (!arg) {
-          newHistory.push({ type: 'err', text: "Usage: cat <filename> (e.g. 'cat bio.txt', 'cat contact.json', 'cat yggdrasil.py')" });
-        } else {
-          const dir = getDirNode(currentPath);
-          const target = dir?.children?.[arg];
-          if (target && target.type === 'file') {
-            newHistory.push({ type: 'code', text: target.content });
-          } else if (arg === 'bio.txt' || arg === 'contact.json') {
-            newHistory.push({ type: 'code', text: VIRTUAL_FS['~'].children[arg].content });
+          const targetPath = resolvePath(arg, currentPath);
+          const targetNode = getNodeFromVFS(targetPath);
+          if (!targetNode) {
+            newHistory.push({ type: 'err', text: `cd: no such file or directory: ${arg}` });
+          } else if (targetNode.type !== 'dir') {
+            newHistory.push({ type: 'err', text: `cd: not a directory: ${arg}` });
           } else {
-            newHistory.push({ type: 'err', text: `cat: ${arg}: No such file. Try 'ls' to see available files.` });
+            setCurrentPath(targetPath);
           }
         }
         break;
+      }
+
+      case 'pwd':
+        newHistory.push({ type: 'out', text: `/home/harshit/${currentPath.replace(/^~\/?/, '')}` });
+        break;
+
+      case 'cat': {
+        if (!arg) {
+          newHistory.push({ type: 'err', text: "Usage: cat <filename> (e.g. 'cat bio.txt', 'cat projects/01_yggdrasil.py', 'cat contact.json')" });
+        } else {
+          const targetPath = resolvePath(arg, currentPath);
+          const targetNode = getNodeFromVFS(targetPath);
+
+          if (!targetNode) {
+            newHistory.push({ type: 'err', text: `cat: ${arg}: No such file. Try 'ls' to see available files.` });
+          } else if (targetNode.type === 'dir') {
+            newHistory.push({ type: 'err', text: `cat: ${arg}: Is a directory. Use 'ls ${arg}' to list contents.` });
+          } else {
+            newHistory.push({ type: 'code', text: targetNode.content });
+          }
+        }
+        break;
+      }
 
       case 'tree':
         newHistory.push({
@@ -611,47 +819,59 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
 ├── contact.json
 ├── id_rsa.pub
 ├── projects/
-│   ├── autovaluate_model.py
-│   ├── resilient_agent.py
-│   ├── support_dispatcher_bert.py
-│   └── yggdrasil.py
+│   ├── 01_yggdrasil.py
+│   ├── 02_resilient_agent.py
+│   ├── 03_autovaluate_model.py
+│   ├── 04_support_dispatcher_bert.py
+│   ├── 05_shieldblock_mv3.js
+│   ├── 06_carbon_guardian.py
+│   ├── 07_letter_guess_engine.py
+│   ├── 08_browser_startpage.js
+│   ├── 09_cosmic_webgl.js
+│   └── 10_cyber_terminal.js
 ├── secrets/
 │   └── flag.txt
 └── skills/
     └── stack.json
 
-3 directories, 8 files`
+3 directories, 14 files`
         });
         break;
 
       case 'ai':
       case 'ask':
         if (!arg) {
-          newHistory.push({ type: 'err', text: "Usage: ai <query> (e.g. 'ai why hire Harshit?', 'ai explain AutoValuate AI', 'ai what is PhishShield?')" });
+          newHistory.push({ type: 'err', text: "Usage: ai <query> (e.g. 'ai why hire Harshit?', 'ai explain AutoValuate AI', 'ai what is Resilient?')" });
         } else {
           const lower = arg.toLowerCase();
-          let ans = "Harshit Sharma specializes in autonomous agent architecture, on-device LLMs, dual-engine ML regression stacking, Chrome Manifest V3 privacy engines, and production systems engineering. He studies B.Tech AI & ML at USAR (GGSIPU), New Delhi.";
+          let ans = "Harshit Sharma specializes in autonomous agent architecture, multi-turn LLM reasoning trees, dual-engine ML regression stacking, and production systems engineering. He studies B.Tech AI & ML at USAR (GGSIPU), New Delhi.";
 
           if (lower.includes('why hire') || lower.includes('hire') || lower.includes('recruit')) {
-            ans = "🌟 Why hire Harshit:\nHe bridges deep algorithmic machine learning (CatBoost/XGBoost, Random Forest, BERT Transformers, TensorFlow Recommenders) with elite production systems engineering (Docker, FastAPI, Kotlin Jetpack Compose, Three.js WebGL, Fastify). He builds real, production-tested architectures with full test matrices (102 tests in AutoValuate, 47 tests in Resilient).";
-          } else if (lower.includes('phish') || lower.includes('security') || lower.includes('threat') || lower.includes('entropy')) {
-            ans = "🛡️ PhishShield AI — Enterprise Threat Intelligence Engine:\nA real-time security analysis system combining Random Forest (250 estimators) & TF-IDF N-grams with a 15-dimensional heuristic feature matrix (raw IP URLs, high-risk TLDs, typosquatting on 50+ global brands, Shannon domain entropy). Achieves 94.29% 5-fold CV accuracy and 100% holdout test accuracy with explainable diagnostics.";
-          } else if (lower.includes('finvaria') || lower.includes('loan') || lower.includes('legal') || lower.includes('kotlin') || lower.includes('android')) {
-            ans = "📱 Finvaria — Youth Empowerment & On-Device AI Mentor:\nBuilt for Startup Hackathon 2.0 with 100% Kotlin & Jetpack Compose. Runs private, on-device local LLM inferences (RunAnywhere SDK / Llama.cpp ARM64) with dynamic knowledge base injection providing offline guidance on loans, legal rights, and education across 11 Indian languages.";
-          } else if (lower.includes('pageshield') || lower.includes('form') || lower.includes('groq') || lower.includes('stealth')) {
-            ans = "🥷 Page Shield — Privacy Defender & Stealth Form AI:\nDual-layer Manifest V3 Chrome Extension disguised as a glassmorphic ad-blocker popup with a secret triple-click configuration drawer. Houses an ultra-stealthy Google Forms solver powered by Groq Llama 3.3 70B & Gemini 2.0 Flash Lite with dual-speed human typing simulation and zero DevTools console logs.";
-          } else if (lower.includes('yggdrasil') || lower.includes('bot') || lower.includes('tree') || lower.includes('discord')) {
+            ans = "🌟 Why hire Harshit:\nHe bridges deep algorithmic foundations (CatBoost/XGBoost, BERT Transformers, TensorFlow Recommenders) with elite production systems engineering (Docker, FastAPI, Three.js WebGL, Fastify). He builds real, production-tested architectures with full test matrices (56 tests in AutoValuate, 47 tests in Resilient).";
+          } else if (lower.includes('yggdrasil') || lower.includes('world tree') || lower.includes('discord')) {
             ans = "🌲 Yggdrasil Platform:\nA self-hosted modular Discord platform combining a Fastify REST API with Discord.js inside a single Node.js runtime, secured with AES-256-GCM + HKDF cryptographic sessions.";
           } else if (lower.includes('resilient') || lower.includes('benchmark') || lower.includes('docker') || lower.includes('sandbox')) {
             ans = "🤖 Resilient AI Benchmark:\nAn automated testing harness for autonomous software engineering agents with isolated Docker git sandboxes and 47/47 passing Pytests.";
           } else if (lower.includes('bike') || lower.includes('car') || lower.includes('price') || lower.includes('autovaluate') || lower.includes('ml')) {
-            ans = "📊 AutoValuate AI — Dual-Engine Valuation Suite:\nA 97.4% R² (bikes) / 97.3% R² (cars) gradient-boosted stacking regressor (CatBoost + XGBoost) trained on 40,000+ real transactions. Features 5-year TCO lifecycle simulation, fleet batch appraisal for 50 vehicles, cryptographic SHA-256 valuation certificates, and 102 passing automated tests (58 Pytest + 44 Vitest). Live on Vercel at https://moto-value-ai.vercel.app/";
+            ans = "📊 AutoValuate AI — Dual-Engine Valuation Suite:\nA 97.4% R² gradient-boosted stacking regressor (CatBoost + XGBoost) trained on 40,000+ real transactions across 32k motorcycles and 8k passenger cars. Features 5-year TCO lifecycle simulation, fleet batch appraisal for 50 vehicles, cryptographic SHA-256 valuation certificates, and 56 passing automated tests. Live on Vercel at https://moto-value-ai.vercel.app/";
           } else if (lower.includes('ticket') || lower.includes('support') || lower.includes('bert') || lower.includes('dispatcher')) {
             ans = "📩 Customer Support Ticket Dispatcher ML:\nA fine-tuned BERT transformer NLP model for automated departmental email classification and real-time urgency scoring with sub-120ms inference latency.";
+          } else if (lower.includes('shield') || lower.includes('block') || lower.includes('mv3') || lower.includes('extension')) {
+            ans = "🛡️ ShieldBlock MV3 Blocker:\nHigh-performance Manifest V3 ad and tracker blocker using native declarativeNetRequest (DNR) with 16x audio ad bypass and real-time network streaming debug logger.";
+          } else if (lower.includes('carbon') || lower.includes('green') || lower.includes('esg')) {
+            ans = "🌱 Carbon Guardian AI:\nEnterprise ESG sustainability platform powered by TensorFlow Recommenders and dynamic gamification economy to optimize corporate carbon footprints.";
+          } else if (lower.includes('letter') || lower.includes('guess') || lower.includes('constraint')) {
+            ans = "🔤 LetterGuess Deterministic Solver:\nOffline Python / SQLite candidate generation and search-space reduction engine with conservative regex constraint analysis.";
+          } else if (lower.includes('startpage') || lower.includes('browser') || lower.includes('theme')) {
+            ans = "🖥️ Custom Browser Startpage v2.0:\nPrivacy launchpad with 13 premium themes, CSP hardening, and live weather radar telemetry. Live on Netlify at https://dailycosmos.netlify.app/";
+          } else if (lower.includes('cosmic') || lower.includes('3d') || lower.includes('webgl') || lower.includes('three')) {
+            ans = "🌌 3D Cosmic WebGL Engine:\nGPU-accelerated Three.js r128 visualizer featuring 6-in-1 physics modes (Galaxy Vortex, Solar System, Supernova, Retrowave Sun) running at 60 FPS.";
           } else if (lower.includes('college') || lower.includes('degree') || lower.includes('usar') || lower.includes('ggsipu') || lower.includes('university')) {
             ans = "🎓 Harshit is pursuing his B.Tech in Artificial Intelligence & Machine Learning at the University School of Automation & Robotics (USAR, GGSIPU), New Delhi.";
           } else if (lower.includes('contact') || lower.includes('email') || lower.includes('reach')) {
             ans = "📬 Reach Harshit:\n- Email: codewithharshitsharma@gmail.com\n- GitHub: https://github.com/harshitthek\n- LinkedIn: https://www.linkedin.com/in/devharshitsharma\n- Discord: harshit0";
+          } else {
+            ans = `Harshit Sharma is an AI Systems Engineer specializing in Machine Learning, Deep Learning (BERT), LLM Agent sandboxes, and full-stack systems. He built 10 flagship universes showcased in this portfolio.`;
           }
 
           newHistory.push({ type: 'ai', text: `🧠 AI REASONING SYNTHESIS:\n${ans}` });
@@ -663,7 +883,7 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
           { type: 'sys', text: `🚀 HARSHIT SHARMA'S ${projectsData.length} FLAGSHIP UNIVERSES:` },
           ...projectsData.map((p, i) => ({
             type: 'out',
-            text: `  [${i + 1}] ${p.title.padEnd(30)} // ${p.categoryLabel} (Run: 'deploy ${i + 1}')\n      Source: ${p.githubUrl || p.url}`
+            text: `  [${i + 1}] ${p.title.padEnd(32)} // ${p.categoryLabel} (Run: 'deploy ${i + 1}')\n      Source: ${p.githubUrl || p.url}`
           }))
         );
         break;
@@ -689,7 +909,7 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
               if (onLaunch) onLaunch(target.title, target.demoUrl || target.url);
             }, 750);
           } else {
-            newHistory.push({ type: 'err', text: `Portal '${arg}' not found. Type 'projects' to list all valid portals.` });
+            newHistory.push({ type: 'err', text: `Portal '${arg}' not found. Type 'projects' to list all ${projectsData.length} portals.` });
           }
         }
         break;
@@ -698,10 +918,10 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
       case 'stack':
         newHistory.push(
           { type: 'sys', text: "🛠️ HARSHIT'S TECHNICAL ARSENAL:" },
-          { type: 'out', text: '  Languages: Python 3.12, Kotlin, JavaScript (ES6+), TypeScript, C/C++, Bash, SQL' },
-          { type: 'out', text: '  AI & ML: CatBoost, XGBoost, Scikit-Learn, PyTorch, BERT, On-Device Llama.cpp, FastAPI' },
-          { type: 'out', text: '  Frontend & Mobile: React 19/18, Jetpack Compose, Three.js / Canvas 2D, Tailwind CSS' },
-          { type: 'out', text: '  DevOps & Systems: Docker, Manifest V3, PostgreSQL, Async SQLite, Linux/antiX, Git Actions' }
+          { type: 'out', text: '  Languages: Python 3.12, JavaScript (ES6+), TypeScript, C/C++, Bash, SQL' },
+          { type: 'out', text: '  AI & ML: CatBoost, XGBoost, Scikit-Learn, PyTorch, BERT Transformers, TensorFlow, FastAPI' },
+          { type: 'out', text: '  Frontend & 3D: React 19 / 18, Three.js / WebGL, HTML5 Canvas 2D, Vite, Tailwind CSS' },
+          { type: 'out', text: '  DevOps & Systems: Docker, Manifest V3, PostgreSQL, Async SQLite, antiX Linux, Git CI/CD' }
         );
         break;
 
@@ -724,7 +944,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         });
         break;
 
-      case 'cowsay':
+      case 'cowsay': {
         const msg = arg || "Harshit Sharma builds resilient autonomous AI systems!";
         const bar = '-'.repeat(msg.length + 2);
         newHistory.push({
@@ -739,11 +959,13 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                 ||     ||`
         });
         break;
+      }
 
-      case 'fortune':
+      case 'fortune': {
         const randomFortune = FORTUNES[Math.floor(Math.random() * FORTUNES.length)];
         newHistory.push({ type: 'info', text: `🔮 ${randomFortune}` });
         break;
+      }
 
       case 'matrix':
         newHistory.push(
@@ -789,7 +1011,10 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         e.preventDefault();
         e.stopPropagation();
         setSnakeGameActive(false);
-        setHistory(h => [...h, { type: 'info', text: `🎮 Snake session exited. Score: ${snakeScore} PTS` }]);
+        setHistory(h => [...h, { type: 'info', text: `🎮 Snake session exited. Final Score: ${snakeScore} PTS` }]);
+      } else if (snakeGameOver && (e.key === 'r' || e.key === 'R' || e.key === 'Enter')) {
+        e.preventDefault();
+        startSnakeGame();
       }
       return;
     }
@@ -799,6 +1024,23 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
       e.preventDefault();
       e.stopPropagation();
       setHistory(prev => [...prev, { type: 'cmd', text: `harshit@usar-delhi ${currentPath} % ${inputVal}^C` }]);
+      setInputVal('');
+      setHistoryIndex(-1);
+      return;
+    }
+
+    // Handle Ctrl+L to clear screen (standard UNIX shortcut)
+    if (e.ctrlKey && (e.key === 'l' || e.key === 'L')) {
+      e.preventDefault();
+      e.stopPropagation();
+      setHistory([]);
+      return;
+    }
+
+    // Handle Ctrl+U to clear current line
+    if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
+      e.preventDefault();
+      e.stopPropagation();
       setInputVal('');
       return;
     }
@@ -810,18 +1052,56 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
       setInputVal('');
     } else if (e.key === 'Tab') {
       e.preventDefault();
-      const curr = inputVal.trim().toLowerCase();
+      const curr = inputVal.trim();
       if (!curr) return;
+
       const allCommands = [
-        'help', 'neofetch', 'bio', 'about', 'ai', 'ask', 'snake', 'hack', 'top', 'theme',
-        'ls', 'cd', 'pwd', 'cat', 'tree', 'projects', 'skills', 'deploy', 'contact',
-        'socials', 'weather', 'cowsay', 'fortune', 'matrix', 'clear', 'exit'
+        'help', 'neofetch', 'bio', 'about', 'skills', 'stack', 'projects', 'contact',
+        'socials', 'top', 'ps', 'weather', 'ls', 'cd', 'pwd', 'cat', 'tree', 'ai',
+        'ask', 'deploy', 'launch', 'snake', 'hack', 'pwn', 'matrix', 'cowsay',
+        'fortune', 'theme', 'clear', 'exit'
       ];
-      const match = allCommands.find(c => c.startsWith(curr));
-      if (match) setInputVal(match);
+
+      const parts = curr.split(/\s+/);
+      
+      // If single word, complete command name
+      if (parts.length === 1) {
+        const match = allCommands.find(c => c.startsWith(parts[0].toLowerCase()));
+        if (match) setInputVal(match);
+      } 
+      // If typing `cat <filename>`, complete filenames in current directory
+      else if (parts[0].toLowerCase() === 'cat') {
+        const filePrefix = parts[1].toLowerCase();
+        const dirNode = getNodeFromVFS(currentPath);
+        if (dirNode && dirNode.children) {
+          const files = Object.keys(dirNode.children);
+          const matchFile = files.find(f => f.toLowerCase().startsWith(filePrefix));
+          if (matchFile) setInputVal(`cat ${matchFile}`);
+        }
+      }
+      // If typing `cd <dirname>`, complete subdirectories
+      else if (parts[0].toLowerCase() === 'cd') {
+        const dirPrefix = parts[1].toLowerCase();
+        const dirNode = getNodeFromVFS(currentPath);
+        if (dirNode && dirNode.children) {
+          const dirs = Object.keys(dirNode.children).filter(k => dirNode.children[k].type === 'dir');
+          const matchDir = dirs.find(d => d.toLowerCase().startsWith(dirPrefix));
+          if (matchDir) setInputVal(`cd ${matchDir}`);
+        }
+      }
+      // If typing `theme <name>`, complete theme
+      else if (parts[0].toLowerCase() === 'theme') {
+        const themePrefix = parts[1].toLowerCase();
+        const themeKeys = Object.keys(THEMES);
+        const matchTheme = themeKeys.find(t => t.startsWith(themePrefix));
+        if (matchTheme) setInputVal(`theme ${matchTheme}`);
+      }
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (cmdHistory.length > 0) {
+        if (historyIndex === -1) {
+          setDraftInput(inputVal);
+        }
         const nextIdx = historyIndex + 1 < cmdHistory.length ? historyIndex + 1 : historyIndex;
         setHistoryIndex(nextIdx);
         setInputVal(cmdHistory[cmdHistory.length - 1 - nextIdx] || '');
@@ -832,9 +1112,9 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         const nextIdx = historyIndex - 1;
         setHistoryIndex(nextIdx);
         setInputVal(cmdHistory[cmdHistory.length - 1 - nextIdx] || '');
-      } else {
+      } else if (historyIndex === 0) {
         setHistoryIndex(-1);
-        setInputVal('');
+        setInputVal(draftInput);
       }
     }
   };
@@ -865,7 +1145,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         <div className="modal-header terminal-hud-header">
           <div className="terminal-dots">
             <span className="t-dot red" onClick={onClose} title="Close Terminal"></span>
-            <span className="t-dot yellow" onClick={() => setHistory([])} title="Clear Terminal"></span>
+            <span className="t-dot yellow" onClick={() => setHistory([])} title="Clear Terminal (Ctrl+L)"></span>
             <span className="t-dot green" onClick={() => setIsFullScreen(!isFullScreen)} title="Toggle Fullscreen"></span>
           </div>
 
@@ -884,6 +1164,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
             <button
               className="modal-close-btn"
               onClick={() => { SoundFX.playClick(); onClose(); }}
+              aria-label="Close modal"
             >
               ✕
             </button>
@@ -891,6 +1172,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         </div>
 
         <div
+          ref={modalBodyRef}
           className="modal-body terminal-modal-body custom-scroll"
           onClick={() => inputRef.current?.focus()}
         >
@@ -898,6 +1180,8 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
             <div key={idx} className={`term-line line-${line.type}`}>
               {line.type === 'neofetch' || line.type === 'code' ? (
                 <pre style={{ color: activeThemeObj.primary }}>{line.text}</pre>
+              ) : line.type === 'sys' || line.type === 'ok' ? (
+                <span style={{ color: activeThemeObj.primary }}>{line.text}</span>
               ) : (
                 <span>{line.text}</span>
               )}
@@ -906,10 +1190,10 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
 
           {/* Arcade Canvas Snake Game */}
           {snakeGameActive && (
-            <div className="arcade-snake-container">
+            <div className="arcade-snake-container" style={{ borderColor: activeThemeObj.primary }}>
               <div className="snake-arcade-hud">
                 <div className="snake-stats-left">
-                  <span className="snake-badge">🐍 ARCADE CANVAS ENGINE</span>
+                  <span className="snake-badge" style={{ color: activeThemeObj.primary }}>🐍 ARCADE CANVAS ENGINE</span>
                   <span className="snake-score-display">SCORE: <strong>{snakeScore}</strong></span>
                   <span className="snake-hi-display">HIGH: <strong>{snakeHighScore}</strong></span>
                 </div>
@@ -948,13 +1232,13 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                 <div className="snake-gameover-overlay">
                   <span className="over-title">💀 GAME OVER // FINAL SCORE: {snakeScore} PTS</span>
                   <div className="over-buttons">
-                    <button className="btn-snake-act retry" onClick={startSnakeGame}>↺ PLAY AGAIN</button>
-                    <button className="btn-snake-act quit" onClick={() => setSnakeGameActive(false)}>QUIT TO SHELL</button>
+                    <button className="btn-snake-act retry" onClick={startSnakeGame}>↺ PLAY AGAIN (R / ENTER)</button>
+                    <button className="btn-snake-act quit" onClick={() => setSnakeGameActive(false)}>QUIT TO SHELL (Q / ESC)</button>
                   </div>
                 </div>
               ) : (
                 <div className="snake-game-footer-bar">
-                  <span>Controls: Arrow Keys or W / A / S / D</span>
+                  <span>Controls: Arrow Keys or W / A / S / D · R to Restart</span>
                   <button className="btn-snake-quit-inline" onClick={() => setSnakeGameActive(false)}>QUIT GAME (ESC)</button>
                 </div>
               )}
@@ -1000,7 +1284,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         </div>
 
         <div className="modal-footer terminal-footer-tips">
-          <span>TIPS: Press <kbd>Tab</kbd> to autocomplete · <kbd>Ctrl+C</kbd> to cancel line · <kbd>↑</kbd>/<kbd>↓</kbd> for history</span>
+          <span>TIPS: Press <kbd>Tab</kbd> to autocomplete · <kbd>Ctrl+C</kbd> cancel · <kbd>Ctrl+L</kbd> clear · <kbd>↑</kbd>/<kbd>↓</kbd> history</span>
         </div>
       </div>
     </div>
