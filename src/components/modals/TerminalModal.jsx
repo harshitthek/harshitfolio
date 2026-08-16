@@ -356,7 +356,6 @@ function resolvePath(targetPath, currentPath) {
   return `~/${parts.join('/')}`;
 }
 
-// Helper: Get node in VFS from normalized path
 function getNodeFromVFS(normalizedPath) {
   if (normalizedPath === '~') return VIRTUAL_FS['~'];
   const parts = normalizedPath.slice(2).split('/').filter(Boolean);
@@ -373,7 +372,7 @@ function getNodeFromVFS(normalizedPath) {
 export default function TerminalModal({ onClose, onLaunch }) {
   const [history, setHistory] = useState([
     { type: 'sys', text: '╔══════════════════════════════════════════════════════════════════════╗' },
-    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.8.0-PRO]      ║' },
+    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.9.0-PRO]      ║' },
     { type: 'sys', text: '║     Host: USAR (GGSIPU) Neural Engine · Clearance: LEVEL 5 ROOT      ║' },
     { type: 'sys', text: '╚══════════════════════════════════════════════════════════════════════╝' },
     { type: 'info', text: "Type 'help' for full command suite, or try: 'neofetch', 'ai <query>', 'snake', 'hack', 'top'." },
@@ -388,7 +387,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const [currentTheme, setCurrentTheme] = useState('green');
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  // ── 60FPS ARCADE CANVAS SNAKE GAME STATE ──
+  // ── 60FPS ARCADE CANVAS SNAKE STATE ──
   const [snakeGameActive, setSnakeGameActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [snakeScore, setSnakeScore] = useState(0);
@@ -397,7 +396,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const [combo, setCombo] = useState(1);
   const [maxCombo, setMaxCombo] = useState(1);
   const [applesEaten, setApplesEaten] = useState(0);
-  const [activePowerUp, setActivePowerUp] = useState(null);
+  const [activePowerUp, setActivePowerUp] = useState(null); // 'SHIELD' | 'SLOW' | '2X' | 'MAGNET'
   const [snakeGameOver, setSnakeGameOver] = useState(false);
   const [isNewHighScore, setIsNewHighScore] = useState(false);
 
@@ -424,7 +423,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const animFrameRef = useRef(null);
   const lastTickTimeRef = useRef(0);
 
-  // Mutable Game State Ref for zero-overhead 60fps execution
+  // Mutable Game State Ref for zero-lag 60fps execution
   const snakeStateRef = useRef({
     snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }, { x: 4, y: 7 }],
     food: { x: 18, y: 7 },
@@ -439,8 +438,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
     isDying: false,
     deathFrames: 0,
     lastEatTime: 0,
-    scanLineY: 0,
     hasShield: false,
+    hasMagnet: false,
     score: 0,
     combo: 1,
     maxCombo: 1,
@@ -465,7 +464,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
     scrollToBottom();
   }, [history, snakeGameActive, scrollToBottom]);
 
-  // Double-turn buffer queue
+  // Turn buffer queue
   const changeSnakeDirection = useCallback((dirKey) => {
     const state = snakeStateRef.current;
     if (state.isDying) return;
@@ -530,6 +529,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
       if (activePowerUp && activePowerUp.expiresAt <= now) {
         setActivePowerUp(null);
         state.hasShield = false;
+        state.hasMagnet = false;
       }
 
       if (state.lastEatTime > 0 && now - state.lastEatTime > 3500) {
@@ -543,6 +543,18 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
       if (state.powerUpItem && state.powerUpItem.expiresAt <= now) {
         state.powerUpItem = null;
+      }
+
+      // Magnetic Attraction Effect (Pulls nearby orbs towards head)
+      if (state.hasMagnet) {
+        const headCur = state.snake[0];
+        const distFood = Math.hypot(state.food.x - headCur.x, state.food.y - headCur.y);
+        if (distFood > 0 && distFood <= 4 && Math.random() > 0.4) {
+          if (state.food.x < headCur.x) state.food.x++;
+          else if (state.food.x > headCur.x) state.food.x--;
+          if (state.food.y < headCur.y) state.food.y++;
+          else if (state.food.y > headCur.y) state.food.y--;
+        }
       }
 
       const head = {
@@ -564,7 +576,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
       const hitSelf = state.snake.some(seg => seg.x === head.x && seg.y === head.y);
 
-      // 💥 TRIGGER CYBERPUNK VOXEL SHATTER DEATH
+      // 💥 TRIGGER CYBERPUNK VOXEL DISINTEGRATION
       if (hitWall || hitSelf) {
         if (state.hasShield) {
           state.hasShield = false;
@@ -637,6 +649,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         setSnakeScore(state.score);
         setApplesEaten(state.apples);
 
+        // Spawn Golden Glitch bit every 4 orbs
         if (state.apples % 4 === 0 && !state.goldenFood) {
           state.goldenFood = {
             ...getRandomEmptyCell(),
@@ -652,8 +665,9 @@ export default function TerminalModal({ onClose, onLaunch }) {
           });
         }
 
+        // Spawn Power-Up every 6 orbs
         if (state.apples % 6 === 0 && !state.powerUpItem) {
-          const types = ['SHIELD', 'SLOW', '2X'];
+          const types = ['SHIELD', 'SLOW', '2X', 'MAGNET'];
           const chosenType = types[Math.floor(Math.random() * types.length)];
           state.powerUpItem = {
             ...getRandomEmptyCell(),
@@ -731,6 +745,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         const pType = state.powerUpItem.type;
         setActivePowerUp({ type: pType, expiresAt: now + 8000 });
         if (pType === 'SHIELD') state.hasShield = true;
+        if (pType === 'MAGNET') state.hasMagnet = true;
         state.floatingTexts.push({
           x: head.x * gridSize + gridSize / 2,
           y: head.y * gridSize,
@@ -765,21 +780,12 @@ export default function TerminalModal({ onClose, onLaunch }) {
         }
       }
 
-      // ── CANVAS DRAWING ──
+      // ── CLEAN HIGH-CONTRAST CANVAS DRAWING (NO PERIODIC SCANLINE) ──
       ctx.fillStyle = '#060606';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Radar Scanline
-      state.scanLineY = (state.scanLineY + 2) % canvas.height;
-      const gradScan = ctx.createLinearGradient(0, state.scanLineY - 12, 0, state.scanLineY + 12);
-      gradScan.addColorStop(0, 'rgba(0, 255, 136, 0)');
-      gradScan.addColorStop(0.5, 'rgba(0, 255, 136, 0.07)');
-      gradScan.addColorStop(1, 'rgba(0, 255, 136, 0)');
-      ctx.fillStyle = gradScan;
-      ctx.fillRect(0, state.scanLineY - 12, canvas.width, 24);
-
-      // Background Grid
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
+      // Clean Cyber Grid
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
       ctx.lineWidth = 1;
       for (let x = 0; x <= cols; x++) {
         ctx.beginPath();
@@ -794,7 +800,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.stroke();
       }
 
-      // Lethal Wall Perimeter
+      // Hardcore Lethal Wall Perimeter
       if (snakeMode === 'walls') {
         ctx.strokeStyle = '#f87171';
         ctx.lineWidth = 2;
@@ -804,108 +810,213 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.shadowBlur = 0;
       }
 
-      // Regular Food Orb
-      const foodPulse = Math.sin(now / 150) * 1.5;
-      ctx.fillStyle = '#38bdf8';
-      ctx.shadowColor = '#38bdf8';
+      // 🍎 REDESIGNED HOLOGRAPHIC QUANTUM FRUIT / APPLE
+      const fx = state.food.x * gridSize + gridSize / 2;
+      const fy = state.food.y * gridSize + gridSize / 2;
+      const applePulse = Math.sin(now / 180) * 1.8;
+      const rotAngle = (now / 600) % (Math.PI * 2);
+
+      // Outer Radial Glow
+      const foodGrad = ctx.createRadialGradient(fx, fy, 2, fx, fy, gridSize / 1.8 + applePulse);
+      foodGrad.addColorStop(0, '#38bdf8');
+      foodGrad.addColorStop(0.6, '#00ff88');
+      foodGrad.addColorStop(1, 'rgba(0, 255, 136, 0)');
+      ctx.fillStyle = foodGrad;
+      ctx.beginPath();
+      ctx.arc(fx, fy, gridSize / 1.5 + applePulse, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Core Apple Body (Rounded with soft shine)
+      ctx.fillStyle = '#00ff88';
+      ctx.shadowColor = '#00ff88';
       ctx.shadowBlur = 12;
       ctx.beginPath();
-      ctx.arc(
-        state.food.x * gridSize + gridSize / 2,
-        state.food.y * gridSize + gridSize / 2,
-        gridSize / 2.8 + foodPulse * 0.4,
-        0,
-        Math.PI * 2
-      );
+      ctx.arc(fx, fy, gridSize / 3 + applePulse * 0.3, 0, Math.PI * 2);
       ctx.fill();
+
+      // Stem & Holographic Leaf
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.arc(fx + 2, fy - 6, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Orbiting Micro-Data Nodes
+      for (let o = 0; o < 3; o++) {
+        const orbitAngle = rotAngle + (o * Math.PI * 2 / 3);
+        const ox = fx + Math.cos(orbitAngle) * (gridSize / 2 + 1);
+        const oy = fy + Math.sin(orbitAngle) * (gridSize / 2 + 1);
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(ox, oy, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
       ctx.shadowBlur = 0;
 
-      // Golden Glitch Star
+      // 🌟 REDESIGNED GOLDEN GLITCH (8-Point Shimmering Star)
       if (state.goldenFood) {
         const remainingMs = Math.max(0, state.goldenFood.expiresAt - now);
         const goldRatio = remainingMs / 8000;
         const gx = state.goldenFood.x * gridSize + gridSize / 2;
         const gy = state.goldenFood.y * gridSize + gridSize / 2;
+        const starRot = (now / 350) % (Math.PI * 2);
+
+        ctx.save();
+        ctx.translate(gx, gy);
+        ctx.rotate(starRot);
 
         ctx.fillStyle = '#fbbf24';
         ctx.shadowColor = '#fbbf24';
-        ctx.shadowBlur = 14;
-        ctx.beginPath();
-        ctx.arc(gx, gy, gridSize / 2.5, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.shadowBlur = 16;
 
+        // Draw 8-point Cyber Diamond Star
+        ctx.beginPath();
+        for (let p = 0; p < 8; p++) {
+          const a = p * Math.PI / 4;
+          const r = p % 2 === 0 ? gridSize / 2.2 : gridSize / 4.5;
+          const px = Math.cos(a) * r;
+          const py = Math.sin(a) * r;
+          if (p === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+        // Countdown Timer Ring
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(gx, gy, gridSize / 2 + 1, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * goldRatio));
+        ctx.arc(gx, gy, gridSize / 1.8, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * goldRatio));
         ctx.stroke();
         ctx.shadowBlur = 0;
       }
 
-      // Power-Up Crystal
+      // 🔮 REDESIGNED POWER-UP CAPSULE
       if (state.powerUpItem) {
         const px = state.powerUpItem.x * gridSize + gridSize / 2;
         const py = state.powerUpItem.y * gridSize + gridSize / 2;
-        ctx.fillStyle = '#c084fc';
-        ctx.shadowColor = '#c084fc';
-        ctx.shadowBlur = 14;
-        ctx.fillRect(px - gridSize / 3, py - gridSize / 3, (gridSize / 3) * 2, (gridSize / 3) * 2);
+        const pType = state.powerUpItem.type;
+        const iconColor = pType === 'SHIELD' ? '#38bdf8' : pType === '2X' ? '#fbbf24' : pType === 'MAGNET' ? '#f43f5e' : '#c084fc';
+
+        ctx.fillStyle = iconColor;
+        ctx.shadowColor = iconColor;
+        ctx.shadowBlur = 15;
+        ctx.beginPath();
+        ctx.roundRect(px - 7, py - 7, 14, 14, 4);
+        ctx.fill();
+
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 9px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const glyph = pType === 'SHIELD' ? 'S' : pType === '2X' ? '2X' : pType === 'MAGNET' ? 'M' : 'T';
+        ctx.fillText(glyph, px, py);
         ctx.shadowBlur = 0;
       }
 
-      // Draw Snake (if alive)
+      // 🐍 REDESIGNED CYBER-VIPER SNAKE
       if (!state.isDying) {
+        const len = state.snake.length;
+
+        // Draw Interconnecting Joint Lines between segments for unified body feel
+        ctx.lineWidth = gridSize - 6;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        for (let i = 0; i < len - 1; i++) {
+          const s1 = state.snake[i];
+          const s2 = state.snake[i + 1];
+
+          // Skip drawing joint wrap connections
+          if (Math.abs(s1.x - s2.x) > 1 || Math.abs(s1.y - s2.y) > 1) continue;
+
+          const t = i / Math.max(1, len);
+          const r = Math.round(0 + t * 40);
+          const g = Math.round(255 - t * 70);
+          const b = Math.round(136 + t * 110);
+          ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+
+          ctx.beginPath();
+          ctx.moveTo(s1.x * gridSize + gridSize / 2, s1.y * gridSize + gridSize / 2);
+          ctx.lineTo(s2.x * gridSize + gridSize / 2, s2.y * gridSize + gridSize / 2);
+          ctx.stroke();
+        }
+
+        // Draw Individual Segment Nodes
         state.snake.forEach((seg, idx) => {
           const isHead = idx === 0;
-          const t = idx / Math.max(1, state.snake.length);
+          const isTail = idx === len - 1;
+          const t = idx / Math.max(1, len);
+          const cx = seg.x * gridSize + gridSize / 2;
+          const cy = seg.y * gridSize + gridSize / 2;
 
           if (isHead) {
-            ctx.fillStyle = '#00ff88';
-            ctx.shadowColor = state.hasShield ? '#38bdf8' : '#00ff88';
-            ctx.shadowBlur = state.hasShield ? 18 : 12;
-
+            // Shield Aura Ring
             if (state.hasShield) {
               ctx.strokeStyle = '#38bdf8';
               ctx.lineWidth = 2;
-              ctx.strokeRect(seg.x * gridSize - 2, seg.y * gridSize - 2, gridSize + 4, gridSize + 4);
+              ctx.shadowColor = '#38bdf8';
+              ctx.shadowBlur = 15;
+              ctx.beginPath();
+              ctx.arc(cx, cy, gridSize / 1.4, 0, Math.PI * 2);
+              ctx.stroke();
+              ctx.shadowBlur = 0;
             }
 
+            // Head Helm (Sleek rounded shape)
+            ctx.fillStyle = '#00ff88';
+            ctx.shadowColor = '#00ff88';
+            ctx.shadowBlur = 14;
             ctx.beginPath();
-            ctx.roundRect(seg.x * gridSize + 1, seg.y * gridSize + 1, gridSize - 2, gridSize - 2, 4);
+            ctx.roundRect(seg.x * gridSize + 1.5, seg.y * gridSize + 1.5, gridSize - 3, gridSize - 3, 5);
             ctx.fill();
 
-            // Eyes
+            // Directional Cyber Visor / Robot Eyes
             ctx.fillStyle = '#050505';
-            const ex = seg.x * gridSize;
-            const ey = seg.y * gridSize;
-            let e1 = { x: ex + 5, y: ey + 5 }, e2 = { x: ex + 15, y: ey + 5 };
-            if (state.dir.x === 1) { e1 = { x: ex + 13, y: ey + 5 }; e2 = { x: ex + 13, y: ey + 15 }; }
-            else if (state.dir.x === -1) { e1 = { x: ex + 5, y: ey + 5 }; e2 = { x: ex + 5, y: ey + 15 }; }
-            else if (state.dir.y === 1) { e1 = { x: ex + 5, y: ey + 13 }; e2 = { x: ex + 15, y: ey + 13 }; }
+            let e1 = { x: cx - 4, y: cy - 4 }, e2 = { x: cx + 4, y: cy - 4 };
+            if (state.dir.x === 1) { e1 = { x: cx + 3, y: cy - 4 }; e2 = { x: cx + 3, y: cy + 4 }; }
+            else if (state.dir.x === -1) { e1 = { x: cx - 3, y: cy - 4 }; e2 = { x: cx - 3, y: cy + 4 }; }
+            else if (state.dir.y === 1) { e1 = { x: cx - 4, y: cy + 3 }; e2 = { x: cx + 4, y: cy + 3 }; }
+            else if (state.dir.y === -1) { e1 = { x: cx - 4, y: cy - 3 }; e2 = { x: cx + 4, y: cy - 3 }; }
 
             ctx.beginPath();
-            ctx.arc(e1.x, e1.y, 2, 0, Math.PI * 2);
-            ctx.arc(e2.x, e2.y, 2, 0, Math.PI * 2);
+            ctx.arc(e1.x, e1.y, 2.2, 0, Math.PI * 2);
+            ctx.arc(e2.x, e2.y, 2.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Pupil Glimmer
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(e1.x, e1.y, 1.0, 0, Math.PI * 2);
+            ctx.arc(e2.x, e2.y, 1.0, 0, Math.PI * 2);
             ctx.fill();
 
           } else {
-            const r = Math.round(0 + t * 14);
-            const g = Math.round(255 - t * 90);
-            const b = Math.round(136 + t * 95);
+            // Body Node Chromatic Luminescence Gradient
+            const r = Math.round(0 + t * 40);
+            const g = Math.round(255 - t * 70);
+            const b = Math.round(136 + t * 110);
             ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+
+            const segRadius = isTail ? gridSize / 4 : gridSize / 3;
             ctx.beginPath();
-            ctx.roundRect(seg.x * gridSize + 2, seg.y * gridSize + 2, gridSize - 4, gridSize - 4, 3);
+            ctx.arc(cx, cy, segRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Inner Core Node
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.beginPath();
+            ctx.arc(cx, cy, 1.5, 0, Math.PI * 2);
             ctx.fill();
           }
         });
       }
 
-      // 💥 RENDER DEATH ANIMATION
+      // 💥 RENDER VOXEL DISINTEGRATION DEATH ANIMATION
       if (state.isDying) {
         state.deathFrames++;
 
         if (state.shockwave && state.shockwave.alpha > 0) {
-          ctx.strokeStyle = `rgba(255, 255, 255, ${state.shockwave.alpha})`;
+          ctx.strokeStyle = `rgba(0, 255, 136, ${state.shockwave.alpha})`;
           ctx.lineWidth = 2;
           ctx.beginPath();
           ctx.arc(state.shockwave.x, state.shockwave.y, state.shockwave.radius, 0, Math.PI * 2);
@@ -1092,8 +1203,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
       isDying: false,
       deathFrames: 0,
       lastEatTime: 0,
-      scanLineY: 0,
       hasShield: false,
+      hasMagnet: false,
       score: 0,
       combo: 1,
       maxCombo: 1,
@@ -1148,7 +1259,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'out', text: '  ai / ask <query>  - Ask the built-in AI reasoning engine technical questions' },
           { type: 'out', text: `  deploy <1-${projectsData.length}|name> - Initiate deployment sequence for a target universe` },
           { type: 'info', text: '── GAMES, CYBER FX & CUSTOMIZATION ──' },
-          { type: 'out', text: '  snake             - Full-Terminal 60fps Cyberpunk Arcade Snake Engine' },
+          { type: 'out', text: '  snake             - Full-Terminal 60fps Cyber-Serpent Arcade Engine' },
           { type: 'out', text: '  hack / pwn        - Cinematic Hollywood cyber penetration sequence' },
           { type: 'out', text: '  matrix            - Digital cascading neural code stream' },
           { type: 'out', text: '  cowsay <text>     - Classic ASCII cow wisdom speech' },
@@ -1620,7 +1731,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
           </div>
 
           <div className="terminal-title-text" style={{ color: activeThemeObj.primary }}>
-            {snakeGameActive ? `ARCADE ENGINE 60FPS · ${activeThemeObj.label}` : `harshit@usar-delhi: ${currentPath} (zsh) · [${activeThemeObj.label}]`}
+            {snakeGameActive ? `CYBER-VIPER ARCADE 60FPS · ${activeThemeObj.label}` : `harshit@usar-delhi: ${currentPath} (zsh) · [${activeThemeObj.label}]`}
           </div>
 
           <div className="terminal-header-actions">
@@ -1705,7 +1816,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                   )}
                   {activePowerUp && (
                     <span className="snake-powerup-badge">
-                      {activePowerUp.type === 'SHIELD' ? '🛡️ SHIELD' : activePowerUp.type === 'SLOW' ? '❄️ MATRIX TIME' : '⚡ 2X SCORE'}
+                      {activePowerUp.type === 'SHIELD' ? '🛡️ SHIELD' : activePowerUp.type === 'SLOW' ? '❄️ MATRIX TIME' : activePowerUp.type === 'MAGNET' ? '🧲 MAGNET' : '⚡ 2X OVERCLOCK'}
                     </span>
                   )}
                 </div>
@@ -1715,14 +1826,14 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                     <button
                       className={`btn-mode-chip ${snakeMode === 'wrap' ? 'active' : ''}`}
                       onClick={() => { SoundFX.playKey(); setSnakeMode('wrap'); }}
-                      title="Wrap around edges"
+                      title="Wrap around borders"
                     >
                       WRAP
                     </button>
                     <button
                       className={`btn-mode-chip ${snakeMode === 'walls' ? 'active' : ''}`}
                       onClick={() => { SoundFX.playKey(); setSnakeMode('walls'); }}
-                      title="Lethal electric perimeter"
+                      title="Lethal electrified perimeter"
                     >
                       WALLS ⚡
                     </button>
