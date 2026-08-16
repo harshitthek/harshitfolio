@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import confetti from 'canvas-confetti';
 import { SoundFX } from '../SoundFX';
 import { projectsData } from '../../data/projectsData';
 
@@ -104,7 +105,7 @@ class ResilientSandboxRunner:
         container = self.docker_client.containers.run(
             "harshit/resilient-sandbox:v2.4",
             detach=True,
-            network_mode="none",  # Strict zero-leak isolation
+            network_mode="none",
             mem_limit="4g"
         )
         print(f"[✓] Isolated container spawned for Issue #{self.issue_id}")
@@ -293,7 +294,7 @@ const positions = new Float32Array(particleCount * 3);
               languages: ["Python 3.12", "JavaScript (ES6+)", "TypeScript", "C/C++", "SQL", "Bash"],
               ai_machine_learning: ["CatBoost", "XGBoost", "Scikit-Learn", "PyTorch", "BERT Transformers", "TensorFlow", "FastAPI"],
               frontend_3d: ["React 19 / 18", "Three.js / WebGL", "HTML5 Canvas 2D", "Vite", "Tailwind CSS"],
-              devops_systems: ["Docker Containers", "PostgreSQL", "Async SQLite", "Manifest V3", "Linux (Ubuntu / antiX)", "GitHub CI/CD"]
+              devops_systems: ["Docker Containers", "PostgreSQL", "Async SQLite", "Manifest V3", "Linux (antiX / Ubuntu)", "GitHub CI/CD"]
             }, null, 2)
           }
         }
@@ -373,7 +374,7 @@ function getNodeFromVFS(normalizedPath) {
 export default function TerminalModal({ onClose, onLaunch }) {
   const [history, setHistory] = useState([
     { type: 'sys', text: '╔══════════════════════════════════════════════════════════════════════╗' },
-    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.5.0-PRO]      ║' },
+    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.6.0-PRO]      ║' },
     { type: 'sys', text: '║     Host: USAR (GGSIPU) Neural Engine · Clearance: LEVEL 5 ROOT      ║' },
     { type: 'sys', text: '╚══════════════════════════════════════════════════════════════════════╝' },
     { type: 'info', text: "Type 'help' for full command suite, or try: 'neofetch', 'ai <query>', 'snake', 'hack', 'top'." },
@@ -388,26 +389,52 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const [currentTheme, setCurrentTheme] = useState('green');
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  // Snake Arcade Game State
+  // ── SUPERCHARGED SNAKE ARCADE GAME STATE ──
   const [snakeGameActive, setSnakeGameActive] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [snakeScore, setSnakeScore] = useState(0);
+  const [snakeMode, setSnakeMode] = useState('wrap'); // 'wrap' (pass through) | 'walls' (lethal walls)
+  const [snakeSpeed, setSnakeSpeed] = useState('normal'); // 'normal' (110ms) | 'fast' (75ms) | 'insane' (48ms)
+  const [combo, setCombo] = useState(1);
+  const [maxCombo, setMaxCombo] = useState(1);
+  const [applesEaten, setApplesEaten] = useState(0);
+  const [activePowerUp, setActivePowerUp] = useState(null); // { type: 'SHIELD'|'SLOW'|'2X', expiresAt: number }
+  const [snakeGameOver, setSnakeGameOver] = useState(false);
+  const [isNewHighScore, setIsNewHighScore] = useState(false);
+
+  const getHighScoreKey = useCallback(() => `harshit_snake_hi_${snakeMode}_${snakeSpeed}`, [snakeMode, snakeSpeed]);
+
   const [snakeHighScore, setSnakeHighScore] = useState(() => {
     try {
-      return parseInt(localStorage.getItem('harshit_snake_highscore') || '0', 10);
+      return parseInt(localStorage.getItem('harshit_snake_hi_wrap_normal') || '0', 10);
     } catch {
       return 0;
     }
   });
-  const [snakeGameOver, setSnakeGameOver] = useState(false);
-  const [snakeSpeed, setSnakeSpeed] = useState('normal'); // normal: 110ms, fast: 75ms, insane: 48ms
+
+  // Sync high score when speed or mode changes
+  useEffect(() => {
+    try {
+      const saved = parseInt(localStorage.getItem(getHighScoreKey()) || '0', 10);
+      setSnakeHighScore(saved);
+    } catch {
+      setSnakeHighScore(0);
+    }
+  }, [getHighScoreKey]);
 
   const snakeCanvasRef = useRef(null);
   const snakeStateRef = useRef({
-    snake: [{ x: 6, y: 6 }, { x: 5, y: 6 }, { x: 4, y: 6 }],
-    food: { x: 12, y: 6 },
+    snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }, { x: 4, y: 7 }],
+    food: { x: 14, y: 7 },
+    goldenFood: null, // { x, y, expiresAt }
+    powerUpItem: null, // { x, y, type: 'SHIELD'|'SLOW'|'2X', expiresAt }
     dir: { x: 1, y: 0 },
-    nextDir: { x: 1, y: 0 },
-    particles: []
+    dirQueue: [],
+    particles: [],
+    floatingTexts: [],
+    lastEatTime: 0,
+    scanLineY: 0,
+    hasShield: false
   });
 
   const bottomRef = useRef(null);
@@ -431,9 +458,28 @@ export default function TerminalModal({ onClose, onLaunch }) {
     scrollToBottom();
   }, [history, snakeGameActive, scrollToBottom]);
 
-  // ── ARCADE CANVAS SNAKE GAME ENGINE ──
+  // Direction changer with input queue buffer
+  const changeSnakeDirection = useCallback((dirKey) => {
+    const state = snakeStateRef.current;
+    const currentOrLastQueued = state.dirQueue.length > 0 
+      ? state.dirQueue[state.dirQueue.length - 1] 
+      : state.dir;
+
+    let nextDir = null;
+    if (dirKey === 'UP' && currentOrLastQueued.y === 0) nextDir = { x: 0, y: -1 };
+    if (dirKey === 'DOWN' && currentOrLastQueued.y === 0) nextDir = { x: 0, y: 1 };
+    if (dirKey === 'LEFT' && currentOrLastQueued.x === 0) nextDir = { x: -1, y: 0 };
+    if (dirKey === 'RIGHT' && currentOrLastQueued.x === 0) nextDir = { x: 1, y: 0 };
+
+    if (nextDir && state.dirQueue.length < 3) {
+      state.dirQueue.push(nextDir);
+      SoundFX.playKey();
+    }
+  }, []);
+
+  // ── SUPERCHARGED SNAKE ARCADE GAME ENGINE LOOP ──
   useEffect(() => {
-    if (!snakeGameActive || snakeGameOver) {
+    if (!snakeGameActive || snakeGameOver || isPaused) {
       if (snakeLoopRef.current) clearInterval(snakeLoopRef.current);
       return;
     }
@@ -444,82 +490,288 @@ export default function TerminalModal({ onClose, onLaunch }) {
     if (!ctx) return;
 
     const gridSize = 20;
-    const cols = 20;
-    const rows = 15;
+    const cols = 24;
+    const rows = 16;
     canvas.width = cols * gridSize;
     canvas.height = rows * gridSize;
 
     const speedIntervals = { normal: 110, fast: 75, insane: 48 };
-    const intervalMs = speedIntervals[snakeSpeed] || 110;
+    let intervalMs = speedIntervals[snakeSpeed] || 110;
+    if (activePowerUp && activePowerUp.type === 'SLOW' && activePowerUp.expiresAt > Date.now()) {
+      intervalMs = Math.round(intervalMs * 1.5);
+    }
 
     snakeLoopRef.current = setInterval(() => {
       const state = snakeStateRef.current;
-      state.dir = state.nextDir;
+      const now = Date.now();
+
+      // Process queued direction
+      if (state.dirQueue.length > 0) {
+        state.dir = state.dirQueue.shift();
+      }
+
+      // Check power-up expiration
+      if (activePowerUp && activePowerUp.expiresAt <= now) {
+        setActivePowerUp(null);
+        state.hasShield = false;
+      }
+
+      // Check combo expiration (3.5s window)
+      if (state.lastEatTime > 0 && now - state.lastEatTime > 3500) {
+        setCombo(1);
+      }
+
+      // Expire golden food
+      if (state.goldenFood && state.goldenFood.expiresAt <= now) {
+        state.goldenFood = null;
+      }
+
+      // Expire power up on map
+      if (state.powerUpItem && state.powerUpItem.expiresAt <= now) {
+        state.powerUpItem = null;
+      }
 
       const head = {
         x: state.snake[0].x + state.dir.x,
         y: state.snake[0].y + state.dir.y
       };
 
-      // Wrap around grid boundaries
-      if (head.x < 0) head.x = cols - 1;
-      if (head.x >= cols) head.x = 0;
-      if (head.y < 0) head.y = rows - 1;
-      if (head.y >= rows) head.y = 0;
+      // Wall collision or wrap
+      let hitWall = false;
+      if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
+        if (snakeMode === 'walls') {
+          hitWall = true;
+        } else {
+          // Wrap
+          if (head.x < 0) head.x = cols - 1;
+          if (head.x >= cols) head.x = 0;
+          if (head.y < 0) head.y = rows - 1;
+          if (head.y >= rows) head.y = 0;
+        }
+      }
 
-      // Check self collision
-      if (state.snake.some(seg => seg.x === head.x && seg.y === head.y)) {
-        setSnakeGameOver(true);
-        SoundFX.playDeploy();
-        return;
+      // Self collision
+      const hitSelf = state.snake.some(seg => seg.x === head.x && seg.y === head.y);
+
+      if (hitWall || hitSelf) {
+        // Check Shield Power-Up Protection
+        if (state.hasShield) {
+          state.hasShield = false;
+          setActivePowerUp(null);
+          SoundFX.playDeploy();
+          state.floatingTexts.push({
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            text: '🛡️ SHIELD BROKEN! SAVED FROM CRASH',
+            color: '#38bdf8',
+            life: 1.2
+          });
+          // Bounce back to safe coordinate inside arena
+          if (head.x < 0) head.x = 0;
+          if (head.x >= cols) head.x = cols - 1;
+          if (head.y < 0) head.y = 0;
+          if (head.y >= rows) head.y = rows - 1;
+        } else {
+          setSnakeGameOver(true);
+          SoundFX.playDeploy();
+          // Check High Score
+          if (snakeScore > snakeHighScore) {
+            setIsNewHighScore(true);
+            try {
+              localStorage.setItem(getHighScoreKey(), String(snakeScore));
+            } catch {}
+            confetti({
+              particleCount: 75,
+              spread: 70,
+              origin: { y: 0.6 },
+              colors: ['#00ff88', '#38bdf8', '#fbbf24', '#c084fc']
+            });
+          }
+          return;
+        }
       }
 
       state.snake.unshift(head);
 
-      // Check food collision
-      if (head.x === state.food.x && head.y === state.food.y) {
-        SoundFX.playSuccess();
-        const multiplier = snakeSpeed === 'insane' ? 30 : snakeSpeed === 'fast' ? 20 : 10;
-        setSnakeScore(prev => {
-          const next = prev + multiplier;
-          if (next > snakeHighScore) {
-            setSnakeHighScore(next);
-            try { localStorage.setItem('harshit_snake_highscore', String(next)); } catch {}
-          }
-          return next;
-        });
-
-        // Spawn food particle bursts
-        for (let i = 0; i < 8; i++) {
-          state.particles.push({
-            x: head.x * gridSize + gridSize / 2,
-            y: head.y * gridSize + gridSize / 2,
-            vx: (Math.random() - 0.5) * 6,
-            vy: (Math.random() - 0.5) * 6,
-            life: 1.0,
-            color: '#38bdf8'
-          });
-        }
-
-        // Reposition food
-        let newFood;
-        while (!newFood || state.snake.some(s => s.x === newFood.x && s.y === newFood.y)) {
-          newFood = {
+      // Helper function to find empty cell
+      const getRandomEmptyCell = () => {
+        let cell;
+        while (!cell || state.snake.some(s => s.x === cell.x && s.y === cell.y)) {
+          cell = {
             x: Math.floor(Math.random() * cols),
             y: Math.floor(Math.random() * rows)
           };
         }
-        state.food = newFood;
-      } else {
+        return cell;
+      };
+
+      let ateFood = false;
+
+      // 1. Check Normal Data Orb Collision
+      if (head.x === state.food.x && head.y === state.food.y) {
+        ateFood = true;
+        SoundFX.playSuccess();
+
+        // Calculate score with combo and 2X multiplier
+        const is2X = activePowerUp && activePowerUp.type === '2X' && activePowerUp.expiresAt > now;
+        const currentMult = (is2X ? 2 : 1) * combo;
+        const speedBonus = snakeSpeed === 'insane' ? 25 : snakeSpeed === 'fast' ? 15 : 10;
+        const points = speedBonus * currentMult;
+
+        setSnakeScore(prev => {
+          const next = prev + points;
+          if (next > snakeHighScore) setSnakeHighScore(next);
+          return next;
+        });
+
+        setApplesEaten(prev => {
+          const nextCount = prev + 1;
+          // Spawn Golden Glitch Bit every 4 normal orbs
+          if (nextCount % 4 === 0 && !state.goldenFood) {
+            state.goldenFood = {
+              ...getRandomEmptyCell(),
+              expiresAt: Date.now() + 8000
+            };
+            SoundFX.playDeploy();
+            state.floatingTexts.push({
+              x: state.goldenFood.x * gridSize + gridSize / 2,
+              y: state.goldenFood.y * gridSize,
+              text: '⚡ GOLDEN GLITCH DETECTED!',
+              color: '#fbbf24',
+              life: 1.0
+            });
+          }
+
+          // Spawn random Power-Up every 6 normal orbs
+          if (nextCount % 6 === 0 && !state.powerUpItem) {
+            const types = ['SHIELD', 'SLOW', '2X'];
+            const chosenType = types[Math.floor(Math.random() * types.length)];
+            state.powerUpItem = {
+              ...getRandomEmptyCell(),
+              type: chosenType,
+              expiresAt: Date.now() + 9000
+            };
+            state.floatingTexts.push({
+              x: state.powerUpItem.x * gridSize + gridSize / 2,
+              y: state.powerUpItem.y * gridSize,
+              text: `🔮 POWER-UP: ${chosenType}`,
+              color: '#c084fc',
+              life: 1.0
+            });
+          }
+
+          return nextCount;
+        });
+
+        // Update combo
+        setCombo(prev => {
+          const nextCombo = Math.min(5, prev + 1);
+          if (nextCombo > maxCombo) setMaxCombo(nextCombo);
+          return nextCombo;
+        });
+        state.lastEatTime = now;
+
+        // Floating score popup
+        state.floatingTexts.push({
+          x: head.x * gridSize + gridSize / 2,
+          y: head.y * gridSize,
+          text: `+${points}${combo > 1 ? ` (x${combo} COMBO!)` : ''}`,
+          color: '#00ff88',
+          life: 1.0
+        });
+
+        // Particle explosion
+        for (let i = 0; i < 10; i++) {
+          state.particles.push({
+            x: head.x * gridSize + gridSize / 2,
+            y: head.y * gridSize + gridSize / 2,
+            vx: (Math.random() - 0.5) * 7,
+            vy: (Math.random() - 0.5) * 7,
+            life: 1.0,
+            color: '#00ff88'
+          });
+        }
+
+        // New regular food
+        state.food = getRandomEmptyCell();
+      }
+
+      // 2. Check Golden Glitch Collision
+      if (state.goldenFood && head.x === state.goldenFood.x && head.y === state.goldenFood.y) {
+        ateFood = true;
+        SoundFX.playDeploy();
+        const goldPoints = 50 * (activePowerUp && activePowerUp.type === '2X' ? 2 : 1);
+        setSnakeScore(prev => {
+          const next = prev + goldPoints;
+          if (next > snakeHighScore) setSnakeHighScore(next);
+          return next;
+        });
+        state.floatingTexts.push({
+          x: head.x * gridSize + gridSize / 2,
+          y: head.y * gridSize,
+          text: `+${goldPoints} GOLD GLITCH! 🌟`,
+          color: '#fbbf24',
+          life: 1.2
+        });
+        for (let i = 0; i < 14; i++) {
+          state.particles.push({
+            x: head.x * gridSize + gridSize / 2,
+            y: head.y * gridSize + gridSize / 2,
+            vx: (Math.random() - 0.5) * 9,
+            vy: (Math.random() - 0.5) * 9,
+            life: 1.0,
+            color: '#fbbf24'
+          });
+        }
+        state.goldenFood = null;
+      }
+
+      // 3. Check Power-Up Collision
+      if (state.powerUpItem && head.x === state.powerUpItem.x && head.y === state.powerUpItem.y) {
+        ateFood = true;
+        SoundFX.playDeploy();
+        const pType = state.powerUpItem.type;
+        setActivePowerUp({ type: pType, expiresAt: now + 8000 });
+        if (pType === 'SHIELD') state.hasShield = true;
+        state.floatingTexts.push({
+          x: head.x * gridSize + gridSize / 2,
+          y: head.y * gridSize,
+          text: `✨ ${pType} ACTIVATED! (8s)`,
+          color: '#c084fc',
+          life: 1.2
+        });
+        for (let i = 0; i < 12; i++) {
+          state.particles.push({
+            x: head.x * gridSize + gridSize / 2,
+            y: head.y * gridSize + gridSize / 2,
+            vx: (Math.random() - 0.5) * 8,
+            vy: (Math.random() - 0.5) * 8,
+            life: 1.0,
+            color: '#c084fc'
+          });
+        }
+        state.powerUpItem = null;
+      }
+
+      if (!ateFood) {
         state.snake.pop();
       }
 
-      // Render Canvas Frame
-      ctx.fillStyle = '#060606';
+      // ── RENDER HIGH-TECH CYBER CANVAS FRAME ──
+      ctx.fillStyle = '#050505';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw Grid Lines
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      // 1. Draw Scanning Laser Radar Line
+      state.scanLineY = (state.scanLineY + 2) % canvas.height;
+      const gradScan = ctx.createLinearGradient(0, state.scanLineY - 15, 0, state.scanLineY + 15);
+      gradScan.addColorStop(0, 'rgba(0, 255, 136, 0)');
+      gradScan.addColorStop(0.5, 'rgba(0, 255, 136, 0.08)');
+      gradScan.addColorStop(1, 'rgba(0, 255, 136, 0)');
+      ctx.fillStyle = gradScan;
+      ctx.fillRect(0, state.scanLineY - 15, canvas.width, 30);
+
+      // 2. Draw Subtle Cyber Grid
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
       ctx.lineWidth = 1;
       for (let x = 0; x <= cols; x++) {
         ctx.beginPath();
@@ -534,73 +786,274 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.stroke();
       }
 
-      // Draw Food
+      // 3. Draw Hardcore Lethal Wall Perimeter
+      if (snakeMode === 'walls') {
+        ctx.strokeStyle = '#f87171';
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#f87171';
+        ctx.shadowBlur = 10;
+        ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
+        ctx.shadowBlur = 0;
+      }
+
+      // 4. Draw Regular Food (Cyan Glowing Data Orb)
+      const foodPulse = Math.sin(now / 160) * 2;
       ctx.fillStyle = '#38bdf8';
       ctx.shadowColor = '#38bdf8';
-      ctx.shadowBlur = 12;
+      ctx.shadowBlur = 14;
       ctx.beginPath();
       ctx.arc(
         state.food.x * gridSize + gridSize / 2,
         state.food.y * gridSize + gridSize / 2,
-        gridSize / 2.8,
+        gridSize / 2.8 + foodPulse * 0.4,
         0,
         Math.PI * 2
       );
       ctx.fill();
+      ctx.shadowBlur = 0;
 
-      // Draw Particles
+      // 5. Draw Golden Glitch Bit (if active)
+      if (state.goldenFood) {
+        const remainingGoldMs = Math.max(0, state.goldenFood.expiresAt - now);
+        const goldRatio = remainingGoldMs / 8000;
+        const gx = state.goldenFood.x * gridSize + gridSize / 2;
+        const gy = state.goldenFood.y * gridSize + gridSize / 2;
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.shadowColor = '#fbbf24';
+        ctx.shadowBlur = 16;
+        ctx.beginPath();
+        ctx.arc(gx, gy, gridSize / 2.4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Countdown timer arc
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(gx, gy, gridSize / 2 + 2, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * goldRatio));
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      // 6. Draw Power-Up Item (if active on grid)
+      if (state.powerUpItem) {
+        const px = state.powerUpItem.x * gridSize + gridSize / 2;
+        const py = state.powerUpItem.y * gridSize + gridSize / 2;
+        ctx.fillStyle = '#c084fc';
+        ctx.shadowColor = '#c084fc';
+        ctx.shadowBlur = 15;
+        ctx.fillRect(px - gridSize / 3, py - gridSize / 3, (gridSize / 3) * 2, (gridSize / 3) * 2);
+        ctx.shadowBlur = 0;
+      }
+
+      // 7. Draw Snake Body & Cyber Head with Directional Eyes
+      state.snake.forEach((seg, idx) => {
+        const isHead = idx === 0;
+        const t = idx / Math.max(1, state.snake.length);
+
+        if (isHead) {
+          ctx.fillStyle = '#00ff88';
+          ctx.shadowColor = state.hasShield ? '#38bdf8' : '#00ff88';
+          ctx.shadowBlur = state.hasShield ? 20 : 14;
+
+          // Shield Aura Ring
+          if (state.hasShield) {
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(seg.x * gridSize - 2, seg.y * gridSize - 2, gridSize + 4, gridSize + 4);
+          }
+
+          ctx.fillRect(seg.x * gridSize + 1, seg.y * gridSize + 1, gridSize - 2, gridSize - 2);
+
+          // Draw Cyber Head Eyes
+          ctx.fillStyle = '#060606';
+          const ex = seg.x * gridSize;
+          const ey = seg.y * gridSize;
+          let eye1 = { x: ex + 5, y: ey + 5 };
+          let eye2 = { x: ex + 15, y: ey + 5 };
+
+          if (state.dir.x === 1) { // Right
+            eye1 = { x: ex + 13, y: ey + 5 };
+            eye2 = { x: ex + 13, y: ey + 15 };
+          } else if (state.dir.x === -1) { // Left
+            eye1 = { x: ex + 5, y: ey + 5 };
+            eye2 = { x: ex + 5, y: ey + 15 };
+          } else if (state.dir.y === 1) { // Down
+            eye1 = { x: ex + 5, y: ey + 13 };
+            eye2 = { x: ex + 15, y: ey + 13 };
+          } else if (state.dir.y === -1) { // Up
+            eye1 = { x: ex + 5, y: ey + 5 };
+            eye2 = { x: ex + 15, y: ey + 5 };
+          }
+
+          ctx.beginPath();
+          ctx.arc(eye1.x, eye1.y, 2, 0, Math.PI * 2);
+          ctx.arc(eye2.x, eye2.y, 2, 0, Math.PI * 2);
+          ctx.fill();
+
+        } else {
+          // Gradient Tail Interpolation (Electric Green -> Neon Cyan/Dark Emerald)
+          const r = Math.round(0 + t * 14);
+          const g = Math.round(255 - t * 100);
+          const b = Math.round(136 + t * 90);
+          ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+          ctx.shadowBlur = 0;
+          ctx.fillRect(seg.x * gridSize + 2, seg.y * gridSize + 2, gridSize - 4, gridSize - 4);
+        }
+      });
+      ctx.shadowBlur = 0;
+
+      // 8. Draw Particles
       state.particles.forEach((p, idx) => {
         p.x += p.vx;
         p.y += p.vy;
-        p.life -= 0.08;
+        p.life -= 0.06;
         if (p.life > 0) {
           ctx.fillStyle = p.color;
           ctx.globalAlpha = p.life;
-          ctx.fillRect(p.x, p.y, 2, 2);
+          ctx.fillRect(p.x, p.y, 3, 3);
           ctx.globalAlpha = 1.0;
         } else {
           state.particles.splice(idx, 1);
         }
       });
 
-      // Draw Snake Segments
-      state.snake.forEach((seg, idx) => {
-        const isHead = idx === 0;
-        ctx.fillStyle = isHead ? '#00ff88' : 'rgba(0, 255, 136, 0.75)';
-        ctx.shadowColor = '#00ff88';
-        ctx.shadowBlur = isHead ? 14 : 6;
-        ctx.fillRect(
-          seg.x * gridSize + 1,
-          seg.y * gridSize + 1,
-          gridSize - 2,
-          gridSize - 2
-        );
+      // 9. Draw Floating Text Popups
+      state.floatingTexts.forEach((ft, idx) => {
+        ft.y -= 0.75;
+        ft.life -= 0.035;
+        if (ft.life > 0) {
+          ctx.font = 'bold 11px "Space Mono", monospace';
+          ctx.fillStyle = ft.color;
+          ctx.globalAlpha = ft.life;
+          ctx.shadowColor = ft.color;
+          ctx.shadowBlur = 8;
+          ctx.textAlign = 'center';
+          ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.globalAlpha = 1.0;
+          ctx.shadowBlur = 0;
+        } else {
+          state.floatingTexts.splice(idx, 1);
+        }
       });
-      ctx.shadowBlur = 0;
 
     }, intervalMs);
 
     return () => clearInterval(snakeLoopRef.current);
-  }, [snakeGameActive, snakeGameOver, snakeSpeed, snakeHighScore]);
+  }, [snakeGameActive, snakeGameOver, isPaused, snakeMode, snakeSpeed, snakeScore, snakeHighScore, activePowerUp, combo, maxCombo, getHighScoreKey]);
 
-  const changeSnakeDirection = useCallback((dirKey) => {
-    const state = snakeStateRef.current;
-    if (dirKey === 'UP' && state.dir.y === 0) state.nextDir = { x: 0, y: -1 };
-    if (dirKey === 'DOWN' && state.dir.y === 0) state.nextDir = { x: 0, y: 1 };
-    if (dirKey === 'LEFT' && state.dir.x === 0) state.nextDir = { x: -1, y: 0 };
-    if (dirKey === 'RIGHT' && state.dir.x === 0) state.nextDir = { x: 1, y: 0 };
-  }, []);
+  // Global window-level key listener with capture phase
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      // 1. SNAKE GAME ACTIVE
+      if (snakeGameActive) {
+        const k = e.key.toLowerCase();
+
+        // Pause Toggle
+        if (k === 'p' || (e.key === ' ' && !snakeGameOver)) {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsPaused(prev => !prev);
+          SoundFX.playClick();
+          return;
+        }
+
+        // Direction steering
+        if (k === 'arrowup' || k === 'w') {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!isPaused) changeSnakeDirection('UP');
+          return;
+        }
+        if (k === 'arrowdown' || k === 's') {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!isPaused) changeSnakeDirection('DOWN');
+          return;
+        }
+        if (k === 'arrowleft' || k === 'a') {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!isPaused) changeSnakeDirection('LEFT');
+          return;
+        }
+        if (k === 'arrowright' || k === 'd') {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!isPaused) changeSnakeDirection('RIGHT');
+          return;
+        }
+
+        // Game Over Quick Restart
+        if (snakeGameOver && (k === 'r' || k === 'enter')) {
+          e.preventDefault();
+          e.stopPropagation();
+          startSnakeGame();
+          return;
+        }
+
+        // Quit to Shell
+        if (k === 'escape' || k === 'q') {
+          e.preventDefault();
+          e.stopPropagation();
+          setSnakeGameActive(false);
+          setHistory(h => [
+            ...h,
+            { type: 'info', text: `🎮 Snake session completed. Final Score: ${snakeScore} PTS (Max Combo: x${maxCombo})` }
+          ]);
+          return;
+        }
+
+        if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        return;
+      }
+
+      // 2. NORMAL TERMINAL MODE
+      if (inputRef.current && document.activeElement !== inputRef.current) {
+        if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1) {
+          inputRef.current.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown, true);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown, true);
+  }, [snakeGameActive, snakeGameOver, isPaused, snakeScore, maxCombo, changeSnakeDirection]);
+
+  // Focus management
+  useEffect(() => {
+    if (snakeGameActive) {
+      snakeCanvasRef.current?.focus();
+    } else {
+      inputRef.current?.focus();
+    }
+  }, [snakeGameActive]);
 
   const startSnakeGame = () => {
     snakeStateRef.current = {
-      snake: [{ x: 6, y: 6 }, { x: 5, y: 6 }, { x: 4, y: 6 }],
-      food: { x: 12, y: 6 },
+      snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }, { x: 4, y: 7 }],
+      food: { x: 14, y: 7 },
+      goldenFood: null,
+      powerUpItem: null,
       dir: { x: 1, y: 0 },
-      nextDir: { x: 1, y: 0 },
-      particles: []
+      dirQueue: [],
+      particles: [],
+      floatingTexts: [],
+      lastEatTime: 0,
+      scanLineY: 0,
+      hasShield: false
     };
     setSnakeScore(0);
+    setCombo(1);
+    setMaxCombo(1);
+    setApplesEaten(0);
+    setActivePowerUp(null);
+    setIsPaused(false);
     setSnakeGameOver(false);
+    setIsNewHighScore(false);
     setSnakeGameActive(true);
     SoundFX.playClick();
   };
@@ -642,7 +1095,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'out', text: '  ai / ask <query>  - Ask the built-in AI reasoning engine technical questions' },
           { type: 'out', text: `  deploy <1-${projectsData.length}|name> - Initiate deployment sequence for a target universe` },
           { type: 'info', text: '── GAMES, CYBER FX & CUSTOMIZATION ──' },
-          { type: 'out', text: '  snake             - Play the 60fps Arcade Canvas Snake Game' },
+          { type: 'out', text: '  snake             - Play the 60fps Arcade Canvas Snake Game with Combos & Power-ups' },
           { type: 'out', text: '  hack / pwn        - Cinematic Hollywood cyber penetration sequence' },
           { type: 'out', text: '  matrix            - Digital cascading neural code stream' },
           { type: 'out', text: '  cowsay <text>     - Classic ASCII cow wisdom speech' },
@@ -693,7 +1146,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
       case 'snake':
       case 'game':
         startSnakeGame();
-        newHistory.push({ type: 'info', text: '🎮 INITIATING 60FPS ARCADE CANVAS SNAKE. Use Arrow Keys or WASD to steer. Press ESC or Q to quit to shell.' });
+        newHistory.push({ type: 'info', text: '🎮 INITIATING 60FPS ARCADE CANVAS SNAKE ENGINE. Arrow Keys or WASD to steer · P to Pause · R to Restart · Q to Quit.' });
         break;
 
       case 'hack':
@@ -992,78 +1445,6 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
     setHistory(newHistory);
   };
 
-  // Window-level keydown listener to capture Snake keys and general terminal input
-  useEffect(() => {
-    const handleGlobalKeyDown = (e) => {
-      // 1. If Snake Game is Active: Intercept all control keys completely
-      if (snakeGameActive) {
-        const k = e.key.toLowerCase();
-        if (k === 'arrowup' || k === 'w') {
-          e.preventDefault();
-          e.stopPropagation();
-          changeSnakeDirection('UP');
-          return;
-        }
-        if (k === 'arrowdown' || k === 's') {
-          e.preventDefault();
-          e.stopPropagation();
-          changeSnakeDirection('DOWN');
-          return;
-        }
-        if (k === 'arrowleft' || k === 'a') {
-          e.preventDefault();
-          e.stopPropagation();
-          changeSnakeDirection('LEFT');
-          return;
-        }
-        if (k === 'arrowright' || k === 'd') {
-          e.preventDefault();
-          e.stopPropagation();
-          changeSnakeDirection('RIGHT');
-          return;
-        }
-        if (k === 'escape' || k === 'q') {
-          e.preventDefault();
-          e.stopPropagation();
-          setSnakeGameActive(false);
-          setHistory(h => [...h, { type: 'info', text: `🎮 Snake session exited. Final Score: ${snakeScore} PTS` }]);
-          return;
-        }
-        if (snakeGameOver && (k === 'r' || k === 'enter' || k === ' ')) {
-          e.preventDefault();
-          e.stopPropagation();
-          startSnakeGame();
-          return;
-        }
-        // Prevent default scrolling on space or arrows during game
-        if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'pageup', 'pagedown'].includes(k)) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-        return;
-      }
-
-      // 2. If user is in terminal mode and presses keys outside of input, auto-focus input
-      if (inputRef.current && document.activeElement !== inputRef.current) {
-        if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1) {
-          inputRef.current.focus();
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleGlobalKeyDown, true);
-    return () => window.removeEventListener('keydown', handleGlobalKeyDown, true);
-  }, [snakeGameActive, snakeGameOver, snakeScore, changeSnakeDirection]);
-
-  // Auto-focus canvas when snake game starts, or focus input when snake game ends
-  useEffect(() => {
-    if (snakeGameActive) {
-      snakeCanvasRef.current?.focus();
-    } else {
-      inputRef.current?.focus();
-    }
-  }, [snakeGameActive]);
-
   const handleKeyDown = (e) => {
     // Handle Ctrl+C inside terminal to cancel active line without opening Code modal
     if (e.ctrlKey && (e.key === 'c' || e.key === 'C')) {
@@ -1110,13 +1491,10 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
 
       const parts = curr.split(/\s+/);
       
-      // If single word, complete command name
       if (parts.length === 1) {
         const match = allCommands.find(c => c.startsWith(parts[0].toLowerCase()));
         if (match) setInputVal(match);
-      } 
-      // If typing `cat <filename>`, complete filenames in current directory
-      else if (parts[0].toLowerCase() === 'cat') {
+      } else if (parts[0].toLowerCase() === 'cat') {
         const filePrefix = parts[1].toLowerCase();
         const dirNode = getNodeFromVFS(currentPath);
         if (dirNode && dirNode.children) {
@@ -1124,9 +1502,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
           const matchFile = files.find(f => f.toLowerCase().startsWith(filePrefix));
           if (matchFile) setInputVal(`cat ${matchFile}`);
         }
-      }
-      // If typing `cd <dirname>`, complete subdirectories
-      else if (parts[0].toLowerCase() === 'cd') {
+      } else if (parts[0].toLowerCase() === 'cd') {
         const dirPrefix = parts[1].toLowerCase();
         const dirNode = getNodeFromVFS(currentPath);
         if (dirNode && dirNode.children) {
@@ -1134,9 +1510,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
           const matchDir = dirs.find(d => d.toLowerCase().startsWith(dirPrefix));
           if (matchDir) setInputVal(`cd ${matchDir}`);
         }
-      }
-      // If typing `theme <name>`, complete theme
-      else if (parts[0].toLowerCase() === 'theme') {
+      } else if (parts[0].toLowerCase() === 'theme') {
         const themePrefix = parts[1].toLowerCase();
         const themeKeys = Object.keys(THEMES);
         const matchTheme = themeKeys.find(t => t.startsWith(themePrefix));
@@ -1220,7 +1594,10 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         <div
           ref={modalBodyRef}
           className="modal-body terminal-modal-body custom-scroll"
-          onClick={() => inputRef.current?.focus()}
+          onClick={() => {
+            if (!snakeGameActive) inputRef.current?.focus();
+            else snakeCanvasRef.current?.focus();
+          }}
         >
           {history.map((line, idx) => (
             <div key={idx} className={`term-line line-${line.type}`}>
@@ -1234,7 +1611,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
             </div>
           ))}
 
-          {/* Arcade Canvas Snake Game */}
+          {/* ── SUPERCHARGED 60FPS ARCADE CANVAS SNAKE GAME ── */}
           {snakeGameActive && (
             <div
               className="arcade-snake-container"
@@ -1242,26 +1619,57 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
               tabIndex={0}
               onClick={() => snakeCanvasRef.current?.focus()}
             >
+              {/* Arcade Top Control Bar */}
               <div className="snake-arcade-hud">
                 <div className="snake-stats-left">
-                  <span className="snake-badge" style={{ color: activeThemeObj.primary }}>🐍 ARCADE CANVAS ENGINE</span>
+                  <span className="snake-badge" style={{ color: activeThemeObj.primary }}>🐍 CYBER ARCADE</span>
                   <span className="snake-score-display">SCORE: <strong>{snakeScore}</strong></span>
-                  <span className="snake-hi-display">HIGH: <strong>{snakeHighScore}</strong></span>
+                  <span className="snake-hi-display">HI: <strong>{snakeHighScore}</strong></span>
+                  {combo > 1 && (
+                    <span className="snake-combo-badge" style={{ color: activeThemeObj.primary }}>
+                      COMBO x{combo} 🔥
+                    </span>
+                  )}
+                  {activePowerUp && (
+                    <span className="snake-powerup-badge">
+                      {activePowerUp.type === 'SHIELD' ? '🛡️ SHIELD' : activePowerUp.type === 'SLOW' ? '❄️ MATRIX TIME' : '⚡ 2X SCORE'}
+                    </span>
+                  )}
                 </div>
-                <div className="snake-speed-selector">
-                  <span>SPEED:</span>
-                  {['normal', 'fast', 'insane'].map(s => (
+
+                <div className="snake-controls-right">
+                  <div className="snake-mode-selector">
                     <button
-                      key={s}
-                      className={`btn-speed-chip ${snakeSpeed === s ? 'active' : ''}`}
-                      onClick={() => { SoundFX.playKey(); setSnakeSpeed(s); }}
+                      className={`btn-mode-chip ${snakeMode === 'wrap' ? 'active' : ''}`}
+                      onClick={() => { SoundFX.playKey(); setSnakeMode('wrap'); }}
+                      title="Wrap around arena edges"
                     >
-                      {s.toUpperCase()}
+                      WRAP
                     </button>
-                  ))}
+                    <button
+                      className={`btn-mode-chip ${snakeMode === 'walls' ? 'active' : ''}`}
+                      onClick={() => { SoundFX.playKey(); setSnakeMode('walls'); }}
+                      title="Lethal electrified perimeter walls"
+                    >
+                      WALLS ⚡
+                    </button>
+                  </div>
+
+                  <div className="snake-speed-selector">
+                    {['normal', 'fast', 'insane'].map(s => (
+                      <button
+                        key={s}
+                        className={`btn-speed-chip ${snakeSpeed === s ? 'active' : ''}`}
+                        onClick={() => { SoundFX.playKey(); setSnakeSpeed(s); }}
+                      >
+                        {s.toUpperCase()}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
+              {/* Main Game Canvas with Interactive HUD Overlay */}
               <div className="snake-canvas-wrapper">
                 <canvas
                   ref={snakeCanvasRef}
@@ -1270,29 +1678,68 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                   onClick={(e) => e.stopPropagation()}
                 />
 
-                {/* On-Screen D-Pad Controls for Touch / Mouse */}
+                {/* Pause Overlay */}
+                {isPaused && !snakeGameOver && (
+                  <div className="snake-pause-overlay">
+                    <span className="pause-title">⏸ SYSTEM PAUSED</span>
+                    <span className="pause-subtitle">PRESS [P] OR [SPACE] TO RESUME</span>
+                    <button className="btn-snake-act retry" onClick={() => setIsPaused(false)}>
+                      RESUME MISSION
+                    </button>
+                  </div>
+                )}
+
+                {/* Game Over Mission Summary Overlay */}
+                {snakeGameOver && (
+                  <div className="snake-gameover-overlay">
+                    <span className="over-title">💀 SESSION TERMINATED // SCORE: {snakeScore} PTS</span>
+                    {isNewHighScore && (
+                      <span className="new-hi-banner" style={{ color: activeThemeObj.primary }}>
+                        🏆 NEW RECORD SET IN {snakeMode.toUpperCase()} MODE!
+                      </span>
+                    )}
+                    <div className="gameover-stats-grid">
+                      <span>Data Orbs: <strong>{applesEaten}</strong></span>
+                      <span>Max Combo: <strong>x{maxCombo}</strong></span>
+                      <span>Difficulty: <strong>{snakeSpeed.toUpperCase()}</strong></span>
+                      <span>Arena: <strong>{snakeMode.toUpperCase()}</strong></span>
+                    </div>
+                    <div className="over-buttons">
+                      <button className="btn-snake-act retry" onClick={startSnakeGame}>
+                        ↺ RESTART (R / ENTER)
+                      </button>
+                      <button className="btn-snake-act quit" onClick={() => setSnakeGameActive(false)}>
+                        QUIT TO SHELL (Q / ESC)
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* On-Screen D-Pad Controls for Touch / Mobile */}
                 <div className="snake-dpad-controls">
                   <button className="dpad-btn up" onClick={() => changeSnakeDirection('UP')}>▲</button>
                   <div className="dpad-mid-row">
                     <button className="dpad-btn left" onClick={() => changeSnakeDirection('LEFT')}>◀</button>
+                    <button className="dpad-btn pause" onClick={() => setIsPaused(!isPaused)}>
+                      {isPaused ? '▶' : '⏸'}
+                    </button>
                     <button className="dpad-btn right" onClick={() => changeSnakeDirection('RIGHT')}>▶</button>
                   </div>
                   <button className="dpad-btn down" onClick={() => changeSnakeDirection('DOWN')}>▼</button>
                 </div>
               </div>
 
-              {snakeGameOver ? (
-                <div className="snake-gameover-overlay">
-                  <span className="over-title">💀 GAME OVER // FINAL SCORE: {snakeScore} PTS</span>
-                  <div className="over-buttons">
-                    <button className="btn-snake-act retry" onClick={startSnakeGame}>↺ PLAY AGAIN (R / ENTER)</button>
-                    <button className="btn-snake-act quit" onClick={() => setSnakeGameActive(false)}>QUIT TO SHELL (Q / ESC)</button>
-                  </div>
-                </div>
-              ) : (
+              {!snakeGameOver && (
                 <div className="snake-game-footer-bar">
-                  <span>Controls: Arrow Keys or W / A / S / D · R to Restart</span>
-                  <button className="btn-snake-quit-inline" onClick={() => setSnakeGameActive(false)}>QUIT GAME (ESC)</button>
+                  <span>Steer: <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> or <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span>
+                  <span>·</span>
+                  <span><kbd>P</kbd> Pause</span>
+                  <span>·</span>
+                  <span><kbd>R</kbd> Restart</span>
+                  <span>·</span>
+                  <button className="btn-snake-quit-inline" onClick={() => setSnakeGameActive(false)}>
+                    QUIT (ESC)
+                  </button>
                 </div>
               )}
             </div>
