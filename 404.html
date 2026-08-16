@@ -283,10 +283,7 @@
     </div>
 
     <div class="redirect-timer">
-      Auto-redirecting to Command Hub in <strong id="countdown-sec">8</strong>s...
-      <div class="redirect-progress-bar">
-        <div class="redirect-progress-fill" id="progress-fill"></div>
-      </div>
+      ⚡ QUANTUM RECOVERY PROTOCOL ONLINE · STANDBY FOR USER COMMAND
     </div>
   </div>
 
@@ -328,22 +325,6 @@
       }
     }
     setInterval(drawMatrix, 40);
-
-    // Auto-Redirect Countdown (8 Seconds)
-    let secondsLeft = 8;
-    const countEl = document.getElementById('countdown-sec');
-    const fillEl = document.getElementById('progress-fill');
-
-    const countdownTimer = setInterval(function() {
-      secondsLeft--;
-      if (countEl) countEl.textContent = secondsLeft;
-      if (fillEl) fillEl.style.width = (secondsLeft / 8 * 100) + '%';
-
-      if (secondsLeft <= 0) {
-        clearInterval(countdownTimer);
-        window.location.href = '/harshitfolio/';
-      }
-    }, 1000);
   </script>
 </body>
 </html>
