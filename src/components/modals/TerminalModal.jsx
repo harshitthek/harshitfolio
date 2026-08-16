@@ -373,7 +373,7 @@ function getNodeFromVFS(normalizedPath) {
 export default function TerminalModal({ onClose, onLaunch }) {
   const [history, setHistory] = useState([
     { type: 'sys', text: '╔══════════════════════════════════════════════════════════════════════╗' },
-    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.7.0-PRO]      ║' },
+    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.8.0-PRO]      ║' },
     { type: 'sys', text: '║     Host: USAR (GGSIPU) Neural Engine · Clearance: LEVEL 5 ROOT      ║' },
     { type: 'sys', text: '╚══════════════════════════════════════════════════════════════════════╝' },
     { type: 'info', text: "Type 'help' for full command suite, or try: 'neofetch', 'ai <query>', 'snake', 'hack', 'top'." },
@@ -393,11 +393,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const [isPaused, setIsPaused] = useState(false);
   const [snakeScore, setSnakeScore] = useState(0);
   const [snakeMode, setSnakeMode] = useState('wrap'); // 'wrap' | 'walls'
-  const [snakeSpeed, setSnakeSpeed] = useState('normal'); // 'normal' (110ms) | 'fast' (75ms) | 'insane' (48ms)
+  const [snakeSpeed, setSnakeSpeed] = useState('normal'); // 'normal' | 'fast' | 'insane'
   const [combo, setCombo] = useState(1);
   const [maxCombo, setMaxCombo] = useState(1);
   const [applesEaten, setApplesEaten] = useState(0);
-  const [activePowerUp, setActivePowerUp] = useState(null); // { type: 'SHIELD'|'SLOW'|'2X', expiresAt: number }
+  const [activePowerUp, setActivePowerUp] = useState(null);
   const [snakeGameOver, setSnakeGameOver] = useState(false);
   const [isNewHighScore, setIsNewHighScore] = useState(false);
 
@@ -424,10 +424,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const animFrameRef = useRef(null);
   const lastTickTimeRef = useRef(0);
 
-  // Mutable Game State Ref for 60fps Zero-Lag Execution
+  // Mutable Game State Ref for zero-overhead 60fps execution
   const snakeStateRef = useRef({
-    snake: [{ x: 6, y: 6 }, { x: 5, y: 6 }, { x: 4, y: 6 }, { x: 3, y: 6 }],
-    food: { x: 14, y: 6 },
+    snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }, { x: 4, y: 7 }],
+    food: { x: 18, y: 7 },
     goldenFood: null,
     powerUpItem: null,
     dir: { x: 1, y: 0 },
@@ -456,16 +456,16 @@ export default function TerminalModal({ onClose, onLaunch }) {
   }, []);
 
   const scrollToBottom = useCallback(() => {
-    if (modalBodyRef.current) {
+    if (modalBodyRef.current && !snakeGameActive) {
       modalBodyRef.current.scrollTop = modalBodyRef.current.scrollHeight;
     }
-  }, []);
+  }, [snakeGameActive]);
 
   useEffect(() => {
     scrollToBottom();
   }, [history, snakeGameActive, scrollToBottom]);
 
-  // Direction input handler with double-turn buffer queue
+  // Double-turn buffer queue
   const changeSnakeDirection = useCallback((dirKey) => {
     const state = snakeStateRef.current;
     if (state.isDying) return;
@@ -486,7 +486,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
     }
   }, []);
 
-  // ── 60FPS REQUEST ANIMATION FRAME GAME ENGINE ──
+  // ── 60FPS FULL-TERMINAL SNAKE ENGINE ──
   useEffect(() => {
     if (!snakeGameActive || snakeGameOver) {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
@@ -498,9 +498,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Full-terminal resolution: 28 cols x 18 rows with 20px grid
     const gridSize = 20;
-    const cols = 22;
-    const rows = 14;
+    const cols = 28;
+    const rows = 18;
     canvas.width = cols * gridSize;
     canvas.height = rows * gridSize;
 
@@ -518,7 +519,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
       return cell;
     };
 
-    // Step Game Logic on Timer Delta
     const stepGameLogic = () => {
       const state = snakeStateRef.current;
       const now = Date.now();
@@ -564,7 +564,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
       const hitSelf = state.snake.some(seg => seg.x === head.x && seg.y === head.y);
 
-      // 💥 TRIGGER SPECTACULAR CYBERPUNK DEATH ANIMATION
+      // 💥 TRIGGER CYBERPUNK VOXEL SHATTER DEATH
       if (hitWall || hitSelf) {
         if (state.hasShield) {
           state.hasShield = false;
@@ -573,7 +573,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           state.floatingTexts.push({
             x: canvas.width / 2,
             y: canvas.height / 2,
-            text: '🛡️ SHIELD BROKEN! CRASH PREVENTED',
+            text: '🛡️ SHIELD BROKEN! CRASH DEFLECTED',
             color: '#38bdf8',
             life: 1.2
           });
@@ -582,16 +582,16 @@ export default function TerminalModal({ onClose, onLaunch }) {
           if (head.y < 0) head.y = 0;
           if (head.y >= rows) head.y = rows - 1;
         } else {
-          // Initialize Explosion Shards
           state.isDying = true;
           state.deathFrames = 0;
           SoundFX.playDeploy();
 
+          // Exploding Voxels
           state.deathFragments = [];
           state.snake.forEach((seg, i) => {
             for (let f = 0; f < 4; f++) {
               const angle = Math.random() * Math.PI * 2;
-              const spd = 2.0 + Math.random() * 5.0;
+              const spd = 2.0 + Math.random() * 5.5;
               state.deathFragments.push({
                 x: seg.x * gridSize + (f % 2) * 10,
                 y: seg.y * gridSize + Math.floor(f / 2) * 10,
@@ -606,12 +606,12 @@ export default function TerminalModal({ onClose, onLaunch }) {
             }
           });
 
-          // Shockwave ripple
+          // Shockwave Pulse
           state.shockwave = {
             x: (head.x < 0 ? 0 : head.x >= cols ? cols - 1 : head.x) * gridSize + gridSize / 2,
             y: (head.y < 0 ? 0 : head.y >= rows ? rows - 1 : head.y) * gridSize + gridSize / 2,
             radius: 4,
-            maxRadius: 180,
+            maxRadius: 220,
             alpha: 1.0
           };
           return;
@@ -637,7 +637,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
         setSnakeScore(state.score);
         setApplesEaten(state.apples);
 
-        // Spawn Golden Glitch every 4 orbs
         if (state.apples % 4 === 0 && !state.goldenFood) {
           state.goldenFood = {
             ...getRandomEmptyCell(),
@@ -653,7 +652,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
           });
         }
 
-        // Spawn Power-Up every 6 orbs
         if (state.apples % 6 === 0 && !state.powerUpItem) {
           const types = ['SHIELD', 'SLOW', '2X'];
           const chosenType = types[Math.floor(Math.random() * types.length)];
@@ -748,7 +746,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
       }
     };
 
-    // ── 60FPS CONTINUOUS CANVAS RENDER LOOP ──
+    // ── 60FPS CONTINUOUS RENDER TICK ──
     const renderLoop = (timestamp) => {
       const state = snakeStateRef.current;
       const now = Date.now();
@@ -758,7 +756,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
         intervalMs = Math.round(intervalMs * 1.5);
       }
 
-      // Logic Step on Delta Accumulator
       if (!state.isDying && !isPaused) {
         if (!lastTickTimeRef.current) lastTickTimeRef.current = timestamp;
         const delta = timestamp - lastTickTimeRef.current;
@@ -768,11 +765,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
         }
       }
 
-      // ── DRAW 60FPS GRAPHICS ──
+      // ── CANVAS DRAWING ──
       ctx.fillStyle = '#060606';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Scanning Radar Line
+      // Radar Scanline
       state.scanLineY = (state.scanLineY + 2) % canvas.height;
       const gradScan = ctx.createLinearGradient(0, state.scanLineY - 12, 0, state.scanLineY + 12);
       gradScan.addColorStop(0, 'rgba(0, 255, 136, 0)');
@@ -781,7 +778,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
       ctx.fillStyle = gradScan;
       ctx.fillRect(0, state.scanLineY - 12, canvas.width, 24);
 
-      // Subtle Background Grid
+      // Background Grid
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
       ctx.lineWidth = 1;
       for (let x = 0; x <= cols; x++) {
@@ -797,7 +794,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.stroke();
       }
 
-      // Hardcore Lethal Wall Perimeter
+      // Lethal Wall Perimeter
       if (snakeMode === 'walls') {
         ctx.strokeStyle = '#f87171';
         ctx.lineWidth = 2;
@@ -807,7 +804,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.shadowBlur = 0;
       }
 
-      // Food (Cyan Glowing Data Orb)
+      // Regular Food Orb
       const foodPulse = Math.sin(now / 150) * 1.5;
       ctx.fillStyle = '#38bdf8';
       ctx.shadowColor = '#38bdf8';
@@ -845,7 +842,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.shadowBlur = 0;
       }
 
-      // Power-Up Matrix Crystal
+      // Power-Up Crystal
       if (state.powerUpItem) {
         const px = state.powerUpItem.x * gridSize + gridSize / 2;
         const py = state.powerUpItem.y * gridSize + gridSize / 2;
@@ -856,7 +853,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.shadowBlur = 0;
       }
 
-      // Draw Snake (if not dying)
+      // Draw Snake (if alive)
       if (!state.isDying) {
         state.snake.forEach((seg, idx) => {
           const isHead = idx === 0;
@@ -873,7 +870,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
               ctx.strokeRect(seg.x * gridSize - 2, seg.y * gridSize - 2, gridSize + 4, gridSize + 4);
             }
 
-            // Rounded Head
             ctx.beginPath();
             ctx.roundRect(seg.x * gridSize + 1, seg.y * gridSize + 1, gridSize - 2, gridSize - 2, 4);
             ctx.fill();
@@ -908,24 +904,16 @@ export default function TerminalModal({ onClose, onLaunch }) {
       if (state.isDying) {
         state.deathFrames++;
 
-        // Flash effect
-        if (state.deathFrames < 6) {
-          ctx.fillStyle = 'rgba(248, 113, 113, 0.25)';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-
-        // Shockwave Ripple
         if (state.shockwave && state.shockwave.alpha > 0) {
           ctx.strokeStyle = `rgba(255, 255, 255, ${state.shockwave.alpha})`;
           ctx.lineWidth = 2;
           ctx.beginPath();
           ctx.arc(state.shockwave.x, state.shockwave.y, state.shockwave.radius, 0, Math.PI * 2);
           ctx.stroke();
-          state.shockwave.radius += 6;
-          state.shockwave.alpha -= 0.04;
+          state.shockwave.radius += 7;
+          state.shockwave.alpha -= 0.035;
         }
 
-        // Exploding Voxels
         state.deathFragments.forEach(f => {
           f.x += f.vx;
           f.y += f.vy;
@@ -947,7 +935,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
           }
         });
 
-        // Conclude death after 40 frames (~700ms)
         if (state.deathFrames >= 40) {
           setSnakeGameOver(true);
           if (state.score > snakeHighScore) {
@@ -1006,7 +993,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
     };
   }, [snakeGameActive, snakeGameOver, isPaused, snakeMode, snakeSpeed, snakeHighScore, activePowerUp, getHighScoreKey]);
 
-  // Window-level keydown listener
+  // Window-level key listener
   useEffect(() => {
     const handleGlobalKeyDown = (e) => {
       if (snakeGameActive) {
@@ -1092,8 +1079,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const startSnakeGame = () => {
     lastTickTimeRef.current = 0;
     snakeStateRef.current = {
-      snake: [{ x: 6, y: 6 }, { x: 5, y: 6 }, { x: 4, y: 6 }, { x: 3, y: 6 }],
-      food: { x: 14, y: 6 },
+      snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }, { x: 4, y: 7 }],
+      food: { x: 18, y: 7 },
       goldenFood: null,
       powerUpItem: null,
       dir: { x: 1, y: 0 },
@@ -1161,7 +1148,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'out', text: '  ai / ask <query>  - Ask the built-in AI reasoning engine technical questions' },
           { type: 'out', text: `  deploy <1-${projectsData.length}|name> - Initiate deployment sequence for a target universe` },
           { type: 'info', text: '── GAMES, CYBER FX & CUSTOMIZATION ──' },
-          { type: 'out', text: '  snake             - Play the 60fps Arcade Canvas Snake Game with Combos & Death FX' },
+          { type: 'out', text: '  snake             - Full-Terminal 60fps Cyberpunk Arcade Snake Engine' },
           { type: 'out', text: '  hack / pwn        - Cinematic Hollywood cyber penetration sequence' },
           { type: 'out', text: '  matrix            - Digital cascading neural code stream' },
           { type: 'out', text: '  cowsay <text>     - Classic ASCII cow wisdom speech' },
@@ -1212,7 +1199,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
       case 'snake':
       case 'game':
         startSnakeGame();
-        newHistory.push({ type: 'info', text: '🎮 INITIATING 60FPS ARCADE CANVAS SNAKE. Arrow Keys / WASD to steer · P to Pause · R to Restart · Q to Quit.' });
+        newHistory.push({ type: 'info', text: '🎮 INITIATING FULL-TERMINAL 60FPS ARCADE SNAKE. Use Arrow Keys / WASD. Press ESC or Q to quit.' });
         break;
 
       case 'hack':
@@ -1633,7 +1620,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
           </div>
 
           <div className="terminal-title-text" style={{ color: activeThemeObj.primary }}>
-            harshit@usar-delhi: {currentPath} (zsh) · [{activeThemeObj.label}]
+            {snakeGameActive ? `ARCADE ENGINE 60FPS · ${activeThemeObj.label}` : `harshit@usar-delhi: ${currentPath} (zsh) · [${activeThemeObj.label}]`}
           </div>
 
           <div className="terminal-header-actions">
@@ -1654,35 +1641,58 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
           </div>
         </div>
 
+        {/* Modal Body: Scroll-Locked Full-Screen Arcade when Snake is active */}
         <div
           ref={modalBodyRef}
-          className="modal-body terminal-modal-body custom-scroll"
+          className={`modal-body terminal-modal-body custom-scroll ${snakeGameActive ? 'snake-active-body' : ''}`}
           onClick={() => {
             if (!snakeGameActive) inputRef.current?.focus();
             else snakeCanvasRef.current?.focus();
           }}
         >
-          {history.map((line, idx) => (
-            <div key={idx} className={`term-line line-${line.type}`}>
-              {line.type === 'neofetch' || line.type === 'code' ? (
-                <pre style={{ color: activeThemeObj.primary }}>{line.text}</pre>
-              ) : line.type === 'sys' || line.type === 'ok' ? (
-                <span style={{ color: activeThemeObj.primary }}>{line.text}</span>
-              ) : (
-                <span>{line.text}</span>
-              )}
-            </div>
-          ))}
+          {!snakeGameActive && (
+            <>
+              {history.map((line, idx) => (
+                <div key={idx} className={`term-line line-${line.type}`}>
+                  {line.type === 'neofetch' || line.type === 'code' ? (
+                    <pre style={{ color: activeThemeObj.primary }}>{line.text}</pre>
+                  ) : line.type === 'sys' || line.type === 'ok' ? (
+                    <span style={{ color: activeThemeObj.primary }}>{line.text}</span>
+                  ) : (
+                    <span>{line.text}</span>
+                  )}
+                </div>
+              ))}
 
-          {/* ── 60FPS ARCADE CANVAS SNAKE ENGINE ── */}
+              <div className="term-input-row">
+                <span className="term-prompt" style={{ color: activeThemeObj.primary }}>
+                  harshit@usar {currentPath} %
+                </span>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className="term-input-field"
+                  value={inputVal}
+                  onChange={(e) => setInputVal(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  autoComplete="off"
+                  spellCheck="false"
+                  placeholder="type 'help'..."
+                />
+              </div>
+              <div ref={bottomRef} />
+            </>
+          )}
+
+          {/* ── FULL-TERMINAL 60FPS ARCADE SNAKE STATION ── */}
           {snakeGameActive && (
             <div
-              className="arcade-snake-container"
+              className="arcade-snake-container full-terminal-arcade"
               style={{ borderColor: activeThemeObj.primary }}
               tabIndex={0}
               onClick={() => snakeCanvasRef.current?.focus()}
             >
-              {/* Arcade Header HUD */}
+              {/* Arcade Top Telemetry Bar */}
               <div className="snake-arcade-hud">
                 <div className="snake-stats-left">
                   <span className="snake-badge" style={{ color: activeThemeObj.primary }}>🐍 CYBER ARCADE</span>
@@ -1712,7 +1722,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                     <button
                       className={`btn-mode-chip ${snakeMode === 'walls' ? 'active' : ''}`}
                       onClick={() => { SoundFX.playKey(); setSnakeMode('walls'); }}
-                      title="Lethal electric walls"
+                      title="Lethal electric perimeter"
                     >
                       WALLS ⚡
                     </button>
@@ -1732,7 +1742,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                 </div>
               </div>
 
-              {/* Canvas Screen */}
+              {/* Seamless Fitting Game Canvas Screen */}
               <div className="snake-canvas-wrapper">
                 <canvas
                   ref={snakeCanvasRef}
@@ -1755,7 +1765,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                 {/* Game Over Mission Summary Overlay */}
                 {snakeGameOver && (
                   <div className="snake-gameover-overlay">
-                    <span className="over-title">💀 SESSION TERMINATED // SCORE: {snakeScore} PTS</span>
+                    <span className="over-title">💀 MISSION TERMINATED // SCORE: {snakeScore} PTS</span>
                     {isNewHighScore && (
                       <span className="new-hi-banner" style={{ color: activeThemeObj.primary }}>
                         🏆 NEW RECORD SET IN {snakeMode.toUpperCase()} MODE!
@@ -1778,7 +1788,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                   </div>
                 )}
 
-                {/* On-Screen D-Pad Controls for Mobile / Touch */}
+                {/* On-Screen D-Pad Controls for Mobile */}
                 <div className="snake-dpad-controls">
                   <button className="dpad-btn up" onClick={() => changeSnakeDirection('UP')}>▲</button>
                   <div className="dpad-mid-row">
@@ -1801,53 +1811,39 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                   <span><kbd>R</kbd> Restart</span>
                   <span>·</span>
                   <button className="btn-snake-quit-inline" onClick={() => setSnakeGameActive(false)}>
-                    QUIT (ESC)
+                    QUIT TO SHELL (ESC)
                   </button>
                 </div>
               )}
             </div>
           )}
-
-          {!snakeGameActive && (
-            <div className="term-input-row">
-              <span className="term-prompt" style={{ color: activeThemeObj.primary }}>
-                harshit@usar {currentPath} %
-              </span>
-              <input
-                ref={inputRef}
-                type="text"
-                className="term-input-field"
-                value={inputVal}
-                onChange={(e) => setInputVal(e.target.value)}
-                onKeyDown={handleKeyDown}
-                autoComplete="off"
-                spellCheck="false"
-                placeholder="type 'help'..."
-              />
-            </div>
-          )}
-          <div ref={bottomRef} />
         </div>
 
-        {/* Quick Suggestion Chips */}
-        <div className="terminal-quick-chips-bar">
-          <span className="chips-label">QUICK CMDS:</span>
-          {quickChips.map((chip, idx) => (
-            <button
-              key={idx}
-              className="term-chip-btn"
-              onClick={() => {
-                SoundFX.playClick();
-                handleCommand(chip.cmd);
-              }}
-            >
-              {chip.label}
-            </button>
-          ))}
-        </div>
+        {/* Quick Suggestion Chips (Visible only when in shell mode) */}
+        {!snakeGameActive && (
+          <div className="terminal-quick-chips-bar">
+            <span className="chips-label">QUICK CMDS:</span>
+            {quickChips.map((chip, idx) => (
+              <button
+                key={idx}
+                className="term-chip-btn"
+                onClick={() => {
+                  SoundFX.playClick();
+                  handleCommand(chip.cmd);
+                }}
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="modal-footer terminal-footer-tips">
-          <span>TIPS: Press <kbd>Tab</kbd> to autocomplete · <kbd>Ctrl+C</kbd> cancel · <kbd>Ctrl+L</kbd> clear · <kbd>↑</kbd>/<kbd>↓</kbd> history</span>
+          {snakeGameActive ? (
+            <span>ARCADE CONTROLS: <kbd>Arrow Keys</kbd> or <kbd>WASD</kbd> · <kbd>P</kbd> Pause · <kbd>R</kbd> Quick Restart · <kbd>ESC</kbd> Exit to Terminal</span>
+          ) : (
+            <span>TIPS: Press <kbd>Tab</kbd> to autocomplete · <kbd>Ctrl+C</kbd> cancel · <kbd>Ctrl+L</kbd> clear · <kbd>↑</kbd>/<kbd>↓</kbd> history</span>
+          )}
         </div>
       </div>
     </div>
