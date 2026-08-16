@@ -272,8 +272,7 @@ import * as THREE from 'three';
 const scene = new THREE.Scene();
 const geometry = new THREE.BufferGeometry();
 const particleCount = 1200;
-const positions = new Float32Array(particleCount * 3);
-// Steered by mouse raycasting in real-time`
+const positions = new Float32Array(particleCount * 3);`
           },
           '10_cyber_terminal.js': {
             type: 'file',
@@ -374,7 +373,7 @@ function getNodeFromVFS(normalizedPath) {
 export default function TerminalModal({ onClose, onLaunch }) {
   const [history, setHistory] = useState([
     { type: 'sys', text: '╔══════════════════════════════════════════════════════════════════════╗' },
-    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.6.0-PRO]      ║' },
+    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.7.0-PRO]      ║' },
     { type: 'sys', text: '║     Host: USAR (GGSIPU) Neural Engine · Clearance: LEVEL 5 ROOT      ║' },
     { type: 'sys', text: '╚══════════════════════════════════════════════════════════════════════╝' },
     { type: 'info', text: "Type 'help' for full command suite, or try: 'neofetch', 'ai <query>', 'snake', 'hack', 'top'." },
@@ -389,11 +388,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const [currentTheme, setCurrentTheme] = useState('green');
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  // ── SUPERCHARGED SNAKE ARCADE GAME STATE ──
+  // ── 60FPS ARCADE CANVAS SNAKE GAME STATE ──
   const [snakeGameActive, setSnakeGameActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [snakeScore, setSnakeScore] = useState(0);
-  const [snakeMode, setSnakeMode] = useState('wrap'); // 'wrap' (pass through) | 'walls' (lethal walls)
+  const [snakeMode, setSnakeMode] = useState('wrap'); // 'wrap' | 'walls'
   const [snakeSpeed, setSnakeSpeed] = useState('normal'); // 'normal' (110ms) | 'fast' (75ms) | 'insane' (48ms)
   const [combo, setCombo] = useState(1);
   const [maxCombo, setMaxCombo] = useState(1);
@@ -412,7 +411,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
     }
   });
 
-  // Sync high score when speed or mode changes
   useEffect(() => {
     try {
       const saved = parseInt(localStorage.getItem(getHighScoreKey()) || '0', 10);
@@ -423,31 +421,40 @@ export default function TerminalModal({ onClose, onLaunch }) {
   }, [getHighScoreKey]);
 
   const snakeCanvasRef = useRef(null);
+  const animFrameRef = useRef(null);
+  const lastTickTimeRef = useRef(0);
+
+  // Mutable Game State Ref for 60fps Zero-Lag Execution
   const snakeStateRef = useRef({
-    snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }, { x: 4, y: 7 }],
-    food: { x: 14, y: 7 },
-    goldenFood: null, // { x, y, expiresAt }
-    powerUpItem: null, // { x, y, type: 'SHIELD'|'SLOW'|'2X', expiresAt }
+    snake: [{ x: 6, y: 6 }, { x: 5, y: 6 }, { x: 4, y: 6 }, { x: 3, y: 6 }],
+    food: { x: 14, y: 6 },
+    goldenFood: null,
+    powerUpItem: null,
     dir: { x: 1, y: 0 },
     dirQueue: [],
     particles: [],
     floatingTexts: [],
+    deathFragments: [],
+    shockwave: null,
+    isDying: false,
+    deathFrames: 0,
     lastEatTime: 0,
     scanLineY: 0,
-    hasShield: false
+    hasShield: false,
+    score: 0,
+    combo: 1,
+    maxCombo: 1,
+    apples: 0
   });
 
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
   const modalBodyRef = useRef(null);
-  const snakeLoopRef = useRef(null);
 
-  // Focus input automatically on mount
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
   }, []);
 
-  // Auto scroll to bottom
   const scrollToBottom = useCallback(() => {
     if (modalBodyRef.current) {
       modalBodyRef.current.scrollTop = modalBodyRef.current.scrollHeight;
@@ -458,9 +465,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
     scrollToBottom();
   }, [history, snakeGameActive, scrollToBottom]);
 
-  // Direction changer with input queue buffer
+  // Direction input handler with double-turn buffer queue
   const changeSnakeDirection = useCallback((dirKey) => {
     const state = snakeStateRef.current;
+    if (state.isDying) return;
+
     const currentOrLastQueued = state.dirQueue.length > 0 
       ? state.dirQueue[state.dirQueue.length - 1] 
       : state.dir;
@@ -471,16 +480,16 @@ export default function TerminalModal({ onClose, onLaunch }) {
     if (dirKey === 'LEFT' && currentOrLastQueued.x === 0) nextDir = { x: -1, y: 0 };
     if (dirKey === 'RIGHT' && currentOrLastQueued.x === 0) nextDir = { x: 1, y: 0 };
 
-    if (nextDir && state.dirQueue.length < 3) {
+    if (nextDir && state.dirQueue.length < 2) {
       state.dirQueue.push(nextDir);
       SoundFX.playKey();
     }
   }, []);
 
-  // ── SUPERCHARGED SNAKE ARCADE GAME ENGINE LOOP ──
+  // ── 60FPS REQUEST ANIMATION FRAME GAME ENGINE ──
   useEffect(() => {
-    if (!snakeGameActive || snakeGameOver || isPaused) {
-      if (snakeLoopRef.current) clearInterval(snakeLoopRef.current);
+    if (!snakeGameActive || snakeGameOver) {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       return;
     }
 
@@ -490,43 +499,48 @@ export default function TerminalModal({ onClose, onLaunch }) {
     if (!ctx) return;
 
     const gridSize = 20;
-    const cols = 24;
-    const rows = 16;
+    const cols = 22;
+    const rows = 14;
     canvas.width = cols * gridSize;
     canvas.height = rows * gridSize;
 
     const speedIntervals = { normal: 110, fast: 75, insane: 48 };
-    let intervalMs = speedIntervals[snakeSpeed] || 110;
-    if (activePowerUp && activePowerUp.type === 'SLOW' && activePowerUp.expiresAt > Date.now()) {
-      intervalMs = Math.round(intervalMs * 1.5);
-    }
 
-    snakeLoopRef.current = setInterval(() => {
+    const getRandomEmptyCell = () => {
+      const state = snakeStateRef.current;
+      let cell;
+      while (!cell || state.snake.some(s => s.x === cell.x && s.y === cell.y)) {
+        cell = {
+          x: Math.floor(Math.random() * cols),
+          y: Math.floor(Math.random() * rows)
+        };
+      }
+      return cell;
+    };
+
+    // Step Game Logic on Timer Delta
+    const stepGameLogic = () => {
       const state = snakeStateRef.current;
       const now = Date.now();
 
-      // Process queued direction
       if (state.dirQueue.length > 0) {
         state.dir = state.dirQueue.shift();
       }
 
-      // Check power-up expiration
       if (activePowerUp && activePowerUp.expiresAt <= now) {
         setActivePowerUp(null);
         state.hasShield = false;
       }
 
-      // Check combo expiration (3.5s window)
       if (state.lastEatTime > 0 && now - state.lastEatTime > 3500) {
+        state.combo = 1;
         setCombo(1);
       }
 
-      // Expire golden food
       if (state.goldenFood && state.goldenFood.expiresAt <= now) {
         state.goldenFood = null;
       }
 
-      // Expire power up on map
       if (state.powerUpItem && state.powerUpItem.expiresAt <= now) {
         state.powerUpItem = null;
       }
@@ -536,13 +550,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
         y: state.snake[0].y + state.dir.y
       };
 
-      // Wall collision or wrap
       let hitWall = false;
       if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
         if (snakeMode === 'walls') {
           hitWall = true;
         } else {
-          // Wrap
           if (head.x < 0) head.x = cols - 1;
           if (head.x >= cols) head.x = 0;
           if (head.y < 0) head.y = rows - 1;
@@ -550,11 +562,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
         }
       }
 
-      // Self collision
       const hitSelf = state.snake.some(seg => seg.x === head.x && seg.y === head.y);
 
+      // 💥 TRIGGER SPECTACULAR CYBERPUNK DEATH ANIMATION
       if (hitWall || hitSelf) {
-        // Check Shield Power-Up Protection
         if (state.hasShield) {
           state.hasShield = false;
           setActivePowerUp(null);
@@ -562,182 +573,144 @@ export default function TerminalModal({ onClose, onLaunch }) {
           state.floatingTexts.push({
             x: canvas.width / 2,
             y: canvas.height / 2,
-            text: '🛡️ SHIELD BROKEN! SAVED FROM CRASH',
+            text: '🛡️ SHIELD BROKEN! CRASH PREVENTED',
             color: '#38bdf8',
             life: 1.2
           });
-          // Bounce back to safe coordinate inside arena
           if (head.x < 0) head.x = 0;
           if (head.x >= cols) head.x = cols - 1;
           if (head.y < 0) head.y = 0;
           if (head.y >= rows) head.y = rows - 1;
         } else {
-          setSnakeGameOver(true);
+          // Initialize Explosion Shards
+          state.isDying = true;
+          state.deathFrames = 0;
           SoundFX.playDeploy();
-          // Check High Score
-          if (snakeScore > snakeHighScore) {
-            setIsNewHighScore(true);
-            try {
-              localStorage.setItem(getHighScoreKey(), String(snakeScore));
-            } catch {}
-            confetti({
-              particleCount: 75,
-              spread: 70,
-              origin: { y: 0.6 },
-              colors: ['#00ff88', '#38bdf8', '#fbbf24', '#c084fc']
-            });
-          }
+
+          state.deathFragments = [];
+          state.snake.forEach((seg, i) => {
+            for (let f = 0; f < 4; f++) {
+              const angle = Math.random() * Math.PI * 2;
+              const spd = 2.0 + Math.random() * 5.0;
+              state.deathFragments.push({
+                x: seg.x * gridSize + (f % 2) * 10,
+                y: seg.y * gridSize + Math.floor(f / 2) * 10,
+                vx: Math.cos(angle) * spd,
+                vy: Math.sin(angle) * spd,
+                size: 3 + Math.random() * 4,
+                rot: Math.random() * Math.PI * 2,
+                vRot: (Math.random() - 0.5) * 0.4,
+                color: i === 0 ? '#ff5f56' : i % 2 === 0 ? '#00ff88' : '#38bdf8',
+                life: 1.0
+              });
+            }
+          });
+
+          // Shockwave ripple
+          state.shockwave = {
+            x: (head.x < 0 ? 0 : head.x >= cols ? cols - 1 : head.x) * gridSize + gridSize / 2,
+            y: (head.y < 0 ? 0 : head.y >= rows ? rows - 1 : head.y) * gridSize + gridSize / 2,
+            radius: 4,
+            maxRadius: 180,
+            alpha: 1.0
+          };
           return;
         }
       }
 
       state.snake.unshift(head);
 
-      // Helper function to find empty cell
-      const getRandomEmptyCell = () => {
-        let cell;
-        while (!cell || state.snake.some(s => s.x === cell.x && s.y === cell.y)) {
-          cell = {
-            x: Math.floor(Math.random() * cols),
-            y: Math.floor(Math.random() * rows)
-          };
-        }
-        return cell;
-      };
-
       let ateFood = false;
 
-      // 1. Check Normal Data Orb Collision
+      // Regular Food Collision
       if (head.x === state.food.x && head.y === state.food.y) {
         ateFood = true;
         SoundFX.playSuccess();
 
-        // Calculate score with combo and 2X multiplier
         const is2X = activePowerUp && activePowerUp.type === '2X' && activePowerUp.expiresAt > now;
-        const currentMult = (is2X ? 2 : 1) * combo;
+        const currentMult = (is2X ? 2 : 1) * state.combo;
         const speedBonus = snakeSpeed === 'insane' ? 25 : snakeSpeed === 'fast' ? 15 : 10;
         const points = speedBonus * currentMult;
 
-        setSnakeScore(prev => {
-          const next = prev + points;
-          if (next > snakeHighScore) setSnakeHighScore(next);
-          return next;
-        });
+        state.score += points;
+        state.apples += 1;
+        setSnakeScore(state.score);
+        setApplesEaten(state.apples);
 
-        setApplesEaten(prev => {
-          const nextCount = prev + 1;
-          // Spawn Golden Glitch Bit every 4 normal orbs
-          if (nextCount % 4 === 0 && !state.goldenFood) {
-            state.goldenFood = {
-              ...getRandomEmptyCell(),
-              expiresAt: Date.now() + 8000
-            };
-            SoundFX.playDeploy();
-            state.floatingTexts.push({
-              x: state.goldenFood.x * gridSize + gridSize / 2,
-              y: state.goldenFood.y * gridSize,
-              text: '⚡ GOLDEN GLITCH DETECTED!',
-              color: '#fbbf24',
-              life: 1.0
-            });
-          }
+        // Spawn Golden Glitch every 4 orbs
+        if (state.apples % 4 === 0 && !state.goldenFood) {
+          state.goldenFood = {
+            ...getRandomEmptyCell(),
+            expiresAt: Date.now() + 8000
+          };
+          SoundFX.playDeploy();
+          state.floatingTexts.push({
+            x: state.goldenFood.x * gridSize + gridSize / 2,
+            y: state.goldenFood.y * gridSize,
+            text: '⚡ GOLDEN GLITCH (8s)',
+            color: '#fbbf24',
+            life: 1.0
+          });
+        }
 
-          // Spawn random Power-Up every 6 normal orbs
-          if (nextCount % 6 === 0 && !state.powerUpItem) {
-            const types = ['SHIELD', 'SLOW', '2X'];
-            const chosenType = types[Math.floor(Math.random() * types.length)];
-            state.powerUpItem = {
-              ...getRandomEmptyCell(),
-              type: chosenType,
-              expiresAt: Date.now() + 9000
-            };
-            state.floatingTexts.push({
-              x: state.powerUpItem.x * gridSize + gridSize / 2,
-              y: state.powerUpItem.y * gridSize,
-              text: `🔮 POWER-UP: ${chosenType}`,
-              color: '#c084fc',
-              life: 1.0
-            });
-          }
+        // Spawn Power-Up every 6 orbs
+        if (state.apples % 6 === 0 && !state.powerUpItem) {
+          const types = ['SHIELD', 'SLOW', '2X'];
+          const chosenType = types[Math.floor(Math.random() * types.length)];
+          state.powerUpItem = {
+            ...getRandomEmptyCell(),
+            type: chosenType,
+            expiresAt: Date.now() + 9000
+          };
+          state.floatingTexts.push({
+            x: state.powerUpItem.x * gridSize + gridSize / 2,
+            y: state.powerUpItem.y * gridSize,
+            text: `🔮 POWER-UP: ${chosenType}`,
+            color: '#c084fc',
+            life: 1.0
+          });
+        }
 
-          return nextCount;
-        });
-
-        // Update combo
-        setCombo(prev => {
-          const nextCombo = Math.min(5, prev + 1);
-          if (nextCombo > maxCombo) setMaxCombo(nextCombo);
-          return nextCombo;
-        });
+        state.combo = Math.min(5, state.combo + 1);
+        if (state.combo > state.maxCombo) state.maxCombo = state.combo;
+        setCombo(state.combo);
+        setMaxCombo(state.maxCombo);
         state.lastEatTime = now;
 
-        // Floating score popup
         state.floatingTexts.push({
           x: head.x * gridSize + gridSize / 2,
           y: head.y * gridSize,
-          text: `+${points}${combo > 1 ? ` (x${combo} COMBO!)` : ''}`,
+          text: `+${points}${state.combo > 1 ? ` (x${state.combo})` : ''}`,
           color: '#00ff88',
           life: 1.0
         });
 
-        // Particle explosion
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 8; i++) {
           state.particles.push({
             x: head.x * gridSize + gridSize / 2,
             y: head.y * gridSize + gridSize / 2,
-            vx: (Math.random() - 0.5) * 7,
-            vy: (Math.random() - 0.5) * 7,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.5) * 6,
             life: 1.0,
             color: '#00ff88'
           });
         }
 
-        // New regular food
         state.food = getRandomEmptyCell();
       }
 
-      // 2. Check Golden Glitch Collision
+      // Golden Glitch Collision
       if (state.goldenFood && head.x === state.goldenFood.x && head.y === state.goldenFood.y) {
         ateFood = true;
         SoundFX.playDeploy();
         const goldPoints = 50 * (activePowerUp && activePowerUp.type === '2X' ? 2 : 1);
-        setSnakeScore(prev => {
-          const next = prev + goldPoints;
-          if (next > snakeHighScore) setSnakeHighScore(next);
-          return next;
-        });
+        state.score += goldPoints;
+        setSnakeScore(state.score);
         state.floatingTexts.push({
           x: head.x * gridSize + gridSize / 2,
           y: head.y * gridSize,
           text: `+${goldPoints} GOLD GLITCH! 🌟`,
           color: '#fbbf24',
-          life: 1.2
-        });
-        for (let i = 0; i < 14; i++) {
-          state.particles.push({
-            x: head.x * gridSize + gridSize / 2,
-            y: head.y * gridSize + gridSize / 2,
-            vx: (Math.random() - 0.5) * 9,
-            vy: (Math.random() - 0.5) * 9,
-            life: 1.0,
-            color: '#fbbf24'
-          });
-        }
-        state.goldenFood = null;
-      }
-
-      // 3. Check Power-Up Collision
-      if (state.powerUpItem && head.x === state.powerUpItem.x && head.y === state.powerUpItem.y) {
-        ateFood = true;
-        SoundFX.playDeploy();
-        const pType = state.powerUpItem.type;
-        setActivePowerUp({ type: pType, expiresAt: now + 8000 });
-        if (pType === 'SHIELD') state.hasShield = true;
-        state.floatingTexts.push({
-          x: head.x * gridSize + gridSize / 2,
-          y: head.y * gridSize,
-          text: `✨ ${pType} ACTIVATED! (8s)`,
-          color: '#c084fc',
           life: 1.2
         });
         for (let i = 0; i < 12; i++) {
@@ -747,30 +720,68 @@ export default function TerminalModal({ onClose, onLaunch }) {
             vx: (Math.random() - 0.5) * 8,
             vy: (Math.random() - 0.5) * 8,
             life: 1.0,
-            color: '#c084fc'
+            color: '#fbbf24'
           });
         }
+        state.goldenFood = null;
+      }
+
+      // Power-Up Collision
+      if (state.powerUpItem && head.x === state.powerUpItem.x && head.y === state.powerUpItem.y) {
+        ateFood = true;
+        SoundFX.playDeploy();
+        const pType = state.powerUpItem.type;
+        setActivePowerUp({ type: pType, expiresAt: now + 8000 });
+        if (pType === 'SHIELD') state.hasShield = true;
+        state.floatingTexts.push({
+          x: head.x * gridSize + gridSize / 2,
+          y: head.y * gridSize,
+          text: `✨ ${pType} ACTIVE (8s)`,
+          color: '#c084fc',
+          life: 1.2
+        });
         state.powerUpItem = null;
       }
 
       if (!ateFood) {
         state.snake.pop();
       }
+    };
 
-      // ── RENDER HIGH-TECH CYBER CANVAS FRAME ──
-      ctx.fillStyle = '#050505';
+    // ── 60FPS CONTINUOUS CANVAS RENDER LOOP ──
+    const renderLoop = (timestamp) => {
+      const state = snakeStateRef.current;
+      const now = Date.now();
+
+      let intervalMs = speedIntervals[snakeSpeed] || 110;
+      if (activePowerUp && activePowerUp.type === 'SLOW' && activePowerUp.expiresAt > now) {
+        intervalMs = Math.round(intervalMs * 1.5);
+      }
+
+      // Logic Step on Delta Accumulator
+      if (!state.isDying && !isPaused) {
+        if (!lastTickTimeRef.current) lastTickTimeRef.current = timestamp;
+        const delta = timestamp - lastTickTimeRef.current;
+        if (delta >= intervalMs) {
+          lastTickTimeRef.current = timestamp;
+          stepGameLogic();
+        }
+      }
+
+      // ── DRAW 60FPS GRAPHICS ──
+      ctx.fillStyle = '#060606';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 1. Draw Scanning Laser Radar Line
+      // Scanning Radar Line
       state.scanLineY = (state.scanLineY + 2) % canvas.height;
-      const gradScan = ctx.createLinearGradient(0, state.scanLineY - 15, 0, state.scanLineY + 15);
+      const gradScan = ctx.createLinearGradient(0, state.scanLineY - 12, 0, state.scanLineY + 12);
       gradScan.addColorStop(0, 'rgba(0, 255, 136, 0)');
-      gradScan.addColorStop(0.5, 'rgba(0, 255, 136, 0.08)');
+      gradScan.addColorStop(0.5, 'rgba(0, 255, 136, 0.07)');
       gradScan.addColorStop(1, 'rgba(0, 255, 136, 0)');
       ctx.fillStyle = gradScan;
-      ctx.fillRect(0, state.scanLineY - 15, canvas.width, 30);
+      ctx.fillRect(0, state.scanLineY - 12, canvas.width, 24);
 
-      // 2. Draw Subtle Cyber Grid
+      // Subtle Background Grid
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
       ctx.lineWidth = 1;
       for (let x = 0; x <= cols; x++) {
@@ -786,21 +797,21 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.stroke();
       }
 
-      // 3. Draw Hardcore Lethal Wall Perimeter
+      // Hardcore Lethal Wall Perimeter
       if (snakeMode === 'walls') {
         ctx.strokeStyle = '#f87171';
         ctx.lineWidth = 2;
         ctx.shadowColor = '#f87171';
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 8;
         ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
         ctx.shadowBlur = 0;
       }
 
-      // 4. Draw Regular Food (Cyan Glowing Data Orb)
-      const foodPulse = Math.sin(now / 160) * 2;
+      // Food (Cyan Glowing Data Orb)
+      const foodPulse = Math.sin(now / 150) * 1.5;
       ctx.fillStyle = '#38bdf8';
       ctx.shadowColor = '#38bdf8';
-      ctx.shadowBlur = 14;
+      ctx.shadowBlur = 12;
       ctx.beginPath();
       ctx.arc(
         state.food.x * gridSize + gridSize / 2,
@@ -812,102 +823,151 @@ export default function TerminalModal({ onClose, onLaunch }) {
       ctx.fill();
       ctx.shadowBlur = 0;
 
-      // 5. Draw Golden Glitch Bit (if active)
+      // Golden Glitch Star
       if (state.goldenFood) {
-        const remainingGoldMs = Math.max(0, state.goldenFood.expiresAt - now);
-        const goldRatio = remainingGoldMs / 8000;
+        const remainingMs = Math.max(0, state.goldenFood.expiresAt - now);
+        const goldRatio = remainingMs / 8000;
         const gx = state.goldenFood.x * gridSize + gridSize / 2;
         const gy = state.goldenFood.y * gridSize + gridSize / 2;
 
         ctx.fillStyle = '#fbbf24';
         ctx.shadowColor = '#fbbf24';
-        ctx.shadowBlur = 16;
+        ctx.shadowBlur = 14;
         ctx.beginPath();
-        ctx.arc(gx, gy, gridSize / 2.4, 0, Math.PI * 2);
+        ctx.arc(gx, gy, gridSize / 2.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Countdown timer arc
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(gx, gy, gridSize / 2 + 2, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * goldRatio));
+        ctx.arc(gx, gy, gridSize / 2 + 1, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * goldRatio));
         ctx.stroke();
         ctx.shadowBlur = 0;
       }
 
-      // 6. Draw Power-Up Item (if active on grid)
+      // Power-Up Matrix Crystal
       if (state.powerUpItem) {
         const px = state.powerUpItem.x * gridSize + gridSize / 2;
         const py = state.powerUpItem.y * gridSize + gridSize / 2;
         ctx.fillStyle = '#c084fc';
         ctx.shadowColor = '#c084fc';
-        ctx.shadowBlur = 15;
+        ctx.shadowBlur = 14;
         ctx.fillRect(px - gridSize / 3, py - gridSize / 3, (gridSize / 3) * 2, (gridSize / 3) * 2);
         ctx.shadowBlur = 0;
       }
 
-      // 7. Draw Snake Body & Cyber Head with Directional Eyes
-      state.snake.forEach((seg, idx) => {
-        const isHead = idx === 0;
-        const t = idx / Math.max(1, state.snake.length);
+      // Draw Snake (if not dying)
+      if (!state.isDying) {
+        state.snake.forEach((seg, idx) => {
+          const isHead = idx === 0;
+          const t = idx / Math.max(1, state.snake.length);
 
-        if (isHead) {
-          ctx.fillStyle = '#00ff88';
-          ctx.shadowColor = state.hasShield ? '#38bdf8' : '#00ff88';
-          ctx.shadowBlur = state.hasShield ? 20 : 14;
+          if (isHead) {
+            ctx.fillStyle = '#00ff88';
+            ctx.shadowColor = state.hasShield ? '#38bdf8' : '#00ff88';
+            ctx.shadowBlur = state.hasShield ? 18 : 12;
 
-          // Shield Aura Ring
-          if (state.hasShield) {
-            ctx.strokeStyle = '#38bdf8';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(seg.x * gridSize - 2, seg.y * gridSize - 2, gridSize + 4, gridSize + 4);
+            if (state.hasShield) {
+              ctx.strokeStyle = '#38bdf8';
+              ctx.lineWidth = 2;
+              ctx.strokeRect(seg.x * gridSize - 2, seg.y * gridSize - 2, gridSize + 4, gridSize + 4);
+            }
+
+            // Rounded Head
+            ctx.beginPath();
+            ctx.roundRect(seg.x * gridSize + 1, seg.y * gridSize + 1, gridSize - 2, gridSize - 2, 4);
+            ctx.fill();
+
+            // Eyes
+            ctx.fillStyle = '#050505';
+            const ex = seg.x * gridSize;
+            const ey = seg.y * gridSize;
+            let e1 = { x: ex + 5, y: ey + 5 }, e2 = { x: ex + 15, y: ey + 5 };
+            if (state.dir.x === 1) { e1 = { x: ex + 13, y: ey + 5 }; e2 = { x: ex + 13, y: ey + 15 }; }
+            else if (state.dir.x === -1) { e1 = { x: ex + 5, y: ey + 5 }; e2 = { x: ex + 5, y: ey + 15 }; }
+            else if (state.dir.y === 1) { e1 = { x: ex + 5, y: ey + 13 }; e2 = { x: ex + 15, y: ey + 13 }; }
+
+            ctx.beginPath();
+            ctx.arc(e1.x, e1.y, 2, 0, Math.PI * 2);
+            ctx.arc(e2.x, e2.y, 2, 0, Math.PI * 2);
+            ctx.fill();
+
+          } else {
+            const r = Math.round(0 + t * 14);
+            const g = Math.round(255 - t * 90);
+            const b = Math.round(136 + t * 95);
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.beginPath();
+            ctx.roundRect(seg.x * gridSize + 2, seg.y * gridSize + 2, gridSize - 4, gridSize - 4, 3);
+            ctx.fill();
           }
+        });
+      }
 
-          ctx.fillRect(seg.x * gridSize + 1, seg.y * gridSize + 1, gridSize - 2, gridSize - 2);
+      // 💥 RENDER DEATH ANIMATION
+      if (state.isDying) {
+        state.deathFrames++;
 
-          // Draw Cyber Head Eyes
-          ctx.fillStyle = '#060606';
-          const ex = seg.x * gridSize;
-          const ey = seg.y * gridSize;
-          let eye1 = { x: ex + 5, y: ey + 5 };
-          let eye2 = { x: ex + 15, y: ey + 5 };
-
-          if (state.dir.x === 1) { // Right
-            eye1 = { x: ex + 13, y: ey + 5 };
-            eye2 = { x: ex + 13, y: ey + 15 };
-          } else if (state.dir.x === -1) { // Left
-            eye1 = { x: ex + 5, y: ey + 5 };
-            eye2 = { x: ex + 5, y: ey + 15 };
-          } else if (state.dir.y === 1) { // Down
-            eye1 = { x: ex + 5, y: ey + 13 };
-            eye2 = { x: ex + 15, y: ey + 13 };
-          } else if (state.dir.y === -1) { // Up
-            eye1 = { x: ex + 5, y: ey + 5 };
-            eye2 = { x: ex + 15, y: ey + 5 };
-          }
-
-          ctx.beginPath();
-          ctx.arc(eye1.x, eye1.y, 2, 0, Math.PI * 2);
-          ctx.arc(eye2.x, eye2.y, 2, 0, Math.PI * 2);
-          ctx.fill();
-
-        } else {
-          // Gradient Tail Interpolation (Electric Green -> Neon Cyan/Dark Emerald)
-          const r = Math.round(0 + t * 14);
-          const g = Math.round(255 - t * 100);
-          const b = Math.round(136 + t * 90);
-          ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-          ctx.shadowBlur = 0;
-          ctx.fillRect(seg.x * gridSize + 2, seg.y * gridSize + 2, gridSize - 4, gridSize - 4);
+        // Flash effect
+        if (state.deathFrames < 6) {
+          ctx.fillStyle = 'rgba(248, 113, 113, 0.25)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
-      });
-      ctx.shadowBlur = 0;
 
-      // 8. Draw Particles
+        // Shockwave Ripple
+        if (state.shockwave && state.shockwave.alpha > 0) {
+          ctx.strokeStyle = `rgba(255, 255, 255, ${state.shockwave.alpha})`;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(state.shockwave.x, state.shockwave.y, state.shockwave.radius, 0, Math.PI * 2);
+          ctx.stroke();
+          state.shockwave.radius += 6;
+          state.shockwave.alpha -= 0.04;
+        }
+
+        // Exploding Voxels
+        state.deathFragments.forEach(f => {
+          f.x += f.vx;
+          f.y += f.vy;
+          f.vx *= 0.95;
+          f.vy *= 0.95;
+          f.rot += f.vRot;
+          f.life -= 0.025;
+
+          if (f.life > 0) {
+            ctx.save();
+            ctx.translate(f.x, f.y);
+            ctx.rotate(f.rot);
+            ctx.fillStyle = f.color;
+            ctx.globalAlpha = f.life;
+            ctx.shadowColor = f.color;
+            ctx.shadowBlur = 8;
+            ctx.fillRect(-f.size / 2, -f.size / 2, f.size, f.size);
+            ctx.restore();
+          }
+        });
+
+        // Conclude death after 40 frames (~700ms)
+        if (state.deathFrames >= 40) {
+          setSnakeGameOver(true);
+          if (state.score > snakeHighScore) {
+            setIsNewHighScore(true);
+            try { localStorage.setItem(getHighScoreKey(), String(state.score)); } catch {}
+            confetti({
+              particleCount: 75,
+              spread: 70,
+              origin: { y: 0.6 },
+              colors: ['#00ff88', '#38bdf8', '#fbbf24', '#c084fc']
+            });
+          }
+        }
+      }
+
+      // Particles
       state.particles.forEach((p, idx) => {
         p.x += p.vx;
         p.y += p.vy;
-        p.life -= 0.06;
+        p.life -= 0.05;
         if (p.life > 0) {
           ctx.fillStyle = p.color;
           ctx.globalAlpha = p.life;
@@ -918,38 +978,40 @@ export default function TerminalModal({ onClose, onLaunch }) {
         }
       });
 
-      // 9. Draw Floating Text Popups
+      // Floating Texts
       state.floatingTexts.forEach((ft, idx) => {
-        ft.y -= 0.75;
+        ft.y -= 0.7;
         ft.life -= 0.035;
         if (ft.life > 0) {
           ctx.font = 'bold 11px "Space Mono", monospace';
           ctx.fillStyle = ft.color;
           ctx.globalAlpha = ft.life;
-          ctx.shadowColor = ft.color;
-          ctx.shadowBlur = 8;
           ctx.textAlign = 'center';
           ctx.fillText(ft.text, ft.x, ft.y);
           ctx.globalAlpha = 1.0;
-          ctx.shadowBlur = 0;
         } else {
           state.floatingTexts.splice(idx, 1);
         }
       });
 
-    }, intervalMs);
+      if (!snakeGameOver) {
+        animFrameRef.current = requestAnimationFrame(renderLoop);
+      }
+    };
 
-    return () => clearInterval(snakeLoopRef.current);
-  }, [snakeGameActive, snakeGameOver, isPaused, snakeMode, snakeSpeed, snakeScore, snakeHighScore, activePowerUp, combo, maxCombo, getHighScoreKey]);
+    animFrameRef.current = requestAnimationFrame(renderLoop);
 
-  // Global window-level key listener with capture phase
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
+  }, [snakeGameActive, snakeGameOver, isPaused, snakeMode, snakeSpeed, snakeHighScore, activePowerUp, getHighScoreKey]);
+
+  // Window-level keydown listener
   useEffect(() => {
     const handleGlobalKeyDown = (e) => {
-      // 1. SNAKE GAME ACTIVE
       if (snakeGameActive) {
         const k = e.key.toLowerCase();
 
-        // Pause Toggle
         if (k === 'p' || (e.key === ' ' && !snakeGameOver)) {
           e.preventDefault();
           e.stopPropagation();
@@ -958,7 +1020,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
           return;
         }
 
-        // Direction steering
         if (k === 'arrowup' || k === 'w') {
           e.preventDefault();
           e.stopPropagation();
@@ -984,7 +1045,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
           return;
         }
 
-        // Game Over Quick Restart
         if (snakeGameOver && (k === 'r' || k === 'enter')) {
           e.preventDefault();
           e.stopPropagation();
@@ -992,14 +1052,13 @@ export default function TerminalModal({ onClose, onLaunch }) {
           return;
         }
 
-        // Quit to Shell
         if (k === 'escape' || k === 'q') {
           e.preventDefault();
           e.stopPropagation();
           setSnakeGameActive(false);
           setHistory(h => [
             ...h,
-            { type: 'info', text: `🎮 Snake session completed. Final Score: ${snakeScore} PTS (Max Combo: x${maxCombo})` }
+            { type: 'info', text: `🎮 Arcade Snake Session Terminated. Score: ${snakeScore} PTS` }
           ]);
           return;
         }
@@ -1011,7 +1070,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
         return;
       }
 
-      // 2. NORMAL TERMINAL MODE
       if (inputRef.current && document.activeElement !== inputRef.current) {
         if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1) {
           inputRef.current.focus();
@@ -1021,9 +1079,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
     window.addEventListener('keydown', handleGlobalKeyDown, true);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown, true);
-  }, [snakeGameActive, snakeGameOver, isPaused, snakeScore, maxCombo, changeSnakeDirection]);
+  }, [snakeGameActive, snakeGameOver, isPaused, snakeScore, changeSnakeDirection]);
 
-  // Focus management
   useEffect(() => {
     if (snakeGameActive) {
       snakeCanvasRef.current?.focus();
@@ -1033,18 +1090,27 @@ export default function TerminalModal({ onClose, onLaunch }) {
   }, [snakeGameActive]);
 
   const startSnakeGame = () => {
+    lastTickTimeRef.current = 0;
     snakeStateRef.current = {
-      snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }, { x: 4, y: 7 }],
-      food: { x: 14, y: 7 },
+      snake: [{ x: 6, y: 6 }, { x: 5, y: 6 }, { x: 4, y: 6 }, { x: 3, y: 6 }],
+      food: { x: 14, y: 6 },
       goldenFood: null,
       powerUpItem: null,
       dir: { x: 1, y: 0 },
       dirQueue: [],
       particles: [],
       floatingTexts: [],
+      deathFragments: [],
+      shockwave: null,
+      isDying: false,
+      deathFrames: 0,
       lastEatTime: 0,
       scanLineY: 0,
-      hasShield: false
+      hasShield: false,
+      score: 0,
+      combo: 1,
+      maxCombo: 1,
+      apples: 0
     };
     setSnakeScore(0);
     setCombo(1);
@@ -1095,7 +1161,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'out', text: '  ai / ask <query>  - Ask the built-in AI reasoning engine technical questions' },
           { type: 'out', text: `  deploy <1-${projectsData.length}|name> - Initiate deployment sequence for a target universe` },
           { type: 'info', text: '── GAMES, CYBER FX & CUSTOMIZATION ──' },
-          { type: 'out', text: '  snake             - Play the 60fps Arcade Canvas Snake Game with Combos & Power-ups' },
+          { type: 'out', text: '  snake             - Play the 60fps Arcade Canvas Snake Game with Combos & Death FX' },
           { type: 'out', text: '  hack / pwn        - Cinematic Hollywood cyber penetration sequence' },
           { type: 'out', text: '  matrix            - Digital cascading neural code stream' },
           { type: 'out', text: '  cowsay <text>     - Classic ASCII cow wisdom speech' },
@@ -1146,7 +1212,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
       case 'snake':
       case 'game':
         startSnakeGame();
-        newHistory.push({ type: 'info', text: '🎮 INITIATING 60FPS ARCADE CANVAS SNAKE ENGINE. Arrow Keys or WASD to steer · P to Pause · R to Restart · Q to Quit.' });
+        newHistory.push({ type: 'info', text: '🎮 INITIATING 60FPS ARCADE CANVAS SNAKE. Arrow Keys / WASD to steer · P to Pause · R to Restart · Q to Quit.' });
         break;
 
       case 'hack':
@@ -1446,7 +1512,6 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
   };
 
   const handleKeyDown = (e) => {
-    // Handle Ctrl+C inside terminal to cancel active line without opening Code modal
     if (e.ctrlKey && (e.key === 'c' || e.key === 'C')) {
       e.preventDefault();
       e.stopPropagation();
@@ -1456,7 +1521,6 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
       return;
     }
 
-    // Handle Ctrl+L to clear screen (standard UNIX shortcut)
     if (e.ctrlKey && (e.key === 'l' || e.key === 'L')) {
       e.preventDefault();
       e.stopPropagation();
@@ -1464,7 +1528,6 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
       return;
     }
 
-    // Handle Ctrl+U to clear current line
     if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
       e.preventDefault();
       e.stopPropagation();
@@ -1611,7 +1674,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
             </div>
           ))}
 
-          {/* ── SUPERCHARGED 60FPS ARCADE CANVAS SNAKE GAME ── */}
+          {/* ── 60FPS ARCADE CANVAS SNAKE ENGINE ── */}
           {snakeGameActive && (
             <div
               className="arcade-snake-container"
@@ -1619,7 +1682,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
               tabIndex={0}
               onClick={() => snakeCanvasRef.current?.focus()}
             >
-              {/* Arcade Top Control Bar */}
+              {/* Arcade Header HUD */}
               <div className="snake-arcade-hud">
                 <div className="snake-stats-left">
                   <span className="snake-badge" style={{ color: activeThemeObj.primary }}>🐍 CYBER ARCADE</span>
@@ -1642,14 +1705,14 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                     <button
                       className={`btn-mode-chip ${snakeMode === 'wrap' ? 'active' : ''}`}
                       onClick={() => { SoundFX.playKey(); setSnakeMode('wrap'); }}
-                      title="Wrap around arena edges"
+                      title="Wrap around edges"
                     >
                       WRAP
                     </button>
                     <button
                       className={`btn-mode-chip ${snakeMode === 'walls' ? 'active' : ''}`}
                       onClick={() => { SoundFX.playKey(); setSnakeMode('walls'); }}
-                      title="Lethal electrified perimeter walls"
+                      title="Lethal electric walls"
                     >
                       WALLS ⚡
                     </button>
@@ -1669,7 +1732,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                 </div>
               </div>
 
-              {/* Main Game Canvas with Interactive HUD Overlay */}
+              {/* Canvas Screen */}
               <div className="snake-canvas-wrapper">
                 <canvas
                   ref={snakeCanvasRef}
@@ -1715,7 +1778,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                   </div>
                 )}
 
-                {/* On-Screen D-Pad Controls for Touch / Mobile */}
+                {/* On-Screen D-Pad Controls for Mobile / Touch */}
                 <div className="snake-dpad-controls">
                   <button className="dpad-btn up" onClick={() => changeSnakeDirection('UP')}>▲</button>
                   <div className="dpad-mid-row">
