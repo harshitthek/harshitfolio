@@ -2,24 +2,348 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/harshitfolio/">
-  <title>HARSHIT.EXE | Redirecting...</title>
-  <script>
-    // GitHub Pages Single Page App Redirect
-    const path = window.location.pathname;
-    const base = '/harshitfolio/';
-    if (path !== base && path !== base + 'index.html') {
-      window.location.replace(base);
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>404 // SECTOR NOT FOUND — HARSHIT.EXE</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23080808'/><rect x='8' y='8' width='84' height='84' rx='14' fill='none' stroke='%23ff5f56' stroke-width='4'/><path d='M30 24v52M70 24v52M30 50h40' stroke='%23ff5f56' stroke-width='8' stroke-linecap='round'/></svg>" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Code:wght@400;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-  </script>
+    body {
+      background-color: #040404;
+      color: #00ff88;
+      font-family: 'Space Mono', 'Fira Code', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Background Matrix Canvas */
+    #matrix-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* CRT Scanlines Overlay */
+    .scanlines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0) 50%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.3)
+      );
+      background-size: 100% 4px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Vignette Glow */
+    .vignette {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9), inset 0 0 40px rgba(0, 255, 136, 0.08);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Main Container */
+    .error-container {
+      position: relative;
+      z-index: 10;
+      max-width: 620px;
+      width: 100%;
+      background: rgba(8, 8, 8, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 45px rgba(0, 255, 136, 0.2);
+      border-radius: 4px;
+      padding: 2.2rem;
+      text-align: center;
+    }
+
+    /* Header Dots */
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1.5rem;
+    }
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    /* Glitch 404 Title */
+    .glitch-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 15vw, 8rem);
+      line-height: 0.9;
+      letter-spacing: 6px;
+      color: #00ff88;
+      text-shadow: 0 0 20px rgba(0, 255, 136, 0.6), 2px 2px 0px rgba(248, 113, 113, 0.6);
+      position: relative;
+      animation: glitch-anim 2.5s infinite;
+    }
+
+    @keyframes glitch-anim {
+      0%, 100% { transform: translate(0); }
+      92% { transform: translate(0); }
+      93% { transform: translate(-2px, 1px); }
+      94% { transform: translate(2px, -1px); }
+      95% { transform: translate(0); }
+    }
+
+    .badge-sub {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #f87171;
+      background: rgba(248, 113, 113, 0.12);
+      border: 1px solid rgba(248, 113, 113, 0.35);
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    /* Telemetry Box */
+    .telemetry-card {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 3px solid #00ff88;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.8rem;
+      text-align: left;
+      font-size: 11.5px;
+      line-height: 1.8;
+      color: #94a3b8;
+    }
+    .telemetry-card .line {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+      padding: 2px 0;
+    }
+    .telemetry-card .line:last-child {
+      border-bottom: none;
+    }
+    .telemetry-card .key {
+      color: #64748b;
+    }
+    .telemetry-card .val {
+      color: #00ff88;
+      font-weight: 700;
+    }
+    .telemetry-card .val.err {
+      color: #f87171;
+    }
+
+    /* Actions */
+    .actions-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-action {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 10px 20px;
+      border-radius: 2px;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: #00ff88;
+      color: #000;
+      border: 1px solid #00ff88;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    }
+    .btn-primary:hover {
+      background: #38bdf8;
+      border-color: #38bdf8;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Auto-Redirect Timer */
+    .redirect-timer {
+      margin-top: 1.5rem;
+      font-size: 10px;
+      color: #64748b;
+      letter-spacing: 1.5px;
+    }
+    .redirect-timer strong {
+      color: #38bdf8;
+    }
+    .redirect-progress-bar {
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      margin-top: 6px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .redirect-progress-fill {
+      height: 100%;
+      width: 100%;
+      background: #00ff88;
+      transition: width 1s linear;
+    }
+  </style>
 </head>
-<body style="background:#050505; color:#00ff88; font-family:'Space Mono', monospace; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; margin:0; text-align:center;">
-  <h2 style="letter-spacing: 2px; margin-bottom: 8px;">⚡ HARSHIT.EXE MISSION CONTROL</h2>
-  <p style="color:#94a3b8; font-size: 13px;">Re-routing to Neural Command Hub...</p>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <div class="error-container">
+    <div class="terminal-dots">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+    </div>
+
+    <div class="glitch-title">404</div>
+    <div class="badge-sub">⚡ SIGNAL LOST // SECTOR UNCHARTED</div>
+
+    <div class="telemetry-card">
+      <div class="line">
+        <span class="key">ERROR_STATUS:</span>
+        <span class="val err">0x404_PORTAL_NOT_INITIALIZED</span>
+      </div>
+      <div class="line">
+        <span class="key">NODE_HOST:</span>
+        <span class="val">USAR (GGSIPU) Neural Mainframe</span>
+      </div>
+      <div class="line">
+        <span class="key">CURRENT_PATH:</span>
+        <span class="val" id="display-path">/unknown</span>
+      </div>
+      <div class="line">
+        <span class="key">REROUTE_PROTOCOL:</span>
+        <span class="val">ACTIVE (10 UNIVERSES READY)</span>
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <a href="/harshitfolio/" class="btn-action btn-primary">
+        🚀 RETURN TO MISSION CONTROL
+      </a>
+      <a href="https://github.com/harshitthek" target="_blank" rel="noopener noreferrer" class="btn-action btn-secondary">
+        🌐 GITHUB REPO
+      </a>
+    </div>
+
+    <div class="redirect-timer">
+      Auto-redirecting to Command Hub in <strong id="countdown-sec">8</strong>s...
+      <div class="redirect-progress-bar">
+        <div class="redirect-progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    setTimeout(function() {
-      window.location.href = '/harshitfolio/';
-    }, 100);
+    // Display current target path
+    document.getElementById('display-path').textContent = window.location.pathname;
+
+    // Matrix Rain Canvas Effect
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const chars = '01010101 HARSHIT USAR GGSIPU AI ML PYTHON THREEJS FASTIFY RESILIENT 404';
+    const fontSize = 14;
+    const columns = Math.floor(window.innerWidth / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(4, 4, 4, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00ff88';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    setInterval(drawMatrix, 40);
+
+    // Auto-Redirect Countdown (8 Seconds)
+    let secondsLeft = 8;
+    const countEl = document.getElementById('countdown-sec');
+    const fillEl = document.getElementById('progress-fill');
+
+    const countdownTimer = setInterval(function() {
+      secondsLeft--;
+      if (countEl) countEl.textContent = secondsLeft;
+      if (fillEl) fillEl.style.width = (secondsLeft / 8 * 100) + '%';
+
+      if (secondsLeft <= 0) {
+        clearInterval(countdownTimer);
+        window.location.href = '/harshitfolio/';
+      }
+    }, 1000);
   </script>
 </body>
 </html>
