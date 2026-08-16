@@ -780,27 +780,85 @@ export default function TerminalModal({ onClose, onLaunch }) {
         }
       }
 
-      // ── CLEAN HIGH-CONTRAST CANVAS DRAWING (NO PERIODIC SCANLINE) ──
-      ctx.fillStyle = '#060606';
+      // ── TACTICAL CYBER MATRIX GRID WITH AMBIENT OLED DEPTH ──
+      // 1. Deep Ambient Radial Field
+      const bgGrad = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height / 2, 40,
+        canvas.width / 2, canvas.height / 2, canvas.width * 0.7
+      );
+      bgGrad.addColorStop(0, '#0c1218');
+      bgGrad.addColorStop(1, '#040507');
+      ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Clean Cyber Grid
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      // 2. Micro-Dashed Sub-Grid Guide Lines
+      ctx.setLineDash([2, 6]);
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
       ctx.lineWidth = 1;
-      for (let x = 0; x <= cols; x++) {
+      for (let x = 1; x < cols; x++) {
         ctx.beginPath();
         ctx.moveTo(x * gridSize, 0);
         ctx.lineTo(x * gridSize, canvas.height);
         ctx.stroke();
       }
-      for (let y = 0; y <= rows; y++) {
+      for (let y = 1; y < rows; y++) {
         ctx.beginPath();
         ctx.moveTo(0, y * gridSize);
         ctx.lineTo(canvas.width, y * gridSize);
         ctx.stroke();
       }
+      ctx.setLineDash([]); // Reset dash
 
-      // Hardcore Lethal Wall Perimeter
+      // 3. Glowing Micro-Crosshair Nodes (+) at Every Grid Intersection
+      ctx.fillStyle = 'rgba(0, 255, 136, 0.16)';
+      for (let x = 1; x < cols; x++) {
+        for (let y = 1; y < rows; y++) {
+          const px = x * gridSize;
+          const py = y * gridSize;
+          ctx.fillRect(px - 2, py, 5, 1);
+          ctx.fillRect(px, py - 2, 1, 5);
+        }
+      }
+
+      // 4. Center Sector Target Reticle
+      const midX = Math.floor(cols / 2) * gridSize;
+      const midY = Math.floor(rows / 2) * gridSize;
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.18)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(midX, midY, 14, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.25)';
+      ctx.beginPath();
+      ctx.arc(midX, midY, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 5. Tactical Corner HUD Brackets
+      const bracketColor = snakeMode === 'walls' ? '#f87171' : 'rgba(0, 255, 136, 0.45)';
+      ctx.strokeStyle = bracketColor;
+      ctx.lineWidth = 2;
+
+      // Top-Left Bracket
+      ctx.beginPath();
+      ctx.moveTo(14, 5); ctx.lineTo(5, 5); ctx.lineTo(5, 14);
+      ctx.stroke();
+
+      // Top-Right Bracket
+      ctx.beginPath();
+      ctx.moveTo(canvas.width - 14, 5); ctx.lineTo(canvas.width - 5, 5); ctx.lineTo(canvas.width - 5, 14);
+      ctx.stroke();
+
+      // Bottom-Left Bracket
+      ctx.beginPath();
+      ctx.moveTo(5, canvas.height - 14); ctx.lineTo(5, canvas.height - 5); ctx.lineTo(14, canvas.height - 5);
+      ctx.stroke();
+
+      // Bottom-Right Bracket
+      ctx.beginPath();
+      ctx.moveTo(canvas.width - 14, canvas.height - 5); ctx.lineTo(canvas.width - 5, canvas.height - 5); ctx.lineTo(canvas.width - 5, canvas.height - 14);
+      ctx.stroke();
+
+      // 6. Perimeter Frame
       if (snakeMode === 'walls') {
         ctx.strokeStyle = '#f87171';
         ctx.lineWidth = 2;
@@ -808,6 +866,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.shadowBlur = 8;
         ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
         ctx.shadowBlur = 0;
+      } else {
+        ctx.strokeStyle = 'rgba(0, 255, 136, 0.12)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
       }
 
       // 🍎 REDESIGNED HOLOGRAPHIC QUANTUM FRUIT / APPLE
