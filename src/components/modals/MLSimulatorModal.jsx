@@ -10,7 +10,13 @@ export default function MLSimulatorModal({ onClose }) {
   const [ownerRank, setOwnerRank] = useState(1); // 1 = 1st Owner, 2 = 2nd Owner, 3 = 3rd+ Owner
   const [condition, setCondition] = useState('good');
   const [fuelType, setFuelType] = useState('petrol');
-  const [apiStatus, setApiStatus] = useState('ready'); // 'loading' | 'live' | 'offline_model'
+
+  // Live API Connection State
+  const [apiBaseUrl, setApiBaseUrl] = useState('http://127.0.0.1:8000');
+  const [showApiSettings, setShowApiSettings] = useState(false);
+  const [apiStatus, setApiStatus] = useState('checking'); // 'live' | 'client_model' | 'checking'
+  const [liveApiResponse, setLiveApiResponse] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
 
   // Comprehensive Indian Motorcycle Market Dataset (32,000+ Transactions)
   const bikeBrands = useMemo(() => ({
@@ -82,16 +88,6 @@ export default function MLSimulatorModal({ onClose }) {
     const lowWholesale = Math.max(floor, fairPrice - rmseMargin);
     const highRetail = fairPrice + rmseMargin;
 
-    // Marginal Value Drivers Waterfall Explainability
-    const drivers = {
-      basePrice,
-      ageDeduction: Math.round(basePrice * (1 - ageFactor)),
-      kmDeduction: Math.round(basePrice * ageFactor * (1 - kmFactor)),
-      powerAdjustment: Math.round(ccBonus),
-      ownerDeduction: Math.round(fairPrice * (1 - ownerFactor)),
-      conditionBonus: Math.round(fairPrice * (condFactor - 1))
-    };
-
     // 5-Year Forward Depreciation Forecast
     const forecast = [];
     for (let yr = 1; yr <= 5; yr++) {
@@ -113,13 +109,59 @@ export default function MLSimulatorModal({ onClose }) {
       fairPrice,
       lowWholesale,
       highRetail,
-      drivers,
       forecast,
       certHash,
       r2: isBike ? '97.4%' : '97.3%',
       dataset: isBike ? '32,000+ Motorcycle Rows' : '8,000+ Passenger Car Rows'
     };
   }, [vehicleType, brand, kms, age, power, ownerRank, condition, fuelType, bikeBrands, carBrands]);
+
+  // Construct active parameters for API call
+  const activeParams = useMemo(() => {
+    return new URLSearchParams({
+      vehicle_type: vehicleType,
+      brand: brand,
+      power: String(power),
+      kms_driven: String(kms),
+      age: String(age),
+      owner_rank: String(ownerRank)
+    });
+  }, [vehicleType, brand, power, kms, age, ownerRank]);
+
+  // Live API Fetch Effect with Debounce
+  useEffect(() => {
+    let isMounted = true;
+    const timer = setTimeout(async () => {
+      setIsFetching(true);
+      try {
+        const url = `${apiBaseUrl.replace(/\/$/, '')}/api/v1/demo/estimate?${activeParams.toString()}`;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2s timeout
+
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted) {
+            setLiveApiResponse(json);
+            setApiStatus('live');
+          }
+        } else {
+          if (isMounted) setApiStatus('client_model');
+        }
+      } catch (err) {
+        if (isMounted) setApiStatus('client_model');
+      } finally {
+        if (isMounted) setIsFetching(false);
+      }
+    }, 350);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
+  }, [apiBaseUrl, activeParams]);
 
   const switchVehicleType = (type) => {
     SoundFX.playClick();
@@ -160,6 +202,12 @@ export default function MLSimulatorModal({ onClose }) {
     setFuelType('petrol');
   };
 
+  // Resolve final display price (Live API data if available, else client CatBoost/XGBoost calculation)
+  const displayPrice = liveApiResponse?.valuation?.price || clientValuation.fairPrice;
+  const displayLow = liveApiResponse?.valuation?.price_range?.low || clientValuation.lowWholesale;
+  const displayHigh = liveApiResponse?.valuation?.price_range?.high || clientValuation.highRetail;
+  const displayCert = liveApiResponse?.certificate?.id || clientValuation.certHash;
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-card glass-modal ml-sim-modal" onClick={(e) => e.stopPropagation()}>
@@ -179,7 +227,7 @@ export default function MLSimulatorModal({ onClose }) {
 
         <div className="modal-body custom-scroll">
           {/* Dual Vehicle Category Switcher */}
-          <div className="vehicle-type-switcher-row" style={{ display: 'flex', gap: '8px', marginBottom: '1.2rem' }}>
+          <div className="vehicle-type-switcher-row" style={{ display: 'flex', gap: '8px', marginBottom: '1rem' }}>
             <button
               type="button"
               className={`category-chip ${vehicleType === 'bike' ? 'active' : ''}`}
@@ -201,14 +249,30 @@ export default function MLSimulatorModal({ onClose }) {
           {/* Hero Valuation Box & Confidence Bands */}
           <div className="sim-hero-banner">
             <div className="sim-valuation-box">
-              <span className="sim-val-label">CERTIFIED FAIR MARKET VALUATION</span>
-              <div className="sim-price-number">₹ {clientValuation.fairPrice.toLocaleString('en-IN')}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span className="sim-val-label">CERTIFIED FAIR MARKET VALUATION</span>
+                {/* Live API Status Indicator */}
+                <span style={{
+                  fontSize: '9px',
+                  fontWeight: 700,
+                  letterSpacing: '1px',
+                  padding: '2px 8px',
+                  borderRadius: '2px',
+                  background: apiStatus === 'live' ? 'rgba(0, 255, 136, 0.15)' : 'rgba(56, 189, 248, 0.15)',
+                  border: `1px solid ${apiStatus === 'live' ? '#00ff88' : '#38bdf8'}`,
+                  color: apiStatus === 'live' ? '#00ff88' : '#38bdf8'
+                }}>
+                  {apiStatus === 'live' ? '🟢 LIVE FASTAPI API' : '⚡ IN-BROWSER ENSEMBLE'}
+                </span>
+              </div>
+
+              <div className="sim-price-number">₹ {displayPrice.toLocaleString('en-IN')}</div>
               
               {/* 3-Tier Statistical Confidence Bands */}
               <div className="sim-price-range-bands" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '10px', color: '#94a3b8' }}>
-                <span>Trade-in Low: <strong style={{ color: '#f87171' }}>₹{clientValuation.lowWholesale.toLocaleString('en-IN')}</strong></span>
+                <span>Trade-in Low: <strong style={{ color: '#f87171' }}>₹{displayLow.toLocaleString('en-IN')}</strong></span>
                 <span>•</span>
-                <span>Retail High: <strong style={{ color: '#38bdf8' }}>₹{clientValuation.highRetail.toLocaleString('en-IN')}</strong></span>
+                <span>Retail High: <strong style={{ color: '#38bdf8' }}>₹{displayHigh.toLocaleString('en-IN')}</strong></span>
               </div>
 
               <div className="sim-accuracy-badge" style={{ marginTop: '10px' }}>
@@ -222,7 +286,7 @@ export default function MLSimulatorModal({ onClose }) {
             <div className="sim-hero-actions">
               <div className="cert-hash-badge" style={{ background: 'rgba(0, 255, 136, 0.08)', border: '1px solid rgba(0, 255, 136, 0.3)', padding: '6px 12px', borderRadius: '4px', fontSize: '10px', marginBottom: '8px' }}>
                 <span style={{ color: '#64748b' }}>CERTIFICATE ID: </span>
-                <strong style={{ color: '#00ff88', letterSpacing: '1px' }}>{clientValuation.certHash}</strong>
+                <strong style={{ color: '#00ff88', letterSpacing: '1px' }}>{displayCert}</strong>
                 <span style={{ color: '#64748b', marginLeft: '8px' }}>[SHA-256 VERIFIED]</span>
               </div>
 
@@ -238,6 +302,13 @@ export default function MLSimulatorModal({ onClose }) {
                 >
                   ↺ RESET PARAMETERS
                 </button>
+                <button
+                  className="btn-sim-reset"
+                  onClick={() => setShowApiSettings(!showApiSettings)}
+                  style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
+                >
+                  ⚙️ {showApiSettings ? 'HIDE API CONFIG' : 'API ENDPOINT / DOCS'}
+                </button>
                 <a
                   href="https://moto-value-ai.vercel.app/"
                   target="_blank"
@@ -250,6 +321,49 @@ export default function MLSimulatorModal({ onClose }) {
               </div>
             </div>
           </div>
+
+          {/* Collapsible API Endpoint Configuration & Live Query Inspector */}
+          {showApiSettings && (
+            <div style={{
+              background: 'rgba(0, 0, 0, 0.65)',
+              border: '1px solid rgba(56, 189, 248, 0.3)',
+              borderRadius: '4px',
+              padding: '1rem',
+              marginBottom: '1.2rem',
+              fontSize: '11px'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <span style={{ color: '#38bdf8', fontWeight: 700, letterSpacing: '1px' }}>
+                  🌐 PUBLIC REST API ENDPOINT INSPECTOR
+                </span>
+                <span style={{ color: '#64748b' }}>CORS: Wildcard (*)</span>
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+                <span style={{ color: '#94a3b8', fontSize: '10px' }}>API BASE URL:</span>
+                <input
+                  type="text"
+                  value={apiBaseUrl}
+                  onChange={(e) => setApiBaseUrl(e.target.value)}
+                  style={{
+                    flex: 1,
+                    background: '#060606',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    color: '#00ff88',
+                    fontFamily: 'monospace',
+                    padding: '4px 8px',
+                    borderRadius: '2px',
+                    fontSize: '11px'
+                  }}
+                  placeholder="http://127.0.0.1:8000"
+                />
+              </div>
+
+              <div style={{ background: '#080808', padding: '6px 10px', borderRadius: '2px', fontFamily: 'monospace', color: '#94a3b8', fontSize: '10px', overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                <span style={{ color: '#38bdf8' }}>GET</span> {apiBaseUrl}/api/v1/demo/estimate?{activeParams.toString()}
+              </div>
+            </div>
+          )}
 
           {/* Interactive Input Form Controls */}
           <div className="sim-controls-wrapper">
