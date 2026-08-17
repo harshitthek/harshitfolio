@@ -11,8 +11,21 @@ export default function MLSimulatorModal({ onClose }) {
   const [condition, setCondition] = useState('good');
   const [fuelType, setFuelType] = useState('petrol');
 
-  // Live API Connection State
-  const [apiBaseUrl, setApiBaseUrl] = useState('http://127.0.0.1:8000');
+  // Live API Connection State with LocalStorage Persistence
+  const [apiBaseUrl, setApiBaseUrl] = useState(() => {
+    try {
+      return localStorage.getItem('autovaluate_backend_url') || 'http://127.0.0.1:8000';
+    } catch {
+      return 'http://127.0.0.1:8000';
+    }
+  });
+
+  const handleUpdateApiUrl = (url) => {
+    setApiBaseUrl(url);
+    try {
+      localStorage.setItem('autovaluate_backend_url', url);
+    } catch {}
+  };
   const [showApiSettings, setShowApiSettings] = useState(false);
   const [apiStatus, setApiStatus] = useState('checking'); // 'live' | 'client_model' | 'checking'
   const [liveApiResponse, setLiveApiResponse] = useState(null);
@@ -344,7 +357,7 @@ export default function MLSimulatorModal({ onClose }) {
                 <input
                   type="text"
                   value={apiBaseUrl}
-                  onChange={(e) => setApiBaseUrl(e.target.value)}
+                  onChange={(e) => handleUpdateApiUrl(e.target.value)}
                   style={{
                     flex: 1,
                     background: '#060606',

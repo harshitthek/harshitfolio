@@ -19,6 +19,7 @@ import TerminalModal from './components/modals/TerminalModal';
 import DossierModal from './components/modals/DossierModal';
 import ContactModal from './components/modals/ContactModal';
 import CyberCursor from './components/CyberCursor';
+import { warmupAllBackends } from './utils/backendWarmup';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('s-video');
@@ -27,6 +28,11 @@ export default function App() {
   const [selectedProjectForModal, setSelectedProjectForModal] = useState(null);
 
   const { speak } = useVoice();
+
+  // Pre-warm free-tier backend containers on initial portfolio arrival
+  useEffect(() => {
+    warmupAllBackends();
+  }, []);
 
   // Screen 1 Video -> Screen 2 Intermediate
   const handleVideoComplete = useCallback(() => {
