@@ -24,8 +24,10 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
   };
 
   const handleToggleVoice = (e) => {
-    e.stopPropagation();
-    if (sfxOn) SoundFX.playClick();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     toggleVoice();
   };
 
@@ -49,16 +51,19 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
         </button>
 
         {/* AI Audio-Reactive Waveform Visualizer */}
-        <div
-          className={`ai-waveform-hud ${isSpeaking ? 'active' : ''}`}
-          title={isSpeaking ? 'AI Voice Narration Transmitting' : 'AI Voice Standby'}
+        <button
+          type="button"
+          className={`ai-waveform-hud ${isSpeaking ? 'active' : ''} ${!voiceEnabled ? 'muted' : ''}`}
+          onClick={handleToggleVoice}
+          title={voiceEnabled ? (isSpeaking ? 'AI Voice Transmitting — Click to Mute' : 'AI Voice Standby — Click to Mute') : 'AI Voice Muted — Click to Enable'}
+          style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
         >
           <span className="bar b1"></span>
           <span className="bar b2"></span>
           <span className="bar b3"></span>
           <span className="bar b4"></span>
-          <span className="waveform-label">{isSpeaking ? 'AI_TRANSMITTING' : 'AI_STANDBY'}</span>
-        </div>
+          <span className="waveform-label">{!voiceEnabled ? 'AI_MUTED' : isSpeaking ? 'AI_TRANSMITTING' : 'AI_STANDBY'}</span>
+        </button>
       </div>
 
       {/* Center Quick Multiverse Modal Triggers (Cards Screen) */}

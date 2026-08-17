@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import { SoundFX } from './SoundFX';
 
 const VoiceContext = createContext();
 
@@ -17,31 +18,57 @@ export function VoiceProvider({ children }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentUtterance, setCurrentUtterance] = useState('');
   const timeoutRef = useRef(null);
+  const keepAliveIntervalRef = useRef(null);
+  const activeUtteranceRef = useRef(null);
 
-  // Keep ref in sync with state at all times
+  // Sync ref with state & persist
   useEffect(() => {
     voiceEnabledRef.current = voiceEnabled;
     if (typeof window !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, String(voiceEnabled));
+      try {
+        localStorage.setItem(STORAGE_KEY, String(voiceEnabled));
+      } catch {}
       if (!voiceEnabled && window.speechSynthesis) {
-        window.speechSynthesis.cancel();
+        try {
+          window.speechSynthesis.cancel();
+        } catch {}
         setIsSpeaking(false);
         setCurrentUtterance('');
+        if (keepAliveIntervalRef.current) clearInterval(keepAliveIntervalRef.current);
       }
     }
   }, [voiceEnabled]);
 
+  // Load and cache voices
   useEffect(() => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       const loadVoices = () => {
         try {
           window.speechSynthesis.getVoices();
-        } catch (e) {
-          // Ignore
-        }
+        } catch {}
       };
       loadVoices();
       window.speechSynthesis.onvoiceschanged = loadVoices;
+
+      // Global user interaction listener to unlock speech synthesis audio engine
+      const unlockSpeech = () => {
+        try {
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+        } catch {}
+      };
+
+      window.addEventListener('click', unlockSpeech, { passive: true });
+      window.addEventListener('touchstart', unlockSpeech, { passive: true });
+      window.addEventListener('keydown', unlockSpeech, { passive: true });
+
+      return () => {
+        window.removeEventListener('click', unlockSpeech);
+        window.removeEventListener('touchstart', unlockSpeech);
+        window.removeEventListener('keydown', unlockSpeech);
+        if (keepAliveIntervalRef.current) clearInterval(keepAliveIntervalRef.current);
+      };
     }
   }, []);
 
@@ -56,66 +83,98 @@ export function VoiceProvider({ children }) {
       }
       window.speechSynthesis.cancel();
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (keepAliveIntervalRef.current) clearInterval(keepAliveIntervalRef.current);
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = rate;
-      utterance.pitch = pitch;
-      utterance.volume = 1;
-      utterance.lang = 'en-US';
+      // 20ms debounce prevents Chromium from canceling the new utterance during the queue clear
+      setTimeout(() => {
+        if (!voiceEnabledRef.current) return;
 
-      // Keep a permanent window reference to prevent Chrome's garbage-collection speech freeze bug
-      window.__activeVoiceUtterance = utterance;
+        try {
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
 
-      const voices = window.speechSynthesis.getVoices();
-      if (voices && voices.length > 0) {
-        const preferredVoice = voices.find(v =>
-          v.name.toLowerCase().includes('daniel') ||
-          v.name.toLowerCase().includes('alex') ||
-          v.name.toLowerCase().includes('google uk') ||
-          v.name.toLowerCase().includes('natural') ||
-          v.name.toLowerCase().includes('male') ||
-          v.lang.startsWith('en')
-        );
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.rate = rate;
+          utterance.pitch = pitch;
+          utterance.volume = 1;
+          utterance.lang = 'en-US';
 
-        if (preferredVoice) {
-          utterance.voice = preferredVoice;
-        }
-      }
+          // Preserve reference on window and ref to prevent Chrome garbage-collection speech freeze
+          window.__activeVoiceUtterance = utterance;
+          activeUtteranceRef.current = utterance;
 
-      utterance.onstart = () => {
-        if (!voiceEnabledRef.current) {
-          window.speechSynthesis.cancel();
+          const voices = window.speechSynthesis.getVoices();
+          if (voices && voices.length > 0) {
+            const preferredVoice = voices.find(v =>
+              v.name.toLowerCase().includes('daniel') ||
+              v.name.toLowerCase().includes('alex') ||
+              v.name.toLowerCase().includes('google uk') ||
+              v.name.toLowerCase().includes('natural') ||
+              v.name.toLowerCase().includes('male') ||
+              v.lang.startsWith('en')
+            );
+
+            if (preferredVoice) {
+              utterance.voice = preferredVoice;
+            }
+          }
+
+          utterance.onstart = () => {
+            if (!voiceEnabledRef.current) {
+              try { window.speechSynthesis.cancel(); } catch {}
+              setIsSpeaking(false);
+              setCurrentUtterance('');
+              return;
+            }
+            setIsSpeaking(true);
+            setCurrentUtterance(text);
+
+            // Chrome keep-alive pulse: prevents Chrome from pausing speech synthesis after 14 seconds
+            if (keepAliveIntervalRef.current) clearInterval(keepAliveIntervalRef.current);
+            keepAliveIntervalRef.current = setInterval(() => {
+              try {
+                if (window.speechSynthesis.speaking) {
+                  window.speechSynthesis.pause();
+                  window.speechSynthesis.resume();
+                } else {
+                  clearInterval(keepAliveIntervalRef.current);
+                }
+              } catch {}
+            }, 8000);
+          };
+
+          utterance.onend = () => {
+            setIsSpeaking(false);
+            setCurrentUtterance('');
+            window.__activeVoiceUtterance = null;
+            activeUtteranceRef.current = null;
+            if (keepAliveIntervalRef.current) clearInterval(keepAliveIntervalRef.current);
+          };
+
+          utterance.onerror = () => {
+            setIsSpeaking(false);
+            setCurrentUtterance('');
+            window.__activeVoiceUtterance = null;
+            activeUtteranceRef.current = null;
+            if (keepAliveIntervalRef.current) clearInterval(keepAliveIntervalRef.current);
+          };
+
+          window.speechSynthesis.speak(utterance);
+
+          // Failsafe auto-reset timer based on sentence word count
+          const wordCount = text.split(' ').length;
+          const estimatedDuration = Math.max(2500, (wordCount / 2.0) * 1000 + 1500);
+          timeoutRef.current = setTimeout(() => {
+            setIsSpeaking(false);
+            if (keepAliveIntervalRef.current) clearInterval(keepAliveIntervalRef.current);
+          }, estimatedDuration);
+
+        } catch (innerErr) {
+          console.warn('[VoiceContext] Dispatch error:', innerErr);
           setIsSpeaking(false);
-          setCurrentUtterance('');
-          return;
         }
-        setIsSpeaking(true);
-        setCurrentUtterance(text);
-      };
-
-      utterance.onend = () => {
-        setIsSpeaking(false);
-        setCurrentUtterance('');
-        window.__activeVoiceUtterance = null;
-      };
-
-      utterance.onerror = () => {
-        setIsSpeaking(false);
-        setCurrentUtterance('');
-        window.__activeVoiceUtterance = null;
-      };
-
-      window.speechSynthesis.speak(utterance);
-
-      // Failsafe auto-reset timer
-      const wordCount = text.split(' ').length;
-      const estimatedDuration = Math.max(2500, (wordCount / 2.2) * 1000 + 1200);
-      timeoutRef.current = setTimeout(() => {
-        setIsSpeaking(false);
-        if (window.speechSynthesis.speaking) {
-          window.speechSynthesis.cancel();
-        }
-      }, estimatedDuration);
+      }, 25);
 
     } catch (err) {
       console.warn('[VoiceContext] Speech error:', err);
@@ -124,18 +183,35 @@ export function VoiceProvider({ children }) {
   }, []);
 
   const toggleVoice = useCallback(() => {
+    // Unlock speech synthesis immediately on user click gesture
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      try {
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        }
+      } catch {}
+    }
+
     setVoiceEnabled(prev => {
       const next = !prev;
       voiceEnabledRef.current = next;
-      if (!next && typeof window !== 'undefined' && window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-        setIsSpeaking(false);
-        setCurrentUtterance('');
-      } else if (next) {
-        // Play brief voice confirmation when unmuting
+
+      if (!next) {
+        SoundFX.playVoiceOff();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+          try {
+            window.speechSynthesis.cancel();
+          } catch {}
+          setIsSpeaking(false);
+          setCurrentUtterance('');
+          if (keepAliveIntervalRef.current) clearInterval(keepAliveIntervalRef.current);
+        }
+      } else {
+        SoundFX.playVoiceOn();
+        // Play clear voice confirmation when unmuting
         setTimeout(() => {
           speak("AI voice telemetry activated.");
-        }, 100);
+        }, 120);
       }
       return next;
     });
@@ -143,9 +219,12 @@ export function VoiceProvider({ children }) {
 
   const stopSpeaking = useCallback(() => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
-      window.speechSynthesis.cancel();
+      try {
+        window.speechSynthesis.cancel();
+      } catch {}
       setIsSpeaking(false);
       setCurrentUtterance('');
+      if (keepAliveIntervalRef.current) clearInterval(keepAliveIntervalRef.current);
     }
   }, []);
 

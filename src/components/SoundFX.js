@@ -76,6 +76,54 @@ export const SoundFX = {
     return () => listeners.delete(fn);
   },
 
+  // AI Voice Transceiver Enabled Chime
+  playVoiceOn: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+      [580, 880, 1160].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + i * 0.05);
+        gain.gain.setValueAtTime(0.08, now + i * 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.05 + 0.12);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + i * 0.05);
+        osc.stop(now + i * 0.05 + 0.12);
+      });
+    } catch (e) {}
+  },
+
+  // AI Voice Transceiver Muted Chime
+  playVoiceOff: () => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = initAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+      [880, 580, 320].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + i * 0.05);
+        gain.gain.setValueAtTime(0.07, now + i * 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.05 + 0.14);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + i * 0.05);
+        osc.stop(now + i * 0.05 + 0.14);
+      });
+    } catch (e) {}
+  },
+
   // Soft sci-fi blip on hover with dynamic pitch modulation
   playHover: (type = 'normal') => {
     if (!soundEnabled) return;

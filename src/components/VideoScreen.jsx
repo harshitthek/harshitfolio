@@ -47,9 +47,10 @@ export default function VideoScreen({ isActive, onComplete }) {
   };
 
   const handleToggleVoice = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (sfxOn) SoundFX.playClick();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     toggleVoice();
   };
 
