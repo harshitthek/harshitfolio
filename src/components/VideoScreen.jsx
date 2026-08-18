@@ -127,19 +127,17 @@ export default function VideoScreen({ isActive, onComplete }) {
     }
   }, [isActive, sfxOn]);
 
-  // Keyboard accessibility: ESC, Space, or Enter to unmute or skip
+  // Keyboard accessibility: Space or Enter to unmute and start video
   useEffect(() => {
     if (!isActive) return;
 
     const handleKeyDown = (e) => {
       if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
 
-      if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+      if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         if (!videoStarted) {
           unmuteVideo();
-        } else {
-          afterVideo();
         }
       }
     };
@@ -290,21 +288,6 @@ export default function VideoScreen({ isActive, onComplete }) {
           </div>
         </div>
       )}
-
-      {/* Skip Button with Cyber Glow & Keyboard Hint */}
-      <button
-        type="button"
-        className="skip-btn"
-        onClick={handleSkip}
-        onMouseEnter={() => sfxOn && SoundFX.playHover('high')}
-        title="Skip intro video (Esc / Space)"
-      >
-        <span className="corner tl"></span>
-        <span className="corner tr"></span>
-        <span className="corner bl"></span>
-        <span className="corner br"></span>
-        <span>SKIP ›</span>
-      </button>
     </div>
   );
 }
