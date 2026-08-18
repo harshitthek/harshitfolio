@@ -288,6 +288,21 @@ export default function VideoScreen({ isActive, onComplete }) {
           </div>
         </div>
       )}
+
+      {/* Skip Button with Cyber Glow & User-Select None */}
+      <button
+        type="button"
+        className="skip-btn"
+        onClick={handleSkip}
+        onMouseEnter={() => sfxOn && SoundFX.playHover('high')}
+        title="Skip intro video"
+      >
+        <span className="corner tl"></span>
+        <span className="corner tr"></span>
+        <span className="corner bl"></span>
+        <span className="corner br"></span>
+        <span>SKIP ›</span>
+      </button>
     </div>
   );
 }

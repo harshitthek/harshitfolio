@@ -879,6 +879,8 @@ body::before {
   transition: all 0.3s;
   z-index: 10;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .skip-btn:hover {
   background: var(--g);
