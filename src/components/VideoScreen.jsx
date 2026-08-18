@@ -114,13 +114,10 @@ export default function VideoScreen({ isActive, onComplete }) {
 
       if (vidRef.current) {
         try {
+          vidRef.current.pause();
           vidRef.current.currentTime = 0;
-          vidRef.current.muted = true;
+          vidRef.current.muted = !sfxOn;
           vidRef.current.volume = 1;
-          const p = vidRef.current.play();
-          if (p !== undefined) {
-            p.catch(() => {});
-          }
         } catch (err) {
           // Ignore
         }
@@ -128,7 +125,7 @@ export default function VideoScreen({ isActive, onComplete }) {
     } else {
       killAllAudio();
     }
-  }, [isActive]);
+  }, [isActive, sfxOn]);
 
   // Keyboard accessibility: ESC, Space, or Enter to unmute or skip
   useEffect(() => {
