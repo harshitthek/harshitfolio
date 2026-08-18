@@ -1262,11 +1262,13 @@ body::after {
 
 .hero-sub-discipline {
   font-family: 'Space Mono', monospace;
-  font-size: 8px;
+  font-size: 8.5px;
   color: var(--dim-light);
-  letter-spacing: 2.8px;
-  margin-top: 1px;
-  white-space: nowrap;
+  letter-spacing: 2px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  text-align: center;
+  white-space: normal;
 }
 
 /* ==========================================================================
@@ -4620,19 +4622,21 @@ html, body, #root {
     top: -24px !important;
   }
   .hero-sub-discipline {
-    font-size: 8px !important;
+    font-size: 7.5px !important;
     letter-spacing: 0.5px !important;
     line-height: 1.4 !important;
     word-break: break-word !important;
     text-align: center !important;
-    margin-bottom: 6px !important;
+    margin-top: 2px !important;
+    margin-bottom: 14px !important;
+    padding: 0 8px !important;
   }
   .mission-holo-center {
-    width: 145px !important;
-    height: 145px !important;
-    max-width: 145px !important;
-    max-height: 145px !important;
-    margin: 4px auto !important;
+    width: 130px !important;
+    height: 110px !important;
+    max-width: 130px !important;
+    max-height: 110px !important;
+    margin: 10px auto 14px !important;
   }
   .mission-welcome-pod {
     width: 100% !important;

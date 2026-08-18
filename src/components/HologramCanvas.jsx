@@ -216,11 +216,12 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       const cosX = Math.cos(angleX), sinX = Math.sin(angleX);
       const cosZ = Math.cos(angleZ), sinZ = Math.sin(angleZ);
 
-      const baseOuterRad = 45 * explosionExpansion;
-      const baseInnerRad = 24 * explosionExpansion;
+      const isMobile = window.innerWidth < 768;
+      const baseOuterRad = (isMobile ? 32 : 45) * explosionExpansion;
+      const baseInnerRad = (isMobile ? 17 : 24) * explosionExpansion;
 
       // 1. Center Glowing Singularity Core
-      const glowRadius = Math.min(380, 75 * explosionExpansion);
+      const glowRadius = Math.min(380, (isMobile ? 55 : 75) * explosionExpansion);
       const glowGrad = ctx.createRadialGradient(cx, cy, 3, cx, cy, glowRadius);
       glowGrad.addColorStop(0, isExploding ? 'rgba(0, 255, 136, 0.85)' : 'rgba(0, 255, 136, 0.35)');
       glowGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.25)');
@@ -277,9 +278,10 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       ctx.strokeStyle = `rgba(56, 189, 248, ${0.3 * explosionAlpha})`;
       ctx.lineWidth = 1;
       ctx.beginPath();
+      const gimbalRadius = (isMobile ? 42 : 58) * explosionExpansion;
       for (let a = 0; a <= Math.PI * 2; a += 0.2) {
-        const rx = Math.cos(a) * 58 * explosionExpansion;
-        const ry = Math.sin(a) * 58 * explosionExpansion;
+        const rx = Math.cos(a) * gimbalRadius;
+        const ry = Math.sin(a) * gimbalRadius;
         const gx = rx * cosY;
         const gy = ry * cosX - rx * sinY * sinX;
         if (a === 0) ctx.moveTo(cx + gx, cy + gy);
@@ -438,7 +440,7 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       ctx.strokeStyle = 'rgba(0, 255, 136, 0.25)';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.ellipse(cx, cy + 55, 62, 8, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx, cy + (isMobile ? 38 : 55), isMobile ? 44 : 62, isMobile ? 6 : 8, 0, 0, Math.PI * 2);
       ctx.stroke();
 
       animId = requestAnimationFrame(render);
@@ -461,7 +463,7 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
   return (
     <>
       {/* Anchor placeholder in layout flow */}
-      <div ref={anchorRef} className="hologram-anchor-box" style={{ width: '280px', height: '130px' }} />
+      <div ref={anchorRef} className="hologram-anchor-box" style={{ width: '100%', height: '110px' }} />
 
       {/* Top-Level Fullscreen Canvas rendered via Body Portal (Flies OVER Top Header Bar!) */}
       {typeof document !== 'undefined' && ReactDOM.createPortal(
