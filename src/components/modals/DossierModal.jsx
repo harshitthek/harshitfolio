@@ -39,10 +39,244 @@ Summary: ${personal.summary}
   const handlePrintResume = () => {
     SoundFX.playDeploy();
     setIsPrinting(true);
-    setTimeout(() => {
+
+    try {
+      const printWindow = window.open('', '_blank', 'width=920,height=1100');
+      if (!printWindow) {
+        window.print();
+        setIsPrinting(false);
+        return;
+      }
+
+      const printHtml = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <title>Harshit_Sharma_Resume.pdf</title>
+          <style>
+            @page {
+              margin: 12mm 15mm;
+              size: A4 portrait;
+            }
+            * {
+              box-sizing: border-box;
+              margin: 0;
+              padding: 0;
+            }
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+              color: #0f172a;
+              background: #ffffff;
+              line-height: 1.42;
+              font-size: 9.5pt;
+              padding: 15px 25px;
+            }
+            .header {
+              border-bottom: 2px solid #0f172a;
+              padding-bottom: 8px;
+              margin-bottom: 12px;
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+            }
+            .name {
+              font-size: 22pt;
+              font-weight: 800;
+              color: #0f172a;
+              letter-spacing: -0.5px;
+              line-height: 1.1;
+            }
+            .role {
+              font-size: 10.5pt;
+              font-weight: 600;
+              color: #059669;
+              margin-top: 2px;
+            }
+            .contact {
+              font-size: 9pt;
+              color: #334155;
+              text-align: right;
+              line-height: 1.45;
+            }
+            .contact a {
+              color: #0284c7;
+              text-decoration: none;
+            }
+            .section {
+              margin-bottom: 12px;
+              page-break-inside: avoid;
+            }
+            .sec-title {
+              font-size: 10pt;
+              font-weight: 700;
+              color: #0f172a;
+              border-bottom: 1.5px solid #cbd5e1;
+              padding-bottom: 2px;
+              margin-bottom: 6px;
+              letter-spacing: 0.8px;
+              text-transform: uppercase;
+            }
+            .summary {
+              font-size: 9pt;
+              color: #334155;
+              line-height: 1.45;
+              text-align: justify;
+            }
+            .row-between {
+              display: flex;
+              justify-content: space-between;
+              align-items: baseline;
+              font-size: 9.5pt;
+            }
+            .item-role {
+              font-weight: 700;
+              color: #0f172a;
+            }
+            .item-period {
+              font-size: 8.5pt;
+              font-weight: 600;
+              color: #475569;
+            }
+            .item-sub {
+              font-size: 9pt;
+              font-weight: 600;
+              color: #059669;
+              margin-bottom: 2px;
+            }
+            .item-desc {
+              font-size: 8.5pt;
+              color: #334155;
+              margin-bottom: 3px;
+            }
+            ul.bullets {
+              padding-left: 16px;
+              font-size: 8.5pt;
+              color: #334155;
+              margin: 0;
+            }
+            ul.bullets li {
+              margin-bottom: 2px;
+              line-height: 1.35;
+            }
+            .skills-table {
+              width: 100%;
+              border-collapse: collapse;
+              font-size: 8.5pt;
+            }
+            .skills-table td {
+              padding: 2px 0;
+              vertical-align: top;
+            }
+            .skills-table td.label {
+              font-weight: 700;
+              color: #0f172a;
+              width: 26%;
+            }
+            .skills-table td.val {
+              color: #334155;
+            }
+            .certs-list {
+              font-size: 8.5pt;
+              color: #334155;
+              line-height: 1.45;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <h1 class="name">${personal.name}</h1>
+              <p class="role">${personal.role}</p>
+            </div>
+            <div class="contact">
+              <div>📧 ${personal.email}</div>
+              <div>🐙 <a href="${personal.github}">${personal.github}</a></div>
+              <div>💼 <a href="${personal.linkedin}">${personal.linkedin}</a></div>
+              <div>📍 ${personal.location}</div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="sec-title">Executive Summary</div>
+            <p class="summary">${personal.summary}</p>
+          </div>
+
+          <div class="section">
+            <div class="sec-title">Education</div>
+            ${education.map(edu => `
+              <div style="margin-bottom: 6px;">
+                <div class="row-between">
+                  <span class="item-role">${edu.degree} — ${edu.major}</span>
+                  <span class="item-period">${edu.period}</span>
+                </div>
+                <div class="item-sub">${edu.institution}, ${edu.university} (${edu.status})</div>
+                <div style="font-size: 8pt; color: #475569; margin-top: 2px;">
+                  <strong>Core Coursework:</strong> ${edu.coursework.join(', ')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="section">
+            <div class="sec-title">Technical Arsenal</div>
+            <table class="skills-table">
+              ${competencies.map(c => `
+                <tr>
+                  <td class="label">${c.area}:</td>
+                  <td class="val">${c.skills.join(', ')}</td>
+                </tr>
+              `).join('')}
+            </table>
+          </div>
+
+          <div class="section">
+            <div class="sec-title">Engineering Experience & Deployed Systems</div>
+            ${experience.map(exp => `
+              <div style="margin-bottom: 8px;">
+                <div class="row-between">
+                  <span class="item-role">${exp.role}</span>
+                  <span class="item-period">${exp.period}</span>
+                </div>
+                <div class="item-sub">${exp.organization} · ${exp.badge}</div>
+                <p class="item-desc">${exp.description}</p>
+                <ul class="bullets">
+                  ${exp.highlights.map(h => `<li>${h}</li>`).join('')}
+                </ul>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="section">
+            <div class="sec-title">Certifications & Research Milestones</div>
+            <div class="certs-list">
+              ${certifications.map(cert => `
+                <div>• <strong>${cert.title}</strong> — ${cert.issuer} (${cert.year}) [${cert.tag}]</div>
+              `).join('')}
+            </div>
+          </div>
+
+          <script>
+            window.onload = function() {
+              window.focus();
+              setTimeout(function() {
+                window.print();
+              }, 150);
+            };
+          </script>
+        </body>
+        </html>
+      `;
+
+      printWindow.document.open();
+      printWindow.document.write(printHtml);
+      printWindow.document.close();
+    } catch (err) {
+      console.warn('Fallback printing:', err);
       window.print();
+    } finally {
       setIsPrinting(false);
-    }, 200);
+    }
   };
 
   return (
