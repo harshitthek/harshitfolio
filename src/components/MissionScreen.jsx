@@ -161,17 +161,17 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
                     <line x1="40" y1="66" x2="50" y2="30" stroke="url(#luxoChromeTube)" strokeWidth="3" strokeLinecap="round" />
                     <line x1="42" y1="63" x2="52" y2="27" stroke="url(#luxoChromeTube)" strokeWidth="3" strokeLinecap="round" />
                     
-                    {/* 1. Downward & Articulated Lamp Head (Strictly Centered on I) */}
+                    {/* 1. Side Profile Head (Jac Jacobsen L-1 Flared Bell Shade) */}
                     <g className="luxo-side-head">
-                      <rect x="44.5" y="16" width="11" height="11" rx="2.5" fill="url(#luxoMetallicShade)" stroke="#38bdf8" strokeWidth="1.4" />
-                      <rect x="53.5" y="19" width="2.5" height="3.5" rx="1" fill="#38bdf8" />
-                      <circle cx="50" cy="26" r="4.2" fill="url(#luxoJointMetallic)" stroke="#38bdf8" strokeWidth="1.4" />
-                      {/* Flared Downward Bell Lampshade (Centered on I) */}
-                      <path d="M40,24 C36,20 64,20 60,24 L68,42 C68,42 32,42 32,42 Z" fill="url(#luxoMetallicShade)" stroke="#00ff88" strokeWidth="2.2" />
+                      <rect x="46" y="21" width="11" height="11" rx="2.5" fill="url(#luxoMetallicShade)" stroke="#38bdf8" strokeWidth="1.4" />
+                      <rect x="55" y="24" width="2.5" height="3.5" rx="1" fill="#38bdf8" />
+                      <circle cx="51" cy="30" r="4.2" fill="url(#luxoJointMetallic)" stroke="#38bdf8" strokeWidth="1.4" />
+                      {/* Flared Bell Lampshade */}
+                      <path d="M50,27 C46,14 34,10 16,16 C25,35 38,43 53,33 Z" fill="url(#luxoMetallicShade)" stroke="#00ff88" strokeWidth="2.2" filter="drop-shadow(0 0 12px rgba(0,255,136,0.85))" />
                       {/* Rolled Chrome Bezel Lip */}
-                      <ellipse cx="50" cy="42" rx="18" ry="4" fill="#0f172a" stroke="url(#luxoBezelChrome)" strokeWidth="2" />
+                      <ellipse cx="16" cy="16" rx="4.5" ry="9.5" transform="rotate(-30 16 16)" fill="#0f172a" stroke="url(#luxoBezelChrome)" strokeWidth="2" />
                       {/* Frosted Incandescent Bulb */}
-                      <circle cx="50" cy="40" r="4.2" fill="#ffffff" />
+                      <circle cx="17" cy="16" r="4.2" fill="#ffffff" filter="drop-shadow(0 0 14px #ffffff)" />
                     </g>
                     
                     {/* 2. Front-Facing Head Aperture (Stepped White Reflector Aperture) */}
@@ -179,7 +179,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
                       <ellipse cx="50" cy="12" rx="8.5" ry="3.8" fill="url(#luxoMetallicShade)" stroke="#38bdf8" strokeWidth="1.4" />
                       <circle cx="50" cy="30" r="4.2" fill="url(#luxoJointMetallic)" stroke="#38bdf8" strokeWidth="1.4" />
                       {/* Concentric Brushed Titanium Bell Shade facing camera */}
-                      <circle cx="50" cy="30" r="17" fill="url(#luxoMetallicShade)" stroke="#00ff88" strokeWidth="2.6" />
+                      <circle cx="50" cy="30" r="17" fill="url(#luxoMetallicShade)" stroke="#00ff88" strokeWidth="2.6" filter="drop-shadow(0 0 16px rgba(0,255,136,0.95))" />
                       <circle cx="50" cy="30" r="12" fill="url(#luxoInnerReflector)" stroke="#38bdf8" strokeWidth="1.5" />
                       {/* Glowing Bulb Core */}
                       <circle className="luxo-bulb" cx="50" cy="30" r="5.5" />

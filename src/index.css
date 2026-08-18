@@ -1433,19 +1433,19 @@ body::before {
   }
 }
 
-/* 2. Lamp Trajectory & Impact Squash (Pure Vertical Hop Course directly over 'I') */
+/* 2. Lamp Trajectory & Impact Squash (3 Progressive Bounces in exact vertical sync) */
 @keyframes pixarLampHopCourse {
   0% {
     opacity: 0;
-    transform: translate(-50%, -120%) scale(0.9);
+    transform: translate(170%, -40%) scale(0.9) rotate(20deg);
   }
   12% {
     opacity: 1;
-    transform: translate(-50%, -84%) scale(1.02, 0.98);
+    transform: translate(80%, -84%) scale(1.02, 0.98) rotate(-6deg);
   }
   /* Bounce 1: Light Touchdown & Squash */
   18% {
-    transform: translate(-50%, -84%) scale(1, 1);
+    transform: translate(-50%, -84%) scale(1, 1) rotate(0deg);
   }
   23% {
     transform: translate(-50%, -70%) scale(1.06, 0.92);
@@ -1455,7 +1455,7 @@ body::before {
   }
   /* Bounce 2: Medium Jump & Squash */
   35% {
-    transform: translate(-50%, -92%) scale(0.95, 1.06);
+    transform: translate(-50%, -92%) scale(0.95, 1.06) rotate(1deg);
   }
   41% {
     transform: translate(-50%, -46%) scale(1.14, 0.84);
@@ -1463,22 +1463,22 @@ body::before {
   47% {
     transform: translate(-50%, -88%) scale(0.96, 1.04);
   }
-  /* Bounce 3: High Stomp Leap Peak */
+  /* Bounce 3: High Stomp Leap Peak (Capped cleanly below top tag!) */
   55% {
-    transform: translate(-50%, -96%) scale(0.92, 1.10);
+    transform: translate(-50%, -96%) scale(0.92, 1.10) rotate(2deg);
   }
   64% {
-    transform: translate(-50%, -84%) scale(0.96, 1.04);
+    transform: translate(-50%, -84%) scale(0.96, 1.04) rotate(0deg);
   }
   /* Downward Smash Slam on Pancake */
   66% {
-    transform: translate(-50%, -12%) scale(1.26, 0.70);
+    transform: translate(-50%, -12%) scale(1.26, 0.70) rotate(0deg);
   }
   71% {
-    transform: translate(-50%, -12%) scale(0.96, 1.04);
+    transform: translate(-50%, -12%) scale(0.96, 1.04) rotate(0deg);
   }
   75%, 100% {
-    transform: translate(-50%, -12%) scale(1, 1);
+    transform: translate(-50%, -12%) scale(1, 1) rotate(0deg);
   }
 }
 
@@ -1490,26 +1490,26 @@ body::before {
   }
   78% {
     /* Tilts down to inspect squashed pancake */
-    transform: rotate(15deg);
+    transform: rotate(45deg);
     opacity: 1;
   }
   83% {
     /* Playful double-take curiosity twitch */
-    transform: rotate(-10deg);
+    transform: rotate(34deg);
     opacity: 1;
   }
   87% {
     /* Inspects pancake again */
-    transform: rotate(12deg);
+    transform: rotate(48deg);
     opacity: 1;
   }
   91% {
     /* Swivels to front */
-    transform: scaleX(0.5);
+    transform: rotate(15deg) scaleX(0.5);
     opacity: 0.8;
   }
   95%, 100% {
-    transform: scaleX(0);
+    transform: rotate(0deg) scaleX(0);
     opacity: 0;
   }
 }
