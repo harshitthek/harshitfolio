@@ -65,7 +65,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
         {/* Massive Hero Name Header (Preserved Exactly with Layered Pixar Animation) */}
         <div className="hero-name-container">
           <h1 className="mission-hero-name">
-            HARS<span key={`h-${pixarKey}`} className="pixar-adjacent-letter pixar-letter-h">H</span><span key={pixarKey} className="pixar-i-layer" onClick={replayPixar} title="Click to replay Pixar stomp!">
+            HARSH<span key={pixarKey} className="pixar-i-layer" onClick={replayPixar} title="Click to replay Pixar stomp!">
               <span className="pixar-i-text">I</span>
               <span className="pixar-lamp-rig" aria-hidden="true">
                 <svg className="luxo-lamp-svg" viewBox="0 0 100 120" fill="none">
@@ -188,7 +188,7 @@ export default function MissionScreen({ isActive, onAccept, onOpenModal }) {
                   </g>
                 </svg>
               </span>
-            </span><span key={`t-${pixarKey}`} className="pixar-adjacent-letter pixar-letter-t">T</span> <span className="hero-name-glow">SHARMA</span>
+            </span>T <span className="hero-name-glow">SHARMA</span>
           </h1>
           <div className="hero-sub-discipline">
             CREATOR &bull; THINKER &bull; MULTIVERSE ARCHITECT &bull; NEW DELHI
