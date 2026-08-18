@@ -93,20 +93,30 @@ export default function App() {
     setSelectedProjectForModal(null);
   }, []);
 
-  // Global Keyboard shortcuts (with strict modifier check to prevent Ctrl+C hijacking)
+  // Global Keyboard shortcuts (active ONLY on the final Multiverse Cards screen)
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Allow Ctrl+K or Cmd+K anywhere
-      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
-        e.preventDefault();
-        SoundFX.playClick();
-        setActiveModal(prev => (prev === 'cmd-palette' ? null : 'cmd-palette'));
+      // Allow ESC to close any open modal
+      if (e.key === 'Escape') {
+        if (activeModal) closeModal();
         return;
       }
 
       // Don't intercept if user is typing in an input or textarea
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
-        if (e.key === 'Escape') closeModal();
+        return;
+      }
+
+      // Strictly disable all hotkeys until the user reaches the final Multiverse screen ('s-cards')
+      if (currentScreen !== 's-cards') {
+        return;
+      }
+
+      // Allow Ctrl+K or Cmd+K on the cards screen
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        SoundFX.playClick();
+        setActiveModal(prev => (prev === 'cmd-palette' ? null : 'cmd-palette'));
         return;
       }
 
@@ -123,9 +133,7 @@ export default function App() {
         return;
       }
 
-      if (e.key === 'Escape') {
-        closeModal();
-      } else if (e.key === 't' || e.key === 'T') {
+      if (e.key === 't' || e.key === 'T') {
         if (!activeModal) {
           SoundFX.playClick();
           setActiveModal('terminal');
@@ -150,7 +158,7 @@ export default function App() {
           SoundFX.playClick();
           setActiveModal('dossier');
         }
-      } else if (((e.key >= '1' && e.key <= '9') || e.key === '0') && currentScreen === 's-cards' && !activeModal) {
+      } else if (((e.key >= '1' && e.key <= '9') || e.key === '0') && !activeModal) {
         const index = e.key === '0' ? 9 : parseInt(e.key, 10) - 1;
         const project = projectsData[index];
         if (project) {
