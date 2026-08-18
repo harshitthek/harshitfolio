@@ -166,10 +166,23 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     let scanY = 0;
+    let frameCount = 0;
 
     const render = (now) => {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       time += 0.02;
+      frameCount++;
+
+      // Real-time anchor tracking (every 6 frames) so hologram is always dead-center without layout lag
+      if (frameCount % 6 === 0 && anchorRef.current) {
+        const rect = anchorRef.current.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          centerPosRef.current = {
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2
+          };
+        }
+      }
 
       const cx = centerPosRef.current.x;
       const cy = centerPosRef.current.y;
@@ -217,11 +230,11 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
       const cosZ = Math.cos(angleZ), sinZ = Math.sin(angleZ);
 
       const isMobile = window.innerWidth < 768;
-      const baseOuterRad = (isMobile ? 32 : 45) * explosionExpansion;
-      const baseInnerRad = (isMobile ? 17 : 24) * explosionExpansion;
+      const baseOuterRad = (isMobile ? 28 : 38) * explosionExpansion;
+      const baseInnerRad = (isMobile ? 15 : 20) * explosionExpansion;
 
       // 1. Center Glowing Singularity Core
-      const glowRadius = Math.min(380, (isMobile ? 55 : 75) * explosionExpansion);
+      const glowRadius = Math.min(380, (isMobile ? 50 : 68) * explosionExpansion);
       const glowGrad = ctx.createRadialGradient(cx, cy, 3, cx, cy, glowRadius);
       glowGrad.addColorStop(0, isExploding ? 'rgba(0, 255, 136, 0.85)' : 'rgba(0, 255, 136, 0.35)');
       glowGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.25)');
