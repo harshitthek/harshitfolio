@@ -79,7 +79,7 @@ export default function CyberCursor({ activeScreen }) {
       document.body.removeEventListener('mouseenter', handleMouseEnter);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [isVisible]);
+  }, []);
 
   // Keep touch devices clean
   if (isTouch || activeScreen === 's-video') return null;

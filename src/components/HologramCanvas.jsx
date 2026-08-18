@@ -330,25 +330,20 @@ export default function HologramCanvas({ isActive, explosionTrigger = 0 }) {
         ctx.stroke();
       });
 
-      // 6. Glowing 3D Nodes
+      // 6. Fast 3D Nodes (Hardware-accelerated fills, zero shadowBlur bottleneck)
+      ctx.fillStyle = '#ffffff';
       outerProjected.forEach(p => {
-        ctx.fillStyle = '#ffffff';
-        ctx.shadowColor = '#00ff88';
-        ctx.shadowBlur = isExploding ? 14 : 6;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, isExploding ? 4.0 : 2.2, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, isExploding ? 3.5 : 2.0, 0, Math.PI * 2);
         ctx.fill();
       });
 
+      ctx.fillStyle = '#38bdf8';
       innerProjected.forEach(p => {
-        ctx.fillStyle = '#38bdf8';
-        ctx.shadowColor = '#38bdf8';
-        ctx.shadowBlur = 5;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, isExploding ? 2.8 : 1.8, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, isExploding ? 2.5 : 1.6, 0, Math.PI * 2);
         ctx.fill();
       });
-      ctx.shadowBlur = 0;
 
       // 7. Ambient Orbital Particles
       particles.forEach(p => {
