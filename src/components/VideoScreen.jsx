@@ -154,10 +154,16 @@ export default function VideoScreen({ isActive, onComplete }) {
         playsInline
         webkit-playsinline="true"
         preload="auto"
-        muted
+        muted={!videoStarted}
         id="intro-video"
         src={`${import.meta.env.BASE_URL}videoplayback.mp4`}
         ref={vidRef}
+        onPlay={(e) => {
+          if (!videoStarted) {
+            e.target.pause();
+            e.target.currentTime = 0;
+          }
+        }}
         onEnded={afterVideo}
         onError={() => {
           if (videoStarted) afterVideo();
