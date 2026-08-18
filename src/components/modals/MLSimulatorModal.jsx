@@ -20,11 +20,20 @@ export default function MLSimulatorModal({ onClose }) {
     }
   });
 
-  const handleUpdateApiUrl = (url) => {
-    setApiBaseUrl(url);
+  const handleUpdateApiUrl = (rawUrl) => {
+    let clean = (rawUrl || '').trim();
+    if (clean && !clean.startsWith('http://') && !clean.startsWith('https://')) {
+      clean = 'http://' + clean;
+    }
     try {
-      localStorage.setItem('autovaluate_backend_url', url);
-    } catch {}
+      const parsed = new URL(clean);
+      if (['http:', 'https:'].includes(parsed.protocol)) {
+        setApiBaseUrl(clean);
+        localStorage.setItem('autovaluate_backend_url', clean);
+      }
+    } catch {
+      // Ignore malformed URLs
+    }
   };
   const [showApiSettings, setShowApiSettings] = useState(false);
   const [apiStatus, setApiStatus] = useState('checking'); // 'live' | 'client_model' | 'checking'

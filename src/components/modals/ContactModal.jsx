@@ -17,7 +17,7 @@ export default function ContactModal({ onClose }) {
     const mailtoUrl = `mailto:codewithharshitsharma@gmail.com?subject=${subject}&body=${body}`;
 
     try {
-      window.open(mailtoUrl, '_blank');
+      window.location.href = mailtoUrl;
     } catch {
       // Fallback
     }
