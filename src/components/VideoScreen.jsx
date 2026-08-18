@@ -59,12 +59,11 @@ export default function VideoScreen({ isActive, onComplete }) {
       if (e.preventDefault) e.preventDefault();
       if (e.stopPropagation) e.stopPropagation();
     }
-    if (videoEnded) return;
     setVideoEnded(true);
     killAllAudio();
 
     if (sfxOn) SoundFX.playClick();
-    onComplete();
+    if (onComplete) onComplete();
   };
 
   const unmuteVideo = (e) => {
@@ -78,7 +77,9 @@ export default function VideoScreen({ isActive, onComplete }) {
     if (sfxOn) SoundFX.playClick();
 
     if (vidRef.current) {
+      vidRef.current.currentTime = 0;
       vidRef.current.muted = !sfxOn;
+      vidRef.current.volume = 1;
       const playPromise = vidRef.current.play();
       if (playPromise !== undefined) {
         playPromise.catch((err) => {
@@ -90,20 +91,41 @@ export default function VideoScreen({ isActive, onComplete }) {
       afterVideo();
     }
 
+    if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
     fallbackTimerRef.current = setTimeout(() => {
       afterVideo();
     }, 8500);
   };
 
   const handleSkip = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    if (e) {
+      if (e.preventDefault) e.preventDefault();
+      if (e.stopPropagation) e.stopPropagation();
+    }
     afterVideo();
   };
 
-  // When screen changes from active to inactive, instantly kill all audio
+  // Full state reset on screen reactivation
   useEffect(() => {
-    if (!isActive) {
+    if (isActive) {
+      setVideoStarted(false);
+      setVideoEnded(false);
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+
+      if (vidRef.current) {
+        try {
+          vidRef.current.currentTime = 0;
+          vidRef.current.muted = true;
+          vidRef.current.volume = 1;
+          const p = vidRef.current.play();
+          if (p !== undefined) {
+            p.catch(() => {});
+          }
+        } catch (err) {
+          // Ignore
+        }
+      }
+    } else {
       killAllAudio();
     }
   }, [isActive]);
