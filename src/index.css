@@ -4630,31 +4630,188 @@ body::before {
   box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
 }
 
-/* Print Styles for Save as PDF */
+/* Hidden on screen by default */
+.dossier-printable-resume {
+  display: none;
+}
+
+/* =====================================================================
+   PRINT & PDF RESUME EXPORT STYLESHEET
+   ===================================================================== */
 @media print {
-  body * {
-    visibility: hidden;
+  @page {
+    margin: 10mm 15mm;
+    size: A4 portrait;
   }
-  .dossier-modal, .dossier-modal * {
-    visibility: visible;
+
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    font-size: 10.5pt !important;
+    line-height: 1.45 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  .dossier-modal {
-    position: absolute;
-    left: 0;
-    top: 0;
+
+  /* Hide all interactive UI layers, canvases, navbars, and modal glass wrappers */
+  .cyber-hud-nav,
+  .neural-canvas,
+  #custom-cursor,
+  .video-top-hud,
+  .video-vignette-overlay,
+  .modal-card.glass-modal,
+  .dossier-tabs-strip,
+  .modal-header,
+  .modal-footer {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .modal-backdrop {
+    position: static !important;
+    display: block !important;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Render clean, beautiful printable resume document */
+  .dossier-printable-resume {
+    display: block !important;
+    visibility: visible !important;
     width: 100% !important;
     max-width: 100% !important;
-    box-shadow: none !important;
     background: #ffffff !important;
-    color: #000000 !important;
-    border: none !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
   }
-  .dossier-tabs-strip, .dossier-header-actions, .modal-close-btn, .modal-footer {
-    display: none !important;
+
+  .print-header {
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
   }
-  .dossier-body-scrollable {
-    max-height: none !important;
-    overflow: visible !important;
+
+  .print-name {
+    font-size: 22pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 2px 0;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .print-role {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #059669;
+    margin: 0;
+  }
+
+  .print-contact-info {
+    font-size: 9pt;
+    color: #334155;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  .print-section {
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }
+
+  .print-sec-title {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #0f172a;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 3px;
+    margin: 0 0 8px 0;
+    letter-spacing: 1px;
+  }
+
+  .print-text {
+    font-size: 9.5pt;
+    color: #334155;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .print-row-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 10pt;
+    color: #0f172a;
+  }
+
+  .print-inst, .print-exp-org {
+    font-size: 9pt;
+    font-weight: 600;
+    color: #059669;
+    margin-bottom: 3px;
+  }
+
+  .print-coursework {
+    font-size: 8.5pt;
+    color: #475569;
+    margin-top: 3px;
+  }
+
+  .print-skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 16px;
+    font-size: 9pt;
+    color: #334155;
+  }
+
+  .print-skill-group strong {
+    color: #0f172a;
+  }
+
+  .print-exp-item, .print-edu-item {
+    margin-bottom: 10px;
+    page-break-inside: avoid;
+  }
+
+  .print-exp-desc {
+    font-size: 9pt;
+    color: #334155;
+    margin: 3px 0 4px 0;
+  }
+
+  .print-bullet-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 8.5pt;
+    color: #334155;
+  }
+
+  .print-bullet-list li {
+    margin-bottom: 2px;
+    line-height: 1.35;
+  }
+
+  .print-cert-list {
+    font-size: 9pt;
+    color: #334155;
+    line-height: 1.5;
   }
 }
 

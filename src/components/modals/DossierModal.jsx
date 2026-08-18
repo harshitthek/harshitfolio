@@ -344,6 +344,84 @@ Summary: ${personal.summary}
           </div>
         </div>
       </div>
+
+      {/* DEDICATED RECRUITER-READY PRINTABLE RESUME (Visible only during print/PDF export) */}
+      <div className="dossier-printable-resume">
+        <header className="print-header">
+          <div className="print-name-title">
+            <h1 className="print-name">{personal.name}</h1>
+            <p className="print-role">{personal.role}</p>
+          </div>
+          <div className="print-contact-info">
+            <div>📧 {personal.email}</div>
+            <div>🐙 {personal.github}</div>
+            <div>💼 {personal.linkedin}</div>
+            <div>📍 {personal.location}</div>
+          </div>
+        </header>
+
+        <section className="print-section">
+          <h2 className="print-sec-title">PROFESSIONAL SUMMARY</h2>
+          <p className="print-text">{personal.summary}</p>
+        </section>
+
+        <section className="print-section">
+          <h2 className="print-sec-title">EDUCATION</h2>
+          {education.map((edu, idx) => (
+            <div key={idx} className="print-edu-item">
+              <div className="print-row-between">
+                <strong>{edu.degree} — {edu.major}</strong>
+                <span>{edu.period}</span>
+              </div>
+              <div className="print-inst">{edu.institution}, {edu.university}</div>
+              <div className="print-coursework">
+                <em>Core Coursework:</em> {edu.coursework.join(', ')}
+              </div>
+            </div>
+          ))}
+        </section>
+
+        <section className="print-section">
+          <h2 className="print-sec-title">TECHNICAL PROFICIENCIES</h2>
+          <div className="print-skills-grid">
+            {competencies.map((c, i) => (
+              <div key={i} className="print-skill-group">
+                <strong>{c.area}:</strong> {c.skills.join(', ')}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="print-section">
+          <h2 className="print-sec-title">ENGINEERING EXPERIENCE & NOTABLE PROJECTS</h2>
+          {experience.map((exp, idx) => (
+            <div key={idx} className="print-exp-item">
+              <div className="print-row-between">
+                <strong>{exp.role}</strong>
+                <span>{exp.period}</span>
+              </div>
+              <div className="print-exp-org">{exp.organization}</div>
+              <p className="print-exp-desc">{exp.description}</p>
+              <ul className="print-bullet-list">
+                {exp.highlights.map((h, hIdx) => (
+                  <li key={hIdx}>{h}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+
+        <section className="print-section">
+          <h2 className="print-sec-title">CERTIFICATIONS & CREDENTIALS</h2>
+          <div className="print-cert-list">
+            {certifications.map((cert, idx) => (
+              <div key={idx} className="print-cert-item">
+                • <strong>{cert.title}</strong> — {cert.issuer} ({cert.year})
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
