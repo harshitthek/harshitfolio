@@ -2,6 +2,6 @@
 Contact: mailto:codewithharshitsharma@gmail.com
 Canonical: https://harshitthek.github.io/harshitfolio/.well-known/security.txt
 Preferred-Languages: en
-Policy: https://github.com/harshitthek/harshitfolio/blob/main/README.md
+Policy: https://github.com/harshitthek/harshitfolio/blob/master/README.md
 Acknowledgments: https://github.com/harshitthek/harshitfolio
-Expires: 2027-12-31T23:59:59.000Z
+Expires: 2029-12-31T23:59:59.000Z
