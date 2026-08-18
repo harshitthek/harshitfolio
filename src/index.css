@@ -489,9 +489,17 @@ body::after {
    SCREEN 1: VIDEO INTRO
    ===================================================================== */
 #s-video {
-  background: #000;
+  background: #040507;
   padding: 0;
   z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
 }
 
 #s-video video {
@@ -504,6 +512,22 @@ body::after {
   transform: translateZ(0);
   backface-visibility: hidden;
   image-rendering: -webkit-optimize-contrast;
+}
+
+/* On mobile / portrait screens: Preserve 100% uncropped widescreen video frame */
+@media (max-width: 900px), (orientation: portrait) {
+  #s-video {
+    background: radial-gradient(circle at center, #0c141d 0%, #030406 100%);
+  }
+
+  #s-video video {
+    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100vw !important;
+    max-height: 100dvh !important;
+    margin: auto;
+  }
 }
 
 .video-vignette-overlay {
