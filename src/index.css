@@ -4341,96 +4341,171 @@ html, body, #root {
 
 /* Mobile & Small Tablet Screens (<= 768px) */
 @media (max-width: 768px) {
-  /* 1. Global Touch Controls & Safe Areas */
+  /* 1. Global Touch Controls & Strict Horizontal Fit */
+  html, body, #root, .screen, #s-video, #s-intermediate, #s-mission, #s-cards, #s-loading {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
   body {
     font-size: 13px;
   }
 
-  /* 2. Cyber HUD Navbar on Mobile */
+  /* 2. Cyber HUD Navbar on Mobile (Guaranteed to Fit Without Cutting Off) */
   .cyber-hud-nav {
-    height: 52px;
-    padding: 0 10px;
-    background: rgba(6, 6, 6, 0.95);
+    height: 50px;
+    padding: 0 8px;
+    background: rgba(6, 6, 6, 0.96);
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
   .brand-badge-btn {
-    padding: 3px 6px;
-    gap: 5px;
+    padding: 2px 4px;
+    gap: 4px;
   }
   .brand-title {
-    font-size: 13px;
-    letter-spacing: 1px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
   }
   .brand-tag {
-    display: none;
+    display: none !important;
   }
   .ai-waveform-hud {
-    padding: 3px 6px;
+    padding: 2px 4px;
     gap: 2px;
   }
   .waveform-label {
-    display: none;
+    display: none !important;
   }
   .nav-right {
-    gap: 5px;
+    gap: 3px !important;
+    align-items: center;
+  }
+  .social-text {
+    display: none !important;
+  }
+  .hud-social-btn {
+    padding: 4px !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .hud-social-btn .social-svg-icon {
+    width: 14px !important;
+    height: 14px !important;
+    margin: 0 !important;
+  }
+  .nav-divider {
+    display: none !important;
   }
   .hud-toggle-btn {
-    padding: 5px 8px;
-    font-size: 8px;
-    letter-spacing: 1px;
-    min-height: 32px;
+    padding: 4px 6px !important;
+    font-size: 7.5px !important;
+    letter-spacing: 0.5px !important;
+    min-height: 28px !important;
+    gap: 3px !important;
   }
 
-  /* 3. Screen 1: Video Intro on Mobile */
+  /* 3. Screen 1: Video Intro on Mobile (100% Fitted) */
   .video-top-hud {
-    padding: 10px 12px;
-    gap: 8px;
-    flex-wrap: wrap;
+    position: absolute !important;
+    top: max(8px, env(safe-area-inset-top)) !important;
+    left: 8px !important;
+    right: 8px !important;
+    padding: 0 !important;
+    width: calc(100% - 16px) !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    z-index: 50 !important;
   }
   .video-brand-pill {
-    padding: 4px 10px;
+    padding: 3px 7px !important;
   }
   .video-brand-pill .brand-title {
-    font-size: 12px;
+    font-size: 11px !important;
+    letter-spacing: 1px !important;
   }
   .video-brand-pill .brand-badge {
-    display: none;
+    display: none !important;
   }
   .video-hud-right {
-    gap: 5px;
+    display: flex !important;
+    gap: 4px !important;
+    align-items: center !important;
+  }
+  .video-hud-btn.git {
+    display: none !important;
   }
   .video-hud-btn {
-    font-size: 8px;
-    padding: 5px 8px;
-    letter-spacing: 1px;
+    font-size: 7.5px !important;
+    padding: 4px 7px !important;
+    letter-spacing: 0.5px !important;
+    min-height: 28px !important;
+  }
+  .unmute-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    padding: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 100vw !important;
+    max-width: 100% !important;
+    z-index: 40 !important;
   }
   .unmute-box {
-    width: calc(100vw - 28px);
-    max-width: 380px;
-    padding: 1.2rem 1rem;
-    margin: auto;
+    width: calc(100vw - 24px) !important;
+    max-width: 340px !important;
+    padding: 18px 14px !important;
+    margin: auto !important;
+    box-sizing: border-box !important;
   }
   .unmute-headline {
-    font-size: clamp(1.3rem, 6vw, 1.8rem);
-    letter-spacing: 2px;
+    font-size: 1.15rem !important;
+    letter-spacing: 1.5px !important;
+    margin-bottom: 8px !important;
+    line-height: 1.25 !important;
   }
   .unmute-sub {
-    font-size: 9px;
-    gap: 4px;
-    flex-wrap: wrap;
+    font-size: 8px !important;
+    gap: 3px !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 10px !important;
+  }
+  .unmute-equalizer {
+    margin-bottom: 12px !important;
+    height: 12px !important;
   }
   .unmute-cta-btn {
-    width: 100%;
-    padding: 12px 14px;
-    font-size: 10px;
-    min-height: 46px;
-    letter-spacing: 1.5px;
+    width: 100% !important;
+    padding: 10px 12px !important;
+    font-size: 9px !important;
+    min-height: 44px !important;
+    letter-spacing: 1px !important;
+  }
+  .unmute-hint {
+    font-size: 7.5px !important;
+    margin-top: 8px !important;
   }
   .skip-btn {
-    bottom: max(14px, env(safe-area-inset-bottom));
-    right: 14px;
-    padding: 8px 16px;
-    font-size: 11px;
+    position: absolute !important;
+    bottom: max(14px, env(safe-area-inset-bottom)) !important;
+    right: 14px !important;
+    padding: 6px 14px !important;
+    font-size: 10px !important;
+    z-index: 50 !important;
   }
+  .corner-dec.tl { top: 6px !important; left: 6px !important; }
+  .corner-dec.tr { top: 6px !important; right: 6px !important; }
+  .corner-dec.bl { bottom: 6px !important; left: 6px !important; }
+  .corner-dec.br { bottom: 6px !important; right: 6px !important; }
 
   /* 4. Screen 2: Intermediate Loading Screen */
   .intermediate-box {
