@@ -18,6 +18,7 @@ import ArchitectureModal from './components/modals/ArchitectureModal';
 import TerminalModal from './components/modals/TerminalModal';
 import DossierModal from './components/modals/DossierModal';
 import ContactModal from './components/modals/ContactModal';
+import CommandPaletteModal from './components/modals/CommandPaletteModal';
 import CyberCursor from './components/CyberCursor';
 import { warmupAllBackends } from './utils/backendWarmup';
 
@@ -95,14 +96,29 @@ export default function App() {
   // Global Keyboard shortcuts (with strict modifier check to prevent Ctrl+C hijacking)
   useEffect(() => {
     const handleKeyDown = (e) => {
+      // Allow Ctrl+K or Cmd+K anywhere
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        SoundFX.playClick();
+        setActiveModal(prev => (prev === 'cmd-palette' ? null : 'cmd-palette'));
+        return;
+      }
+
       // Don't intercept if user is typing in an input or textarea
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
         if (e.key === 'Escape') closeModal();
         return;
       }
 
+      // Quick slash / shortcut to open command palette
+      if (e.key === '/') {
+        e.preventDefault();
+        SoundFX.playClick();
+        setActiveModal('cmd-palette');
+        return;
+      }
+
       // DO NOT trigger letter hotkeys if Ctrl, Meta (Cmd), or Alt is held down!
-      // This fixes the issue where Ctrl+C copied text or closed terminal and opened Code Inspector!
       if (e.ctrlKey || e.metaKey || e.altKey) {
         return;
       }
@@ -236,6 +252,25 @@ export default function App() {
       {activeModal === 'contact' && (
         <ContactModal
           onClose={closeModal}
+        />
+      )}
+
+      {activeModal === 'cmd-palette' && (
+        <CommandPaletteModal
+          isOpen={activeModal === 'cmd-palette'}
+          onClose={closeModal}
+          onJumpToScreen={(screen) => {
+            setCurrentScreen(screen);
+            closeModal();
+          }}
+          onOpenModal={(modal) => {
+            setActiveModal(modal);
+          }}
+          onLaunchProject={(name, url) => {
+            closeModal();
+            launchPortfolio(name, url);
+          }}
+          currentScreen={currentScreen}
         />
       )}
     </div>

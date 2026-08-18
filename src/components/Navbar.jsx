@@ -160,6 +160,21 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
           </button>
         )}
 
+        {/* Global Cyber Command Palette Button */}
+        {onOpenModal && (
+          <button
+            className="hud-social-btn cmd-trigger"
+            onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('cmd-palette'); }}
+            title="Open Cyber Command Palette (Ctrl+K or /)"
+          >
+            <svg className="social-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <span className="social-text">⌘K</span>
+          </button>
+        )}
+
         <div className="nav-divider"></div>
 
         {/* Sound Effects Toggle */}
