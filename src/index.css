@@ -36,6 +36,17 @@ html, body {
   overflow-x: hidden;
 }
 
+/* ── Cyberpunk Selection Highlighting ── */
+::selection {
+  background: rgba(0, 255, 136, 0.35);
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+}
+::-moz-selection {
+  background: rgba(0, 255, 136, 0.35);
+  color: #ffffff;
+}
+
 /* ── CRT Monitor Scanlines ── */
 body::before {
   content: '';
@@ -1229,6 +1240,8 @@ body::after {
   align-items: center;
   gap: 2px;
   margin-top: 6px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .mission-hero-name {
@@ -1245,6 +1258,8 @@ body::after {
   padding: 0 10px;
   text-shadow: 0 0 55px rgba(0, 255, 136, 0.45);
   animation: titleShimmer 8s ease infinite;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 @keyframes titleShimmer {
@@ -1258,6 +1273,8 @@ body::after {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 40px rgba(56, 189, 248, 0.6);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .hero-sub-discipline {
@@ -1269,6 +1286,8 @@ body::after {
   margin-bottom: 12px;
   text-align: center;
   white-space: normal;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* ==========================================================================
@@ -1283,16 +1302,22 @@ body::after {
   background-size: 250% auto;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .pixar-letter-h {
   transform-origin: 20% 90%;
   animation: pixarPushLetterH 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .pixar-letter-t {
   transform-origin: 80% 90%;
   animation: pixarPushLetterT 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .pixar-i-layer {
@@ -1305,6 +1330,8 @@ body::after {
   padding: 0;
   -webkit-background-clip: border-box !important;
   -webkit-text-fill-color: initial !important;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .pixar-i-text {
