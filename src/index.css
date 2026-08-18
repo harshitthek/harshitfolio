@@ -4275,13 +4275,41 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 /* =====================================================================
-   RESPONSIVE BREAKPOINTS
+   COMPREHENSIVE MOBILE & TABLET RESPONSIVE OVERHAUL
    ===================================================================== */
-@media (max-width: 900px) {
+
+/* Viewport dynamic height support across all mobile platforms */
+html, body, #root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+}
+
+#s-cards {
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Tablet & Medium Screens (<= 992px) */
+@media (max-width: 992px) {
   .cyber-hud-nav {
     padding: 0 1rem;
   }
   .nav-center {
+    display: none;
+  }
+  .cyber-flank-terminal,
+  .cyber-flank-lab {
     display: none;
   }
   .contact-grid-container {
@@ -4292,43 +4320,397 @@ body::-webkit-scrollbar-thumb:hover {
   }
 }
 
-@media (max-width: 640px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-    padding: 1rem 1rem 3rem;
+/* Mobile & Small Tablet Screens (<= 768px) */
+@media (max-width: 768px) {
+  /* 1. Global Touch Controls & Safe Areas */
+  body {
+    font-size: 13px;
   }
-  .card-img {
-    height: 150px;
+
+  /* 2. Cyber HUD Navbar on Mobile */
+  .cyber-hud-nav {
+    height: 52px;
+    padding: 0 10px;
+    background: rgba(6, 6, 6, 0.95);
+  }
+  .brand-badge-btn {
+    padding: 3px 6px;
+    gap: 5px;
+  }
+  .brand-title {
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  .brand-tag {
+    display: none;
+  }
+  .ai-waveform-hud {
+    padding: 3px 6px;
+    gap: 2px;
+  }
+  .waveform-label {
+    display: none;
+  }
+  .nav-right {
+    gap: 5px;
+  }
+  .hud-toggle-btn {
+    padding: 5px 8px;
+    font-size: 8px;
+    letter-spacing: 1px;
+    min-height: 32px;
+  }
+
+  /* 3. Screen 1: Video Intro on Mobile */
+  .video-top-hud {
+    padding: 10px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .video-brand-pill {
+    padding: 4px 10px;
+  }
+  .video-brand-pill .brand-title {
+    font-size: 12px;
+  }
+  .video-brand-pill .brand-badge {
+    display: none;
+  }
+  .video-hud-right {
+    gap: 5px;
+  }
+  .video-hud-btn {
+    font-size: 8px;
+    padding: 5px 8px;
+    letter-spacing: 1px;
+  }
+  .unmute-box {
+    width: calc(100vw - 28px);
+    max-width: 380px;
+    padding: 1.2rem 1rem;
+    margin: auto;
+  }
+  .unmute-headline {
+    font-size: clamp(1.3rem, 6vw, 1.8rem);
+    letter-spacing: 2px;
+  }
+  .unmute-sub {
+    font-size: 9px;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .unmute-cta-btn {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 10px;
+    min-height: 46px;
+    letter-spacing: 1.5px;
+  }
+  .skip-btn {
+    bottom: max(14px, env(safe-area-inset-bottom));
+    right: 14px;
+    padding: 8px 16px;
+    font-size: 11px;
+  }
+
+  /* 4. Screen 2: Intermediate Loading Screen */
+  .intermediate-box {
+    width: calc(100vw - 28px);
+    max-width: 400px;
+    padding: 1.4rem 1.2rem;
+  }
+  .intermediate-title {
+    font-size: 10px;
+  }
+  .intermediate-progress-num {
+    font-size: clamp(2.4rem, 12vw, 3.8rem);
+  }
+  .telemetry-feed {
+    font-size: 8.5px;
+  }
+
+  /* 5. Screen 3: Mission Classified Hub */
+  #s-mission {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 60px 1rem max(2rem, env(safe-area-inset-bottom));
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .mission-content-wrapper {
+    width: 100%;
+    max-width: 480px;
+    padding: 0;
+    margin: auto;
+  }
+  .mission-hero-name {
+    font-size: clamp(2.4rem, 11vw, 4.4rem);
+    letter-spacing: 4px;
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+  .pixar-lamp-rig {
+    width: 32px;
+    height: 38px;
+    top: -26px;
+  }
+  .mission-origin-tag {
+    font-size: 8px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .mission-holo-center {
+    width: 170px;
+    height: 170px;
+    max-width: 170px;
+    max-height: 170px;
+    margin: 8px auto;
+  }
+  .mission-welcome-pod {
+    width: 100%;
+    padding: 1rem 12px;
+  }
+  .welcome-pod-badge {
+    font-size: 8px;
+  }
+  .welcome-pod-text {
+    font-size: 10px;
+    line-height: 1.45;
+  }
+  .mission-accept-btn {
+    width: 100%;
+    min-height: 48px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 12px;
+  }
+
+  /* 6. Screen 4: Multiverse Cards Deck */
+  #s-cards {
+    padding-top: 56px;
+    padding-bottom: max(3rem, env(safe-area-inset-bottom));
   }
   .cards-top-bar {
-    padding: 0.8rem 1rem 0;
+    padding: 0.8rem 1rem 0.4rem;
     flex-direction: column;
-    gap: 8px;
-    align-items: flex-start;
+    gap: 10px;
+    align-items: stretch;
   }
   .cards-filter-wrapper {
     flex-direction: column;
     align-items: stretch;
+    gap: 8px;
+  }
+  .category-pills-row {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 2px 2px 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .category-pills-row::-webkit-scrollbar {
+    display: none;
+  }
+  .category-chip {
+    white-space: nowrap;
+    padding: 7px 12px;
+    font-size: 9.5px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
   }
   .search-filter-box {
+    width: 100%;
     min-width: 100%;
   }
-  .modal-backdrop {
-    padding: 0.5rem;
+  .search-input {
+    height: 38px;
+    font-size: 12px;
   }
-  .glass-modal {
-    max-height: 95vh;
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    padding: 0.8rem 1rem 4rem;
   }
-  .modal-body {
-    padding: 1.2rem;
+  .portal-card {
+    border-radius: 4px;
   }
-  .modal-header, .modal-footer {
+  .card-img {
+    height: 165px;
+  }
+  .card-body {
     padding: 1rem;
   }
-  .modal-stats-strip {
-    grid-template-columns: 1fr;
+  .card-title {
+    font-size: 1.15rem;
   }
-  .dossier-meta-grid {
+  .card-desc {
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+  .card-stats-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+  .stat-item .stat-val {
+    font-size: 11px;
+  }
+  .stat-item .stat-lbl {
+    font-size: 7.5px;
+  }
+  .card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .btn-portal-launch, .btn-portal-inspect {
+    width: 100%;
+    min-height: 42px;
+    justify-content: center;
+    font-size: 10.5px;
+  }
+
+  /* 7. Modal Bottom Sheets on Mobile */
+  .modal-backdrop {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .glass-modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 93dvh !important;
+    border-radius: 12px 12px 0 0 !important;
+    border-bottom: none !important;
+    margin: 0 !important;
+  }
+  .modal-header {
+    padding: 10px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(12px);
+  }
+  .modal-title {
+    font-size: 13px;
+  }
+  .modal-category {
+    font-size: 8px;
+  }
+  .modal-close-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-body {
+    padding: 1rem;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(93dvh - 125px);
+  }
+  .modal-footer {
+    padding: 10px 14px;
+    flex-direction: column-reverse;
+    gap: 8px;
+    position: sticky;
+    bottom: 0;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(12px);
+  }
+  .btn-modal-close,
+  .btn-modal-launch {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    font-size: 11px;
+  }
+
+  /* 8. Terminal Modal & Snake Mobile Controls */
+  .terminal-modal-dialog {
+    max-height: 94dvh !important;
+  }
+  .terminal-body {
+    font-size: 10.5px;
+  }
+  .terminal-quick-chips-bar {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 5px;
+    padding: 6px 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .terminal-quick-chips-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .term-chip-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 4px 8px;
+    font-size: 8.5px;
+  }
+  .snake-dpad-controls {
+    display: flex !important;
+    margin-top: 10px;
+    touch-action: manipulation;
+  }
+  .dpad-btn {
+    width: 52px;
+    height: 44px;
+    font-size: 18px;
+    border-radius: 4px;
+    touch-action: manipulation;
+  }
+  .dpad-mid-row {
+    display: flex;
+    gap: 14px;
+  }
+
+  /* 9. AutoValuate ML Simulator Mobile */
+  .vehicle-type-switcher-row {
+    flex-direction: column;
+  }
+  .sim-hero-banner {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .sim-price-number {
+    font-size: clamp(1.8rem, 8vw, 2.4rem);
+  }
+  .condition-chips {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .condition-chip {
+    width: 100%;
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 9.5px;
+  }
+  .sim-slider-range {
+    height: 8px;
+  }
+  .sim-slider-range::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Extra Small Phones (<= 380px) */
+@media (max-width: 380px) {
+  .mission-hero-name {
+    font-size: 2.1rem;
+    letter-spacing: 2px;
+  }
+  .hud-toggle-btn span {
+    font-size: 7.5px;
+  }
+  .card-stats-row {
     grid-template-columns: 1fr;
   }
 }
+

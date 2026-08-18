@@ -485,6 +485,29 @@ export default function TerminalModal({ onClose, onLaunch }) {
     }
   }, []);
 
+  // Mobile Touch Swipe Handling
+  const touchStartPosRef = useRef({ x: 0, y: 0 });
+  const handleCanvasTouchStart = (e) => {
+    if (e.touches && e.touches[0]) {
+      touchStartPosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  };
+  const handleCanvasTouchEnd = (e) => {
+    if (e.changedTouches && e.changedTouches[0]) {
+      const dx = e.changedTouches[0].clientX - touchStartPosRef.current.x;
+      const dy = e.changedTouches[0].clientY - touchStartPosRef.current.y;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+      if (Math.max(absX, absY) > 18) {
+        if (absX > absY) {
+          changeSnakeDirection(dx > 0 ? 'RIGHT' : 'LEFT');
+        } else {
+          changeSnakeDirection(dy > 0 ? 'DOWN' : 'UP');
+        }
+      }
+    }
+  };
+
   // ── 60FPS FULL-TERMINAL SNAKE ENGINE ──
   useEffect(() => {
     if (!snakeGameActive || snakeGameOver) {
@@ -1915,8 +1938,12 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                 </div>
               </div>
 
-              {/* Seamless Fitting Game Canvas Screen */}
-              <div className="snake-canvas-wrapper">
+              {/* Seamless Fitting Game Canvas Screen with Touch Swipe */}
+              <div
+                className="snake-canvas-wrapper"
+                onTouchStart={handleCanvasTouchStart}
+                onTouchEnd={handleCanvasTouchEnd}
+              >
                 <canvas
                   ref={snakeCanvasRef}
                   className="snake-game-canvas"
@@ -1963,15 +1990,40 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
 
                 {/* On-Screen D-Pad Controls for Mobile */}
                 <div className="snake-dpad-controls">
-                  <button className="dpad-btn up" onClick={() => changeSnakeDirection('UP')}>▲</button>
+                  <button
+                    type="button"
+                    className="dpad-btn up"
+                    onClick={() => changeSnakeDirection('UP')}
+                    onTouchStart={(e) => { e.preventDefault(); changeSnakeDirection('UP'); }}
+                  >▲</button>
                   <div className="dpad-mid-row">
-                    <button className="dpad-btn left" onClick={() => changeSnakeDirection('LEFT')}>◀</button>
-                    <button className="dpad-btn pause" onClick={() => setIsPaused(!isPaused)}>
+                    <button
+                      type="button"
+                      className="dpad-btn left"
+                      onClick={() => changeSnakeDirection('LEFT')}
+                      onTouchStart={(e) => { e.preventDefault(); changeSnakeDirection('LEFT'); }}
+                    >◀</button>
+                    <button
+                      type="button"
+                      className="dpad-btn pause"
+                      onClick={() => setIsPaused(!isPaused)}
+                      onTouchStart={(e) => { e.preventDefault(); setIsPaused(!isPaused); }}
+                    >
                       {isPaused ? '▶' : '⏸'}
                     </button>
-                    <button className="dpad-btn right" onClick={() => changeSnakeDirection('RIGHT')}>▶</button>
+                    <button
+                      type="button"
+                      className="dpad-btn right"
+                      onClick={() => changeSnakeDirection('RIGHT')}
+                      onTouchStart={(e) => { e.preventDefault(); changeSnakeDirection('RIGHT'); }}
+                    >▶</button>
                   </div>
-                  <button className="dpad-btn down" onClick={() => changeSnakeDirection('DOWN')}>▼</button>
+                  <button
+                    type="button"
+                    className="dpad-btn down"
+                    onClick={() => changeSnakeDirection('DOWN')}
+                    onTouchStart={(e) => { e.preventDefault(); changeSnakeDirection('DOWN'); }}
+                  >▼</button>
                 </div>
               </div>
 

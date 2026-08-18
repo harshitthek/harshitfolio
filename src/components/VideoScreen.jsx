@@ -211,7 +211,7 @@ export default function VideoScreen({ isActive, onComplete }) {
           role="button"
           tabIndex={0}
         >
-          <div className="unmute-box" onClick={(e) => e.stopPropagation()}>
+          <div className="unmute-box" onClick={unmuteVideo}>
             <span className="corner tl"></span>
             <span className="corner tr"></span>
             <span className="corner bl"></span>
