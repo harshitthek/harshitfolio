@@ -545,6 +545,8 @@ body::before {
   padding: 18px 24px;
   z-index: 50;
   pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .video-hud-left {
@@ -664,6 +666,8 @@ body::before {
   background: radial-gradient(circle, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.9) 100%);
   padding: 1.5rem;
   transition: opacity 0.35s ease, background 0.35s ease;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .unmute-overlay.overlay-dissolving {
@@ -683,6 +687,8 @@ body::before {
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   max-width: 580px;
   width: 92%;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .unmute-overlay:hover .unmute-box {
   border-color: var(--g);
@@ -737,6 +743,8 @@ body::before {
   padding: 4px 10px;
   border: 1px solid rgba(0, 255, 136, 0.25);
   border-radius: 2px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .unmute-pulse-dot {
   width: 5px;
@@ -758,6 +766,8 @@ body::before {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 25px rgba(0, 255, 136, 0.25);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .unmute-sub {
@@ -770,6 +780,8 @@ body::before {
   justify-content: center;
   gap: 8px;
   flex-wrap: wrap;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .unmute-sub .dot-sep {
   color: var(--g);
@@ -783,6 +795,8 @@ body::before {
   gap: 4px;
   margin-bottom: 18px;
   height: 18px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .eq-bar {
   width: 3px;
@@ -825,6 +839,8 @@ body::before {
   width: 100%;
   box-shadow: 0 0 20px rgba(0, 255, 136, 0.25);
   margin-bottom: 12px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .unmute-cta-btn::before {
   content: '';
@@ -859,6 +875,8 @@ body::before {
   font-size: 8px;
   color: var(--dim);
   letter-spacing: 1.5px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .hint-bracket {
   color: var(--g);
