@@ -1241,16 +1241,23 @@ body::before {
   letter-spacing: clamp(4px, 0.8vw, 8px);
   white-space: nowrap; /* GUARANTEES single line always */
   margin: 0;
+  padding: 0 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.hero-word-main {
+  display: inline-block;
+  vertical-align: baseline;
   background: linear-gradient(90deg, #ffffff 0%, var(--g) 40%, #38bdf8 70%, #ffffff 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  padding: 0 16px;
   text-shadow: 0 0 55px rgba(0, 255, 136, 0.45);
   animation: titleShimmer 8s ease infinite;
-  user-select: none;
-  -webkit-user-select: none;
-  will-change: transform;
 }
 
 @keyframes titleShimmer {
