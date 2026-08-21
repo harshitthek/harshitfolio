@@ -6347,6 +6347,217 @@ html, body, #root {
 
 .gh-login-handle:hover {
   color: var(--g);
+  color: var(--dim);
+}
+
+.footer-hint-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hint-pill kbd {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  padding: 1px 4px;
+  color: var(--white);
+  font-size: 8px;
+}
+
+.footer-status {
+  color: rgba(0, 255, 136, 0.7);
+  letter-spacing: 0.5px;
+}
+
+/* Mobile Command Palette Styling */
+@media (max-width: 768px) {
+  .cmd-palette-backdrop {
+    padding: 2.5rem 0.5rem 0.5rem;
+    align-items: flex-start;
+  }
+  .cmd-palette-container {
+    max-height: 85dvh;
+  }
+  .cmd-search-header {
+    padding: 0.8rem 1rem;
+  }
+  .cmd-search-input {
+    font-size: 12px;
+  }
+  .cmd-results-list {
+    max-height: 300px;
+  }
+  .cmd-item-sub {
+    font-size: 8.5px;
+  }
+  .cmd-shortcut-tag {
+    font-size: 7.5px;
+    padding: 1px 4px;
+  }
+  .footer-hint-group {
+    display: none;
+  }
+}
+
+/* ── GITHUB TELEMETRY MODAL ── */
+.gh-telemetry-modal {
+  max-width: 920px;
+  width: 95vw;
+}
+
+.gh-live-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.gh-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.gh-pulse-dot.live {
+  background: var(--g);
+  box-shadow: 0 0 8px var(--g);
+  animation: pulseDot 1.4s infinite;
+}
+
+.gh-pulse-dot.cached {
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+}
+
+.gh-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gh-refresh-btn,
+.gh-profile-ext-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  color: var(--g);
+  font-family: 'Space Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 1px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.gh-refresh-btn:hover,
+.gh-profile-ext-btn:hover {
+  background: var(--g);
+  color: #000;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+}
+
+.gh-refresh-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.gh-refresh-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+.gh-body-scrollable {
+  max-height: 62vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+/* Profile Hero */
+.gh-profile-hero {
+  display: flex;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  padding: 1.4rem;
+  margin-bottom: 1.25rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.gh-avatar-wrap {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+}
+
+.gh-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--gb);
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+}
+
+.gh-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(56, 189, 248, 0.2));
+  border: 1px solid var(--gb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  color: var(--g);
+  position: relative;
+  z-index: 1;
+}
+
+.gh-avatar-glow {
+  position: absolute;
+  inset: -3px;
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.4), transparent 70%);
+  border-radius: 8px;
+}
+
+.gh-profile-details {
+  flex: 1;
+  min-width: 260px;
+}
+
+.gh-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.gh-name-row h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  color: var(--white);
+  margin: 0;
+}
+
+.gh-login-handle {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--cyan);
+  text-decoration: none;
+}
+
+.gh-login-handle:hover {
+  color: var(--g);
   text-decoration: underline;
 }
 
@@ -6393,12 +6604,21 @@ html, body, #root {
   background: rgba(0, 255, 136, 0.04);
 }
 
+.gh-stat-card.highlight-cyan {
+  border-color: rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.04);
+}
+
 .gh-stat-num {
   display: block;
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.8rem;
   color: var(--g);
   letter-spacing: 1.5px;
+}
+
+.gh-stat-card.highlight-cyan .gh-stat-num {
+  color: var(--cyan);
 }
 
 .gh-stat-label {
@@ -6450,6 +6670,23 @@ html, body, #root {
   gap: 6px;
   font-family: 'Space Mono', monospace;
   font-size: 9px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gh-lang-chip:hover {
+  background: rgba(0, 255, 136, 0.08);
+  border-color: rgba(0, 255, 136, 0.3);
+}
+
+.gh-lang-chip.active {
+  background: var(--gd);
+  border-color: var(--g);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
 }
 
 .gh-lang-dot {
@@ -6473,10 +6710,17 @@ html, body, #root {
   font-size: 8px;
 }
 
-/* Search Bar */
+/* Repo Controls Row & Filter Pills */
+.gh-repo-controls-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
 .gh-repo-search-bar {
   position: relative;
-  margin-bottom: 14px;
+  width: 100%;
 }
 
 .gh-search-input {
@@ -6510,6 +6754,37 @@ html, body, #root {
 
 .gh-clear-search-btn:hover {
   color: var(--g);
+}
+
+.gh-lang-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.gh-filter-pill {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--dim-light);
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 1px;
+  padding: 4px 9px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gh-filter-pill:hover {
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.gh-filter-pill.active {
+  background: var(--gd);
+  border-color: var(--g);
+  color: var(--g);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.25);
 }
 
 /* Repos Grid */
@@ -6617,6 +6892,37 @@ html, body, #root {
   border-color: var(--g);
 }
 
+.gh-empty-repos {
+  grid-column: 1 / -1;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--dim-light);
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.gh-reset-filter-btn {
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid var(--g);
+  color: var(--g);
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  padding: 5px 12px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.gh-reset-filter-btn:hover {
+  background: var(--g);
+  color: #000;
+}
+
 /* Activity Stream */
 .gh-events-timeline {
   display: flex;
@@ -6668,6 +6974,10 @@ html, body, #root {
   gap: 8px;
   flex-wrap: wrap;
   margin-bottom: 6px;
+}
+
+.gh-event-icon-badge {
+  font-size: 11px;
 }
 
 .gh-event-type-badge {

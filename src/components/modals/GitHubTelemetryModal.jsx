@@ -6,14 +6,14 @@ const CACHE_KEY_USER = 'harshit_gh_user_cache';
 const CACHE_KEY_REPOS = 'harshit_gh_repos_cache';
 const CACHE_KEY_EVENTS = 'harshit_gh_events_cache';
 
-// Verified Fallback Profile Snapshot (in case GitHub API rate limit 403 occurs)
+// Verified Fallback Profile Snapshot (in case GitHub API rate limit occurs)
 const FALLBACK_PROFILE = {
   login: 'harshitthek',
   name: 'Harshit Sharma',
   avatar_url: 'https://avatars.githubusercontent.com/u/149952541?v=4',
   html_url: 'https://github.com/harshitthek',
-  bio: 'AI & ML Engineer · Autonomous Agents · Systems Engineering',
-  location: 'New Delhi, India',
+  bio: 'AI & Machine Learning Engineer · Autonomous Agents · Production Systems',
+  location: 'New Delhi, India (USAR, GGSIPU)',
   public_repos: 24,
   followers: 45,
   following: 38,
@@ -31,7 +31,7 @@ const FALLBACK_REPOS = projectsData.map((p, idx) => ({
   stargazers_count: 5 + (idx % 8),
   forks_count: 2 + (idx % 4),
   language: p.tags[0] || 'Python',
-  updated_at: new Date(Date.now() - idx * 86400000 * 4).toISOString(),
+  updated_at: new Date(Date.now() - idx * 86400000 * 3).toISOString(),
   topics: p.tags
 }));
 
@@ -43,7 +43,9 @@ export default function GitHubTelemetryModal({ onClose }) {
   const [loading, setLoading] = useState(true);
   const [isLive, setIsLive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedLang, setSelectedLang] = useState('all');
   const [copiedClone, setCopiedClone] = useState(null);
+  const [imgError, setImgError] = useState(false);
 
   const fetchGitHubIntel = useCallback(async () => {
     setLoading(true);
@@ -126,10 +128,17 @@ export default function GitHubTelemetryModal({ onClose }) {
       .map(([lang, count]) => ({
         lang,
         count,
-        percent: Math.round((count / total) * 100),
+        percent: Math.max(1, Math.round((count / (total || 1)) * 100)),
         color: colors[lang] || '#94a3b8'
       }))
       .sort((a, b) => b.count - a.count);
+  }, [repos]);
+
+  // Distinct languages for filter pills
+  const availableLanguages = useMemo(() => {
+    const set = new Set();
+    repos.forEach(r => { if (r.language) set.add(r.language); });
+    return ['all', ...Array.from(set)];
   }, [repos]);
 
   // Total Stars & Forks Aggregates
@@ -137,14 +146,18 @@ export default function GitHubTelemetryModal({ onClose }) {
   const totalForks = useMemo(() => repos.reduce((acc, r) => acc + (r.forks_count || 0), 0), [repos]);
 
   const filteredRepos = useMemo(() => {
-    if (!searchQuery.trim()) return repos;
-    const q = searchQuery.toLowerCase();
-    return repos.filter(r =>
-      r.name.toLowerCase().includes(q) ||
-      (r.description && r.description.toLowerCase().includes(q)) ||
-      (r.language && r.language.toLowerCase().includes(q))
-    );
-  }, [repos, searchQuery]);
+    return repos.filter(r => {
+      const matchesLang = selectedLang === 'all' || r.language === selectedLang;
+      if (!matchesLang) return false;
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase();
+      return (
+        r.name.toLowerCase().includes(q) ||
+        (r.description && r.description.toLowerCase().includes(q)) ||
+        (r.language && r.language.toLowerCase().includes(q))
+      );
+    });
+  }, [repos, searchQuery, selectedLang]);
 
   const handleCopyClone = (repoName, e) => {
     e.stopPropagation();
@@ -170,6 +183,18 @@ export default function GitHubTelemetryModal({ onClose }) {
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     } catch {
       return 'recently';
+    }
+  };
+
+  const getEventIcon = (type) => {
+    switch (type) {
+      case 'PushEvent': return '🚀';
+      case 'WatchEvent': return '⭐';
+      case 'CreateEvent': return '🌱';
+      case 'ForkEvent': return '🍴';
+      case 'IssuesEvent': return '💬';
+      case 'ReleaseEvent': return '📦';
+      default: return '⚡';
     }
   };
 
@@ -209,6 +234,7 @@ export default function GitHubTelemetryModal({ onClose }) {
               target="_blank"
               rel="noopener noreferrer"
               className="gh-profile-ext-btn"
+              title="Open GitHub profile in new tab"
             >
               <span>PROFILE ↗</span>
             </a>
@@ -257,12 +283,16 @@ export default function GitHubTelemetryModal({ onClose }) {
               {/* Profile Card Header */}
               <div className="gh-profile-hero">
                 <div className="gh-avatar-wrap">
-                  <img
-                    src={profile.avatar_url}
-                    alt={profile.name || profile.login}
-                    className="gh-avatar-img"
-                    onError={(e) => { e.target.style.display = 'none'; }}
-                  />
+                  {!imgError ? (
+                    <img
+                      src={profile.avatar_url}
+                      alt={profile.name || profile.login}
+                      className="gh-avatar-img"
+                      onError={() => setImgError(true)}
+                    />
+                  ) : (
+                    <div className="gh-avatar-fallback">HS</div>
+                  )}
                   <div className="gh-avatar-glow"></div>
                 </div>
 
@@ -279,6 +309,7 @@ export default function GitHubTelemetryModal({ onClose }) {
                     <span className="gh-badge-item">📍 {profile.location || 'New Delhi, India'}</span>
                     <span className="gh-badge-item">📅 Joined {formatTimeAgo(profile.created_at)}</span>
                     <span className="gh-badge-item">⚡ {profile.public_repos} Public Repositories</span>
+                    <span className="gh-badge-item">👥 {profile.followers} Followers</span>
                   </div>
                 </div>
               </div>
@@ -297,7 +328,7 @@ export default function GitHubTelemetryModal({ onClose }) {
                   <span className="gh-stat-num">{totalForks}</span>
                   <span className="gh-stat-label">FORKS ACQUIRED</span>
                 </div>
-                <div className="gh-stat-card">
+                <div className="gh-stat-card highlight-cyan">
                   <span className="gh-stat-num">850+</span>
                   <span className="gh-stat-label">COMMIT VELOCITY</span>
                 </div>
@@ -322,7 +353,16 @@ export default function GitHubTelemetryModal({ onClose }) {
                 {/* Language Legend Chips */}
                 <div className="gh-lang-legend-grid">
                   {languageStats.map((item, idx) => (
-                    <div key={idx} className="gh-lang-chip">
+                    <div
+                      key={idx}
+                      className={`gh-lang-chip ${selectedLang === item.lang ? 'active' : ''}`}
+                      onClick={() => {
+                        SoundFX.playClick();
+                        setSelectedLang(selectedLang === item.lang ? 'all' : item.lang);
+                        setActiveTab('repos');
+                      }}
+                      title={`Click to filter repos by ${item.lang}`}
+                    >
                       <span className="gh-lang-dot" style={{ backgroundColor: item.color }}></span>
                       <span className="gh-lang-name">{item.lang}</span>
                       <span className="gh-lang-pct">{item.percent}%</span>
@@ -337,50 +377,80 @@ export default function GitHubTelemetryModal({ onClose }) {
           {/* TAB 2: REPOSITORY FLEET */}
           {activeTab === 'repos' && (
             <div className="gh-tab-pane animate-fade-in">
-              {/* Search & Filter Bar */}
-              <div className="gh-repo-search-bar">
-                <input
-                  type="text"
-                  placeholder="Filter repositories by name, language, or keyword..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="gh-search-input"
-                />
-                {searchQuery && (
-                  <button className="gh-clear-search-btn" onClick={() => setSearchQuery('')}>✕</button>
-                )}
+              {/* Search & Language Filter Strip */}
+              <div className="gh-repo-controls-row">
+                <div className="gh-repo-search-bar">
+                  <input
+                    type="text"
+                    maxLength={80}
+                    placeholder="Search repositories by name, description, or keyword..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="gh-search-input"
+                  />
+                  {searchQuery && (
+                    <button className="gh-clear-search-btn" onClick={() => setSearchQuery('')}>✕</button>
+                  )}
+                </div>
+
+                <div className="gh-lang-filter-pills">
+                  {availableLanguages.map((lang) => (
+                    <button
+                      key={lang}
+                      className={`gh-filter-pill ${selectedLang === lang ? 'active' : ''}`}
+                      onClick={() => {
+                        SoundFX.playClick();
+                        setSelectedLang(lang);
+                      }}
+                    >
+                      {lang === 'all' ? 'ALL STACKS' : lang}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Repository Fleet Cards Grid */}
               <div className="gh-repos-grid">
-                {filteredRepos.map((repo) => (
-                  <div key={repo.id} className="gh-repo-card">
-                    <div className="gh-repo-header">
-                      <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="gh-repo-title">
-                        {repo.name} ↗
-                      </a>
-                      <span className="gh-repo-lang-tag">{repo.language || 'Code'}</span>
-                    </div>
-
-                    <p className="gh-repo-desc">{repo.description || 'Production engineering repository by Harshit Sharma.'}</p>
-
-                    <div className="gh-repo-footer">
-                      <div className="gh-repo-metrics">
-                        <span title="Stars">⭐ {repo.stargazers_count || 0}</span>
-                        <span title="Forks">🍴 {repo.forks_count || 0}</span>
-                        <span className="gh-repo-time">🕒 {formatTimeAgo(repo.updated_at)}</span>
+                {filteredRepos.length > 0 ? (
+                  filteredRepos.map((repo) => (
+                    <div key={repo.id} className="gh-repo-card">
+                      <div className="gh-repo-header">
+                        <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="gh-repo-title">
+                          {repo.name} ↗
+                        </a>
+                        <span className="gh-repo-lang-tag">{repo.language || 'Multi-Stack'}</span>
                       </div>
 
-                      <button
-                        className={`btn-clone-copy ${copiedClone === repo.name ? 'copied' : ''}`}
-                        onClick={(e) => handleCopyClone(repo.name, e)}
-                        title="Copy 'git clone' command to clipboard"
-                      >
-                        {copiedClone === repo.name ? 'COPIED!' : '📋 CLONE'}
-                      </button>
+                      <p className="gh-repo-desc">{repo.description || 'Autonomous engineering and open-source system by Harshit Sharma.'}</p>
+
+                      <div className="gh-repo-footer">
+                        <div className="gh-repo-metrics">
+                          <span title="Stars">⭐ {repo.stargazers_count || 0}</span>
+                          <span title="Forks">🍴 {repo.forks_count || 0}</span>
+                          <span className="gh-repo-time">🕒 {formatTimeAgo(repo.updated_at)}</span>
+                        </div>
+
+                        <button
+                          className={`btn-clone-copy ${copiedClone === repo.name ? 'copied' : ''}`}
+                          onClick={(e) => handleCopyClone(repo.name, e)}
+                          title="Copy 'git clone' command to clipboard"
+                        >
+                          {copiedClone === repo.name ? 'COPIED!' : '📋 CLONE'}
+                        </button>
+                      </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="gh-empty-repos">
+                    <span>⚠️ No repositories match "{searchQuery}" with filter "{selectedLang}".</span>
+                    <button
+                      className="gh-reset-filter-btn"
+                      onClick={() => { setSearchQuery(''); setSelectedLang('all'); }}
+                    >
+                      RESET REPO FILTERS
+                    </button>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           )}
@@ -388,7 +458,7 @@ export default function GitHubTelemetryModal({ onClose }) {
           {/* TAB 3: ACTIVITY STREAM */}
           {activeTab === 'activity' && (
             <div className="gh-tab-pane animate-fade-in">
-              <div className="section-label">// REAL-TIME PUBLIC EVENT & COMMIT STREAM</div>
+              <div className="section-label">// REAL-TIME PUBLIC COMMIT & EVENT STREAM</div>
 
               {events.length === 0 ? (
                 <div className="gh-empty-events">
@@ -405,6 +475,7 @@ export default function GitHubTelemetryModal({ onClose }) {
 
                       <div className="gh-event-content">
                         <div className="gh-event-header">
+                          <span className="gh-event-icon-badge">{getEventIcon(ev.type)}</span>
                           <span className="gh-event-type-badge">
                             {ev.type.replace('Event', '').toUpperCase()}
                           </span>
