@@ -34,7 +34,11 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen, onTr
 
   const handleBrandClick = () => {
     if (sfxOn) SoundFX.playClick();
-    onJumpToScreen('s-cards');
+
+    // Brand logo navigates to Mission Control Home screen ('s-mission')
+    if (activeScreen !== 's-mission') {
+      onJumpToScreen('s-mission');
+    }
 
     const now = Date.now();
     brandClicksRef.current = [...brandClicksRef.current.filter((t) => now - t < 2500), now];
@@ -54,7 +58,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen, onTr
           type="button"
           className="brand-badge-btn"
           onClick={handleBrandClick}
-          title="Go to Multiverse Hub (Secret: 5 taps for God Mode)"
+          title="Return to Mission Control Home (Secret: 5 taps for God Mode)"
         >
           <span className="brand-dot live"></span>
           <span className="brand-title">
