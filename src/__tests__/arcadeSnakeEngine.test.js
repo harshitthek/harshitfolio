@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 const SPEED_MAP = {
-  normal: 105,
-  fast: 75,
-  insane: 50
+  normal: 68,
+  fast: 44,
+  insane: 26
 };
 
 const calculateWrapPosition = (head, dir, cols, rows) => {
@@ -31,9 +31,9 @@ const isSelfCollision = (nextPos, snakeBody) => {
 
 describe('Arcade Snake 60FPS Game Physics Engine', () => {
   it('should map speed presets to correct millisecond intervals', () => {
-    expect(SPEED_MAP.normal).toBe(105);
-    expect(SPEED_MAP.fast).toBe(75);
-    expect(SPEED_MAP.insane).toBe(50);
+    expect(SPEED_MAP.normal).toBe(68);
+    expect(SPEED_MAP.fast).toBe(44);
+    expect(SPEED_MAP.insane).toBe(26);
   });
 
   it('should wrap correctly across arena borders in WRAP mode', () => {

@@ -548,7 +548,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
     if (dirKey === 'LEFT' && currentOrLastQueued.x === 0) nextDir = { x: -1, y: 0 };
     if (dirKey === 'RIGHT' && currentOrLastQueued.x === 0) nextDir = { x: 1, y: 0 };
 
-    if (nextDir && state.dirQueue.length < 2) {
+    if (nextDir && state.dirQueue.length < 3) {
       state.dirQueue.push(nextDir);
       SoundFX.playKey();
     }
@@ -617,7 +617,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
     }
   };
 
-  // ── 60FPS FULL-TERMINAL SNAKE ENGINE ──
+  // ── 60FPS FULL-TERMINAL HIGH-PERFORMANCE SNAKE ENGINE ──
   useEffect(() => {
     if (!snakeGameActive || snakeGameOver) {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
@@ -626,28 +626,132 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
     const canvas = snakeCanvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
     // Full-terminal resolution: 28 cols x 18 rows with 20px grid
     const gridSize = 20;
     const cols = 28;
     const rows = 18;
-    canvas.width = cols * gridSize;
-    canvas.height = rows * gridSize;
+    const width = cols * gridSize;
+    const height = rows * gridSize;
+    canvas.width = width;
+    canvas.height = height;
 
-    const speedIntervals = { normal: 110, fast: 75, insane: 48 };
+    // High-performance speeds: Snappy, instant response
+    const speedIntervals = { normal: 68, fast: 44, insane: 26 };
+
+    // Pre-rendered Static Cyber Matrix Background Buffer (Offscreen Canvas)
+    const bgCanvas = document.createElement('canvas');
+    bgCanvas.width = width;
+    bgCanvas.height = height;
+    const bgCtx = bgCanvas.getContext('2d');
+    if (bgCtx) {
+      // 1. Ambient Gradient
+      const bgGrad = bgCtx.createRadialGradient(
+        width / 2,
+        height / 2,
+        40,
+        width / 2,
+        height / 2,
+        width * 0.7
+      );
+      bgGrad.addColorStop(0, '#0c1218');
+      bgGrad.addColorStop(1, '#040507');
+      bgCtx.fillStyle = bgGrad;
+      bgCtx.fillRect(0, 0, width, height);
+
+      // 2. Micro-Dashed Sub-Grid Guide Lines
+      bgCtx.setLineDash([2, 6]);
+      bgCtx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
+      bgCtx.lineWidth = 1;
+      for (let x = 1; x < cols; x++) {
+        bgCtx.beginPath();
+        bgCtx.moveTo(x * gridSize, 0);
+        bgCtx.lineTo(x * gridSize, height);
+        bgCtx.stroke();
+      }
+      for (let y = 1; y < rows; y++) {
+        bgCtx.beginPath();
+        bgCtx.moveTo(0, y * gridSize);
+        bgCtx.lineTo(width, y * gridSize);
+        bgCtx.stroke();
+      }
+      bgCtx.setLineDash([]);
+
+      // 3. Glowing Micro-Crosshairs at intersections
+      bgCtx.fillStyle = 'rgba(0, 255, 136, 0.16)';
+      for (let x = 1; x < cols; x++) {
+        for (let y = 1; y < rows; y++) {
+          const px = x * gridSize;
+          const py = y * gridSize;
+          bgCtx.fillRect(px - 2, py, 5, 1);
+          bgCtx.fillRect(px, py - 2, 1, 5);
+        }
+      }
+
+      // 4. Center Sector Target Reticle
+      const midX = Math.floor(cols / 2) * gridSize;
+      const midY = Math.floor(rows / 2) * gridSize;
+      bgCtx.strokeStyle = 'rgba(56, 189, 248, 0.18)';
+      bgCtx.lineWidth = 1;
+      bgCtx.beginPath();
+      bgCtx.arc(midX, midY, 14, 0, Math.PI * 2);
+      bgCtx.stroke();
+      bgCtx.fillStyle = 'rgba(56, 189, 248, 0.25)';
+      bgCtx.beginPath();
+      bgCtx.arc(midX, midY, 2, 0, Math.PI * 2);
+      bgCtx.fill();
+
+      // 5. Corner HUD Brackets
+      const bracketColor = snakeMode === 'walls' ? '#f87171' : 'rgba(0, 255, 136, 0.45)';
+      bgCtx.strokeStyle = bracketColor;
+      bgCtx.lineWidth = 2;
+      bgCtx.beginPath();
+      bgCtx.moveTo(14, 5);
+      bgCtx.lineTo(5, 5);
+      bgCtx.lineTo(5, 14);
+      bgCtx.moveTo(width - 14, 5);
+      bgCtx.lineTo(width - 5, 5);
+      bgCtx.lineTo(width - 5, 14);
+      bgCtx.moveTo(5, height - 14);
+      bgCtx.lineTo(5, height - 5);
+      bgCtx.lineTo(14, height - 5);
+      bgCtx.moveTo(width - 14, height - 5);
+      bgCtx.lineTo(width - 5, height - 5);
+      bgCtx.lineTo(width - 5, height - 14);
+      bgCtx.stroke();
+
+      // 6. Perimeter Frame
+      if (snakeMode === 'walls') {
+        bgCtx.strokeStyle = '#f87171';
+        bgCtx.lineWidth = 2;
+        bgCtx.shadowColor = '#f87171';
+        bgCtx.shadowBlur = 8;
+        bgCtx.strokeRect(1, 1, width - 2, height - 2);
+        bgCtx.shadowBlur = 0;
+      } else {
+        bgCtx.strokeStyle = 'rgba(0, 255, 136, 0.12)';
+        bgCtx.lineWidth = 1;
+        bgCtx.strokeRect(1, 1, width - 2, height - 2);
+      }
+    }
 
     const getRandomEmptyCell = () => {
       const state = snakeStateRef.current;
       let cell;
-      while (!cell || state.snake.some((s) => s.x === cell.x && s.y === cell.y)) {
+      let attempts = 0;
+      while (
+        (!cell || state.snake.some((s) => s.x === cell.x && s.y === cell.y)) &&
+        attempts < 100
+      ) {
+        attempts++;
         cell = {
           x: Math.floor(Math.random() * cols),
           y: Math.floor(Math.random() * rows)
         };
       }
-      return cell;
+      return cell || { x: 5, y: 5 };
     };
 
     const stepGameLogic = () => {
@@ -658,10 +762,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
         state.dir = state.dirQueue.shift();
       }
 
-      if (activePowerUp && activePowerUp.expiresAt <= now) {
-        setActivePowerUp(null);
+      if (state.activePowerUp && state.activePowerUp.expiresAt <= now) {
+        state.activePowerUp = null;
         state.hasShield = false;
         state.hasMagnet = false;
+        setActivePowerUp(null);
       }
 
       if (state.lastEatTime > 0 && now - state.lastEatTime > 3500) {
@@ -712,6 +817,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
       if (hitWall || hitSelf) {
         if (state.hasShield) {
           state.hasShield = false;
+          state.activePowerUp = null;
           setActivePowerUp(null);
           SoundFX.playDeploy();
           state.floatingTexts.push({
@@ -771,7 +877,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ateFood = true;
         SoundFX.playSuccess();
 
-        const is2X = activePowerUp && activePowerUp.type === '2X' && activePowerUp.expiresAt > now;
+        const is2X =
+          state.activePowerUp &&
+          state.activePowerUp.type === '2X' &&
+          state.activePowerUp.expiresAt > now;
         const currentMult = (is2X ? 2 : 1) * state.combo;
         const speedBonus = snakeSpeed === 'insane' ? 25 : snakeSpeed === 'fast' ? 15 : 10;
         const points = speedBonus * currentMult;
@@ -847,7 +956,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
       if (state.goldenFood && head.x === state.goldenFood.x && head.y === state.goldenFood.y) {
         ateFood = true;
         SoundFX.playDeploy();
-        const goldPoints = 50 * (activePowerUp && activePowerUp.type === '2X' ? 2 : 1);
+        const is2X =
+          state.activePowerUp &&
+          state.activePowerUp.type === '2X' &&
+          state.activePowerUp.expiresAt > now;
+        const goldPoints = 50 * (is2X ? 2 : 1);
         state.score += goldPoints;
         setSnakeScore(state.score);
         state.floatingTexts.push({
@@ -875,7 +988,9 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ateFood = true;
         SoundFX.playDeploy();
         const pType = state.powerUpItem.type;
-        setActivePowerUp({ type: pType, expiresAt: now + 8000 });
+        const pObj = { type: pType, expiresAt: now + 8000 };
+        state.activePowerUp = pObj;
+        setActivePowerUp(pObj);
         if (pType === 'SHIELD') state.hasShield = true;
         if (pType === 'MAGNET') state.hasMagnet = true;
         state.floatingTexts.push({
@@ -898,9 +1013,17 @@ export default function TerminalModal({ onClose, onLaunch }) {
       const state = snakeStateRef.current;
       const now = Date.now();
 
-      let intervalMs = speedIntervals[snakeSpeed] || 110;
-      if (activePowerUp && activePowerUp.type === 'SLOW' && activePowerUp.expiresAt > now) {
-        intervalMs = Math.round(intervalMs * 1.5);
+      // Dynamic acceleration based on snake length
+      const baseInterval = speedIntervals[snakeSpeed] || 68;
+      const lengthSpeedup = Math.min(18, Math.floor(state.snake.length / 3) * 1.5);
+      let intervalMs = Math.max(22, baseInterval - lengthSpeedup);
+
+      if (
+        state.activePowerUp &&
+        state.activePowerUp.type === 'SLOW' &&
+        state.activePowerUp.expiresAt > now
+      ) {
+        intervalMs = Math.round(intervalMs * 1.6);
       }
 
       if (!state.isDying && !isPaused) {
@@ -912,115 +1035,14 @@ export default function TerminalModal({ onClose, onLaunch }) {
         }
       }
 
-      // ── TACTICAL CYBER MATRIX GRID WITH AMBIENT OLED DEPTH ──
-      // 1. Deep Ambient Radial Field
-      const bgGrad = ctx.createRadialGradient(
-        canvas.width / 2,
-        canvas.height / 2,
-        40,
-        canvas.width / 2,
-        canvas.height / 2,
-        canvas.width * 0.7
-      );
-      bgGrad.addColorStop(0, '#0c1218');
-      bgGrad.addColorStop(1, '#040507');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // ── ULTRA-FAST ZERO-LAG BACKGROUND DRAW ──
+      ctx.drawImage(bgCanvas, 0, 0);
 
-      // 2. Micro-Dashed Sub-Grid Guide Lines
-      ctx.setLineDash([2, 6]);
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
-      ctx.lineWidth = 1;
-      for (let x = 1; x < cols; x++) {
-        ctx.beginPath();
-        ctx.moveTo(x * gridSize, 0);
-        ctx.lineTo(x * gridSize, canvas.height);
-        ctx.stroke();
-      }
-      for (let y = 1; y < rows; y++) {
-        ctx.beginPath();
-        ctx.moveTo(0, y * gridSize);
-        ctx.lineTo(canvas.width, y * gridSize);
-        ctx.stroke();
-      }
-      ctx.setLineDash([]); // Reset dash
-
-      // 3. Glowing Micro-Crosshair Nodes (+) at Every Grid Intersection
-      ctx.fillStyle = 'rgba(0, 255, 136, 0.16)';
-      for (let x = 1; x < cols; x++) {
-        for (let y = 1; y < rows; y++) {
-          const px = x * gridSize;
-          const py = y * gridSize;
-          ctx.fillRect(px - 2, py, 5, 1);
-          ctx.fillRect(px, py - 2, 1, 5);
-        }
-      }
-
-      // 4. Center Sector Target Reticle
-      const midX = Math.floor(cols / 2) * gridSize;
-      const midY = Math.floor(rows / 2) * gridSize;
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.18)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(midX, midY, 14, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.fillStyle = 'rgba(56, 189, 248, 0.25)';
-      ctx.beginPath();
-      ctx.arc(midX, midY, 2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 5. Tactical Corner HUD Brackets
-      const bracketColor = snakeMode === 'walls' ? '#f87171' : 'rgba(0, 255, 136, 0.45)';
-      ctx.strokeStyle = bracketColor;
-      ctx.lineWidth = 2;
-
-      // Top-Left Bracket
-      ctx.beginPath();
-      ctx.moveTo(14, 5);
-      ctx.lineTo(5, 5);
-      ctx.lineTo(5, 14);
-      ctx.stroke();
-
-      // Top-Right Bracket
-      ctx.beginPath();
-      ctx.moveTo(canvas.width - 14, 5);
-      ctx.lineTo(canvas.width - 5, 5);
-      ctx.lineTo(canvas.width - 5, 14);
-      ctx.stroke();
-
-      // Bottom-Left Bracket
-      ctx.beginPath();
-      ctx.moveTo(5, canvas.height - 14);
-      ctx.lineTo(5, canvas.height - 5);
-      ctx.lineTo(14, canvas.height - 5);
-      ctx.stroke();
-
-      // Bottom-Right Bracket
-      ctx.beginPath();
-      ctx.moveTo(canvas.width - 14, canvas.height - 5);
-      ctx.lineTo(canvas.width - 5, canvas.height - 5);
-      ctx.lineTo(canvas.width - 5, canvas.height - 14);
-      ctx.stroke();
-
-      // 6. Perimeter Frame
-      if (snakeMode === 'walls') {
-        ctx.strokeStyle = '#f87171';
-        ctx.lineWidth = 2;
-        ctx.shadowColor = '#f87171';
-        ctx.shadowBlur = 8;
-        ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
-        ctx.shadowBlur = 0;
-      } else {
-        ctx.strokeStyle = 'rgba(0, 255, 136, 0.12)';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
-      }
-
-      // 🍎 REDESIGNED HOLOGRAPHIC QUANTUM FRUIT / APPLE
+      // 🍎 HOLOGRAPHIC QUANTUM FRUIT / APPLE
       const fx = state.food.x * gridSize + gridSize / 2;
       const fy = state.food.y * gridSize + gridSize / 2;
-      const applePulse = Math.sin(now / 180) * 1.8;
-      const rotAngle = (now / 600) % (Math.PI * 2);
+      const applePulse = Math.sin(now / 150) * 1.5;
+      const rotAngle = (now / 500) % (Math.PI * 2);
 
       // Outer Radial Glow
       const foodGrad = ctx.createRadialGradient(fx, fy, 2, fx, fy, gridSize / 1.8 + applePulse);
@@ -1032,39 +1054,33 @@ export default function TerminalModal({ onClose, onLaunch }) {
       ctx.arc(fx, fy, gridSize / 1.5 + applePulse, 0, Math.PI * 2);
       ctx.fill();
 
-      // Core Apple Body (Rounded with soft shine)
+      // Core Apple Body
       ctx.fillStyle = '#00ff88';
       ctx.shadowColor = '#00ff88';
-      ctx.shadowBlur = 12;
+      ctx.shadowBlur = 10;
       ctx.beginPath();
       ctx.arc(fx, fy, gridSize / 3 + applePulse * 0.3, 0, Math.PI * 2);
       ctx.fill();
 
-      // Stem & Holographic Leaf
-      ctx.fillStyle = '#38bdf8';
-      ctx.beginPath();
-      ctx.arc(fx + 2, fy - 6, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-
       // Orbiting Micro-Data Nodes
+      ctx.fillStyle = '#38bdf8';
       for (let o = 0; o < 3; o++) {
         const orbitAngle = rotAngle + (o * Math.PI * 2) / 3;
         const ox = fx + Math.cos(orbitAngle) * (gridSize / 2 + 1);
         const oy = fy + Math.sin(orbitAngle) * (gridSize / 2 + 1);
-        ctx.fillStyle = '#38bdf8';
         ctx.beginPath();
         ctx.arc(ox, oy, 1.8, 0, Math.PI * 2);
         ctx.fill();
       }
       ctx.shadowBlur = 0;
 
-      // 🌟 REDESIGNED GOLDEN GLITCH (8-Point Shimmering Star)
+      // 🌟 GOLDEN GLITCH (8-Point Shimmering Star)
       if (state.goldenFood) {
         const remainingMs = Math.max(0, state.goldenFood.expiresAt - now);
         const goldRatio = remainingMs / 8000;
         const gx = state.goldenFood.x * gridSize + gridSize / 2;
         const gy = state.goldenFood.y * gridSize + gridSize / 2;
-        const starRot = (now / 350) % (Math.PI * 2);
+        const starRot = (now / 300) % (Math.PI * 2);
 
         ctx.save();
         ctx.translate(gx, gy);
@@ -1072,9 +1088,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
         ctx.fillStyle = '#fbbf24';
         ctx.shadowColor = '#fbbf24';
-        ctx.shadowBlur = 16;
+        ctx.shadowBlur = 14;
 
-        // Draw 8-point Cyber Diamond Star
         ctx.beginPath();
         for (let p = 0; p < 8; p++) {
           const a = (p * Math.PI) / 4;
@@ -1097,7 +1112,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.shadowBlur = 0;
       }
 
-      // 🔮 REDESIGNED POWER-UP CAPSULE
+      // 🔮 POWER-UP CAPSULE
       if (state.powerUpItem) {
         const px = state.powerUpItem.x * gridSize + gridSize / 2;
         const py = state.powerUpItem.y * gridSize + gridSize / 2;
@@ -1113,7 +1128,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
         ctx.fillStyle = iconColor;
         ctx.shadowColor = iconColor;
-        ctx.shadowBlur = 15;
+        ctx.shadowBlur = 12;
         ctx.beginPath();
         ctx.roundRect(px - 7, py - 7, 14, 14, 4);
         ctx.fill();
@@ -1128,19 +1143,17 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.shadowBlur = 0;
       }
 
-      // 🐍 REDESIGNED CYBER-VIPER SNAKE
+      // 🐍 CYBER-VIPER SNAKE
       if (!state.isDying) {
         const len = state.snake.length;
 
-        // Draw Interconnecting Joint Lines between segments for unified body feel
+        // Draw Interconnecting Joint Lines
         ctx.lineWidth = gridSize - 6;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         for (let i = 0; i < len - 1; i++) {
           const s1 = state.snake[i];
           const s2 = state.snake[i + 1];
-
-          // Skip drawing joint wrap connections
           if (Math.abs(s1.x - s2.x) > 1 || Math.abs(s1.y - s2.y) > 1) continue;
 
           const t = i / Math.max(1, len);
@@ -1169,17 +1182,17 @@ export default function TerminalModal({ onClose, onLaunch }) {
               ctx.strokeStyle = '#38bdf8';
               ctx.lineWidth = 2;
               ctx.shadowColor = '#38bdf8';
-              ctx.shadowBlur = 15;
+              ctx.shadowBlur = 12;
               ctx.beginPath();
               ctx.arc(cx, cy, gridSize / 1.4, 0, Math.PI * 2);
               ctx.stroke();
               ctx.shadowBlur = 0;
             }
 
-            // Head Helm (Sleek rounded shape)
+            // Head Helm
             ctx.fillStyle = '#00ff88';
             ctx.shadowColor = '#00ff88';
-            ctx.shadowBlur = 14;
+            ctx.shadowBlur = 12;
             ctx.beginPath();
             ctx.roundRect(
               seg.x * gridSize + 1.5,
@@ -1192,8 +1205,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
             // Directional Cyber Visor / Robot Eyes
             ctx.fillStyle = '#050505';
-            let e1 = { x: cx - 4, y: cy - 4 },
-              e2 = { x: cx + 4, y: cy - 4 };
+            let e1 = { x: cx - 4, y: cy - 4 };
+            let e2 = { x: cx + 4, y: cy - 4 };
             if (state.dir.x === 1) {
               e1 = { x: cx + 3, y: cy - 4 };
               e2 = { x: cx + 3, y: cy + 4 };
@@ -1219,8 +1232,9 @@ export default function TerminalModal({ onClose, onLaunch }) {
             ctx.arc(e1.x, e1.y, 1.0, 0, Math.PI * 2);
             ctx.arc(e2.x, e2.y, 1.0, 0, Math.PI * 2);
             ctx.fill();
+            ctx.shadowBlur = 0;
           } else {
-            // Body Node Chromatic Luminescence Gradient
+            // Body Node
             const r = Math.round(0 + t * 40);
             const g = Math.round(255 - t * 70);
             const b = Math.round(136 + t * 110);
@@ -1240,7 +1254,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         });
       }
 
-      // 💥 RENDER VOXEL DISINTEGRATION DEATH ANIMATION
+      // 💥 VOXEL DISINTEGRATION DEATH ANIMATION
       if (state.isDying) {
         state.deathFrames++;
 
@@ -1340,7 +1354,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
     snakeMode,
     snakeSpeed,
     snakeHighScore,
-    activePowerUp,
     getHighScoreKey
   ]);
 
