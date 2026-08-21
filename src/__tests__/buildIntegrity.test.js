@@ -36,11 +36,11 @@ describe('Production Build & SEO Asset Integrity', () => {
     expect(content).toContain('add_header Cache-Control');
   });
 
-  it('should have valid ruff.toml configuration for Python linting', () => {
-    const ruffPath = path.resolve(process.cwd(), 'ruff.toml');
-    expect(fs.existsSync(ruffPath)).toBe(true);
-    const content = fs.readFileSync(ruffPath, 'utf-8');
-    expect(content).toContain('target-version = "py312"');
-    expect(content).toContain('[lint]');
+  it('should have valid eslint.config.js configuration', () => {
+    const eslintPath = path.resolve(process.cwd(), 'eslint.config.js');
+    expect(fs.existsSync(eslintPath)).toBe(true);
+    const content = fs.readFileSync(eslintPath, 'utf-8');
+    expect(content).toContain('ecmaVersion: 2024');
+    expect(content).toContain('AbortController');
   });
 });

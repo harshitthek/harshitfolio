@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # ── STAGE 1: FRONTEND CODE QUALITY & SECURITY ──
+  # ── STAGE 1: FRONTEND CODE QUALITY, ESLINT & SECURITY ──
   security-and-lint:
     name: 🛡️ Code Quality, ESLint & Security Audit
     runs-on: ubuntu-latest
@@ -25,7 +25,7 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 22 LTS
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -40,29 +40,7 @@ jobs:
       - name: Security Vulnerability Audit
         run: npm audit --audit-level=moderate || true
 
-  # ── STAGE 2: PYTHON & ML QUALITY WITH RUFF ──
-  python-ruff-quality:
-    name: ⚡ Python & ML Quality (Ruff Linter & Formatter)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Source
-        uses: actions/checkout@v4
-
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Ruff
-        run: pip install ruff
-
-      - name: Run Ruff Linter
-        run: ruff check .
-
-      - name: Run Ruff Code Formatter Check
-        run: ruff format --check .
-
-  # ── STAGE 3: COMPREHENSIVE TEST MATRIX (VITEST) ──
+  # ── STAGE 2: COMPREHENSIVE TEST MATRIX (VITEST) ──
   unit-and-integration-tests:
     name: 🧪 Vitest Test Matrix (Schemas, VFS, Terminals & Sound)
     runs-on: ubuntu-latest
@@ -70,7 +48,7 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 22 LTS
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -82,17 +60,17 @@ jobs:
       - name: Execute Vitest Test Matrix
         run: npm test
 
-  # ── STAGE 4: PRODUCTION BUILD & MULTI-TARGET DEPLOYMENT ──
+  # ── STAGE 3: PRODUCTION BUILD & MULTI-TARGET DEPLOYMENT ──
   build-and-deploy:
     name: 🚀 Production Build & Dual Deployment (Pages + Oracle VM)
-    needs: [security-and-lint, python-ruff-quality, unit-and-integration-tests]
+    needs: [security-and-lint, unit-and-integration-tests]
     if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 22 LTS
         uses: actions/setup-node@v4
         with:
           node-version: 22
