@@ -34,7 +34,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Run ESLint Code Analysis
+      - name: Run Biome Code Analysis & Quality Audit
         run: npm run lint
 
       - name: Security Vulnerability Audit
