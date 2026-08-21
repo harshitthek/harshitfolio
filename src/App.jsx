@@ -18,6 +18,7 @@ import ArchitectureModal from './components/modals/ArchitectureModal';
 import TerminalModal from './components/modals/TerminalModal';
 import DossierModal from './components/modals/DossierModal';
 import ContactModal from './components/modals/ContactModal';
+import GitHubTelemetryModal from './components/modals/GitHubTelemetryModal';
 import CommandPaletteModal from './components/modals/CommandPaletteModal';
 import CyberCursor from './components/CyberCursor';
 import { warmupAllBackends } from './utils/backendWarmup';
@@ -158,6 +159,11 @@ export default function App() {
           SoundFX.playClick();
           setActiveModal('dossier');
         }
+      } else if (e.key === 'g' || e.key === 'G') {
+        if (!activeModal) {
+          SoundFX.playClick();
+          setActiveModal('github');
+        }
       } else if (((e.key >= '1' && e.key <= '9') || e.key === '0') && !activeModal) {
         const index = e.key === '0' ? 9 : parseInt(e.key, 10) - 1;
         const project = projectsData[index];
@@ -253,6 +259,12 @@ export default function App() {
 
       {activeModal === 'dossier' && (
         <DossierModal
+          onClose={closeModal}
+        />
+      )}
+
+      {activeModal === 'github' && (
+        <GitHubTelemetryModal
           onClose={closeModal}
         />
       )}

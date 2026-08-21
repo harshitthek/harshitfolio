@@ -119,6 +119,15 @@ export default function CommandPaletteModal({
         action: () => onOpenModal('dossier')
       },
       {
+        id: 'modal-github',
+        category: 'PORTALS & MODALS',
+        icon: '🐙',
+        title: 'Live GitHub Telemetry & Activity Stream',
+        subtitle: 'Real-time repository fleet, language distribution, and commit stream',
+        shortcut: 'G',
+        action: () => onOpenModal('github')
+      },
+      {
         id: 'modal-contact',
         category: 'PORTALS & MODALS',
         icon: '📡',

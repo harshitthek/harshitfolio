@@ -224,7 +224,7 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
 
         <div className="cards-hotkey-hint">
           <span>HOTKEYS:</span>
-          <span>Press <kbd>1</kbd>–<kbd>9</kbd>, <kbd>0</kbd> to launch portal</span>
+          <span><kbd>1</kbd>–<kbd>9</kbd>, <kbd>0</kbd> Launch</span>
           <span>·</span>
           <span><kbd>T</kbd> Terminal</span>
           <span>·</span>
@@ -234,7 +234,9 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
           <span>·</span>
           <span><kbd>D</kbd> Dossier</span>
           <span>·</span>
-          <span><kbd>ESC</kbd> Close</span>
+          <span><kbd>G</kbd> Git Intel</span>
+          <span>·</span>
+          <span><kbd>⌘K</kbd> Palette</span>
         </div>
       </div>
 
