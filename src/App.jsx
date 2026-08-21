@@ -1,19 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import CardsScreen from './components/CardsScreen';
 import CyberCursor from './components/CyberCursor';
-import CyberGodModeFX from './components/CyberGodModeFX';
 import IntermediateScreen from './components/IntermediateScreen';
 import LoadingScreen from './components/LoadingScreen';
 import MissionScreen from './components/MissionScreen';
-import ArchitectureModal from './components/modals/ArchitectureModal';
-import CodeInspectorModal from './components/modals/CodeInspectorModal';
-import CommandPaletteModal from './components/modals/CommandPaletteModal';
-import ContactModal from './components/modals/ContactModal';
-import DossierModal from './components/modals/DossierModal';
-import GitHubTelemetryModal from './components/modals/GitHubTelemetryModal';
-import MLSimulatorModal from './components/modals/MLSimulatorModal';
-import ProjectModal from './components/modals/ProjectModal';
-import TerminalModal from './components/modals/TerminalModal';
 import Navbar from './components/Navbar';
 import NeuralBackground from './components/NeuralBackground';
 import { SoundFX } from './components/SoundFX';
@@ -21,6 +11,18 @@ import VideoScreen from './components/VideoScreen';
 import { useVoice } from './components/VoiceContext';
 import { projectsData } from './data/projectsData';
 import { warmupAllBackends } from './utils/backendWarmup';
+
+// ⚡ Ultra-Fast Code-Splitting: Lazy-load heavy interactive modals on demand
+const ArchitectureModal = lazy(() => import('./components/modals/ArchitectureModal'));
+const CodeInspectorModal = lazy(() => import('./components/modals/CodeInspectorModal'));
+const CommandPaletteModal = lazy(() => import('./components/modals/CommandPaletteModal'));
+const ContactModal = lazy(() => import('./components/modals/ContactModal'));
+const DossierModal = lazy(() => import('./components/modals/DossierModal'));
+const GitHubTelemetryModal = lazy(() => import('./components/modals/GitHubTelemetryModal'));
+const MLSimulatorModal = lazy(() => import('./components/modals/MLSimulatorModal'));
+const ProjectModal = lazy(() => import('./components/modals/ProjectModal'));
+const TerminalModal = lazy(() => import('./components/modals/TerminalModal'));
+const CyberGodModeFX = lazy(() => import('./components/CyberGodModeFX'));
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('s-video');
@@ -303,9 +305,6 @@ export default function App() {
 
   return (
     <div className={`app-container ${godModeActive ? 'god-mode-active' : ''}`}>
-      {/* Easter Egg: Fullscreen Supernova Shockwave Blast & Overdrive Badge */}
-      <CyberGodModeFX isActive={godModeActive} onClose={() => setGodModeActive(false)} />
-
       {/* Precision Theme-Matched Cyber Cursor */}
       <CyberCursor activeScreen={currentScreen} />
 
@@ -347,49 +346,55 @@ export default function App() {
         onComplete={onDeployComplete}
       />
 
-      {/* In-App Interactive Feature Modals */}
-      {activeModal === 'project' && selectedProjectForModal && (
-        <ProjectModal
-          card={selectedProjectForModal}
-          onClose={closeModal}
-          onLaunch={launchPortfolio}
-        />
-      )}
+      {/* ⚡ Lazy-Loaded Interactive Feature Modals & Easter Egg FX */}
+      <Suspense fallback={null}>
+        {godModeActive && (
+          <CyberGodModeFX isActive={godModeActive} onClose={() => setGodModeActive(false)} />
+        )}
 
-      {activeModal === 'ml-sim' && <MLSimulatorModal onClose={closeModal} />}
+        {activeModal === 'project' && selectedProjectForModal && (
+          <ProjectModal
+            card={selectedProjectForModal}
+            onClose={closeModal}
+            onLaunch={launchPortfolio}
+          />
+        )}
 
-      {activeModal === 'code-inspect' && <CodeInspectorModal onClose={closeModal} />}
+        {activeModal === 'ml-sim' && <MLSimulatorModal onClose={closeModal} />}
 
-      {activeModal === 'architecture' && <ArchitectureModal onClose={closeModal} />}
+        {activeModal === 'code-inspect' && <CodeInspectorModal onClose={closeModal} />}
 
-      {activeModal === 'terminal' && (
-        <TerminalModal onClose={closeModal} onLaunch={launchPortfolio} />
-      )}
+        {activeModal === 'architecture' && <ArchitectureModal onClose={closeModal} />}
 
-      {activeModal === 'dossier' && <DossierModal onClose={closeModal} />}
+        {activeModal === 'terminal' && (
+          <TerminalModal onClose={closeModal} onLaunch={launchPortfolio} />
+        )}
 
-      {activeModal === 'github' && <GitHubTelemetryModal onClose={closeModal} />}
+        {activeModal === 'dossier' && <DossierModal onClose={closeModal} />}
 
-      {activeModal === 'contact' && <ContactModal onClose={closeModal} />}
+        {activeModal === 'github' && <GitHubTelemetryModal onClose={closeModal} />}
 
-      {activeModal === 'cmd-palette' && (
-        <CommandPaletteModal
-          isOpen={activeModal === 'cmd-palette'}
-          onClose={closeModal}
-          onJumpToScreen={(screen) => {
-            setCurrentScreen(screen);
-            closeModal();
-          }}
-          onOpenModal={(modal) => {
-            setActiveModal(modal);
-          }}
-          onLaunchProject={(name, url) => {
-            closeModal();
-            launchPortfolio(name, url);
-          }}
-          currentScreen={currentScreen}
-        />
-      )}
+        {activeModal === 'contact' && <ContactModal onClose={closeModal} />}
+
+        {activeModal === 'cmd-palette' && (
+          <CommandPaletteModal
+            isOpen={activeModal === 'cmd-palette'}
+            onClose={closeModal}
+            onJumpToScreen={(screen) => {
+              setCurrentScreen(screen);
+              closeModal();
+            }}
+            onOpenModal={(modal) => {
+              setActiveModal(modal);
+            }}
+            onLaunchProject={(name, url) => {
+              closeModal();
+              launchPortfolio(name, url);
+            }}
+            currentScreen={currentScreen}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }
