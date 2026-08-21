@@ -223,15 +223,19 @@ export default function MLSimulatorModal({ onClose }) {
     const b = brandMap[brand] || Object.values(brandMap)[0];
     const basePrice = b.base;
 
+    const safeAge = Math.max(0, Math.min(30, Number(age) || 0));
+    const safeKms = Math.max(0, Number(kms) || 0);
+    const safePower = Math.max(50, Number(power) || b.defCC);
+
     // 1. Multi-Stage Age Decay Curve
-    const ageFactor = b.decay ** age;
+    const ageFactor = b.decay ** safeAge;
 
     // 2. Odometer Usage Factor
     const maxKms = isBike ? 120000 : 250000;
-    const kmFactor = Math.max(0.42, 1 - (kms / maxKms) * 0.44);
+    const kmFactor = Math.max(0.42, 1 - (safeKms / maxKms) * 0.44);
 
     // 3. Engine Displacement / CC Premium
-    const ccDiff = power - b.defCC;
+    const ccDiff = safePower - b.defCC;
     const ccBonus = ccDiff * (isBike ? 140 : 380);
 
     // 4. Ownership Transfer Penalty
@@ -247,8 +251,9 @@ export default function MLSimulatorModal({ onClose }) {
     const fFactor = isBike ? 1.0 : fuelMultipliers[fuelType] || 1.0;
 
     // Base Estimate Calculation
-    const estimated =
+    const rawEst =
       (basePrice * ageFactor * kmFactor + ccBonus) * ownerFactor * condFactor * fFactor;
+    const estimated = Number.isFinite(rawEst) ? rawEst : basePrice;
     const floor = isBike ? 22000 : 160000;
     const fairPrice = Math.max(floor, Math.round(estimated / 500) * 500);
 

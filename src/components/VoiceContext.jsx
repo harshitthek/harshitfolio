@@ -8,8 +8,12 @@ const STORAGE_KEY = 'harshit_portfolio_voice_enabled';
 export function VoiceProvider({ children }) {
   const [voiceEnabled, setVoiceEnabled] = useState(() => {
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored !== null) return stored === 'true';
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored !== null) return stored === 'true';
+      } catch {
+        return true;
+      }
     }
     return true;
   });

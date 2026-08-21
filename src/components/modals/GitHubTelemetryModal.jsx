@@ -52,6 +52,16 @@ export default function GitHubTelemetryModal({ onClose }) {
     SoundFX.playLaser();
 
     try {
+      // Helper for safe cache retrieval
+      const getSafeCache = (key) => {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : null;
+        } catch {
+          return null;
+        }
+      };
+
       // 1. Fetch Profile
       const userRes = await fetch('https://api.github.com/users/harshitthek');
       if (userRes.ok) {
@@ -62,8 +72,8 @@ export default function GitHubTelemetryModal({ onClose }) {
           localStorage.setItem(CACHE_KEY_USER, JSON.stringify(userData));
         } catch {}
       } else {
-        const cached = localStorage.getItem(CACHE_KEY_USER);
-        if (cached) setProfile(JSON.parse(cached));
+        const cached = getSafeCache(CACHE_KEY_USER);
+        if (cached) setProfile(cached);
       }
 
       // 2. Fetch Repositories
@@ -79,8 +89,8 @@ export default function GitHubTelemetryModal({ onClose }) {
           } catch {}
         }
       } else {
-        const cachedRepos = localStorage.getItem(CACHE_KEY_REPOS);
-        if (cachedRepos) setRepos(JSON.parse(cachedRepos));
+        const cachedRepos = getSafeCache(CACHE_KEY_REPOS);
+        if (cachedRepos && Array.isArray(cachedRepos)) setRepos(cachedRepos);
       }
 
       // 3. Fetch Public Events (Commit Stream)
@@ -96,8 +106,8 @@ export default function GitHubTelemetryModal({ onClose }) {
           } catch {}
         }
       } else {
-        const cachedEvents = localStorage.getItem(CACHE_KEY_EVENTS);
-        if (cachedEvents) setEvents(JSON.parse(cachedEvents));
+        const cachedEvents = getSafeCache(CACHE_KEY_EVENTS);
+        if (cachedEvents && Array.isArray(cachedEvents)) setEvents(cachedEvents);
       }
     } catch (err) {
       console.warn(

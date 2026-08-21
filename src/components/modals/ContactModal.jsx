@@ -8,13 +8,19 @@ export default function ContactModal({ onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const cleanName = (form.name || '').trim();
+    const cleanEmail = (form.email || '').trim();
+    const cleanMsg = (form.message || '').trim();
+
+    if (!cleanName || !cleanEmail || !cleanMsg) return;
+
     SoundFX.playSuccess();
     setSubmitted(true);
 
     // Open real email transmission prefilled with operator's data
-    const subject = encodeURIComponent(`Transmission from ${form.name} via Harshit.exe Portfolio`);
+    const subject = encodeURIComponent(`Transmission from ${cleanName} via Harshit.exe Portfolio`);
     const body = encodeURIComponent(
-      `Operator Name: ${form.name}\nReturn Email: ${form.email}\n\nTransmission Payload:\n${form.message}\n\n---\nSent via Harshit.exe Neural Portfolio`
+      `Operator Name: ${cleanName}\nReturn Email: ${cleanEmail}\n\nTransmission Payload:\n${cleanMsg}\n\n---\nSent via Harshit.exe Neural Portfolio`
     );
     const mailtoUrl = `mailto:codewithharshitsharma@gmail.com?subject=${subject}&body=${body}`;
 

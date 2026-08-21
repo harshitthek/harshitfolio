@@ -4,9 +4,13 @@ const STORAGE_KEY = 'harshit_portfolio_sfx_enabled';
 
 let soundEnabled = true;
 if (typeof window !== 'undefined') {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored !== null) {
-    soundEnabled = stored === 'true';
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored !== null) {
+      soundEnabled = stored === 'true';
+    }
+  } catch (_e) {
+    // Storage access blocked or restricted
   }
 }
 
@@ -14,7 +18,11 @@ const listeners = new Set();
 
 function notifyListeners() {
   if (typeof window !== 'undefined') {
-    localStorage.setItem(STORAGE_KEY, String(soundEnabled));
+    try {
+      localStorage.setItem(STORAGE_KEY, String(soundEnabled));
+    } catch (_e) {
+      // Storage access blocked or quota exceeded
+    }
   }
   listeners.forEach((fn) => {
     try {
