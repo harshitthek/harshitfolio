@@ -50,6 +50,41 @@ body {
   color: #ffffff;
 }
 
+/* ── Cyberpunk Skeleton Shimmer FX ── */
+@keyframes cyberSkeletonShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.cyber-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0.6) 25%,
+    rgba(0, 255, 136, 0.15) 50%,
+    rgba(15, 23, 42, 0.6) 75%
+  );
+  background-size: 200% 100%;
+  animation: cyberSkeletonShimmer 1.8s infinite ease-in-out;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 255, 136, 0.15);
+}
+
+.cyber-skeleton.cyan {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0.6) 25%,
+    rgba(56, 189, 248, 0.18) 50%,
+    rgba(15, 23, 42, 0.6) 75%
+  );
+  background-size: 200% 100%;
+  animation: cyberSkeletonShimmer 1.8s infinite ease-in-out;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+}
+
 /* ── CRT Monitor Scanlines ── */
 body::before {
   content: "";

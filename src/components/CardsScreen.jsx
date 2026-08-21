@@ -27,6 +27,17 @@ function PortCard({ card, onLaunch, onQuickIntel }) {
       onMouseEnter={() => SoundFX.playHover()}
     >
       <div className={`card-img ${imgLoaded || imgError ? 'img-loaded' : ''}`}>
+        {!imgLoaded && !imgError && (
+          <div
+            className="cyber-skeleton cyan"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 1,
+              opacity: 0.75
+            }}
+          />
+        )}
         {!imgError ? (
           <picture>
             <source srcSet={card.img.replace(/\.jpg$/, '.webp')} type="image/webp" />

@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import CardsScreen from './components/CardsScreen';
 import CyberCursor from './components/CyberCursor';
+import CyberModalSkeleton from './components/CyberModalSkeleton';
 import IntermediateScreen from './components/IntermediateScreen';
 import LoadingScreen from './components/LoadingScreen';
 import MissionScreen from './components/MissionScreen';
@@ -347,7 +348,7 @@ export default function App() {
       />
 
       {/* ⚡ Lazy-Loaded Interactive Feature Modals & Easter Egg FX */}
-      <Suspense fallback={null}>
+      <Suspense fallback={activeModal ? <CyberModalSkeleton onClose={closeModal} /> : null}>
         {godModeActive && (
           <CyberGodModeFX isActive={godModeActive} onClose={() => setGodModeActive(false)} />
         )}
