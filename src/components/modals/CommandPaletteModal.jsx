@@ -251,7 +251,7 @@ export default function CommandPaletteModal({
   useEffect(() => {
     if (listRef.current) {
       const activeEl = listRef.current.querySelector('.cmd-item.selected');
-      if (activeEl) {
+      if (activeEl && typeof activeEl.scrollIntoView === 'function') {
         activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
     }

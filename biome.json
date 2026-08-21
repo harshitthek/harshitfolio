@@ -14,6 +14,9 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "correctness": {
+        "noUndeclaredVariables": "error"
+      },
       "suspicious": {
         "noCommentText": "off",
         "noArrayIndexKey": "off",
@@ -31,6 +34,32 @@
     }
   },
   "javascript": {
+    "globals": [
+      "window",
+      "document",
+      "setTimeout",
+      "clearTimeout",
+      "setInterval",
+      "clearInterval",
+      "requestAnimationFrame",
+      "cancelAnimationFrame",
+      "localStorage",
+      "sessionStorage",
+      "console",
+      "Math",
+      "Date",
+      "fetch",
+      "AbortController",
+      "process",
+      "confetti",
+      "navigator",
+      "location",
+      "HTMLCanvasElement",
+      "HTMLVideoElement",
+      "Image",
+      "AudioContext",
+      "webkitAudioContext"
+    ],
     "formatter": {
       "quoteStyle": "single",
       "jsxQuoteStyle": "double",
