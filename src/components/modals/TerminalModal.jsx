@@ -10,16 +10,18 @@ const VIRTUAL_FS = {
     children: {
       'bio.txt': {
         type: 'file',
-        size: '1.6 KB',
+        size: '1.8 KB',
         content: `=====================================================
 HARSHIT SHARMA // ARTIFICIAL INTELLIGENCE & SYSTEMS ENGINEER
 =====================================================
 Institution : University School of Automation & Robotics (USAR, GGSIPU), New Delhi
-Degree      : B.Tech in Artificial Intelligence & Machine Learning
+Degree      : B.Tech in Artificial Intelligence & Machine Learning (Class of 2029)
 Location    : New Delhi, India
 GitHub      : https://github.com/harshitthek
 LinkedIn    : https://www.linkedin.com/in/devharshitsharma
 Email       : codewithharshitsharma@gmail.com
+Server      : Oracle Cloud Infrastructure (OCI Ampere A1 ARM64) [144.24.104.31]
+Domains     : harshitthek.is-a.dev · harshit.thedev.id
 
 Core Technical Arsenal:
 - Autonomous Multi-Agent LLM Orchestration & Evaluation Pipelines
@@ -27,20 +29,22 @@ Core Technical Arsenal:
 - Fine-Tuned BERT NLP Deep Learning Departmental Classifiers
 - High-Performance Chrome Manifest V3 Network Engines (DeclarativeNetRequest)
 - Deterministic Constraint Reducers & Search-Space Budgeting
+- Bare-Metal Linux Systems, Nginx Reverse Proxies & GitOps CI/CD
 - GPU-Accelerated 3D WebGL / Three.js Visual Engines (60 FPS)`
       },
       'contact.json': {
         type: 'file',
-        size: '560 B',
+        size: '620 B',
         content: JSON.stringify({
           name: "Harshit Sharma",
           role: "AI Engineer & ML Systems Architect",
           institution: "USAR (GGSIPU), New Delhi",
-          degree: "B.Tech AI & ML",
+          degree: "B.Tech AI & ML (Class of 2029)",
           email: "codewithharshitsharma@gmail.com",
           github: "https://github.com/harshitthek",
           linkedin: "https://www.linkedin.com/in/devharshitsharma",
           discord: "harshit0",
+          domains: ["harshitthek.is-a.dev", "harshit.thedev.id"],
           status: "Open to AI/ML Research, LLM Agent Engineering & Systems Roles"
         }, null, 2)
       },
@@ -386,6 +390,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const [currentPath, setCurrentPath] = useState('~');
   const [currentTheme, setCurrentTheme] = useState('green');
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+  // ── MATRIX DIGITAL RAIN STATE ──
+  const [matrixActive, setMatrixActive] = useState(false);
+  const matrixCanvasRef = useRef(null);
+  const matrixAnimRef = useRef(null);
 
   // ── 60FPS ARCADE CANVAS SNAKE STATE ──
   const [snakeGameActive, setSnakeGameActive] = useState(false);
@@ -1189,9 +1198,81 @@ export default function TerminalModal({ onClose, onLaunch }) {
     };
   }, [snakeGameActive, snakeGameOver, isPaused, snakeMode, snakeSpeed, snakeHighScore, activePowerUp, getHighScoreKey]);
 
+  // ── 60FPS MATRIX DIGITAL RAIN ENGINE ──
+  useEffect(() => {
+    if (!matrixActive) {
+      if (matrixAnimRef.current) cancelAnimationFrame(matrixAnimRef.current);
+      return;
+    }
+
+    const canvas = matrixCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = canvas.parentElement ? canvas.parentElement.clientWidth : 800;
+    canvas.height = canvas.parentElement ? canvas.parentElement.clientHeight : 500;
+
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array.from({ length: columns }, () => Math.floor(Math.random() * -40));
+    const chars = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ01234567890ABCDEFXYZ{}[]<>=+*~#$_HARSHIT';
+
+    const renderMatrix = () => {
+      ctx.fillStyle = 'rgba(4, 5, 7, 0.12)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        // Glowing white-green head for leading droplet
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = activeThemeObj.primary;
+        ctx.shadowBlur = 10;
+        ctx.fillText(text, x, y);
+
+        // Body stream
+        ctx.fillStyle = activeThemeObj.primary;
+        ctx.shadowBlur = 0;
+        if (drops[i] > 1) {
+          const prevChar = chars.charAt(Math.floor(Math.random() * chars.length));
+          ctx.fillText(prevChar, x, (drops[i] - 1) * fontSize);
+        }
+
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+
+      matrixAnimRef.current = requestAnimationFrame(renderMatrix);
+    };
+
+    matrixAnimRef.current = requestAnimationFrame(renderMatrix);
+
+    return () => {
+      if (matrixAnimRef.current) cancelAnimationFrame(matrixAnimRef.current);
+    };
+  }, [matrixActive, activeThemeObj]);
+
   // Window-level key listener
   useEffect(() => {
     const handleGlobalKeyDown = (e) => {
+      if (matrixActive) {
+        const k = e.key.toLowerCase();
+        if (k === 'escape' || k === 'q' || k === 'enter' || k === ' ') {
+          e.preventDefault();
+          e.stopPropagation();
+          setMatrixActive(false);
+          SoundFX.playClick();
+          return;
+        }
+      }
+
       if (snakeGameActive) {
         const k = e.key.toLowerCase();
 
@@ -1328,12 +1409,18 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'sys', text: '⚡ HARSHIT.EXE SHELL COMMAND DIRECTORY:' },
           { type: 'info', text: '── SYSTEM TELEMETRY & PROFILE ──' },
           { type: 'out', text: '  neofetch          - Hardware specs, OS telemetry & Harshit\'s ASCII crest' },
+          { type: 'out', text: '  whoami            - Current session UID, clearance level & host' },
+          { type: 'out', text: '  uptime            - Server uptime, active load average & memory stats' },
+          { type: 'out', text: '  uname [-a]        - Operating system & Linux kernel architecture' },
           { type: 'out', text: '  bio / about       - Full personal bio, degree program & university background' },
           { type: 'out', text: '  skills / stack    - Breakdown of AI/ML, full-stack, and systems proficiencies' },
           { type: 'out', text: `  projects          - List all ${projectsData.length} flagship engineering universes with live links` },
           { type: 'out', text: '  contact / socials - Direct email, GitHub, LinkedIn, and Discord endpoints' },
           { type: 'out', text: '  top / ps          - Real-time running background daemon telemetry' },
           { type: 'out', text: '  weather           - Live telemetry weather radar for New Delhi' },
+          { type: 'info', text: '── NETWORKING & CLOUD INFRASTRUCTURE ──' },
+          { type: 'out', text: '  ping [<host>]     - ICMP latency probe to Oracle Cloud & DNS nodes' },
+          { type: 'out', text: '  curl [<url>]      - Inspect HTTP headers & response payloads' },
           { type: 'info', text: '── FILESYSTEM NAVIGATION ──' },
           { type: 'out', text: '  ls [-l] [<path>]  - List directory contents (e.g. ls, ls -l, ls projects)' },
           { type: 'out', text: '  cd <dir>          - Change directory (e.g. cd projects, cd .., cd ~)' },
@@ -1344,13 +1431,16 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'out', text: '  ai / ask <query>  - Ask the built-in AI reasoning engine technical questions' },
           { type: 'out', text: `  deploy <1-${projectsData.length}|name> - Initiate deployment sequence for a target universe` },
           { type: 'info', text: '── GAMES, CYBER FX & CUSTOMIZATION ──' },
+          { type: 'out', text: '  matrix / rain     - 60FPS Cascading Neural Digital Rain Canvas' },
           { type: 'out', text: '  snake             - Full-Terminal 60fps Cyber-Serpent Arcade Engine' },
           { type: 'out', text: '  hack / pwn        - Cinematic Hollywood cyber penetration sequence' },
-          { type: 'out', text: '  matrix            - Digital cascading neural code stream' },
           { type: 'out', text: '  cowsay <text>     - Classic ASCII cow wisdom speech' },
           { type: 'out', text: '  fortune           - Random developer & AI aphorism' },
+          { type: 'out', text: '  echo <text>       - Print text with $USER, $HOST, $IP variable expansion' },
+          { type: 'out', text: '  date              - Current system timestamp & timezone' },
+          { type: 'out', text: '  history           - Chronological log of entered commands' },
           { type: 'out', text: '  theme <name>      - Switch palette (green, cyan, amber, purple, red)' },
-          { type: 'out', text: '  clear             - Clear terminal buffer' },
+          { type: 'out', text: '  clear / banner    - Clear screen or render MOTD header' },
           { type: 'out', text: '  exit              - Dismiss terminal window' }
         );
         break;
@@ -1361,21 +1451,115 @@ export default function TerminalModal({ onClose, onLaunch }) {
           text: `
       ██╗  ██╗███████╗      harshit@usar-delhi
       ██║  ██║██╔════╝      ------------------
-      ███████║███████╗      OS: Ubuntu Linux 24.04 LTS (x86_64)
-      ██╔══██║╚════██║      Host: USAR (GGSIPU) Neural Research Lab
-      ██║  ██║███████║      Degree: B.Tech Artificial Intelligence & ML
-      ╚═╝  ╚═╝╚══════╝      Kernel: Linux 6.8.0-ai-custom-rt
-                            Uptime: 4+ Years Continuous Engineering
+      ███████║███████╗      OS: Oracle Linux Server 9.8 (aarch64)
+      ██╔══██║╚════██║      Host: USAR (GGSIPU) Neural Engine · OCI Ampere A1
+      ██║  ██║███████║      Degree: B.Tech Artificial Intelligence & ML (Class of 2029)
+      ╚═╝  ╚═╝╚══════╝      Kernel: Linux 6.12.0-204.92.4.2.el9uek.aarch64
+                            Uptime: 43 Days Continuous Server Engineering
                             Shell: zsh 5.9 (harshit-powerlevel10k)
                             Theme: ${THEMES[currentTheme]?.label || 'CLASSIC MATRIX GREEN'}
-                            CPU: Intel i9-14900K @ 5.80GHz (24 Cores)
-                            GPU: NVIDIA RTX 4090 24GB VRAM
+                            CPU: ARM Neoverse-N1 @ 3.00GHz (Ampere A1)
+                            RAM: 6.0 GB Unified (5.5 GiB Usable · 2.7 GiB Free)
+                            Disk: 46.6 GB NVMe Block Storage (18 GB Available)
+                            Web Server: Nginx 1.20.1 (Reverse Proxy · HTTP/2)
+                            Domains: harshitthek.is-a.dev · harshit.thedev.id
+                            Server IP: 144.24.104.31 (OCI ap-mumbai-1)
                             AI Stack: CatBoost, XGBoost, PyTorch, BERT, FastAPI, Three.js
-                            Primary Repos: AutoValuate AI, Resilient, Yggdrasil, Ticket Dispatcher ML
-                            Email: codewithharshitsharma@gmail.com
                             GitHub: https://github.com/harshitthek
           `
         });
+        break;
+
+      case 'whoami':
+        newHistory.push({
+          type: 'sys',
+          text: `harshit (uid=0[root] gid=0[root] groups=0[root],4[adm],27[sudo],998[ai-lab])\nRole: AI & Systems Engineer · Class of 2029 (USAR, GGSIPU)\nHost: ygg [Oracle Cloud Infrastructure ARM64 · 144.24.104.31]\nStatus: LEVEL 5 ROOT CLEARANCE ACTIVE`
+        });
+        break;
+
+      case 'uptime':
+        newHistory.push({
+          type: 'info',
+          text: ' 01:36:12 up 43 days, 19:40,  1 user,  load average: 0.08, 0.02, 0.01\nMemory: 5.5 GiB Total · 2.7 GiB Free · 0.9 GiB Used · 2.2 GiB Buff/Cache'
+        });
+        break;
+
+      case 'uname':
+        newHistory.push({
+          type: 'out',
+          text: arg.includes('-a') || !arg
+            ? 'Linux ygg 6.12.0-204.92.4.2.el9uek.aarch64 #2 SMP Thu Jul 2 08:13:04 PDT 2026 aarch64 aarch64 aarch64 GNU/Linux'
+            : 'Linux'
+        });
+        break;
+
+      case 'date':
+        newHistory.push({
+          type: 'out',
+          text: new Date().toString()
+        });
+        break;
+
+      case 'echo': {
+        let outStr = arg || '';
+        outStr = outStr
+          .replace(/\$USER/g, 'harshit')
+          .replace(/\$HOST/g, 'ygg (Oracle Cloud VM)')
+          .replace(/\$IP/g, '144.24.104.31')
+          .replace(/\$DOMAIN/g, 'harshitthek.is-a.dev')
+          .replace(/\$ROLE/g, 'AI & Systems Engineer (USAR Class of 2029)')
+          .replace(/\$DEGREE/g, 'B.Tech AI & ML');
+        newHistory.push({ type: 'out', text: outStr });
+        break;
+      }
+
+      case 'history':
+        newHistory.push(
+          { type: 'sys', text: '📜 SESSION COMMAND HISTORY:' },
+          ...cmdHistory.map((h, i) => ({ type: 'out', text: `  ${(i + 1).toString().padStart(3, ' ')}  ${h}` }))
+        );
+        break;
+
+      case 'ping': {
+        const host = arg || 'harshitthek.is-a.dev';
+        newHistory.push(
+          { type: 'info', text: `PING ${host} (144.24.104.31): 56 data bytes` },
+          { type: 'out', text: `64 bytes from 144.24.104.31: icmp_seq=0 ttl=64 time=11.4 ms` },
+          { type: 'out', text: `64 bytes from 144.24.104.31: icmp_seq=1 ttl=64 time=12.1 ms` },
+          { type: 'out', text: `64 bytes from 144.24.104.31: icmp_seq=2 ttl=64 time=10.9 ms` },
+          { type: 'ok', text: `--- ${host} ping statistics ---\n3 packets transmitted, 3 packets received, 0.0% packet loss\nround-trip min/avg/max/stddev = 10.9/11.4/12.1/0.48 ms` }
+        );
+        break;
+      }
+
+      case 'curl': {
+        const target = arg || 'http://144.24.104.31/';
+        newHistory.push({
+          type: 'code',
+          text: `HTTP/1.1 200 OK
+Server: nginx/1.20.1 (Oracle Cloud Linux aarch64)
+Date: ${new Date().toUTCString()}
+Content-Type: text/html; charset=UTF-8
+Connection: keep-alive
+X-Frame-Options: SAMEORIGIN
+X-Content-Type-Options: nosniff
+Strict-Transport-Security: max-age=31536000
+
+<!DOCTYPE html>
+<title>HARSHIT.EXE | Harshit Sharma — AI & Systems Engineer</title>
+<!-- 🚀 10 Flagship Universes Live on Oracle Cloud Infrastructure -->`
+        });
+        break;
+      }
+
+      case 'banner':
+      case 'motd':
+        newHistory.push(
+          { type: 'sys', text: '╔══════════════════════════════════════════════════════════════════════╗' },
+          { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.9.0-PRO]      ║' },
+          { type: 'sys', text: '║     Host: USAR (GGSIPU) Neural Engine · Clearance: LEVEL 5 ROOT      ║' },
+          { type: 'sys', text: '╚══════════════════════════════════════════════════════════════════════╝' }
+        );
         break;
 
       case 'bio':
@@ -1384,7 +1568,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'sys', text: '👤 HARSHIT SHARMA — BIOGRAPHICAL DOSSIER' },
           { type: 'out', text: '  Name: Harshit Sharma' },
           { type: 'out', text: '  Institution: University School of Automation & Robotics (USAR, GGSIPU), New Delhi' },
-          { type: 'out', text: '  Degree: B.Tech in Artificial Intelligence & Machine Learning' },
+          { type: 'out', text: '  Degree: B.Tech in Artificial Intelligence & Machine Learning (Class of 2029)' },
+          { type: 'out', text: '  Server: Oracle Cloud VM (144.24.104.31) · harshitthek.is-a.dev' },
           { type: 'out', text: '  Focus: Autonomous AI Agent Benchmarks, Dual-Engine ML Regression, BERT Transformers, 3D WebGL' },
           { type: 'out', text: '  GitHub: https://github.com/harshitthek' },
           { type: 'out', text: '  LinkedIn: https://www.linkedin.com/in/devharshitsharma' },
@@ -1546,7 +1731,7 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
           newHistory.push({ type: 'err', text: "Usage: ai <query> (e.g. 'ai why hire Harshit?', 'ai explain AutoValuate AI', 'ai what is Resilient?')" });
         } else {
           const lower = arg.toLowerCase();
-          let ans = "Harshit Sharma specializes in autonomous agent architecture, multi-turn LLM reasoning trees, dual-engine ML regression stacking, and production systems engineering. He studies B.Tech AI & ML at USAR (GGSIPU), New Delhi.";
+          let ans = "Harshit Sharma specializes in autonomous agent architecture, multi-turn LLM reasoning trees, dual-engine ML regression stacking, and production systems engineering. He studies B.Tech AI & ML at USAR (GGSIPU), New Delhi (Class of 2029).";
 
           if (lower.includes('why hire') || lower.includes('hire') || lower.includes('recruit')) {
             ans = "🌟 Why hire Harshit:\nHe bridges deep algorithmic foundations (CatBoost/XGBoost, BERT Transformers, TensorFlow Recommenders) with elite production systems engineering (Docker, FastAPI, Three.js WebGL, Fastify). He builds real, production-tested architectures with full test matrices (56 tests in AutoValuate, 47 tests in Resilient).";
@@ -1568,12 +1753,12 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
             ans = "🖥️ Custom Browser Startpage v2.0:\nPrivacy launchpad with 13 premium themes, CSP hardening, and live weather radar telemetry. Live on Netlify at https://dailycosmos.netlify.app/";
           } else if (lower.includes('cosmic') || lower.includes('3d') || lower.includes('webgl') || lower.includes('three')) {
             ans = "🌌 3D Cosmic WebGL Engine:\nGPU-accelerated Three.js r128 visualizer featuring 6-in-1 physics modes (Galaxy Vortex, Solar System, Supernova, Retrowave Sun) running at 60 FPS.";
-          } else if (lower.includes('college') || lower.includes('degree') || lower.includes('usar') || lower.includes('ggsipu') || lower.includes('university')) {
-            ans = "🎓 Harshit is pursuing his B.Tech in Artificial Intelligence & Machine Learning at the University School of Automation & Robotics (USAR, GGSIPU), New Delhi.";
+          } else if (lower.includes('college') || lower.includes('degree') || lower.includes('usar') || lower.includes('ggsipu') || lower.includes('university') || lower.includes('grad')) {
+            ans = "🎓 Harshit is pursuing his B.Tech in Artificial Intelligence & Machine Learning (Class of 2029) at the University School of Automation & Robotics (USAR, GGSIPU), New Delhi.";
           } else if (lower.includes('contact') || lower.includes('email') || lower.includes('reach')) {
             ans = "📬 Reach Harshit:\n- Email: codewithharshitsharma@gmail.com\n- GitHub: https://github.com/harshitthek\n- LinkedIn: https://www.linkedin.com/in/devharshitsharma\n- Discord: harshit0";
           } else {
-            ans = `Harshit Sharma is an AI Systems Engineer specializing in Machine Learning, Deep Learning (BERT), LLM Agent sandboxes, and full-stack systems. He built 10 flagship universes showcased in this portfolio.`;
+            ans = `Harshit Sharma is an AI Systems Engineer specializing in Machine Learning, Deep Learning (BERT), LLM Agent sandboxes, and full-stack systems. Class of 2029 at USAR (GGSIPU).`;
           }
 
           newHistory.push({ type: 'ai', text: `🧠 AI REASONING SYNTHESIS:\n${ans}` });
@@ -1670,12 +1855,10 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
       }
 
       case 'matrix':
-        newHistory.push(
-          { type: 'ok', text: '01001000 01100001 01110010 01110011 01101000 01101001 01110100' },
-          { type: 'ok', text: '日ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ 01010101 01010011 01000001 01010010' },
-          { type: 'ok', text: '10110001 01110100 01101000 01100101 01101011 // HARSHIT_NEURAL_STREAM' },
-          { type: 'ok', text: 'AI_PIPELINE_CONVERGED // NEURAL SYNAPSE ONLINE 100%' }
-        );
+      case 'rain':
+        setMatrixActive(true);
+        SoundFX.playDeploy();
+        newHistory.push({ type: 'ok', text: '⚡ INITIATING MATRIX DIGITAL RAIN. Press ESC, Q, or click anywhere to exit.' });
         break;
 
       case 'clear':
@@ -1729,9 +1912,10 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
       if (!curr) return;
 
       const allCommands = [
-        'help', 'neofetch', 'bio', 'about', 'skills', 'stack', 'projects', 'contact',
+        'help', 'neofetch', 'whoami', 'uptime', 'uname', 'ping', 'curl', 'history', 'date',
+        'echo', 'banner', 'motd', 'bio', 'about', 'skills', 'stack', 'projects', 'contact',
         'socials', 'top', 'ps', 'weather', 'ls', 'cd', 'pwd', 'cat', 'tree', 'ai',
-        'ask', 'deploy', 'launch', 'snake', 'hack', 'pwn', 'matrix', 'cowsay',
+        'ask', 'deploy', 'launch', 'snake', 'hack', 'pwn', 'matrix', 'rain', 'cowsay',
         'fortune', 'theme', 'clear', 'exit'
       ];
 
@@ -1787,12 +1971,12 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
 
   const quickChips = [
     { label: '⚡ neofetch', cmd: 'neofetch' },
-    { label: '🤖 ai "Why hire Harshit?"', cmd: 'ai why hire Harshit?' },
-    { label: '🎮 snake (60fps)', cmd: 'snake' },
-    { label: '🔓 hack', cmd: 'hack' },
-    { label: '📊 top', cmd: 'top' },
-    { label: '🌲 tree', cmd: 'tree' },
-    { label: '🚀 deploy 1', cmd: 'deploy 1' },
+    { label: '👤 whoami', cmd: 'whoami' },
+    { label: '📡 ping', cmd: 'ping' },
+    { label: '🌐 curl', cmd: 'curl' },
+    { label: '🌧️ matrix', cmd: 'matrix' },
+    { label: '🎮 snake', cmd: 'snake' },
+    { label: '🤖 ai why hire?', cmd: 'ai why hire Harshit?' },
     { label: '🎨 theme cyan', cmd: 'theme cyan' }
   ];
 
@@ -1816,7 +2000,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
           </div>
 
           <div className="terminal-title-text" style={{ color: activeThemeObj.primary }}>
-            {snakeGameActive ? `CYBER-VIPER ARCADE 60FPS · ${activeThemeObj.label}` : `harshit@usar-delhi: ${currentPath} (zsh) · [${activeThemeObj.label}]`}
+            {matrixActive ? `MATRIX DIGITAL RAIN · 60FPS STREAM · [${activeThemeObj.label}]` : snakeGameActive ? `CYBER-VIPER ARCADE 60FPS · ${activeThemeObj.label}` : `harshit@usar-delhi: ${currentPath} (zsh) · [${activeThemeObj.label}]`}
           </div>
 
           <div className="terminal-header-actions">
@@ -1837,16 +2021,60 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
           </div>
         </div>
 
-        {/* Modal Body: Scroll-Locked Full-Screen Arcade when Snake is active */}
+        {/* Modal Body: Scroll-Locked Full-Screen Arcade / Matrix when active */}
         <div
           ref={modalBodyRef}
-          className={`modal-body terminal-modal-body custom-scroll ${snakeGameActive ? 'snake-active-body' : ''}`}
+          className={`modal-body terminal-modal-body custom-scroll ${snakeGameActive || matrixActive ? 'snake-active-body' : ''}`}
           onClick={() => {
-            if (!snakeGameActive) inputRef.current?.focus();
-            else snakeCanvasRef.current?.focus();
+            if (!snakeGameActive && !matrixActive) inputRef.current?.focus();
+            else if (snakeGameActive) snakeCanvasRef.current?.focus();
           }}
         >
-          {!snakeGameActive && (
+          {matrixActive && (
+            <div
+              className="matrix-canvas-container"
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+                minHeight: '440px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#040507',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                cursor: 'pointer'
+              }}
+              onClick={() => setMatrixActive(false)}
+            >
+              <canvas
+                ref={matrixCanvasRef}
+                style={{ width: '100%', height: '100%', display: 'block' }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '16px',
+                  background: 'rgba(0, 0, 0, 0.88)',
+                  border: `1px solid ${activeThemeObj.primary}`,
+                  color: activeThemeObj.primary,
+                  padding: '8px 20px',
+                  borderRadius: '6px',
+                  fontSize: '11px',
+                  fontFamily: '"Space Mono", monospace',
+                  letterSpacing: '1px',
+                  pointerEvents: 'none',
+                  boxShadow: `0 0 20px ${activeThemeObj.glow}`
+                }}
+              >
+                ⚡ MATRIX STREAM ACTIVE · CLICK TO RETURN OR PRESS [ESC] / [Q]
+              </div>
+            </div>
+          )}
+
+          {!snakeGameActive && !matrixActive && (
             <>
               {history.map((line, idx) => (
                 <div key={idx} className={`term-line line-${line.type}`}>
