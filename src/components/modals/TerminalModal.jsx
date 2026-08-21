@@ -577,6 +577,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
       lastEatTime: 0,
       hasShield: false,
       hasMagnet: false,
+      invulnerableUntil: 0,
       score: 0,
       combo: 1,
       maxCombo: 1,
@@ -799,6 +800,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
         y: state.snake[0].y + state.dir.y
       };
 
+      const isInvulnerable = Boolean(state.invulnerableUntil && state.invulnerableUntil > now);
+
       let hitWall = false;
       if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
         if (snakeMode === 'walls') {
@@ -811,27 +814,69 @@ export default function TerminalModal({ onClose, onLaunch }) {
         }
       }
 
-      const hitSelf = state.snake.some((seg) => seg.x === head.x && seg.y === head.y);
+      // In phase immunity or shield, self collisions are deflected/ignored
+      const hitSelf =
+        !isInvulnerable && state.snake.slice(1).some((seg) => seg.x === head.x && seg.y === head.y);
 
-      // 💥 TRIGGER CYBERPUNK VOXEL DISINTEGRATION
+      // 💥 SHIELD DEFLECTION & INVULNERABILITY VS CYBER VOXEL DISINTEGRATION
       if (hitWall || hitSelf) {
-        if (state.hasShield) {
-          state.hasShield = false;
-          state.activePowerUp = null;
-          setActivePowerUp(null);
-          SoundFX.playDeploy();
-          state.floatingTexts.push({
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            text: '🛡️ SHIELD BROKEN! CRASH DEFLECTED',
-            color: '#38bdf8',
-            life: 1.2
-          });
-          if (head.x < 0) head.x = 0;
-          if (head.x >= cols) head.x = cols - 1;
-          if (head.y < 0) head.y = 0;
-          if (head.y >= rows) head.y = rows - 1;
+        if (state.hasShield || isInvulnerable) {
+          if (state.hasShield) {
+            state.hasShield = false;
+            state.activePowerUp = null;
+            setActivePowerUp(null);
+            state.invulnerableUntil = now + 2500; // 2.5s phase immunity!
+            SoundFX.playDeploy();
+            state.floatingTexts.push({
+              x: canvas.width / 2,
+              y: canvas.height / 2,
+              text: '🛡️ SHIELD ABSORB! PHASE IMMUNITY (2.5s)',
+              color: '#38bdf8',
+              life: 1.5
+            });
+
+            // Glowing Cyan Shockwave Burst
+            state.shockwave = {
+              x: (head.x < 0 ? 0 : head.x >= cols ? cols - 1 : head.x) * gridSize + gridSize / 2,
+              y: (head.y < 0 ? 0 : head.y >= rows ? rows - 1 : head.y) * gridSize + gridSize / 2,
+              radius: 6,
+              maxRadius: 180,
+              alpha: 1.0,
+              color: '#38bdf8'
+            };
+
+            // Shield Burst Plasma Sparks
+            for (let i = 0; i < 14; i++) {
+              state.particles.push({
+                x: (head.x < 0 ? 0 : head.x >= cols ? cols - 1 : head.x) * gridSize + gridSize / 2,
+                y: (head.y < 0 ? 0 : head.y >= rows ? rows - 1 : head.y) * gridSize + gridSize / 2,
+                vx: (Math.random() - 0.5) * 8,
+                vy: (Math.random() - 0.5) * 8,
+                life: 1.0,
+                color: '#38bdf8'
+              });
+            }
+          }
+
+          if (hitWall) {
+            // Auto-deflect / bounce inside bounds and reverse direction
+            if (head.x < 0) {
+              head.x = 0;
+              state.dir = { x: 1, y: 0 };
+            } else if (head.x >= cols) {
+              head.x = cols - 1;
+              state.dir = { x: -1, y: 0 };
+            }
+            if (head.y < 0) {
+              head.y = 0;
+              state.dir = { x: 0, y: 1 };
+            } else if (head.y >= rows) {
+              head.y = rows - 1;
+              state.dir = { x: 0, y: -1 };
+            }
+          }
         } else {
+          // Fatal Crash
           state.isDying = true;
           state.deathFrames = 0;
           SoundFX.playDeploy();
@@ -862,7 +907,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
             y: (head.y < 0 ? 0 : head.y >= rows ? rows - 1 : head.y) * gridSize + gridSize / 2,
             radius: 4,
             maxRadius: 220,
-            alpha: 1.0
+            alpha: 1.0,
+            color: '#00ff88'
           };
           return;
         }
@@ -988,7 +1034,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ateFood = true;
         SoundFX.playDeploy();
         const pType = state.powerUpItem.type;
-        const pObj = { type: pType, expiresAt: now + 8000 };
+        const durationSec = pType === 'SHIELD' ? 16 : 9;
+        const pObj = { type: pType, expiresAt: now + durationSec * 1000 };
         state.activePowerUp = pObj;
         setActivePowerUp(pObj);
         if (pType === 'SHIELD') state.hasShield = true;
@@ -996,7 +1043,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         state.floatingTexts.push({
           x: head.x * gridSize + gridSize / 2,
           y: head.y * gridSize,
-          text: `✨ ${pType} ACTIVE (8s)`,
+          text: `✨ ${pType} ACTIVE (${durationSec}s)`,
           color: '#c084fc',
           life: 1.2
         });
@@ -1146,6 +1193,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
       // 🐍 CYBER-VIPER SNAKE
       if (!state.isDying) {
         const len = state.snake.length;
+        const isInvuln = Boolean(state.invulnerableUntil && state.invulnerableUntil > now);
+
+        // Phase immunity visual blinking
+        ctx.globalAlpha = isInvuln ? (Math.floor(now / 70) % 2 === 0 ? 0.35 : 0.95) : 1.0;
 
         // Draw Interconnecting Joint Lines
         ctx.lineWidth = gridSize - 6;
@@ -1160,7 +1211,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
           const r = Math.round(0 + t * 40);
           const g = Math.round(255 - t * 70);
           const b = Math.round(136 + t * 110);
-          ctx.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+          ctx.strokeStyle = state.hasShield
+            ? '#38bdf8'
+            : isInvuln
+              ? '#67e8f9'
+              : `rgb(${r}, ${g}, ${b})`;
 
           ctx.beginPath();
           ctx.moveTo(s1.x * gridSize + gridSize / 2, s1.y * gridSize + gridSize / 2);
@@ -1177,21 +1232,34 @@ export default function TerminalModal({ onClose, onLaunch }) {
           const cy = seg.y * gridSize + gridSize / 2;
 
           if (isHead) {
-            // Shield Aura Ring
+            // Shield Aura Ring & Rotating Plasma Nodes
             if (state.hasShield) {
+              const shieldPulse = Math.sin(now / 120) * 2;
+              const shieldRad = gridSize * 0.88 + shieldPulse;
               ctx.strokeStyle = '#38bdf8';
-              ctx.lineWidth = 2;
+              ctx.lineWidth = 2.5;
               ctx.shadowColor = '#38bdf8';
-              ctx.shadowBlur = 12;
+              ctx.shadowBlur = 14;
               ctx.beginPath();
-              ctx.arc(cx, cy, gridSize / 1.4, 0, Math.PI * 2);
+              ctx.arc(cx, cy, shieldRad, 0, Math.PI * 2);
               ctx.stroke();
+
+              // 4 Orbiting Forcefield Energy Nodes
+              for (let fn = 0; fn < 4; fn++) {
+                const fa = now / 350 + (fn * Math.PI) / 2;
+                const fpx = cx + Math.cos(fa) * shieldRad;
+                const fpy = cy + Math.sin(fa) * shieldRad;
+                ctx.fillStyle = '#38bdf8';
+                ctx.beginPath();
+                ctx.arc(fpx, fpy, 2.2, 0, Math.PI * 2);
+                ctx.fill();
+              }
               ctx.shadowBlur = 0;
             }
 
             // Head Helm
-            ctx.fillStyle = '#00ff88';
-            ctx.shadowColor = '#00ff88';
+            ctx.fillStyle = state.hasShield ? '#38bdf8' : '#00ff88';
+            ctx.shadowColor = state.hasShield ? '#38bdf8' : '#00ff88';
             ctx.shadowBlur = 12;
             ctx.beginPath();
             ctx.roundRect(
@@ -1238,7 +1306,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
             const r = Math.round(0 + t * 40);
             const g = Math.round(255 - t * 70);
             const b = Math.round(136 + t * 110);
-            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.fillStyle = state.hasShield ? '#0284c7' : `rgb(${r}, ${g}, ${b})`;
 
             const segRadius = isTail ? gridSize / 4 : gridSize / 3;
             ctx.beginPath();
@@ -1252,21 +1320,25 @@ export default function TerminalModal({ onClose, onLaunch }) {
             ctx.fill();
           }
         });
+        ctx.globalAlpha = 1.0;
+      }
+
+      // 💥 SHOCKWAVE BURST (Deflection & Death)
+      if (state.shockwave && state.shockwave.alpha > 0) {
+        ctx.strokeStyle = state.shockwave.color
+          ? `rgba(56, 189, 248, ${state.shockwave.alpha})`
+          : `rgba(0, 255, 136, ${state.shockwave.alpha})`;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(state.shockwave.x, state.shockwave.y, state.shockwave.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        state.shockwave.radius += 7;
+        state.shockwave.alpha -= 0.035;
       }
 
       // 💥 VOXEL DISINTEGRATION DEATH ANIMATION
       if (state.isDying) {
         state.deathFrames++;
-
-        if (state.shockwave && state.shockwave.alpha > 0) {
-          ctx.strokeStyle = `rgba(0, 255, 136, ${state.shockwave.alpha})`;
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.arc(state.shockwave.x, state.shockwave.y, state.shockwave.radius, 0, Math.PI * 2);
-          ctx.stroke();
-          state.shockwave.radius += 7;
-          state.shockwave.alpha -= 0.035;
-        }
 
         state.deathFragments.forEach((f) => {
           f.x += f.vx;

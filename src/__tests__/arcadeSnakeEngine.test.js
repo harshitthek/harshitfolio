@@ -77,4 +77,36 @@ describe('Arcade Snake 60FPS Game Physics Engine', () => {
     expect(isSelfCollision({ x: 5, y: 6 }, snakeBody)).toBe(true);
     expect(isSelfCollision({ x: 6, y: 5 }, snakeBody)).toBe(false);
   });
+
+  it('should absorb lethal collision when shield is active and grant phase immunity', () => {
+    let hasShield = true;
+    let invulnerableUntil = 0;
+    const now = 100000;
+
+    const handleCollision = (currentTime) => {
+      const isInvulnerable = Boolean(invulnerableUntil && invulnerableUntil > currentTime);
+      if (hasShield || isInvulnerable) {
+        if (hasShield) {
+          hasShield = false;
+          invulnerableUntil = currentTime + 2500;
+        }
+        return { fatal: false, invulnerableUntil };
+      }
+      return { fatal: true, invulnerableUntil };
+    };
+
+    // First collision absorbs crash with shield
+    const res1 = handleCollision(now);
+    expect(res1.fatal).toBe(false);
+    expect(hasShield).toBe(false);
+    expect(invulnerableUntil).toBe(102500);
+
+    // Subsequent collision during 2.5s phase immunity is also safe
+    const res2 = handleCollision(now + 1000);
+    expect(res2.fatal).toBe(false);
+
+    // Collision after phase immunity expires without shield is lethal
+    const res3 = handleCollision(now + 3000);
+    expect(res3.fatal).toBe(true);
+  });
 });
