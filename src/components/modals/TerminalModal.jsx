@@ -14,7 +14,6 @@ const VIRTUAL_FS = {
         content: `=====================================================
 HARSHIT SHARMA // ARTIFICIAL INTELLIGENCE & SYSTEMS ENGINEER
 =====================================================
-Institution : University School of Automation & Robotics (USAR, GGSIPU), New Delhi
 Degree      : B.Tech in Artificial Intelligence & Machine Learning (Class of 2029)
 Location    : New Delhi, India
 GitHub      : https://github.com/harshitthek
@@ -38,8 +37,8 @@ Core Technical Arsenal:
         content: JSON.stringify({
           name: "Harshit Sharma",
           role: "AI Engineer & ML Systems Architect",
-          institution: "USAR (GGSIPU), New Delhi",
           degree: "B.Tech AI & ML (Class of 2029)",
+          location: "New Delhi, India",
           email: "codewithharshitsharma@gmail.com",
           github: "https://github.com/harshitthek",
           linkedin: "https://www.linkedin.com/in/devharshitsharma",
@@ -51,7 +50,7 @@ Core Technical Arsenal:
       'id_rsa.pub': {
         type: 'file',
         size: '740 B',
-        content: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHarshitSharmaProductionAIKey2026 harshit@usar-delhi'
+        content: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHarshitSharmaProductionAIKey2026 harshit@neural-core'
       },
       'projects': {
         type: 'dir',
@@ -377,7 +376,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const [history, setHistory] = useState([
     { type: 'sys', text: '╔══════════════════════════════════════════════════════════════════════╗' },
     { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.9.0-PRO]      ║' },
-    { type: 'sys', text: '║     Host: USAR (GGSIPU) Neural Engine · Clearance: LEVEL 5 ROOT      ║' },
+    { type: 'sys', text: '║     Host: Neural AI Engine · Clearance: LEVEL 5 ROOT                 ║' },
     { type: 'sys', text: '╚══════════════════════════════════════════════════════════════════════╝' },
     { type: 'info', text: "Type 'help' for full command suite, or try: 'neofetch', 'ai <query>', 'snake', 'hack', 'top'." },
     { type: 'space', text: '' }
@@ -1400,7 +1399,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
     const cmd = parts[0].toLowerCase();
     const arg = parts.slice(1).join(' ');
 
-    const newHistory = [...history, { type: 'cmd', text: `harshit@usar-delhi ${currentPath} % ${trimmed}` }];
+    const newHistory = [...history, { type: 'cmd', text: `harshit@neural-core ${currentPath} % ${trimmed}` }];
 
     switch (cmd) {
       case 'help':
@@ -1412,7 +1411,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'out', text: '  whoami            - Current session UID, clearance level & host' },
           { type: 'out', text: '  uptime            - Server uptime, active load average & memory stats' },
           { type: 'out', text: '  uname [-a]        - Operating system & Linux kernel architecture' },
-          { type: 'out', text: '  bio / about       - Full personal bio, degree program & university background' },
+          { type: 'out', text: '  bio / about       - Full personal bio, degree program & engineering background' },
           { type: 'out', text: '  skills / stack    - Breakdown of AI/ML, full-stack, and systems proficiencies' },
           { type: 'out', text: `  projects          - List all ${projectsData.length} flagship engineering universes with live links` },
           { type: 'out', text: '  contact / socials - Direct email, GitHub, LinkedIn, and Discord endpoints' },
@@ -1449,10 +1448,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
         newHistory.push({
           type: 'neofetch',
           text: `
-      ██╗  ██╗███████╗      harshit@usar-delhi
-      ██║  ██║██╔════╝      ------------------
+      ██╗  ██╗███████╗      harshit@neural-core
+      ██║  ██║██╔════╝      -------------------
       ███████║███████╗      OS: Oracle Linux Server 9.8 (aarch64)
-      ██╔══██║╚════██║      Host: USAR (GGSIPU) Neural Engine · OCI Ampere A1
+      ██╔══██║╚════██║      Host: Neural AI Engine · OCI Ampere A1
       ██║  ██║███████║      Degree: B.Tech Artificial Intelligence & ML (Class of 2029)
       ╚═╝  ╚═╝╚══════╝      Kernel: Linux 6.12.0-204.92.4.2.el9uek.aarch64
                             Uptime: 43 Days Continuous Server Engineering
@@ -1473,7 +1472,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
       case 'whoami':
         newHistory.push({
           type: 'sys',
-          text: `harshit (uid=0[root] gid=0[root] groups=0[root],4[adm],27[sudo],998[ai-lab])\nRole: AI & Systems Engineer · Class of 2029 (USAR, GGSIPU)\nHost: ygg [Oracle Cloud Infrastructure ARM64 · 144.24.104.31]\nStatus: LEVEL 5 ROOT CLEARANCE ACTIVE`
+          text: `harshit (uid=0[root] gid=0[root] groups=0[root],4[adm],27[sudo],998[ai-lab])\nRole: AI & Systems Engineer · Class of 2029\nHost: ygg [Oracle Cloud Infrastructure ARM64 · 144.24.104.31]\nStatus: LEVEL 5 ROOT CLEARANCE ACTIVE`
         });
         break;
 
@@ -1507,7 +1506,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           .replace(/\$HOST/g, 'ygg (Oracle Cloud VM)')
           .replace(/\$IP/g, '144.24.104.31')
           .replace(/\$DOMAIN/g, 'harshitthek.is-a.dev')
-          .replace(/\$ROLE/g, 'AI & Systems Engineer (USAR Class of 2029)')
+          .replace(/\$ROLE/g, 'AI & Systems Engineer (Class of 2029)')
           .replace(/\$DEGREE/g, 'B.Tech AI & ML');
         newHistory.push({ type: 'out', text: outStr });
         break;
@@ -1557,7 +1556,7 @@ Strict-Transport-Security: max-age=31536000
         newHistory.push(
           { type: 'sys', text: '╔══════════════════════════════════════════════════════════════════════╗' },
           { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.9.0-PRO]      ║' },
-          { type: 'sys', text: '║     Host: USAR (GGSIPU) Neural Engine · Clearance: LEVEL 5 ROOT      ║' },
+          { type: 'sys', text: '║     Host: Neural AI Engine · Clearance: LEVEL 5 ROOT                 ║' },
           { type: 'sys', text: '╚══════════════════════════════════════════════════════════════════════╝' }
         );
         break;
@@ -1567,8 +1566,8 @@ Strict-Transport-Security: max-age=31536000
         newHistory.push(
           { type: 'sys', text: '👤 HARSHIT SHARMA — BIOGRAPHICAL DOSSIER' },
           { type: 'out', text: '  Name: Harshit Sharma' },
-          { type: 'out', text: '  Institution: University School of Automation & Robotics (USAR, GGSIPU), New Delhi' },
           { type: 'out', text: '  Degree: B.Tech in Artificial Intelligence & Machine Learning (Class of 2029)' },
+          { type: 'out', text: '  Location: New Delhi, India' },
           { type: 'out', text: '  Server: Oracle Cloud VM (144.24.104.31) · harshitthek.is-a.dev' },
           { type: 'out', text: '  Focus: Autonomous AI Agent Benchmarks, Dual-Engine ML Regression, BERT Transformers, 3D WebGL' },
           { type: 'out', text: '  GitHub: https://github.com/harshitthek' },
@@ -1731,7 +1730,7 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
           newHistory.push({ type: 'err', text: "Usage: ai <query> (e.g. 'ai why hire Harshit?', 'ai explain AutoValuate AI', 'ai what is Resilient?')" });
         } else {
           const lower = arg.toLowerCase();
-          let ans = "Harshit Sharma specializes in autonomous agent architecture, multi-turn LLM reasoning trees, dual-engine ML regression stacking, and production systems engineering. He studies B.Tech AI & ML at USAR (GGSIPU), New Delhi (Class of 2029).";
+          let ans = "Harshit Sharma specializes in autonomous agent architecture, multi-turn LLM reasoning trees, dual-engine ML regression stacking, and production systems engineering. He studies B.Tech in Artificial Intelligence & Machine Learning (Class of 2029).";
 
           if (lower.includes('why hire') || lower.includes('hire') || lower.includes('recruit')) {
             ans = "🌟 Why hire Harshit:\nHe bridges deep algorithmic foundations (CatBoost/XGBoost, BERT Transformers, TensorFlow Recommenders) with elite production systems engineering (Docker, FastAPI, Three.js WebGL, Fastify). He builds real, production-tested architectures with full test matrices (56 tests in AutoValuate, 47 tests in Resilient).";
@@ -1753,12 +1752,12 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
             ans = "🖥️ Custom Browser Startpage v2.0:\nPrivacy launchpad with 13 premium themes, CSP hardening, and live weather radar telemetry. Live on Netlify at https://dailycosmos.netlify.app/";
           } else if (lower.includes('cosmic') || lower.includes('3d') || lower.includes('webgl') || lower.includes('three')) {
             ans = "🌌 3D Cosmic WebGL Engine:\nGPU-accelerated Three.js r128 visualizer featuring 6-in-1 physics modes (Galaxy Vortex, Solar System, Supernova, Retrowave Sun) running at 60 FPS.";
-          } else if (lower.includes('college') || lower.includes('degree') || lower.includes('usar') || lower.includes('ggsipu') || lower.includes('university') || lower.includes('grad')) {
-            ans = "🎓 Harshit is pursuing his B.Tech in Artificial Intelligence & Machine Learning (Class of 2029) at the University School of Automation & Robotics (USAR, GGSIPU), New Delhi.";
+          } else if (lower.includes('college') || lower.includes('degree') || lower.includes('university') || lower.includes('grad') || lower.includes('education')) {
+            ans = "🎓 Harshit is pursuing his B.Tech in Artificial Intelligence & Machine Learning (Class of 2029) based in New Delhi.";
           } else if (lower.includes('contact') || lower.includes('email') || lower.includes('reach')) {
             ans = "📬 Reach Harshit:\n- Email: codewithharshitsharma@gmail.com\n- GitHub: https://github.com/harshitthek\n- LinkedIn: https://www.linkedin.com/in/devharshitsharma\n- Discord: harshit0";
           } else {
-            ans = `Harshit Sharma is an AI Systems Engineer specializing in Machine Learning, Deep Learning (BERT), LLM Agent sandboxes, and full-stack systems. Class of 2029 at USAR (GGSIPU).`;
+            ans = `Harshit Sharma is an AI Systems Engineer specializing in Machine Learning, Deep Learning (BERT), LLM Agent sandboxes, and full-stack systems (Class of 2029).`;
           }
 
           newHistory.push({ type: 'ai', text: `🧠 AI REASONING SYNTHESIS:\n${ans}` });
@@ -1881,7 +1880,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
     if (e.ctrlKey && (e.key === 'c' || e.key === 'C')) {
       e.preventDefault();
       e.stopPropagation();
-      setHistory(prev => [...prev, { type: 'cmd', text: `harshit@usar-delhi ${currentPath} % ${inputVal}^C` }]);
+      setHistory(prev => [...prev, { type: 'cmd', text: `harshit@neural-core ${currentPath} % ${inputVal}^C` }]);
       setInputVal('');
       setHistoryIndex(-1);
       return;
@@ -2000,7 +1999,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
           </div>
 
           <div className="terminal-title-text" style={{ color: activeThemeObj.primary }}>
-            {matrixActive ? `MATRIX DIGITAL RAIN · 60FPS STREAM · [${activeThemeObj.label}]` : snakeGameActive ? `CYBER-VIPER ARCADE 60FPS · ${activeThemeObj.label}` : `harshit@usar-delhi: ${currentPath} (zsh) · [${activeThemeObj.label}]`}
+            {matrixActive ? `MATRIX DIGITAL RAIN · 60FPS STREAM · [${activeThemeObj.label}]` : snakeGameActive ? `CYBER-VIPER ARCADE 60FPS · ${activeThemeObj.label}` : `harshit@neural-core: ${currentPath} (zsh) · [${activeThemeObj.label}]`}
           </div>
 
           <div className="terminal-header-actions">
@@ -2090,7 +2089,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
 
               <div className="term-input-row">
                 <span className="term-prompt" style={{ color: activeThemeObj.primary }}>
-                  harshit@usar {currentPath} %
+                  harshit@neural-core {currentPath} %
                 </span>
                 <input
                   ref={inputRef}

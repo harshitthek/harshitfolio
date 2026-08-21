@@ -114,7 +114,7 @@ export default function CommandPaletteModal({
         category: 'PORTALS & MODALS',
         icon: '📋',
         title: 'Executive Dossier & Full Resume',
-        subtitle: 'Review education (USAR), tech stack, and background',
+        subtitle: 'Review engineering background, degree, and tech stack',
         shortcut: 'D',
         action: () => onOpenModal('dossier')
       },

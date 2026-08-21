@@ -19,9 +19,9 @@ export default function LoadingScreen({ isActive, targetName, onComplete }) {
     SoundFX.playDeploy();
 
     const steps = [
-      { type: 'cmd', prompt: '$', cmd: `ping harshit-neural.usar.dev -c 3`, delay: 80 },
+      { type: 'cmd', prompt: '$', cmd: `ping harshit-neural.internal -c 3`, delay: 80 },
       { type: 'res', res: `64 bytes from 192.168.1.42: icmp_seq=1 ttl=64 time=9.4ms`, cls: 'ok', delay: 480 },
-      { type: 'cmd', prompt: '$', cmd: `ssh harshit@usar-delhi.internal -p 2244 -i ~/.ssh/ai_key`, delay: 800 },
+      { type: 'cmd', prompt: '$', cmd: `ssh harshit@neural-core.internal -p 2244 -i ~/.ssh/ai_key`, delay: 800 },
       { type: 'res', res: `Authentication verified. Welcome Operator: Harshit Sharma.`, cls: 'ok', delay: 1150 },
       { type: 'cmd', prompt: '$', cmd: `fetch --portal "${targetName}" --pipeline autonomous --cache-hit`, delay: 1400 },
       { type: 'res', res: `Streaming neural weights & repo assets... [████████░░] 84%`, cls: 'res', delay: 1750 },

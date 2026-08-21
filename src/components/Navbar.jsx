@@ -47,7 +47,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
         >
           <span className="brand-dot live"></span>
           <span className="brand-title">HARSHIT<span className="text-glow">.EXE</span></span>
-          <span className="brand-tag">USAR_DELHI</span>
+          <span className="brand-tag">NEURAL_AI</span>
         </button>
 
         {/* AI Audio-Reactive Waveform Visualizer */}

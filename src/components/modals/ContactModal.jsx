@@ -84,7 +84,7 @@ export default function ContactModal({ onClose }) {
                 <div className="comms-item">
                   <div className="comms-info">
                     <span className="comms-lbl">BASE LOCATION</span>
-                    <span className="comms-val">New Delhi, India (USAR, GGSIPU)</span>
+                    <span className="comms-val">New Delhi, India</span>
                   </div>
                 </div>
 

@@ -4,7 +4,7 @@ Site: https://harshitthek.github.io/harshitfolio/
 GitHub: https://github.com/harshitthek
 LinkedIn: https://www.linkedin.com/in/devharshitsharma
 Email: codewithharshitsharma@gmail.com
-Education: B.Tech Artificial Intelligence & Machine Learning, USAR (GGSIPU), New Delhi, India
+Education: B.Tech Artificial Intelligence & Machine Learning (Class of 2029)
 Location: New Delhi, India
 
 /* THANKS */

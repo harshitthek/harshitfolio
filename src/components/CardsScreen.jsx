@@ -269,7 +269,7 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
       {/* Footer System Dossier Strip */}
       <div className="cards-footer-strip">
         <div className="footer-strip-content">
-          <span>HARSHIT SHARMA · B.TECH AI & ML · USAR (GGSIPU) NEW DELHI</span>
+          <span>HARSHIT SHARMA · B.TECH AI & ML · CLASS OF 2029 · NEW DELHI</span>
           <span className="strip-divider">·</span>
           <span>EMAIL: <a href="mailto:codewithharshitsharma@gmail.com" className="email-link">codewithharshitsharma@gmail.com</a></span>
           <span className="strip-divider">·</span>

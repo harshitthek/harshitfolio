@@ -3,7 +3,7 @@ export const dossierData = {
     name: "Harshit Sharma",
     callsign: "AGENT_HARSHIT // HARSHIT.EXE",
     role: "AI & Machine Learning Engineer · Full-Stack Systems Architect",
-    institution: "University School of Automation & Robotics (USAR), GGSIPU",
+    institution: "B.Tech in Artificial Intelligence & Machine Learning",
     degree: "B.Tech in Artificial Intelligence & Machine Learning",
     duration: "2025 – 2029",
     location: "New Delhi, India",
@@ -38,8 +38,8 @@ export const dossierData = {
     {
       period: "2023 – 2024",
       role: "Full-Stack & Systems Engineering Specialist",
-      organization: "University School of Automation & Robotics (USAR)",
-      badge: "RESEARCH & ACADEMICS",
+      organization: "Neural Systems & Web Engineering",
+      badge: "RESEARCH & DEV",
       description: "Engineered scalable web applications, Canvas 2D/3D graphics engines, and native Chrome Manifest V3 extensions.",
       highlights: [
         "Created ShieldBlock MV3: Privacy protection extension with Declarative Net Request rules and 0ms latency impact.",
@@ -53,8 +53,8 @@ export const dossierData = {
     {
       degree: "Bachelor of Technology (B.Tech)",
       major: "Artificial Intelligence & Machine Learning (AI & ML)",
-      institution: "University School of Automation & Robotics (USAR)",
-      university: "Guru Gobind Singh Indraprastha University (GGSIPU), East Delhi Campus",
+      institution: "Bachelor of Technology in AI & Machine Learning",
+      university: "Class of 2029 · New Delhi, India",
       period: "2025 – 2029",
       status: "Undergraduate (Class of 2029)",
       coursework: [
@@ -102,7 +102,7 @@ export const dossierData = {
     },
     {
       title: "Algorithmic Problem Solving & Data Structures",
-      issuer: "USAR Competitive Engineering",
+      issuer: "Competitive Engineering Guild",
       year: "2023",
       tag: "ALGORITHMS"
     }

@@ -5,7 +5,7 @@ const SCRIPT_SEQUENCE = [
     cmd: 'whoami',
     outputs: [
       { tag: 'USER', text: 'Harshit Sharma // Creator & Thinker', color: 'green' },
-      { tag: 'ACAD', text: 'B.Tech AI & ML @ USAR (GGSIPU), New Delhi', color: 'cyan' }
+      { tag: 'ACAD', text: 'B.Tech AI & ML (Class of 2029), New Delhi', color: 'cyan' }
     ]
   },
   {

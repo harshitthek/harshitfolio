@@ -177,7 +177,7 @@ export default function VideoScreen({ isActive, onComplete }) {
           <div className="video-brand-pill">
             <span className="brand-dot live"></span>
             <span className="brand-title">HARSHIT<span className="text-glow">.EXE</span></span>
-            <span className="brand-badge">USAR_DELHI</span>
+            <span className="brand-badge">NEURAL_AI</span>
           </div>
         </div>
 
@@ -254,7 +254,7 @@ export default function VideoScreen({ isActive, onComplete }) {
               <span className="dot-sep">•</span>
               <span>ARTIFICIAL INTELLIGENCE</span>
               <span className="dot-sep">•</span>
-              <span>USAR (GGSIPU)</span>
+              <span>CLASS OF 2029</span>
             </div>
 
             {/* Micro Equalizer Waveform */}

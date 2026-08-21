@@ -25,7 +25,7 @@
 
 ## ⚡ Transmission Overview
 
-**HARSHIT.EXE** is an operational, next-generation multiverse developer interface. Designed as a fictional AI mission control command terminal, it immerses recruiters, engineers, and visitors in a cinematic experience while transmitting real-world production engineering work by **Harshit Sharma** — AI & Machine Learning engineer at USAR (GGSIPU), New Delhi.
+**HARSHIT.EXE** is an operational, next-generation multiverse developer interface. Designed as a fictional AI mission control command terminal, it immerses recruiters, engineers, and visitors in a cinematic experience while transmitting real-world production engineering work by **Harshit Sharma** — AI & Machine Learning Engineer (Class of 2029).
 
 Every component serves a purpose. Every animation is hardware-accelerated. Every interaction features procedural acoustic feedback.
 
@@ -185,7 +185,7 @@ Visit `http://localhost:5173` in your browser. (Chrome, Edge, or Firefox recomme
 <div align="center">
 
 **Harshit Sharma**  
-*AI & Machine Learning Student | USAR (GGSIPU), New Delhi*  
+*AI & Machine Learning Engineer (Class of 2029) · New Delhi, India*  
 *Specializing in Agentic Workflows, Machine Learning Engines, and Real-Time Systems*
 
 📧 [codewithharshitsharma@gmail.com](mailto:codewithharshitsharma@gmail.com) &nbsp;·&nbsp;

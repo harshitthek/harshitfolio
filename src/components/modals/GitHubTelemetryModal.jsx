@@ -13,7 +13,7 @@ const FALLBACK_PROFILE = {
   avatar_url: 'https://avatars.githubusercontent.com/u/149952541?v=4',
   html_url: 'https://github.com/harshitthek',
   bio: 'AI & Machine Learning Engineer · Autonomous Agents · Production Systems',
-  location: 'New Delhi, India (USAR, GGSIPU)',
+  location: 'New Delhi, India',
   public_repos: 24,
   followers: 45,
   following: 38,

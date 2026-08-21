@@ -3,7 +3,7 @@ import { SoundFX } from './SoundFX';
 
 const TELEMETRY_STEPS = [
   { time: '0.1s', text: 'INITIALIZING NEURAL UPLINK // 10.0 Gbps', status: 'OK' },
-  { time: '0.5s', text: 'AGENT IDENTITY VERIFIED: HARSHIT SHARMA [USAR_DELHI]', status: 'AUTH' },
+  { time: '0.5s', text: 'AGENT IDENTITY VERIFIED: HARSHIT SHARMA [SYS_AUTH]', status: 'AUTH' },
   { time: '1.0s', text: 'DECRYPTING CLASSIFIED PORTFOLIO DATABASE [LEVEL-9]', status: 'DONE' },
   { time: '1.6s', text: 'INITIALIZING 8 MULTIVERSE PORTALS // ALL SYSTEMS GO', status: 'READY' }
 ];
@@ -149,7 +149,7 @@ export default function IntermediateScreen({ isActive, onComplete }) {
         </div>
 
         <div className="load-sublabel">
-          AUTHENTICATED AGENT: HARSHIT SHARMA &bull; ARTIFICIAL INTELLIGENCE &bull; USAR (GGSIPU)
+          AUTHENTICATED AGENT: HARSHIT SHARMA &bull; ARTIFICIAL INTELLIGENCE &bull; CLASS OF 2029
         </div>
       </div>
     </div>
