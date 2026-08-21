@@ -73,7 +73,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
             <button
               className="hud-quick-btn"
               onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('terminal'); }}
-              title="Open Interactive Hacker Shell"
+              title="Open Interactive Hacker Shell (Press T)"
             >
               <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
               TERMINAL
@@ -81,7 +81,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
             <button
               className="hud-quick-btn"
               onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('ml-sim'); }}
-              title="Open Live ML Valuation Simulator"
+              title="Open Live ML Valuation Simulator (Press M)"
             >
               <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
               ML SIM
@@ -89,7 +89,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
             <button
               className="hud-quick-btn"
               onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('code-inspect'); }}
-              title="Inspect Production Source Code"
+              title="Inspect Production Source Code (Press C)"
             >
               <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
               CODE
@@ -97,7 +97,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
             <button
               className="hud-quick-btn"
               onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('architecture'); }}
-              title="View Multi-Agent Architecture Diagrams"
+              title="View Multi-Agent Architecture Diagrams (Press A)"
             >
               <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
               ARCH
@@ -105,7 +105,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
             <button
               className="hud-quick-btn"
               onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('dossier'); }}
-              title="View Personnel Dossier & Skills"
+              title="View Personnel Dossier & Skills (Press D)"
             >
               <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               DOSSIER
@@ -115,7 +115,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
               onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('github'); }}
               title="View Real-Time GitHub Telemetry & Activity Stream (Press G)"
             >
-              <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+              <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3" fill="none"/><circle cx="6" cy="18" r="3" fill="none"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
               GIT INTEL
             </button>
           </div>

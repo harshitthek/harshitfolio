@@ -6397,25 +6397,272 @@ html, body, #root {
   }
   .footer-hint-group {
     display: none;
-  }
+  }.brand-badge-btn {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 136, 0.35);
+  border-radius: 2px;
+  height: 28px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--white);
+  font-family: 'Space Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 1.8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.brand-badge-btn:hover {
+  background: var(--gd);
+  border-color: var(--g);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
 }
 
-/* ── GITHUB TELEMETRY MODAL ── */
-.gh-telemetry-modal {
-  max-width: 920px;
-  width: 95vw;
+.brand-dot.live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--g);
+  box-shadow: 0 0 8px var(--g);
+  animation: pulseDot 1.4s ease infinite;
 }
 
-.gh-live-status-row {
+.brand-title {
+  font-weight: 700;
+}
+.text-glow {
+  color: var(--g);
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+}
+
+.brand-tag {
+  font-size: 8.5px;
+  background: rgba(0, 255, 136, 0.12);
+  color: var(--g);
+  padding: 2px 5px;
+  border-radius: 2px;
+  letter-spacing: 1px;
+}
+
+/* ── AI Audio-Reactive Waveform in Navbar ── */
+.ai-waveform-hud {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ai-waveform-hud .bar {
+  display: inline-block;
+  width: 3px;
+  height: 8px;
+  background: var(--dim);
+  border-radius: 1px;
+  transition: all 0.15s ease;
+}
+.ai-waveform-hud.active .bar {
+  background: var(--g);
+  box-shadow: 0 0 6px var(--g);
+}
+.ai-waveform-hud.active .bar.b1 { animation: wavePulse 0.4s ease infinite alternate; }
+.ai-waveform-hud.active .bar.b2 { animation: wavePulse 0.55s ease infinite alternate 0.1s; }
+.ai-waveform-hud.active .bar.b3 { animation: wavePulse 0.35s ease infinite alternate 0.2s; }
+.ai-waveform-hud.active .bar.b4 { animation: wavePulse 0.6s ease infinite alternate 0.05s; }
+.ai-waveform-hud.active .bar.b5 { animation: wavePulse 0.45s ease infinite alternate 0.15s; }
+
+@keyframes wavePulse {
+  0% { height: 4px; }
+  100% { height: 18px; }
+}
+
+.waveform-label {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: var(--dim-light);
+  margin-left: 6px;
+}
+.ai-waveform-hud.active .waveform-label {
+  color: var(--g);
+  font-weight: 700;
+}
+
+.nav-center {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 2px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
-.gh-pulse-dot {
-  width: 8px;
-  height: 8px;
+.quick-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.hud-quick-btn {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--white);
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 1.2px;
+  height: 28px;
+  padding: 0 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hud-quick-btn.highlight {
+  border-color: rgba(0, 255, 136, 0.35);
+  background: rgba(0, 255, 136, 0.08);
+  color: var(--g);
+}
+
+.hud-quick-btn:hover {
+  border-color: var(--gb);
+  color: var(--g);
+  background: var(--gd);
+  transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Permanent Top Social & Comms Buttons (Zero Emojis, Pure SVGs) */
+.hud-social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: rgba(10, 14, 12, 0.85);
+  border: 1px solid rgba(0, 255, 136, 0.22);
+  color: #cbd5e1;
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hud-social-btn:hover {
+  border-color: var(--g);
+  color: var(--g);
+  background: rgba(0, 255, 136, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
+}
+.hud-social-btn.git:hover {
+  border-color: var(--g);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.35);
+}
+.hud-social-btn.linkedin {
+  border-color: rgba(56, 189, 248, 0.25);
+  color: #bae6fd;
+}
+.hud-social-btn.linkedin:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(56, 189, 248, 0.1);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+}
+.hud-social-btn.comms {
+  background: rgba(0, 255, 136, 0.08);
+  border-color: rgba(0, 255, 136, 0.35);
+  color: var(--g);
+}
+.hud-social-btn.comms:hover {
+  background: var(--g);
+  color: #000;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+}
+
+.social-svg-icon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.toggle-svg-icon {
+  width: 11px;
+  height: 11px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.nav-svg-icon {
+  width: 11px;
+  height: 11px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.nav-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+.hud-toggle-btn {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--gb);
+  color: var(--g);
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 1.2px;
+  height: 28px;
+  padding: 0 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.hud-toggle-btn:hover {
+  background: var(--gd);
+}
+.hud-toggle-btn.muted {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--dim);
+}
   border-radius: 50%;
 }
 
