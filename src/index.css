@@ -3029,23 +3029,45 @@ body::before {
   color: var(--dim-light);
   width: 32px;
   height: 32px;
+  border-radius: 3px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .modal-close-btn:hover {
   background: rgba(255, 77, 77, 0.2);
   border-color: var(--red);
   color: var(--red);
+  transform: rotate(90deg);
+  box-shadow: 0 0 12px rgba(255, 77, 77, 0.4);
 }
 
 .modal-body {
   padding: 1.8rem;
   overflow-y: auto;
   flex: 1;
+}
+
+/* Glowing Neon Custom Scrollbar */
+.custom-scroll::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.4);
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--g), var(--cyan));
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--g);
+  box-shadow: 0 0 12px var(--g);
 }
 
 .modal-footer {

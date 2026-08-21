@@ -127,6 +127,8 @@ export default function ContactModal({ onClose }) {
                     id="user-name"
                     type="text"
                     required
+                    maxLength={100}
+                    autoComplete="name"
                     placeholder="e.g. Alex Mercer"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -139,6 +141,8 @@ export default function ContactModal({ onClose }) {
                     id="user-email"
                     type="email"
                     required
+                    maxLength={120}
+                    autoComplete="email"
                     placeholder="alex@company.com"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -151,6 +155,7 @@ export default function ContactModal({ onClose }) {
                     id="user-msg"
                     rows="4"
                     required
+                    maxLength={3000}
                     placeholder="Hi Harshit, I'd like to connect on an AI project..."
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
