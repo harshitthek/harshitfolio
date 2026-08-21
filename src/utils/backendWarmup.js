@@ -36,6 +36,7 @@ export async function warmupAllBackends() {
       const cleanBase = baseUrl.replace(/\/$/, '');
       const pingUrl = `${cleanBase}/api/v1/demo/estimate?vehicle_type=bike&brand=Royal%20Enfield&power=350&kms_driven=15000&age=3&owner_rank=1`;
 
+      // Configure AbortController with 25s timeout to prevent hanging connections
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s spinup window
 
