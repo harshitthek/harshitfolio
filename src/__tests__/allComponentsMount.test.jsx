@@ -2,13 +2,9 @@ import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import CardsScreen from '../components/CardsScreen';
 import CyberTerminalWing from '../components/CyberTerminalWing';
-import ErrorBoundary from '../components/ErrorBoundary';
 import IntermediateScreen from '../components/IntermediateScreen';
 import LoadingScreen from '../components/LoadingScreen';
 import MissionScreen from '../components/MissionScreen';
-import Navbar from '../components/Navbar';
-import VideoScreen from '../components/VideoScreen';
-import { VoiceProvider } from '../components/VoiceContext';
 import ArchitectureModal from '../components/modals/ArchitectureModal';
 import CodeInspectorModal from '../components/modals/CodeInspectorModal';
 import CommandPaletteModal from '../components/modals/CommandPaletteModal';
@@ -17,6 +13,9 @@ import DossierModal from '../components/modals/DossierModal';
 import GitHubTelemetryModal from '../components/modals/GitHubTelemetryModal';
 import MLSimulatorModal from '../components/modals/MLSimulatorModal';
 import ProjectModal from '../components/modals/ProjectModal';
+import Navbar from '../components/Navbar';
+import VideoScreen from '../components/VideoScreen';
+import { VoiceProvider } from '../components/VoiceContext';
 
 // Mock Canvas 2D Context
 HTMLCanvasElement.prototype.getContext = () => ({
@@ -88,11 +87,7 @@ describe('Full Component Suite Smoke & ReferenceError Integrity Test', () => {
 
     const { container: navContainer } = render(
       <VoiceProvider>
-        <Navbar
-          activeScreen="s-mission"
-          onJumpToScreen={vi.fn()}
-          onOpenModal={vi.fn()}
-        />
+        <Navbar activeScreen="s-mission" onJumpToScreen={vi.fn()} onOpenModal={vi.fn()} />
       </VoiceProvider>
     );
     expect(navContainer.querySelector('.cyber-hud-nav')).toBeTruthy();
@@ -104,7 +99,14 @@ describe('Full Component Suite Smoke & ReferenceError Integrity Test', () => {
       title: 'Bike Valuation',
       desc: 'Machine learning model',
       tags: ['Python', 'React'],
-      stats: { stat1: '95%', stat1Lbl: 'Accuracy', stat2: '<10ms', stat2Lbl: 'Latency', stat3: '2026', stat3Lbl: 'Year' }
+      stats: {
+        stat1: '95%',
+        stat1Lbl: 'Accuracy',
+        stat2: '<10ms',
+        stat2Lbl: 'Latency',
+        stat3: '2026',
+        stat3Lbl: 'Year'
+      }
     };
 
     render(<ArchitectureModal onClose={vi.fn()} />);
@@ -116,7 +118,12 @@ describe('Full Component Suite Smoke & ReferenceError Integrity Test', () => {
     render(<ProjectModal card={dummyCard} onClose={vi.fn()} onLaunch={vi.fn()} />);
     render(
       <VoiceProvider>
-        <CommandPaletteModal isOpen={true} onClose={vi.fn()} onJumpToScreen={vi.fn()} onOpenModal={vi.fn()} />
+        <CommandPaletteModal
+          isOpen={true}
+          onClose={vi.fn()}
+          onJumpToScreen={vi.fn()}
+          onOpenModal={vi.fn()}
+        />
       </VoiceProvider>
     );
   });
