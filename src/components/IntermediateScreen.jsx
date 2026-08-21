@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SoundFX } from './SoundFX';
 
 const TELEMETRY_STEPS = [
@@ -43,7 +43,12 @@ export default function IntermediateScreen({ isActive, onComplete }) {
 
       // Random cycling hex hash until 100%
       if (currentPct < 100) {
-        const randomHex = '0x' + Math.floor(Math.random() * 0xFFFFFF).toString(16).toUpperCase().padStart(6, '0');
+        const randomHex =
+          '0x' +
+          Math.floor(Math.random() * 0xffffff)
+            .toString(16)
+            .toUpperCase()
+            .padStart(6, '0');
         setHexCode(randomHex);
       } else {
         setHexCode('0x00FF88 // DECRYPTED');
@@ -102,7 +107,7 @@ export default function IntermediateScreen({ isActive, onComplete }) {
         {/* Top Status Pill */}
         <div className="intermediate-badge">
           <span className="badge-pulse-dot"></span>
-          <span>NEURAL HANDSHAKE IN PROGRESS // DECRYPTING DATASTREAM</span>
+          <span>NEURAL HANDSHAKE IN PROGRESS {/* DECRYPTING DATASTREAM */}</span>
         </div>
 
         {/* Glitch Glyph */}
@@ -127,23 +132,18 @@ export default function IntermediateScreen({ isActive, onComplete }) {
           </div>
 
           <div className="intermediate-progress-track">
-            <div
-              className="intermediate-progress-fill"
-              style={{ width: `${progress}%` }}
-            ></div>
+            <div className="intermediate-progress-fill" style={{ width: `${progress}%` }}></div>
           </div>
         </div>
 
         {/* Streaming Neural Telemetry Logs */}
         <div className="intermediate-telemetry-box">
-          {TELEMETRY_STEPS.slice(0, logIndex + 1).map((step, idx) => (
-            <div key={idx} className="telemetry-log-row">
+          {TELEMETRY_STEPS.slice(0, logIndex + 1).map((step) => (
+            <div key={`step-${step.time}-${step.status}`} className="telemetry-log-row">
               <span className="log-time">[{step.time}]</span>
               <span className="log-arrow">&gt;&gt;</span>
               <span className="log-text">{step.text}</span>
-              <span className={`log-status ${step.status.toLowerCase()}`}>
-                [{step.status}]
-              </span>
+              <span className={`log-status ${step.status.toLowerCase()}`}>[{step.status}]</span>
             </div>
           ))}
         </div>

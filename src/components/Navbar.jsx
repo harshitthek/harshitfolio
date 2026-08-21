@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useVoice } from './VoiceContext';
+import { useEffect, useState } from 'react';
 import { SoundFX } from './SoundFX';
+import { useVoice } from './VoiceContext';
 
 export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
   const { voiceEnabled, isSpeaking, toggleVoice } = useVoice();
@@ -38,6 +38,7 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
       {/* Brand Identity & AI Voice Transceiver */}
       <div className="nav-left">
         <button
+          type="button"
           className="brand-badge-btn"
           onClick={() => {
             if (sfxOn) SoundFX.playClick();
@@ -46,7 +47,9 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
           title="Go to Multiverse Hub"
         >
           <span className="brand-dot live"></span>
-          <span className="brand-title">HARSHIT<span className="text-glow">.EXE</span></span>
+          <span className="brand-title">
+            HARSHIT<span className="text-glow">.EXE</span>
+          </span>
           <span className="brand-tag">NEURAL_AI</span>
         </button>
 
@@ -55,14 +58,22 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
           type="button"
           className={`ai-waveform-hud ${isSpeaking ? 'active' : ''} ${!voiceEnabled ? 'muted' : ''}`}
           onClick={handleToggleVoice}
-          title={voiceEnabled ? (isSpeaking ? 'AI Voice Transmitting — Click to Mute' : 'AI Voice Standby — Click to Mute') : 'AI Voice Muted — Click to Enable'}
+          title={
+            voiceEnabled
+              ? isSpeaking
+                ? 'AI Voice Transmitting — Click to Mute'
+                : 'AI Voice Standby — Click to Mute'
+              : 'AI Voice Muted — Click to Enable'
+          }
           style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
         >
           <span className="bar b1"></span>
           <span className="bar b2"></span>
           <span className="bar b3"></span>
           <span className="bar b4"></span>
-          <span className="waveform-label">{!voiceEnabled ? 'AI_MUTED' : isSpeaking ? 'AI_TRANSMITTING' : 'AI_STANDBY'}</span>
+          <span className="waveform-label">
+            {!voiceEnabled ? 'AI_MUTED' : isSpeaking ? 'AI_TRANSMITTING' : 'AI_STANDBY'}
+          </span>
         </button>
       </div>
 
@@ -71,51 +82,134 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
         {isCardsScreen && (
           <div className="quick-modal-actions">
             <button
+              type="button"
               className="hud-quick-btn"
-              onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('terminal'); }}
+              onClick={() => {
+                if (sfxOn) SoundFX.playClick();
+                onOpenModal('terminal');
+              }}
               title="Open Interactive Hacker Shell (Press T)"
             >
-              <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              <svg
+                className="nav-svg-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="4 17 10 11 4 5" />
+                <line x1="12" y1="19" x2="20" y2="19" />
+              </svg>
               TERMINAL
             </button>
             <button
+              type="button"
               className="hud-quick-btn"
-              onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('ml-sim'); }}
+              onClick={() => {
+                if (sfxOn) SoundFX.playClick();
+                onOpenModal('ml-sim');
+              }}
               title="Open Live ML Valuation Simulator (Press M)"
             >
-              <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+              <svg
+                className="nav-svg-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8 12h8" />
+              </svg>
               ML SIM
             </button>
             <button
+              type="button"
               className="hud-quick-btn"
-              onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('code-inspect'); }}
+              onClick={() => {
+                if (sfxOn) SoundFX.playClick();
+                onOpenModal('code-inspect');
+              }}
               title="Inspect Production Source Code (Press C)"
             >
-              <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <svg
+                className="nav-svg-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg>
               CODE
             </button>
             <button
+              type="button"
               className="hud-quick-btn"
-              onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('architecture'); }}
+              onClick={() => {
+                if (sfxOn) SoundFX.playClick();
+                onOpenModal('architecture');
+              }}
               title="View Multi-Agent Architecture Diagrams (Press A)"
             >
-              <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+              <svg
+                className="nav-svg-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                <polyline points="2 17 12 22 22 17" />
+                <polyline points="2 12 12 17 22 12" />
+              </svg>
               ARCH
             </button>
             <button
+              type="button"
               className="hud-quick-btn"
-              onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('dossier'); }}
+              onClick={() => {
+                if (sfxOn) SoundFX.playClick();
+                onOpenModal('dossier');
+              }}
               title="View Personnel Dossier & Skills (Press D)"
             >
-              <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <svg
+                className="nav-svg-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
               DOSSIER
             </button>
             <button
+              type="button"
               className="hud-quick-btn highlight"
-              onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('github'); }}
+              onClick={() => {
+                if (sfxOn) SoundFX.playClick();
+                onOpenModal('github');
+              }}
               title="View Real-Time GitHub Telemetry & Activity Stream (Press G)"
             >
-              <svg className="nav-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3" fill="none"/><circle cx="6" cy="18" r="3" fill="none"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+              <svg
+                className="nav-svg-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="6" y1="3" x2="6" y2="15" />
+                <circle cx="18" cy="6" r="3" fill="none" />
+                <circle cx="6" cy="18" r="3" fill="none" />
+                <path d="M18 9a9 9 0 0 1-9 9" />
+              </svg>
               GIT INTEL
             </button>
           </div>
@@ -131,10 +225,12 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
           rel="noopener noreferrer"
           className="hud-social-btn git"
           title="Open Harshit's GitHub (@harshitthek)"
-          onClick={() => { if (sfxOn) SoundFX.playClick(); }}
+          onClick={() => {
+            if (sfxOn) SoundFX.playClick();
+          }}
         >
           <svg className="social-svg-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
           </svg>
           <span className="social-text">GITHUB</span>
         </a>
@@ -146,10 +242,12 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
           rel="noopener noreferrer"
           className="hud-social-btn linkedin"
           title="Connect with Harshit on LinkedIn"
-          onClick={() => { if (sfxOn) SoundFX.playClick(); }}
+          onClick={() => {
+            if (sfxOn) SoundFX.playClick();
+          }}
         >
           <svg className="social-svg-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
           </svg>
           <span className="social-text">LINKEDIN</span>
         </a>
@@ -157,12 +255,24 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
         {/* Permanent Direct Comms Modal */}
         {onOpenModal && (
           <button
+            type="button"
             className="hud-social-btn comms"
-            onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('contact'); }}
+            onClick={() => {
+              if (sfxOn) SoundFX.playClick();
+              onOpenModal('contact');
+            }}
             title="Open Direct Comms / Email Channel"
           >
-            <svg className="social-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            <svg
+              className="social-svg-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
             <span className="social-text">COMMS</span>
           </button>
@@ -171,13 +281,25 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
         {/* Global Cyber Command Palette Button */}
         {onOpenModal && (
           <button
+            type="button"
             className="hud-social-btn cmd-trigger"
-            onClick={() => { if (sfxOn) SoundFX.playClick(); onOpenModal('cmd-palette'); }}
+            onClick={() => {
+              if (sfxOn) SoundFX.playClick();
+              onOpenModal('cmd-palette');
+            }}
             title="Open Cyber Command Palette (Ctrl+K or /)"
           >
-            <svg className="social-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <svg
+              className="social-svg-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <span className="social-text">⌘K</span>
           </button>
@@ -187,21 +309,46 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
 
         {/* Sound Effects Toggle */}
         <button
+          type="button"
           className={`hud-toggle-btn ${!sfxOn ? 'muted' : ''}`}
           onClick={handleToggleSFX}
           title={sfxOn ? 'Disable Sound Effects' : 'Enable Sound Effects'}
           aria-label="Toggle SFX"
         >
           {sfxOn ? (
-            <svg className="toggle-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <svg
+              className="toggle-svg-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
           ) : (
-            <svg className="toggle-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+            <svg
+              className="toggle-svg-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <line x1="23" y1="9" x2="17" y2="15" />
+              <line x1="17" y1="9" x2="23" y2="15" />
+            </svg>
           )}
           <span>SFX</span>
         </button>
 
         {/* AI Voice Toggle */}
         <button
+          type="button"
           className={`hud-toggle-btn voice ${!voiceEnabled ? 'muted' : ''}`}
           onClick={handleToggleVoice}
           title={voiceEnabled ? 'Mute AI Voice Narration' : 'Enable AI Voice Narration'}

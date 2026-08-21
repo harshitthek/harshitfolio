@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { SoundFX } from './SoundFX';
 
 const VoiceContext = createContext();
@@ -106,13 +106,14 @@ export function VoiceProvider({ children }) {
 
           const voices = window.speechSynthesis.getVoices();
           if (voices && voices.length > 0) {
-            const preferredVoice = voices.find(v =>
-              v.name.toLowerCase().includes('daniel') ||
-              v.name.toLowerCase().includes('alex') ||
-              v.name.toLowerCase().includes('google uk') ||
-              v.name.toLowerCase().includes('natural') ||
-              v.name.toLowerCase().includes('male') ||
-              v.lang.startsWith('en')
+            const preferredVoice = voices.find(
+              (v) =>
+                v.name.toLowerCase().includes('daniel') ||
+                v.name.toLowerCase().includes('alex') ||
+                v.name.toLowerCase().includes('google uk') ||
+                v.name.toLowerCase().includes('natural') ||
+                v.name.toLowerCase().includes('male') ||
+                v.lang.startsWith('en')
             );
 
             if (preferredVoice) {
@@ -122,7 +123,9 @@ export function VoiceProvider({ children }) {
 
           utterance.onstart = () => {
             if (!voiceEnabledRef.current) {
-              try { window.speechSynthesis.cancel(); } catch {}
+              try {
+                window.speechSynthesis.cancel();
+              } catch {}
               setIsSpeaking(false);
               setCurrentUtterance('');
               return;
@@ -169,13 +172,11 @@ export function VoiceProvider({ children }) {
             setIsSpeaking(false);
             if (keepAliveIntervalRef.current) clearInterval(keepAliveIntervalRef.current);
           }, estimatedDuration);
-
         } catch (innerErr) {
           console.warn('[VoiceContext] Dispatch error:', innerErr);
           setIsSpeaking(false);
         }
       }, 25);
-
     } catch (err) {
       console.warn('[VoiceContext] Speech error:', err);
       setIsSpeaking(false);
@@ -192,7 +193,7 @@ export function VoiceProvider({ children }) {
       } catch {}
     }
 
-    setVoiceEnabled(prev => {
+    setVoiceEnabled((prev) => {
       const next = !prev;
       voiceEnabledRef.current = next;
 
@@ -210,7 +211,7 @@ export function VoiceProvider({ children }) {
         SoundFX.playVoiceOn();
         // Play clear voice confirmation when unmuting
         setTimeout(() => {
-          speak("AI voice telemetry activated.");
+          speak('AI voice telemetry activated.');
         }, 120);
       }
       return next;
@@ -229,7 +230,9 @@ export function VoiceProvider({ children }) {
   }, []);
 
   return (
-    <VoiceContext.Provider value={{ voiceEnabled, isSpeaking, currentUtterance, speak, toggleVoice, stopSpeaking }}>
+    <VoiceContext.Provider
+      value={{ voiceEnabled, isSpeaking, currentUtterance, speak, toggleVoice, stopSpeaking }}
+    >
       {children}
     </VoiceContext.Provider>
   );

@@ -1,26 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useVoice } from './components/VoiceContext';
-import { SoundFX } from './components/SoundFX';
-import { projectsData } from './data/projectsData';
-
-import VideoScreen from './components/VideoScreen';
-import IntermediateScreen from './components/IntermediateScreen';
-import MissionScreen from './components/MissionScreen';
+import { useCallback, useEffect, useState } from 'react';
 import CardsScreen from './components/CardsScreen';
+import CyberCursor from './components/CyberCursor';
+import IntermediateScreen from './components/IntermediateScreen';
 import LoadingScreen from './components/LoadingScreen';
+import MissionScreen from './components/MissionScreen';
+import ArchitectureModal from './components/modals/ArchitectureModal';
+import CodeInspectorModal from './components/modals/CodeInspectorModal';
+import CommandPaletteModal from './components/modals/CommandPaletteModal';
+import ContactModal from './components/modals/ContactModal';
+import DossierModal from './components/modals/DossierModal';
+import GitHubTelemetryModal from './components/modals/GitHubTelemetryModal';
+import MLSimulatorModal from './components/modals/MLSimulatorModal';
+import ProjectModal from './components/modals/ProjectModal';
+import TerminalModal from './components/modals/TerminalModal';
 import Navbar from './components/Navbar';
 import NeuralBackground from './components/NeuralBackground';
-
-import ProjectModal from './components/modals/ProjectModal';
-import MLSimulatorModal from './components/modals/MLSimulatorModal';
-import CodeInspectorModal from './components/modals/CodeInspectorModal';
-import ArchitectureModal from './components/modals/ArchitectureModal';
-import TerminalModal from './components/modals/TerminalModal';
-import DossierModal from './components/modals/DossierModal';
-import ContactModal from './components/modals/ContactModal';
-import GitHubTelemetryModal from './components/modals/GitHubTelemetryModal';
-import CommandPaletteModal from './components/modals/CommandPaletteModal';
-import CyberCursor from './components/CyberCursor';
+import { SoundFX } from './components/SoundFX';
+import VideoScreen from './components/VideoScreen';
+import { useVoice } from './components/VoiceContext';
+import { projectsData } from './data/projectsData';
 import { warmupAllBackends } from './utils/backendWarmup';
 
 export default function App() {
@@ -39,31 +37,36 @@ export default function App() {
   // Screen 1 Video -> Screen 2 Intermediate
   const handleVideoComplete = useCallback(() => {
     setCurrentScreen('s-intermediate');
-    speak("Loading mission database. Stand by.");
+    speak('Loading mission database. Stand by.');
   }, [speak]);
 
   // Screen 2 Intermediate -> Screen 3 Mission (called only AFTER 100% is reached and flash completes)
   const handleIntermediateComplete = useCallback(() => {
     setCurrentScreen('s-mission');
-    speak(`Incoming classified mission. Welcome to Harshit Sharma's portfolio. Thirteen neural universes await. Choose wisely.`);
+    speak(
+      `Incoming classified mission. Welcome to Harshit Sharma's portfolio. Thirteen neural universes await. Choose wisely.`
+    );
   }, [speak]);
 
   // Screen 3 Mission -> Cards
   const handleAcceptMission = useCallback(() => {
     setCurrentScreen('s-cards');
-    speak("Neural multiverse generator ready. Pick an engineering portal for Harshit.");
+    speak('Neural multiverse generator ready. Pick an engineering portal for Harshit.');
   }, [speak]);
 
   // Screen 4 Cards -> Loading Deploy
-  const launchPortfolio = useCallback((name, url) => {
-    setDeployTarget({ name, url });
-    setCurrentScreen('s-loading');
-    speak(`Deploying ${name}. Initiating launch sequence.`);
-  }, [speak]);
+  const launchPortfolio = useCallback(
+    (name, url) => {
+      setDeployTarget({ name, url });
+      setCurrentScreen('s-loading');
+      speak(`Deploying ${name}. Initiating launch sequence.`);
+    },
+    [speak]
+  );
 
   // Screen 5 Loading -> Redirect & return to Cards
   const onDeployComplete = useCallback(() => {
-    speak("Launch successful. Redirecting now.");
+    speak('Launch successful. Redirecting now.');
     if (deployTarget.url) {
       window.open(deployTarget.url, '_blank');
     }
@@ -117,7 +120,7 @@ export default function App() {
       if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
         SoundFX.playClick();
-        setActiveModal(prev => (prev === 'cmd-palette' ? null : 'cmd-palette'));
+        setActiveModal((prev) => (prev === 'cmd-palette' ? null : 'cmd-palette'));
         return;
       }
 
@@ -194,10 +197,7 @@ export default function App() {
       />
 
       {/* 5 Main Cinematic Screen Sequence */}
-      <VideoScreen
-        isActive={currentScreen === 's-video'}
-        onComplete={handleVideoComplete}
-      />
+      <VideoScreen isActive={currentScreen === 's-video'} onComplete={handleVideoComplete} />
 
       <IntermediateScreen
         isActive={currentScreen === 's-intermediate'}
@@ -232,48 +232,21 @@ export default function App() {
         />
       )}
 
-      {activeModal === 'ml-sim' && (
-        <MLSimulatorModal
-          onClose={closeModal}
-        />
-      )}
+      {activeModal === 'ml-sim' && <MLSimulatorModal onClose={closeModal} />}
 
-      {activeModal === 'code-inspect' && (
-        <CodeInspectorModal
-          onClose={closeModal}
-        />
-      )}
+      {activeModal === 'code-inspect' && <CodeInspectorModal onClose={closeModal} />}
 
-      {activeModal === 'architecture' && (
-        <ArchitectureModal
-          onClose={closeModal}
-        />
-      )}
+      {activeModal === 'architecture' && <ArchitectureModal onClose={closeModal} />}
 
       {activeModal === 'terminal' && (
-        <TerminalModal
-          onClose={closeModal}
-          onLaunch={launchPortfolio}
-        />
+        <TerminalModal onClose={closeModal} onLaunch={launchPortfolio} />
       )}
 
-      {activeModal === 'dossier' && (
-        <DossierModal
-          onClose={closeModal}
-        />
-      )}
+      {activeModal === 'dossier' && <DossierModal onClose={closeModal} />}
 
-      {activeModal === 'github' && (
-        <GitHubTelemetryModal
-          onClose={closeModal}
-        />
-      )}
+      {activeModal === 'github' && <GitHubTelemetryModal onClose={closeModal} />}
 
-      {activeModal === 'contact' && (
-        <ContactModal
-          onClose={closeModal}
-        />
-      )}
+      {activeModal === 'contact' && <ContactModal onClose={closeModal} />}
 
       {activeModal === 'cmd-palette' && (
         <CommandPaletteModal

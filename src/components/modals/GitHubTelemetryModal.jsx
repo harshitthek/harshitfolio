@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { SoundFX } from '../SoundFX';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { projectsData } from '../../data/projectsData';
+import { SoundFX } from '../SoundFX';
 
 const CACHE_KEY_USER = 'harshit_gh_user_cache';
 const CACHE_KEY_REPOS = 'harshit_gh_repos_cache';
@@ -58,19 +58,25 @@ export default function GitHubTelemetryModal({ onClose }) {
         const userData = await userRes.json();
         setProfile(userData);
         setIsLive(true);
-        try { localStorage.setItem(CACHE_KEY_USER, JSON.stringify(userData)); } catch {}
+        try {
+          localStorage.setItem(CACHE_KEY_USER, JSON.stringify(userData));
+        } catch {}
       } else {
         const cached = localStorage.getItem(CACHE_KEY_USER);
         if (cached) setProfile(JSON.parse(cached));
       }
 
       // 2. Fetch Repositories
-      const reposRes = await fetch('https://api.github.com/users/harshitthek/repos?sort=updated&per_page=50');
+      const reposRes = await fetch(
+        'https://api.github.com/users/harshitthek/repos?sort=updated&per_page=50'
+      );
       if (reposRes.ok) {
         const reposData = await reposRes.json();
         if (Array.isArray(reposData) && reposData.length > 0) {
           setRepos(reposData);
-          try { localStorage.setItem(CACHE_KEY_REPOS, JSON.stringify(reposData)); } catch {}
+          try {
+            localStorage.setItem(CACHE_KEY_REPOS, JSON.stringify(reposData));
+          } catch {}
         }
       } else {
         const cachedRepos = localStorage.getItem(CACHE_KEY_REPOS);
@@ -78,19 +84,26 @@ export default function GitHubTelemetryModal({ onClose }) {
       }
 
       // 3. Fetch Public Events (Commit Stream)
-      const eventsRes = await fetch('https://api.github.com/users/harshitthek/events/public?per_page=20');
+      const eventsRes = await fetch(
+        'https://api.github.com/users/harshitthek/events/public?per_page=20'
+      );
       if (eventsRes.ok) {
         const eventsData = await eventsRes.json();
         if (Array.isArray(eventsData)) {
           setEvents(eventsData);
-          try { localStorage.setItem(CACHE_KEY_EVENTS, JSON.stringify(eventsData)); } catch {}
+          try {
+            localStorage.setItem(CACHE_KEY_EVENTS, JSON.stringify(eventsData));
+          } catch {}
         }
       } else {
         const cachedEvents = localStorage.getItem(CACHE_KEY_EVENTS);
         if (cachedEvents) setEvents(JSON.parse(cachedEvents));
       }
     } catch (err) {
-      console.warn('[GitHub Telemetry] Offline or Rate Limited — Falling back to cached snapshot:', err);
+      console.warn(
+        '[GitHub Telemetry] Offline or Rate Limited — Falling back to cached snapshot:',
+        err
+      );
     } finally {
       setLoading(false);
     }
@@ -105,7 +118,7 @@ export default function GitHubTelemetryModal({ onClose }) {
     const counts = {};
     let total = 0;
 
-    repos.forEach(r => {
+    repos.forEach((r) => {
       if (r.language) {
         counts[r.language] = (counts[r.language] || 0) + 1;
         total++;
@@ -118,7 +131,7 @@ export default function GitHubTelemetryModal({ onClose }) {
       TypeScript: '#38bdf8',
       Kotlin: '#a855f7',
       'C++': '#ec4899',
-      'C': '#06b6d4',
+      C: '#06b6d4',
       HTML: '#f97316',
       CSS: '#6366f1',
       Shell: '#10b981'
@@ -137,24 +150,32 @@ export default function GitHubTelemetryModal({ onClose }) {
   // Distinct languages for filter pills
   const availableLanguages = useMemo(() => {
     const set = new Set();
-    repos.forEach(r => { if (r.language) set.add(r.language); });
+    repos.forEach((r) => {
+      if (r.language) set.add(r.language);
+    });
     return ['all', ...Array.from(set)];
   }, [repos]);
 
   // Total Stars & Forks Aggregates
-  const totalStars = useMemo(() => repos.reduce((acc, r) => acc + (r.stargazers_count || 0), 0), [repos]);
-  const totalForks = useMemo(() => repos.reduce((acc, r) => acc + (r.forks_count || 0), 0), [repos]);
+  const totalStars = useMemo(
+    () => repos.reduce((acc, r) => acc + (r.stargazers_count || 0), 0),
+    [repos]
+  );
+  const totalForks = useMemo(
+    () => repos.reduce((acc, r) => acc + (r.forks_count || 0), 0),
+    [repos]
+  );
 
   const filteredRepos = useMemo(() => {
-    return repos.filter(r => {
+    return repos.filter((r) => {
       const matchesLang = selectedLang === 'all' || r.language === selectedLang;
       if (!matchesLang) return false;
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase();
       return (
         r.name.toLowerCase().includes(q) ||
-        (r.description && r.description.toLowerCase().includes(q)) ||
-        (r.language && r.language.toLowerCase().includes(q))
+        r.description?.toLowerCase().includes(q) ||
+        r.language?.toLowerCase().includes(q)
       );
     });
   }, [repos, searchQuery, selectedLang]);
@@ -188,19 +209,31 @@ export default function GitHubTelemetryModal({ onClose }) {
 
   const getEventIcon = (type) => {
     switch (type) {
-      case 'PushEvent': return '🚀';
-      case 'WatchEvent': return '⭐';
-      case 'CreateEvent': return '🌱';
-      case 'ForkEvent': return '🍴';
-      case 'IssuesEvent': return '💬';
-      case 'ReleaseEvent': return '📦';
-      default: return '⚡';
+      case 'PushEvent':
+        return '🚀';
+      case 'WatchEvent':
+        return '⭐';
+      case 'CreateEvent':
+        return '🌱';
+      case 'ForkEvent':
+        return '🍴';
+      case 'IssuesEvent':
+        return '💬';
+      case 'ReleaseEvent':
+        return '📦';
+      default:
+        return '⚡';
     }
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-card glass-modal gh-telemetry-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-backdrop" onClick={onClose} role="presentation">
+      <div
+        className="modal-card glass-modal gh-telemetry-modal"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
         <span className="corner tl"></span>
         <span className="corner tr"></span>
         <span className="corner bl"></span>
@@ -212,20 +245,32 @@ export default function GitHubTelemetryModal({ onClose }) {
             <div className="gh-live-status-row">
               <span className={`gh-pulse-dot ${isLive ? 'live' : 'cached'}`}></span>
               <span className="modal-category">
-                {isLive ? 'LIVE GITHUB REST TELEMETRY // CONNECTED' : 'CACHED GITHUB TELEMETRY SNAPSHOT'}
+                {isLive
+                  ? 'LIVE GITHUB REST TELEMETRY // CONNECTED'
+                  : 'CACHED GITHUB TELEMETRY SNAPSHOT'}
               </span>
             </div>
-            <h2 className="modal-title">GitHub Neural Nexus // @harshitthek</h2>
+            <h2 className="modal-title">GitHub Neural Nexus {/* @harshitthek */}</h2>
           </div>
 
           <div className="gh-header-actions">
             <button
+              type="button"
               className="gh-refresh-btn"
               onClick={fetchGitHubIntel}
               disabled={loading}
               title="Force re-sync telemetry with GitHub API"
             >
-              <svg className={`gh-refresh-icon ${loading ? 'spinning' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              <svg
+                className={`gh-refresh-icon ${loading ? 'spinning' : ''}`}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="23 4 23 10 17 10" />
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+              </svg>
               <span>{loading ? 'SYNCING...' : 'RE-SYNC'}</span>
             </button>
 
@@ -240,8 +285,12 @@ export default function GitHubTelemetryModal({ onClose }) {
             </a>
 
             <button
+              type="button"
               className="modal-close-btn"
-              onClick={() => { SoundFX.playClick(); onClose(); }}
+              onClick={() => {
+                SoundFX.playClick();
+                onClose();
+              }}
               aria-label="Close modal"
             >
               ✕
@@ -252,22 +301,34 @@ export default function GitHubTelemetryModal({ onClose }) {
         {/* Tab Navigation Strip */}
         <div className="dossier-tabs-strip">
           <button
+            type="button"
             className={`dossier-tab ${activeTab === 'overview' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playKey(); setActiveTab('overview'); }}
+            onClick={() => {
+              SoundFX.playKey();
+              setActiveTab('overview');
+            }}
           >
             <span className="tab-num">01</span>
             <span>TELEMETRY OVERVIEW</span>
           </button>
           <button
+            type="button"
             className={`dossier-tab ${activeTab === 'repos' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playKey(); setActiveTab('repos'); }}
+            onClick={() => {
+              SoundFX.playKey();
+              setActiveTab('repos');
+            }}
           >
             <span className="tab-num">02</span>
             <span>REPOSITORY FLEET ({repos.length})</span>
           </button>
           <button
+            type="button"
             className={`dossier-tab ${activeTab === 'activity' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playKey(); setActiveTab('activity'); }}
+            onClick={() => {
+              SoundFX.playKey();
+              setActiveTab('activity');
+            }}
           >
             <span className="tab-num">03</span>
             <span>COMMIT & EVENT STREAM</span>
@@ -276,7 +337,6 @@ export default function GitHubTelemetryModal({ onClose }) {
 
         {/* Scrollable Modal Content Body */}
         <div className="modal-body custom-scroll gh-body-scrollable">
-
           {/* TAB 1: OVERVIEW */}
           {activeTab === 'overview' && (
             <div className="gh-tab-pane animate-fade-in">
@@ -299,16 +359,30 @@ export default function GitHubTelemetryModal({ onClose }) {
                 <div className="gh-profile-details">
                   <div className="gh-name-row">
                     <h3>{profile.name || 'Harshit Sharma'}</h3>
-                    <a href={profile.html_url} target="_blank" rel="noopener noreferrer" className="gh-login-handle">
+                    <a
+                      href={profile.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="gh-login-handle"
+                    >
                       @{profile.login} ↗
                     </a>
                   </div>
-                  <p className="gh-bio-text">{profile.bio || 'AI & Machine Learning Engineer · Autonomous Multi-Agent Architectures'}</p>
+                  <p className="gh-bio-text">
+                    {profile.bio ||
+                      'AI & Machine Learning Engineer · Autonomous Multi-Agent Architectures'}
+                  </p>
 
                   <div className="gh-meta-badges">
-                    <span className="gh-badge-item">📍 {profile.location || 'New Delhi, India'}</span>
-                    <span className="gh-badge-item">📅 Joined {formatTimeAgo(profile.created_at)}</span>
-                    <span className="gh-badge-item">⚡ {profile.public_repos} Public Repositories</span>
+                    <span className="gh-badge-item">
+                      📍 {profile.location || 'New Delhi, India'}
+                    </span>
+                    <span className="gh-badge-item">
+                      📅 Joined {formatTimeAgo(profile.created_at)}
+                    </span>
+                    <span className="gh-badge-item">
+                      ⚡ {profile.public_repos} Public Repositories
+                    </span>
                     <span className="gh-badge-item">👥 {profile.followers} Followers</span>
                   </div>
                 </div>
@@ -336,7 +410,7 @@ export default function GitHubTelemetryModal({ onClose }) {
 
               {/* Live Language Distribution Bar */}
               <div className="gh-language-section">
-                <div className="gh-sec-label">// PRIMARY LANGUAGE DISTRIBUTION MATRIX</div>
+                <div className="gh-sec-label">{/* PRIMARY LANGUAGE DISTRIBUTION MATRIX */}</div>
 
                 {/* Segmented Multi-Color Progress Bar */}
                 <div className="gh-lang-bar-track">
@@ -389,13 +463,20 @@ export default function GitHubTelemetryModal({ onClose }) {
                     className="gh-search-input"
                   />
                   {searchQuery && (
-                    <button className="gh-clear-search-btn" onClick={() => setSearchQuery('')}>✕</button>
+                    <button
+                      type="button"
+                      className="gh-clear-search-btn"
+                      onClick={() => setSearchQuery('')}
+                    >
+                      ✕
+                    </button>
                   )}
                 </div>
 
                 <div className="gh-lang-filter-pills">
                   {availableLanguages.map((lang) => (
                     <button
+                      type="button"
                       key={lang}
                       className={`gh-filter-pill ${selectedLang === lang ? 'active' : ''}`}
                       onClick={() => {
@@ -413,15 +494,23 @@ export default function GitHubTelemetryModal({ onClose }) {
               <div className="gh-repos-grid">
                 {filteredRepos.length > 0 ? (
                   filteredRepos.map((repo) => (
-                    <div key={repo.id} className="gh-repo-card">
+                    <div key={repo.id || repo.name} className="gh-repo-card">
                       <div className="gh-repo-header">
-                        <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="gh-repo-title">
+                        <a
+                          href={repo.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="gh-repo-title"
+                        >
                           {repo.name} ↗
                         </a>
                         <span className="gh-repo-lang-tag">{repo.language || 'Multi-Stack'}</span>
                       </div>
 
-                      <p className="gh-repo-desc">{repo.description || 'Autonomous engineering and open-source system by Harshit Sharma.'}</p>
+                      <p className="gh-repo-desc">
+                        {repo.description ||
+                          'Autonomous engineering and open-source system by Harshit Sharma.'}
+                      </p>
 
                       <div className="gh-repo-footer">
                         <div className="gh-repo-metrics">
@@ -431,6 +520,7 @@ export default function GitHubTelemetryModal({ onClose }) {
                         </div>
 
                         <button
+                          type="button"
                           className={`btn-clone-copy ${copiedClone === repo.name ? 'copied' : ''}`}
                           onClick={(e) => handleCopyClone(repo.name, e)}
                           title="Copy 'git clone' command to clipboard"
@@ -442,10 +532,16 @@ export default function GitHubTelemetryModal({ onClose }) {
                   ))
                 ) : (
                   <div className="gh-empty-repos">
-                    <span>⚠️ No repositories match "{searchQuery}" with filter "{selectedLang}".</span>
+                    <span>
+                      ⚠️ No repositories match "{searchQuery}" with filter "{selectedLang}".
+                    </span>
                     <button
+                      type="button"
                       className="gh-reset-filter-btn"
-                      onClick={() => { setSearchQuery(''); setSelectedLang('all'); }}
+                      onClick={() => {
+                        setSearchQuery('');
+                        setSelectedLang('all');
+                      }}
                     >
                       RESET REPO FILTERS
                     </button>
@@ -458,7 +554,7 @@ export default function GitHubTelemetryModal({ onClose }) {
           {/* TAB 3: ACTIVITY STREAM */}
           {activeTab === 'activity' && (
             <div className="gh-tab-pane animate-fade-in">
-              <div className="section-label">// REAL-TIME PUBLIC COMMIT & EVENT STREAM</div>
+              <div className="section-label">{/* REAL-TIME PUBLIC COMMIT & EVENT STREAM */}</div>
 
               {events.length === 0 ? (
                 <div className="gh-empty-events">
@@ -467,7 +563,7 @@ export default function GitHubTelemetryModal({ onClose }) {
               ) : (
                 <div className="gh-events-timeline">
                   {events.map((ev, idx) => (
-                    <div key={idx} className="gh-event-node">
+                    <div key={ev.id || `ev-${idx}`} className="gh-event-node">
                       <div className="gh-event-marker">
                         <span className="gh-event-dot"></span>
                         <span className="gh-event-line"></span>
@@ -493,8 +589,10 @@ export default function GitHubTelemetryModal({ onClose }) {
                         {ev.payload?.commits && (
                           <div className="gh-event-commits-list">
                             {ev.payload.commits.map((c, cIdx) => (
-                              <div key={cIdx} className="gh-commit-row">
-                                <span className="gh-commit-hash">{c.sha ? c.sha.slice(0, 7) : 'commit'}</span>
+                              <div key={c.sha || `c-${cIdx}`} className="gh-commit-row">
+                                <span className="gh-commit-hash">
+                                  {c.sha ? c.sha.slice(0, 7) : 'commit'}
+                                </span>
                                 <span className="gh-commit-msg">{c.message}</span>
                               </div>
                             ))}
@@ -513,7 +611,7 @@ export default function GitHubTelemetryModal({ onClose }) {
         <div className="modal-footer gh-footer-wrap">
           <div className="footer-left-status">
             <span className="status-indicator-dot"></span>
-            <span>LIVE GITHUB NODE // HARSHIT SHARMA REPOSITORY FLEET</span>
+            <span>LIVE GITHUB NODE {/* HARSHIT SHARMA REPOSITORY FLEET */}</span>
           </div>
 
           <div className="footer-btns-group">
@@ -527,8 +625,12 @@ export default function GitHubTelemetryModal({ onClose }) {
             </a>
 
             <button
+              type="button"
               className="btn-modal-close"
-              onClick={() => { SoundFX.playClick(); onClose(); }}
+              onClick={() => {
+                SoundFX.playClick();
+                onClose();
+              }}
             >
               DISMISS
             </button>

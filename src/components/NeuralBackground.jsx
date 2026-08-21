@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useVoice } from './VoiceContext';
 
 export default function NeuralBackground() {
@@ -16,23 +16,27 @@ export default function NeuralBackground() {
     const ctx = canvas.getContext('2d');
     let animationFrameId;
 
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let width = canvas.width;
+    let height = canvas.height;
 
     const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      width = canvas.width;
+      height = canvas.height;
     };
     window.addEventListener('resize', handleResize);
 
     // Mouse coordinates
-    let mouse = { x: -1000, y: -1000, radius: 140 };
+    const mouse = { x: -1000, y: -1000, radius: 140 };
     const handleMouseMove = (e) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
     };
     const handleTouchMove = (e) => {
-      if (e.touches && e.touches[0]) {
+      if (e.touches?.[0]) {
         mouse.x = e.touches[0].clientX;
         mouse.y = e.touches[0].clientY;
       }
@@ -107,9 +111,7 @@ export default function NeuralBackground() {
 
       // 2. Batched Line Connections (Single Draw Call!)
       ctx.beginPath();
-      ctx.strokeStyle = isSpeaking
-        ? 'rgba(56, 189, 248, 0.18)'
-        : 'rgba(0, 255, 136, 0.12)';
+      ctx.strokeStyle = isSpeaking ? 'rgba(56, 189, 248, 0.18)' : 'rgba(0, 255, 136, 0.12)';
       ctx.lineWidth = 0.8;
 
       for (let i = 0; i < nodes.length; i++) {

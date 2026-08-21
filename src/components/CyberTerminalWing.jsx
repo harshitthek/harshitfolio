@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const SCRIPT_SEQUENCE = [
   {
@@ -18,14 +18,22 @@ const SCRIPT_SEQUENCE = [
   {
     cmd: 'cat skills.env',
     outputs: [
-      { tag: 'AI/ML', text: 'CatBoost, XGBoost, On-Device Llama.cpp, Scikit-Learn', color: 'green' },
+      {
+        tag: 'AI/ML',
+        text: 'CatBoost, XGBoost, On-Device Llama.cpp, Scikit-Learn',
+        color: 'green'
+      },
       { tag: 'STACK', text: 'React 19, FastAPI, Kotlin Jetpack Compose, Canvas 2D', color: 'cyan' }
     ]
   },
   {
     cmd: 'cat projects.status',
     outputs: [
-      { tag: 'ML_97.4%', text: 'AutoValuate AI: Stacking Valuation Suite (102 Tests)', color: 'green' },
+      {
+        tag: 'ML_97.4%',
+        text: 'AutoValuate AI: Stacking Valuation Suite (102 Tests)',
+        color: 'green'
+      },
       { tag: 'AGENT_CI', text: 'Resilient: Autonomous AI Benchmark Pipeline', color: 'cyan' },
       { tag: 'SECURITY', text: 'PhishShield: Real-Time Phishing Threat Engine', color: 'green' },
       { tag: 'ON_DEVICE', text: 'Finvaria: Offline Local LLM Youth Empowerment', color: 'cyan' }
@@ -50,7 +58,7 @@ const SCRIPT_SEQUENCE = [
   }
 ];
 
-export default function CyberTerminalWing({ isActive }) {
+export default function CyberTerminalWing({ isActive: _isActive }) {
   const [logs, setLogs] = useState([
     { tag: 'SYS', text: 'neural_kernel v2.4 initialized', color: 'cyan' },
     { tag: 'OK', text: 'harshit.exe telemetry daemon [ONLINE]', color: 'green' }
@@ -64,18 +72,18 @@ export default function CyberTerminalWing({ isActive }) {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [logs, currentTyping]);
+  });
 
-  const addTimeout = (fn, delay) => {
+  const addTimeout = useCallback((fn, delay) => {
     const id = setTimeout(fn, delay);
     timeoutsRef.current.push(id);
     return id;
-  };
+  }, []);
 
-  const clearAllTimeouts = () => {
+  const clearAllTimeouts = useCallback(() => {
     timeoutsRef.current.forEach(clearTimeout);
     timeoutsRef.current = [];
-  };
+  }, []);
 
   useEffect(() => {
     let isCancelled = false;
@@ -110,10 +118,7 @@ export default function CyberTerminalWing({ isActive }) {
               stepIndex = (stepIndex + 1) % SCRIPT_SEQUENCE.length;
               addTimeout(playSequenceStep, 800);
             } else {
-              setLogs(prev => [
-                ...prev,
-                { tag: 'CMD', text: `$ ${cmdText}`, color: 'white' }
-              ]);
+              setLogs((prev) => [...prev, { tag: 'CMD', text: `$ ${cmdText}`, color: 'white' }]);
               setCurrentTyping('');
 
               // Emit outputs with fast cadence
@@ -123,7 +128,7 @@ export default function CyberTerminalWing({ isActive }) {
 
                 if (outIdx < item.outputs.length) {
                   const outLine = item.outputs[outIdx];
-                  setLogs(prev => [...prev, outLine]);
+                  setLogs((prev) => [...prev, outLine]);
                   outIdx++;
                   addTimeout(emitOutput, 220);
                 } else {
@@ -149,28 +154,28 @@ export default function CyberTerminalWing({ isActive }) {
       isCancelled = true;
       clearAllTimeouts();
     };
-  }, []);
+  }, [clearAllTimeouts, addTimeout]);
 
   return (
-    <aside className="cyber-flank-terminal left-flank read-only-feed" aria-label="Autonomous Terminal Feed">
-      <div className="terminal-window non-interactive" role="region" aria-label="Harshit Terminal Feed">
+    <aside
+      className="cyber-flank-terminal left-flank read-only-feed"
+      aria-label="Autonomous Terminal Feed"
+    >
+      <section className="terminal-window non-interactive" aria-label="Harshit Terminal Feed">
         <span className="corner tl"></span>
         <span className="corner tr"></span>
         <span className="corner bl"></span>
         <span className="corner br"></span>
 
-        {/* Linux Terminal Titlebar */}
-        <div className="term-titlebar">
-          <div className="term-dots">
-            <span className="term-dot red"></span>
-            <span className="term-dot yellow"></span>
-            <span className="term-dot green"></span>
+        {/* Terminal Title Bar */}
+        <div className="term-bar-top">
+          <div className="term-lights">
+            <span className="dot red"></span>
+            <span className="dot yellow"></span>
+            <span className="dot green"></span>
           </div>
-          <div className="term-host-wrap">
-            <span className="term-host">harshit@core:~# telemetry</span>
-          </div>
-          <span className="autotype-pill">
-            <span className="live-rec-dot"></span>
+          <span className="term-window-title">HARSHIT_CORE_STREAM // SYS_RADAR</span>
+          <span className="term-badge" title="Continuous Real-time Log Stream">
             AUTOTYPE
           </span>
         </div>
@@ -179,8 +184,8 @@ export default function CyberTerminalWing({ isActive }) {
         <div ref={scrollRef} className="term-stream-body autotype-stream">
           <div className="term-scanline"></div>
 
-          {logs.map((log, i) => (
-            <div key={i} className="term-line">
+          {logs.map((log) => (
+            <div key={`log-${log.tag}-${log.text}`} className="term-line">
               <span className={`term-tag ${log.color}`}>[{log.tag}]</span>
               <span className="term-msg">{log.text}</span>
             </div>
@@ -199,7 +204,7 @@ export default function CyberTerminalWing({ isActive }) {
           <span className="footer-stat cyan">FEED: LIVE_TELEMETRY</span>
           <span className="footer-stat green">STATUS: STREAMING</span>
         </div>
-      </div>
+      </section>
     </aside>
   );
 }

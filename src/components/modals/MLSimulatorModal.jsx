@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SoundFX } from '../SoundFX';
 
 export default function MLSimulatorModal({ onClose }) {
@@ -23,7 +23,7 @@ export default function MLSimulatorModal({ onClose }) {
   const handleUpdateApiUrl = (rawUrl) => {
     let clean = (rawUrl || '').trim();
     if (clean && !clean.startsWith('http://') && !clean.startsWith('https://')) {
-      clean = 'http://' + clean;
+      clean = `http://${clean}`;
     }
     try {
       const parsed = new URL(clean);
@@ -38,35 +38,181 @@ export default function MLSimulatorModal({ onClose }) {
   const [showApiSettings, setShowApiSettings] = useState(false);
   const [apiStatus, setApiStatus] = useState('checking'); // 'live' | 'client_model' | 'checking'
   const [liveApiResponse, setLiveApiResponse] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
+  const [_isFetching, setIsFetching] = useState(false);
 
   // Comprehensive Indian Motorcycle Market Dataset (32,000+ Transactions)
-  const bikeBrands = useMemo(() => ({
-    'Royal Enfield': { name: 'Royal Enfield (Classic 350 / Bullet / Hunter)', base: 215000, defCC: 350, decay: 0.89, minCC: 350, maxCC: 650 },
-    'KTM': { name: 'KTM (Duke 250 / 390 / RC Series)', base: 245000, defCC: 250, decay: 0.86, minCC: 125, maxCC: 390 },
-    'Yamaha': { name: 'Yamaha (R15 V4 / MT-15 / FZ-S)', base: 185000, defCC: 155, decay: 0.90, minCC: 125, maxCC: 250 },
-    'Kawasaki': { name: 'Kawasaki (Ninja 300 / 400 / Z650)', base: 390000, defCC: 300, decay: 0.85, minCC: 300, maxCC: 650 },
-    'Honda': { name: 'Honda (CB350 Hness / Hornet / Shine)', base: 175000, defCC: 350, decay: 0.91, minCC: 100, maxCC: 350 },
-    'TVS': { name: 'TVS (Apache RTR 160 / 200 / RR310)', base: 165000, defCC: 200, decay: 0.88, minCC: 125, maxCC: 310 },
-    'Bajaj': { name: 'Bajaj (Pulsar NS200 / Dominar 400)', base: 178000, defCC: 200, decay: 0.87, minCC: 125, maxCC: 400 },
-    'Suzuki': { name: 'Suzuki (Gixxer SF 250 / Hayabusa)', base: 195000, defCC: 250, decay: 0.89, minCC: 125, maxCC: 250 },
-    'Triumph': { name: 'Triumph (Speed 400 / Scrambler 400X)', base: 275000, defCC: 400, decay: 0.88, minCC: 400, maxCC: 900 },
-    'BMW Motorrad': { name: 'BMW Motorrad (G310R / G310GS)', base: 340000, defCC: 313, decay: 0.87, minCC: 313, maxCC: 850 },
-    'Harley-Davidson': { name: 'Harley-Davidson (X440 / Street 750)', base: 310000, defCC: 440, decay: 0.86, minCC: 440, maxCC: 750 },
-    'Hero': { name: 'Hero (Splendor / Xpulse 200 / Karizma)', base: 125000, defCC: 200, decay: 0.92, minCC: 100, maxCC: 210 }
-  }), []);
+  const bikeBrands = useMemo(
+    () => ({
+      'Royal Enfield': {
+        name: 'Royal Enfield (Classic 350 / Bullet / Hunter)',
+        base: 215000,
+        defCC: 350,
+        decay: 0.89,
+        minCC: 350,
+        maxCC: 650
+      },
+      KTM: {
+        name: 'KTM (Duke 250 / 390 / RC Series)',
+        base: 245000,
+        defCC: 250,
+        decay: 0.86,
+        minCC: 125,
+        maxCC: 390
+      },
+      Yamaha: {
+        name: 'Yamaha (R15 V4 / MT-15 / FZ-S)',
+        base: 185000,
+        defCC: 155,
+        decay: 0.9,
+        minCC: 125,
+        maxCC: 250
+      },
+      Kawasaki: {
+        name: 'Kawasaki (Ninja 300 / 400 / Z650)',
+        base: 390000,
+        defCC: 300,
+        decay: 0.85,
+        minCC: 300,
+        maxCC: 650
+      },
+      Honda: {
+        name: 'Honda (CB350 Hness / Hornet / Shine)',
+        base: 175000,
+        defCC: 350,
+        decay: 0.91,
+        minCC: 100,
+        maxCC: 350
+      },
+      TVS: {
+        name: 'TVS (Apache RTR 160 / 200 / RR310)',
+        base: 165000,
+        defCC: 200,
+        decay: 0.88,
+        minCC: 125,
+        maxCC: 310
+      },
+      Bajaj: {
+        name: 'Bajaj (Pulsar NS200 / Dominar 400)',
+        base: 178000,
+        defCC: 200,
+        decay: 0.87,
+        minCC: 125,
+        maxCC: 400
+      },
+      Suzuki: {
+        name: 'Suzuki (Gixxer SF 250 / Hayabusa)',
+        base: 195000,
+        defCC: 250,
+        decay: 0.89,
+        minCC: 125,
+        maxCC: 250
+      },
+      Triumph: {
+        name: 'Triumph (Speed 400 / Scrambler 400X)',
+        base: 275000,
+        defCC: 400,
+        decay: 0.88,
+        minCC: 400,
+        maxCC: 900
+      },
+      'BMW Motorrad': {
+        name: 'BMW Motorrad (G310R / G310GS)',
+        base: 340000,
+        defCC: 313,
+        decay: 0.87,
+        minCC: 313,
+        maxCC: 850
+      },
+      'Harley-Davidson': {
+        name: 'Harley-Davidson (X440 / Street 750)',
+        base: 310000,
+        defCC: 440,
+        decay: 0.86,
+        minCC: 440,
+        maxCC: 750
+      },
+      Hero: {
+        name: 'Hero (Splendor / Xpulse 200 / Karizma)',
+        base: 125000,
+        defCC: 200,
+        decay: 0.92,
+        minCC: 100,
+        maxCC: 210
+      }
+    }),
+    []
+  );
 
   // Comprehensive Indian Passenger Car Market Dataset (8,000+ Transactions)
-  const carBrands = useMemo(() => ({
-    'Maruti Suzuki': { name: 'Maruti Suzuki (Swift / Baleno / Brezza / Grand Vitara)', base: 740000, defCC: 1200, decay: 0.91, minCC: 1000, maxCC: 1500 },
-    'Hyundai': { name: 'Hyundai (Creta / i20 / Venue / Verna)', base: 980000, defCC: 1500, decay: 0.89, minCC: 1000, maxCC: 2000 },
-    'Tata Motors': { name: 'Tata Motors (Nexon / Harrier / Punch / Safari)', base: 920000, defCC: 1200, decay: 0.90, minCC: 1200, maxCC: 2000 },
-    'Mahindra': { name: 'Mahindra (Thar / XUV700 / Scorpio-N)', base: 1420000, defCC: 2000, decay: 0.92, minCC: 1500, maxCC: 2200 },
-    'Toyota': { name: 'Toyota (Innova Crysta / Fortuner / Hyryder)', base: 1850000, defCC: 2400, decay: 0.94, minCC: 1500, maxCC: 2800 },
-    'Honda': { name: 'Honda (City / Elevate / Amaze)', base: 1050000, defCC: 1500, decay: 0.89, minCC: 1200, maxCC: 1500 },
-    'Kia': { name: 'Kia (Seltos / Sonet / Carens)', base: 1120000, defCC: 1500, decay: 0.88, minCC: 1000, maxCC: 1500 },
-    'Volkswagen': { name: 'Volkswagen (Virtus / Taigun / Polo)', base: 1200000, defCC: 1000, decay: 0.87, minCC: 1000, maxCC: 1500 }
-  }), []);
+  const carBrands = useMemo(
+    () => ({
+      'Maruti Suzuki': {
+        name: 'Maruti Suzuki (Swift / Baleno / Brezza / Grand Vitara)',
+        base: 740000,
+        defCC: 1200,
+        decay: 0.91,
+        minCC: 1000,
+        maxCC: 1500
+      },
+      Hyundai: {
+        name: 'Hyundai (Creta / i20 / Venue / Verna)',
+        base: 980000,
+        defCC: 1500,
+        decay: 0.89,
+        minCC: 1000,
+        maxCC: 2000
+      },
+      'Tata Motors': {
+        name: 'Tata Motors (Nexon / Harrier / Punch / Safari)',
+        base: 920000,
+        defCC: 1200,
+        decay: 0.9,
+        minCC: 1200,
+        maxCC: 2000
+      },
+      Mahindra: {
+        name: 'Mahindra (Thar / XUV700 / Scorpio-N)',
+        base: 1420000,
+        defCC: 2000,
+        decay: 0.92,
+        minCC: 1500,
+        maxCC: 2200
+      },
+      Toyota: {
+        name: 'Toyota (Innova Crysta / Fortuner / Hyryder)',
+        base: 1850000,
+        defCC: 2400,
+        decay: 0.94,
+        minCC: 1500,
+        maxCC: 2800
+      },
+      Honda: {
+        name: 'Honda (City / Elevate / Amaze)',
+        base: 1050000,
+        defCC: 1500,
+        decay: 0.89,
+        minCC: 1200,
+        maxCC: 1500
+      },
+      Kia: {
+        name: 'Kia (Seltos / Sonet / Carens)',
+        base: 1120000,
+        defCC: 1500,
+        decay: 0.88,
+        minCC: 1000,
+        maxCC: 1500
+      },
+      Volkswagen: {
+        name: 'Volkswagen (Virtus / Taigun / Polo)',
+        base: 1200000,
+        defCC: 1000,
+        decay: 0.87,
+        minCC: 1000,
+        maxCC: 1500
+      }
+    }),
+    []
+  );
 
   const currentBrands = vehicleType === 'bike' ? bikeBrands : carBrands;
 
@@ -78,7 +224,7 @@ export default function MLSimulatorModal({ onClose }) {
     const basePrice = b.base;
 
     // 1. Multi-Stage Age Decay Curve
-    const ageFactor = Math.pow(b.decay, age);
+    const ageFactor = b.decay ** age;
 
     // 2. Odometer Usage Factor
     const maxKms = isBike ? 120000 : 250000;
@@ -89,19 +235,20 @@ export default function MLSimulatorModal({ onClose }) {
     const ccBonus = ccDiff * (isBike ? 140 : 380);
 
     // 4. Ownership Transfer Penalty
-    const ownerMultipliers = { 1: 1.00, 2: 0.92, 3: 0.84 };
+    const ownerMultipliers = { 1: 1.0, 2: 0.92, 3: 0.84 };
     const ownerFactor = ownerMultipliers[ownerRank] || 0.84;
 
     // 5. Physical Maintenance Condition
-    const conditionMultipliers = { showroom: 1.08, good: 1.00, fair: 0.90 };
+    const conditionMultipliers = { showroom: 1.08, good: 1.0, fair: 0.9 };
     const condFactor = conditionMultipliers[condition] || 1.0;
 
     // 6. Fuel Type Factor (Cars)
-    const fuelMultipliers = { petrol: 1.00, diesel: 1.05, cng: 0.96, ev: 1.02 };
-    const fFactor = isBike ? 1.0 : (fuelMultipliers[fuelType] || 1.0);
+    const fuelMultipliers = { petrol: 1.0, diesel: 1.05, cng: 0.96, ev: 1.02 };
+    const fFactor = isBike ? 1.0 : fuelMultipliers[fuelType] || 1.0;
 
     // Base Estimate Calculation
-    const estimated = ((basePrice * ageFactor * kmFactor) + ccBonus) * ownerFactor * condFactor * fFactor;
+    const estimated =
+      (basePrice * ageFactor * kmFactor + ccBonus) * ownerFactor * condFactor * fFactor;
     const floor = isBike ? 22000 : 160000;
     const fairPrice = Math.max(floor, Math.round(estimated / 500) * 500);
 
@@ -115,16 +262,26 @@ export default function MLSimulatorModal({ onClose }) {
     for (let yr = 1; yr <= 5; yr++) {
       const projAge = age + yr;
       const projKms = kms + (isBike ? yr * 6000 : yr * 12000);
-      const projAgeFactor = Math.pow(b.decay, projAge);
+      const projAgeFactor = b.decay ** projAge;
       const projKmFactor = Math.max(0.35, 1 - (projKms / maxKms) * 0.44);
-      const projPrice = Math.max(floor, Math.round((((basePrice * projAgeFactor * projKmFactor) + ccBonus) * ownerFactor * condFactor * fFactor) / 500) * 500);
+      const projPrice = Math.max(
+        floor,
+        Math.round(
+          ((basePrice * projAgeFactor * projKmFactor + ccBonus) *
+            ownerFactor *
+            condFactor *
+            fFactor) /
+            500
+        ) * 500
+      );
       forecast.push({ year: yr, futureAge: projAge, price: projPrice });
     }
 
     // Cryptographic SHA-256 Hash ID simulation
     const rawHash = `${brand}-${power}-${kms}-${age}-${ownerRank}-${fairPrice}`;
     let hashNum = 0;
-    for (let i = 0; i < rawHash.length; i++) hashNum = (hashNum << 5) - hashNum + rawHash.charCodeAt(i);
+    for (let i = 0; i < rawHash.length; i++)
+      hashNum = (hashNum << 5) - hashNum + rawHash.charCodeAt(i);
     const certHash = `AV-${Math.abs(hashNum).toString(16).toUpperCase().padStart(8, '0').slice(0, 8)}`;
 
     return {
@@ -172,7 +329,7 @@ export default function MLSimulatorModal({ onClose }) {
         } else {
           if (isMounted) setApiStatus('client_model');
         }
-      } catch (err) {
+      } catch (_err) {
         if (isMounted) setApiStatus('client_model');
       } finally {
         if (isMounted) setIsFetching(false);
@@ -231,16 +388,27 @@ export default function MLSimulatorModal({ onClose }) {
   const displayCert = liveApiResponse?.certificate?.id || clientValuation.certHash;
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-card glass-modal ml-sim-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-backdrop" onClick={onClose} role="presentation">
+      <div
+        className="modal-card glass-modal sim-modal"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
         <div className="modal-header">
           <div className="modal-title-group">
-            <span className="modal-category">LIVE PUBLIC DEMO API // DUAL-ENGINE STACKING (40,000+ ROWS)</span>
+            <span className="modal-category">
+              LIVE PUBLIC DEMO API {/* DUAL-ENGINE STACKING (40,000+ ROWS) */}
+            </span>
             <h2 className="modal-title">AutoValuate AI — Vehicle Resale Intelligence Suite</h2>
           </div>
           <button
+            type="button"
             className="modal-close-btn"
-            onClick={() => { SoundFX.playClick(); onClose(); }}
+            onClick={() => {
+              SoundFX.playClick();
+              onClose();
+            }}
             aria-label="Close modal"
           >
             ✕
@@ -249,12 +417,21 @@ export default function MLSimulatorModal({ onClose }) {
 
         <div className="modal-body custom-scroll">
           {/* Dual Vehicle Category Switcher */}
-          <div className="vehicle-type-switcher-row" style={{ display: 'flex', gap: '8px', marginBottom: '1rem' }}>
+          <div
+            className="vehicle-type-switcher-row"
+            style={{ display: 'flex', gap: '8px', marginBottom: '1rem' }}
+          >
             <button
               type="button"
               className={`category-chip ${vehicleType === 'bike' ? 'active' : ''}`}
               onClick={() => switchVehicleType('bike')}
-              style={{ flex: 1, padding: '10px 16px', fontSize: '11px', letterSpacing: '2px', fontWeight: 700 }}
+              style={{
+                flex: 1,
+                padding: '10px 16px',
+                fontSize: '11px',
+                letterSpacing: '2px',
+                fontWeight: 700
+              }}
             >
               🏍️ MOTORCYCLES (32,000+ ROWS · 97.4% R²)
             </button>
@@ -262,7 +439,13 @@ export default function MLSimulatorModal({ onClose }) {
               type="button"
               className={`category-chip ${vehicleType === 'car' ? 'active' : ''}`}
               onClick={() => switchVehicleType('car')}
-              style={{ flex: 1, padding: '10px 16px', fontSize: '11px', letterSpacing: '2px', fontWeight: 700 }}
+              style={{
+                flex: 1,
+                padding: '10px 16px',
+                fontSize: '11px',
+                letterSpacing: '2px',
+                fontWeight: 700
+              }}
             >
               🚗 PASSENGER CARS (8,000+ ROWS · 97.3% R²)
             </button>
@@ -271,30 +454,54 @@ export default function MLSimulatorModal({ onClose }) {
           {/* Hero Valuation Box & Confidence Bands */}
           <div className="sim-hero-banner">
             <div className="sim-valuation-box">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              >
                 <span className="sim-val-label">CERTIFIED FAIR MARKET VALUATION</span>
                 {/* Live API Status Indicator */}
-                <span style={{
-                  fontSize: '9px',
-                  fontWeight: 700,
-                  letterSpacing: '1px',
-                  padding: '2px 8px',
-                  borderRadius: '2px',
-                  background: apiStatus === 'live' ? 'rgba(0, 255, 136, 0.15)' : 'rgba(56, 189, 248, 0.15)',
-                  border: `1px solid ${apiStatus === 'live' ? '#00ff88' : '#38bdf8'}`,
-                  color: apiStatus === 'live' ? '#00ff88' : '#38bdf8'
-                }}>
+                <span
+                  style={{
+                    fontSize: '9px',
+                    fontWeight: 700,
+                    letterSpacing: '1px',
+                    padding: '2px 8px',
+                    borderRadius: '2px',
+                    background:
+                      apiStatus === 'live' ? 'rgba(0, 255, 136, 0.15)' : 'rgba(56, 189, 248, 0.15)',
+                    border: `1px solid ${apiStatus === 'live' ? '#00ff88' : '#38bdf8'}`,
+                    color: apiStatus === 'live' ? '#00ff88' : '#38bdf8'
+                  }}
+                >
                   {apiStatus === 'live' ? '🟢 LIVE FASTAPI API' : '⚡ IN-BROWSER ENSEMBLE'}
                 </span>
               </div>
 
               <div className="sim-price-number">₹ {displayPrice.toLocaleString('en-IN')}</div>
-              
+
               {/* 3-Tier Statistical Confidence Bands */}
-              <div className="sim-price-range-bands" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '10px', color: '#94a3b8' }}>
-                <span>Trade-in Low: <strong style={{ color: '#f87171' }}>₹{displayLow.toLocaleString('en-IN')}</strong></span>
+              <div
+                className="sim-price-range-bands"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginTop: '8px',
+                  fontSize: '10px',
+                  color: '#94a3b8'
+                }}
+              >
+                <span>
+                  Trade-in Low:{' '}
+                  <strong style={{ color: '#f87171' }}>
+                    ₹{displayLow.toLocaleString('en-IN')}
+                  </strong>
+                </span>
                 <span>•</span>
-                <span>Retail High: <strong style={{ color: '#38bdf8' }}>₹{displayHigh.toLocaleString('en-IN')}</strong></span>
+                <span>
+                  Retail High:{' '}
+                  <strong style={{ color: '#38bdf8' }}>
+                    ₹{displayHigh.toLocaleString('en-IN')}
+                  </strong>
+                </span>
               </div>
 
               <div className="sim-accuracy-badge" style={{ marginTop: '10px' }}>
@@ -306,18 +513,33 @@ export default function MLSimulatorModal({ onClose }) {
             </div>
 
             <div className="sim-hero-actions">
-              <div className="cert-hash-badge" style={{ background: 'rgba(0, 255, 136, 0.08)', border: '1px solid rgba(0, 255, 136, 0.3)', padding: '6px 12px', borderRadius: '4px', fontSize: '10px', marginBottom: '8px' }}>
+              <div
+                className="cert-hash-badge"
+                style={{
+                  background: 'rgba(0, 255, 136, 0.08)',
+                  border: '1px solid rgba(0, 255, 136, 0.3)',
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  fontSize: '10px',
+                  marginBottom: '8px'
+                }}
+              >
                 <span style={{ color: '#64748b' }}>CERTIFICATE ID: </span>
                 <strong style={{ color: '#00ff88', letterSpacing: '1px' }}>{displayCert}</strong>
                 <span style={{ color: '#64748b', marginLeft: '8px' }}>[SHA-256 VERIFIED]</span>
               </div>
 
               <p className="sim-explainer">
-                Features dual CatBoost & XGBoost gradient-boosted stacking regressors with native categorical embeddings, multi-stage econometric depreciation curves, and 5-year TCO life-cycle forecasting.
+                Features dual CatBoost & XGBoost gradient-boosted stacking regressors with native
+                categorical embeddings, multi-stage econometric depreciation curves, and 5-year TCO
+                life-cycle forecasting.
               </p>
 
-              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem', flexWrap: 'wrap' }}>
+              <div
+                style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem', flexWrap: 'wrap' }}
+              >
                 <button
+                  type="button"
                   className="btn-sim-reset"
                   onClick={resetDefaults}
                   title="Reset simulation parameters to defaults"
@@ -325,9 +547,14 @@ export default function MLSimulatorModal({ onClose }) {
                   ↺ RESET PARAMETERS
                 </button>
                 <button
+                  type="button"
                   className="btn-sim-reset"
                   onClick={() => setShowApiSettings(!showApiSettings)}
-                  style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }}
+                  style={{
+                    background: 'rgba(56, 189, 248, 0.1)',
+                    color: '#38bdf8',
+                    borderColor: 'rgba(56, 189, 248, 0.3)'
+                  }}
                 >
                   ⚙️ {showApiSettings ? 'HIDE API CONFIG' : 'API ENDPOINT / DOCS'}
                 </button>
@@ -336,7 +563,11 @@ export default function MLSimulatorModal({ onClose }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-sim-reset"
-                  style={{ background: 'rgba(0, 255, 136, 0.15)', color: '#00ff88', borderColor: 'rgba(0, 255, 136, 0.4)' }}
+                  style={{
+                    background: 'rgba(0, 255, 136, 0.15)',
+                    color: '#00ff88',
+                    borderColor: 'rgba(0, 255, 136, 0.4)'
+                  }}
                 >
                   🚀 OPEN LIVE VERCEL APP ↗
                 </a>
@@ -346,22 +577,33 @@ export default function MLSimulatorModal({ onClose }) {
 
           {/* Collapsible API Endpoint Configuration & Live Query Inspector */}
           {showApiSettings && (
-            <div style={{
-              background: 'rgba(0, 0, 0, 0.65)',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
-              borderRadius: '4px',
-              padding: '1rem',
-              marginBottom: '1.2rem',
-              fontSize: '11px'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <div
+              style={{
+                background: 'rgba(0, 0, 0, 0.65)',
+                border: '1px solid rgba(56, 189, 248, 0.3)',
+                borderRadius: '4px',
+                padding: '1rem',
+                marginBottom: '1.2rem',
+                fontSize: '11px'
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '8px'
+                }}
+              >
                 <span style={{ color: '#38bdf8', fontWeight: 700, letterSpacing: '1px' }}>
                   🌐 PUBLIC REST API ENDPOINT INSPECTOR
                 </span>
                 <span style={{ color: '#64748b' }}>CORS: Wildcard (*)</span>
               </div>
 
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+              <div
+                style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}
+              >
                 <span style={{ color: '#94a3b8', fontSize: '10px' }}>API BASE URL:</span>
                 <input
                   type="text"
@@ -381,8 +623,20 @@ export default function MLSimulatorModal({ onClose }) {
                 />
               </div>
 
-              <div style={{ background: '#080808', padding: '6px 10px', borderRadius: '2px', fontFamily: 'monospace', color: '#94a3b8', fontSize: '10px', overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                <span style={{ color: '#38bdf8' }}>GET</span> {apiBaseUrl}/api/v1/demo/estimate?{activeParams.toString()}
+              <div
+                style={{
+                  background: '#080808',
+                  padding: '6px 10px',
+                  borderRadius: '2px',
+                  fontFamily: 'monospace',
+                  color: '#94a3b8',
+                  fontSize: '10px',
+                  overflowX: 'auto',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                <span style={{ color: '#38bdf8' }}>GET</span> {apiBaseUrl}/api/v1/demo/estimate?
+                {activeParams.toString()}
               </div>
             </div>
           )}
@@ -391,11 +645,12 @@ export default function MLSimulatorModal({ onClose }) {
           <div className="sim-controls-wrapper">
             {/* Control 1: Brand Selection */}
             <div className="sim-form-group">
-              <label className="sim-label">
+              <label htmlFor="sim-brand-select" className="sim-label">
                 <span>MANUFACTURER & MODEL FAMILY</span>
                 <span className="sim-active-val">{brand}</span>
               </label>
               <select
+                id="sim-brand-select"
                 value={brand}
                 onChange={(e) => {
                   SoundFX.playKey();
@@ -406,7 +661,9 @@ export default function MLSimulatorModal({ onClose }) {
                 className="sim-select-input"
               >
                 {Object.keys(currentBrands).map((bName) => (
-                  <option key={bName} value={bName}>{currentBrands[bName].name}</option>
+                  <option key={bName} value={bName}>
+                    {currentBrands[bName].name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -430,9 +687,13 @@ export default function MLSimulatorModal({ onClose }) {
                 className="sim-slider-range"
               />
               <div className="slider-limits">
-                <span>{currentBrands[brand]?.minCC || (vehicleType === 'bike' ? '100 CC' : '800 CC')}</span>
+                <span>
+                  {currentBrands[brand]?.minCC || (vehicleType === 'bike' ? '100 CC' : '800 CC')}
+                </span>
                 <span>Default: {currentBrands[brand]?.defCC} CC</span>
-                <span>{currentBrands[brand]?.maxCC || (vehicleType === 'bike' ? '650 CC' : '2,500 CC')}</span>
+                <span>
+                  {currentBrands[brand]?.maxCC || (vehicleType === 'bike' ? '650 CC' : '2,500 CC')}
+                </span>
               </div>
             </div>
 
@@ -490,27 +751,38 @@ export default function MLSimulatorModal({ onClose }) {
             <div className="sim-form-group">
               <div className="sim-label-row">
                 <span className="sim-label">OWNERSHIP HISTORY</span>
-                <span className="sim-active-val">{ownerRank === 1 ? '1ST OWNER' : ownerRank === 2 ? '2ND OWNER' : '3RD+ OWNER'}</span>
+                <span className="sim-active-val">
+                  {ownerRank === 1 ? '1ST OWNER' : ownerRank === 2 ? '2ND OWNER' : '3RD+ OWNER'}
+                </span>
               </div>
               <div className="condition-chips">
                 <button
                   type="button"
                   className={`condition-chip ${ownerRank === 1 ? 'active' : ''}`}
-                  onClick={() => { SoundFX.playKey(); setOwnerRank(1); }}
+                  onClick={() => {
+                    SoundFX.playKey();
+                    setOwnerRank(1);
+                  }}
                 >
                   🥇 1ST OWNER (100% VALUATION)
                 </button>
                 <button
                   type="button"
                   className={`condition-chip ${ownerRank === 2 ? 'active' : ''}`}
-                  onClick={() => { SoundFX.playKey(); setOwnerRank(2); }}
+                  onClick={() => {
+                    SoundFX.playKey();
+                    setOwnerRank(2);
+                  }}
                 >
                   🥈 2ND OWNER (-8% PENALTY)
                 </button>
                 <button
                   type="button"
                   className={`condition-chip ${ownerRank === 3 ? 'active' : ''}`}
-                  onClick={() => { SoundFX.playKey(); setOwnerRank(3); }}
+                  onClick={() => {
+                    SoundFX.playKey();
+                    setOwnerRank(3);
+                  }}
                 >
                   🥉 3RD+ OWNER (-16% PENALTY)
                 </button>
@@ -527,21 +799,30 @@ export default function MLSimulatorModal({ onClose }) {
                 <button
                   type="button"
                   className={`condition-chip ${condition === 'showroom' ? 'active' : ''}`}
-                  onClick={() => { SoundFX.playKey(); setCondition('showroom'); }}
+                  onClick={() => {
+                    SoundFX.playKey();
+                    setCondition('showroom');
+                  }}
                 >
                   ✨ SHOWROOM / IMMACULATE (+8%)
                 </button>
                 <button
                   type="button"
                   className={`condition-chip ${condition === 'good' ? 'active' : ''}`}
-                  onClick={() => { SoundFX.playKey(); setCondition('good'); }}
+                  onClick={() => {
+                    SoundFX.playKey();
+                    setCondition('good');
+                  }}
                 >
                   🛡️ GOOD / REGULAR SERVICE (100%)
                 </button>
                 <button
                   type="button"
                   className={`condition-chip ${condition === 'fair' ? 'active' : ''}`}
-                  onClick={() => { SoundFX.playKey(); setCondition('fair'); }}
+                  onClick={() => {
+                    SoundFX.playKey();
+                    setCondition('fair');
+                  }}
                 >
                   ⚠️ FAIR / COSMETIC WEAR (-10%)
                 </button>
@@ -561,7 +842,10 @@ export default function MLSimulatorModal({ onClose }) {
                       key={f}
                       type="button"
                       className={`condition-chip ${fuelType === f ? 'active' : ''}`}
-                      onClick={() => { SoundFX.playKey(); setFuelType(f); }}
+                      onClick={() => {
+                        SoundFX.playKey();
+                        setFuelType(f);
+                      }}
                     >
                       {f.toUpperCase()}
                     </button>
@@ -572,17 +856,63 @@ export default function MLSimulatorModal({ onClose }) {
           </div>
 
           {/* 5-Year Forward Depreciation Forecast Cards */}
-          <div className="sim-forecast-section" style={{ marginTop: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '4px', padding: '1rem' }}>
-            <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '2px', color: '#38bdf8', display: 'block', marginBottom: '8px' }}>
+          <div
+            className="sim-forecast-section"
+            style={{
+              marginTop: '1.5rem',
+              background: 'rgba(255, 255, 255, 0.02)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '4px',
+              padding: '1rem'
+            }}
+          >
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 700,
+                letterSpacing: '2px',
+                color: '#38bdf8',
+                display: 'block',
+                marginBottom: '8px'
+              }}
+            >
               📈 5-YEAR FORWARD RESALE VALUATION TRAJECTORY
             </span>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '8px' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))',
+                gap: '8px'
+              }}
+            >
               {clientValuation.forecast.map((fc) => (
-                <div key={fc.year} style={{ background: 'rgba(0, 0, 0, 0.5)', border: '1px solid rgba(255, 255, 255, 0.06)', borderRadius: '4px', padding: '8px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '9px', color: '#64748b', letterSpacing: '1px' }}>+{fc.year} YR ({fc.futureAge}Y OLD)</div>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#00ff88', marginTop: '4px' }}>₹{fc.price.toLocaleString('en-IN')}</div>
+                <div
+                  key={fc.year}
+                  style={{
+                    background: 'rgba(0, 0, 0, 0.5)',
+                    border: '1px solid rgba(255, 255, 255, 0.06)',
+                    borderRadius: '4px',
+                    padding: '8px',
+                    textAlign: 'center'
+                  }}
+                >
+                  <div style={{ fontSize: '9px', color: '#64748b', letterSpacing: '1px' }}>
+                    +{fc.year} YR ({fc.futureAge}Y OLD)
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      color: '#00ff88',
+                      marginTop: '4px'
+                    }}
+                  >
+                    ₹{fc.price.toLocaleString('en-IN')}
+                  </div>
                   <div style={{ fontSize: '8px', color: '#94a3b8', marginTop: '2px' }}>
-                    {fc.year === 1 ? '🔥 SWEET SPOT' : `-${Math.round((1 - fc.price / clientValuation.fairPrice) * 100)}% Drop`}
+                    {fc.year === 1
+                      ? '🔥 SWEET SPOT'
+                      : `-${Math.round((1 - fc.price / clientValuation.fairPrice) * 100)}% Drop`}
                   </div>
                 </div>
               ))}
@@ -592,8 +922,12 @@ export default function MLSimulatorModal({ onClose }) {
 
         <div className="modal-footer">
           <button
+            type="button"
             className="btn-modal-close"
-            onClick={() => { SoundFX.playClick(); onClose(); }}
+            onClick={() => {
+              SoundFX.playClick();
+              onClose();
+            }}
           >
             DISMISS SIMULATOR
           </button>

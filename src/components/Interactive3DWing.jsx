@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function Interactive3DWing({ isActive }) {
   const canvasRef = useRef(null);
@@ -31,22 +31,52 @@ export default function Interactive3DWing({ isActive }) {
     // 3D 16-point Rotating Cyber Cube Geometry
     const size = 32;
     const vertices = [
-      [-size, -size, -size], [size, -size, -size], [size, size, -size], [-size, size, -size],
-      [-size, -size, size], [size, -size, size], [size, size, size], [-size, size, size],
+      [-size, -size, -size],
+      [size, -size, -size],
+      [size, size, -size],
+      [-size, size, -size],
+      [-size, -size, size],
+      [size, -size, size],
+      [size, size, size],
+      [-size, size, size],
       // Inner core
-      [-size/2, -size/2, -size/2], [size/2, -size/2, -size/2], [size/2, size/2, -size/2], [-size/2, size/2, -size/2],
-      [-size/2, -size/2, size/2], [size/2, -size/2, size/2], [size/2, size/2, size/2], [-size/2, size/2, size/2]
+      [-size / 2, -size / 2, -size / 2],
+      [size / 2, -size / 2, -size / 2],
+      [size / 2, size / 2, -size / 2],
+      [-size / 2, size / 2, -size / 2],
+      [-size / 2, -size / 2, size / 2],
+      [size / 2, -size / 2, size / 2],
+      [size / 2, size / 2, size / 2],
+      [-size / 2, size / 2, size / 2]
     ];
 
     const edges = [
       // Outer cube
-      [0, 1], [1, 2], [2, 3], [3, 0],
-      [4, 5], [5, 6], [6, 7], [7, 4],
-      [0, 4], [1, 5], [2, 6], [3, 7],
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 0],
+      [4, 5],
+      [5, 6],
+      [6, 7],
+      [7, 4],
+      [0, 4],
+      [1, 5],
+      [2, 6],
+      [3, 7],
       // Inner cube
-      [8, 9], [9, 10], [10, 11], [11, 8],
-      [12, 13], [13, 14], [14, 15], [15, 12],
-      [8, 12], [9, 13], [10, 14], [11, 15]
+      [8, 9],
+      [9, 10],
+      [10, 11],
+      [11, 8],
+      [12, 13],
+      [13, 14],
+      [14, 15],
+      [15, 12],
+      [8, 12],
+      [9, 13],
+      [10, 14],
+      [11, 15]
     ];
 
     // 24 Floating Orbital Particle Sparkles
@@ -75,20 +105,22 @@ export default function Interactive3DWing({ isActive }) {
       rotY += 0.02 + targetY * 0.02;
       rotX = 0.35 + Math.sin(time * 0.8) * 0.2 + targetX * 0.2;
 
-      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      const cosY = Math.cos(rotY),
+        sinY = Math.sin(rotY);
+      const cosX = Math.cos(rotX),
+        sinX = Math.sin(rotX);
 
       // Project 3D to 2D
       const projected = vertices.map(([x, y, z]) => {
         // Rotate Y
-        let x1 = x * cosY + z * sinY;
-        let y1 = y;
-        let z1 = -x * sinY + z * cosY;
+        const x1 = x * cosY + z * sinY;
+        const y1 = y;
+        const z1 = -x * sinY + z * cosY;
 
         // Rotate X
-        let x2 = x1;
-        let y2 = y1 * cosX - z1 * sinX;
-        let z2 = y1 * sinX + z1 * cosX;
+        const x2 = x1;
+        const y2 = y1 * cosX - z1 * sinX;
+        const z2 = y1 * sinX + z1 * cosX;
 
         const scale = 140 / (140 + z2);
         return {
@@ -123,7 +155,7 @@ export default function Interactive3DWing({ isActive }) {
       ctx.shadowBlur = 0;
 
       // 3. Draw Orbiting Sparkle Cloud
-      particles.forEach(p => {
+      particles.forEach((p) => {
         p.angle += p.speed;
         const px = cx + Math.cos(p.angle) * p.radius;
         const py = cy + Math.sin(p.angle) * p.radius * 0.45 + Math.sin(time * 2 + p.angle) * 4;
@@ -160,7 +192,7 @@ export default function Interactive3DWing({ isActive }) {
 
         <div className="cube-header">
           <span className="cube-pulse-dot"></span>
-          <span className="cube-title">3D_QUANTUM_CORE // WebGL</span>
+          <span className="cube-title">3D_QUANTUM_CORE {/* WebGL */}</span>
         </div>
 
         <canvas ref={canvasRef} className="cube-canvas" />

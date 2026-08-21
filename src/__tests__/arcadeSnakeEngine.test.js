@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 const SPEED_MAP = {
   normal: 105,
@@ -26,7 +26,7 @@ const isWallCollision = (head, dir, cols, rows) => {
 };
 
 const isSelfCollision = (nextPos, snakeBody) => {
-  return snakeBody.some(seg => seg.x === nextPos.x && seg.y === nextPos.y);
+  return snakeBody.some((seg) => seg.x === nextPos.x && seg.y === nextPos.y);
 };
 
 describe('Arcade Snake 60FPS Game Physics Engine', () => {
@@ -68,7 +68,12 @@ describe('Arcade Snake 60FPS Game Physics Engine', () => {
   });
 
   it('should detect self-collision with snake body segments', () => {
-    const snakeBody = [{ x: 5, y: 5 }, { x: 4, y: 5 }, { x: 4, y: 6 }, { x: 5, y: 6 }];
+    const snakeBody = [
+      { x: 5, y: 5 },
+      { x: 4, y: 5 },
+      { x: 4, y: 6 },
+      { x: 5, y: 6 }
+    ];
     expect(isSelfCollision({ x: 5, y: 6 }, snakeBody)).toBe(true);
     expect(isSelfCollision({ x: 6, y: 5 }, snakeBody)).toBe(false);
   });

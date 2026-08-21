@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { dossierData } from '../data/dossierData';
 
 describe('Dossier Executive Data Matrix Integrity', () => {
@@ -17,7 +17,7 @@ describe('Dossier Executive Data Matrix Integrity', () => {
   it('should have 4 valid core engineering stats', () => {
     expect(Array.isArray(dossierData.stats)).toBe(true);
     expect(dossierData.stats.length).toBe(4);
-    dossierData.stats.forEach(s => {
+    dossierData.stats.forEach((s) => {
       expect(s.value).toBeTruthy();
       expect(s.label).toBeTruthy();
     });
@@ -26,7 +26,7 @@ describe('Dossier Executive Data Matrix Integrity', () => {
   it('should have structured experience timeline', () => {
     expect(Array.isArray(dossierData.experience)).toBe(true);
     expect(dossierData.experience.length).toBeGreaterThanOrEqual(2);
-    dossierData.experience.forEach(exp => {
+    dossierData.experience.forEach((exp) => {
       expect(exp.period).toBeTruthy();
       expect(exp.role).toBeTruthy();
       expect(exp.organization).toBeTruthy();
@@ -48,7 +48,7 @@ describe('Dossier Executive Data Matrix Integrity', () => {
   it('should have 4 competency domains with non-empty skills', () => {
     expect(Array.isArray(dossierData.competencies)).toBe(true);
     expect(dossierData.competencies.length).toBe(4);
-    dossierData.competencies.forEach(comp => {
+    dossierData.competencies.forEach((comp) => {
       expect(comp.area).toBeTruthy();
       expect(Array.isArray(comp.skills)).toBe(true);
       expect(comp.skills.length).toBeGreaterThan(3);

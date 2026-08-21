@@ -16,10 +16,10 @@ function notifyListeners() {
   if (typeof window !== 'undefined') {
     localStorage.setItem(STORAGE_KEY, String(soundEnabled));
   }
-  listeners.forEach(fn => {
+  listeners.forEach((fn) => {
     try {
       fn(soundEnabled);
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   });
@@ -97,7 +97,7 @@ export const SoundFX = {
         osc.start(now + i * 0.05);
         osc.stop(now + i * 0.05 + 0.12);
       });
-    } catch (e) {}
+    } catch (_e) {}
   },
 
   // AI Voice Transceiver Muted Chime
@@ -121,7 +121,7 @@ export const SoundFX = {
         osc.start(now + i * 0.05);
         osc.stop(now + i * 0.05 + 0.14);
       });
-    } catch (e) {}
+    } catch (_e) {}
   },
 
   // Soft sci-fi blip on hover with dynamic pitch modulation
@@ -129,7 +129,7 @@ export const SoundFX = {
     if (!soundEnabled) return;
     try {
       const ctx = initAudioContext();
-      if (!ctx || ctx.state !== 'running') return;
+      if (ctx?.state !== 'running') return;
 
       const now = ctx.currentTime;
       const osc = ctx.createOscillator();
@@ -167,7 +167,7 @@ export const SoundFX = {
 
       osc.start(now);
       osc.stop(now + duration);
-    } catch (e) {
+    } catch (_e) {
       // Audio locked or ignored
     }
   },
@@ -196,7 +196,7 @@ export const SoundFX = {
 
       osc.start(now);
       osc.stop(now + 0.09);
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   },
@@ -267,7 +267,7 @@ export const SoundFX = {
       crackleGain.connect(ctx.destination);
       crackleOsc.start(now);
       crackleOsc.stop(now + 0.45);
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   },
@@ -296,7 +296,7 @@ export const SoundFX = {
 
       osc.start(now);
       osc.stop(now + 0.18);
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   },
@@ -328,7 +328,7 @@ export const SoundFX = {
         osc.start(start);
         osc.stop(start + 0.045);
       });
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   },
@@ -356,7 +356,7 @@ export const SoundFX = {
 
       osc.start(now);
       osc.stop(now + duration);
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   },
@@ -394,7 +394,7 @@ export const SoundFX = {
       gainHigh.connect(ctx.destination);
       oscHigh.start(now);
       oscHigh.stop(now + 0.35);
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   },
@@ -423,7 +423,7 @@ export const SoundFX = {
 
       osc.start(now);
       osc.stop(now + 0.5);
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   },
@@ -433,7 +433,7 @@ export const SoundFX = {
     if (!soundEnabled) return;
     try {
       const ctx = initAudioContext();
-      if (!ctx || ctx.state !== 'running') return;
+      if (ctx?.state !== 'running') return;
 
       const now = ctx.currentTime;
       const osc = ctx.createOscillator();
@@ -450,7 +450,7 @@ export const SoundFX = {
 
       osc.start(now);
       osc.stop(now + 0.035);
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   },
@@ -464,7 +464,7 @@ export const SoundFX = {
       if (ctx.state === 'suspended') ctx.resume();
 
       const now = ctx.currentTime;
-      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
       notes.forEach((freq, i) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -482,7 +482,7 @@ export const SoundFX = {
         osc.start(startTime);
         osc.stop(startTime + 0.28);
       });
-    } catch (e) {
+    } catch (_e) {
       // Ignore
     }
   }

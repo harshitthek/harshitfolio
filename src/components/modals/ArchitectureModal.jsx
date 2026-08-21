@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { architectureData } from '../../data/architectureData';
 import { SoundFX } from '../SoundFX';
 
@@ -8,16 +8,25 @@ export default function ArchitectureModal({ onClose }) {
   const current = architectureData[activeArch] || architectureData.bike;
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-card glass-modal arch-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-backdrop" onClick={onClose} role="presentation">
+      <div
+        className="modal-card glass-modal arch-modal"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
         <div className="modal-header">
           <div className="modal-title-group">
             <span className="modal-category">SYSTEM DESIGN & ARCHITECTURAL FLOW</span>
             <h2 className="modal-title">{current.title}</h2>
           </div>
           <button
+            type="button"
             className="modal-close-btn"
-            onClick={() => { SoundFX.playClick(); onClose(); }}
+            onClick={() => {
+              SoundFX.playClick();
+              onClose();
+            }}
             aria-label="Close modal"
           >
             ✕
@@ -27,55 +36,86 @@ export default function ArchitectureModal({ onClose }) {
         {/* Tab Switcher */}
         <div className="arch-tabs-bar">
           <button
+            type="button"
             className={`arch-tab-btn ${activeArch === 'bike' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveArch('bike'); }}
+            onClick={() => {
+              SoundFX.playClick();
+              setActiveArch('bike');
+            }}
           >
             <span>🏎️</span> AutoValuate ML
           </button>
           <button
+            type="button"
             className={`arch-tab-btn ${activeArch === 'resilient' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveArch('resilient'); }}
+            onClick={() => {
+              SoundFX.playClick();
+              setActiveArch('resilient');
+            }}
           >
             <span>🤖</span> Resilient Pipeline
           </button>
           <button
+            type="button"
             className={`arch-tab-btn ${activeArch === 'phishshield' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveArch('phishshield'); }}
+            onClick={() => {
+              SoundFX.playClick();
+              setActiveArch('phishshield');
+            }}
           >
             <span>🛡️</span> PhishShield AI
           </button>
           <button
+            type="button"
             className={`arch-tab-btn ${activeArch === 'finvaria' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveArch('finvaria'); }}
+            onClick={() => {
+              SoundFX.playClick();
+              setActiveArch('finvaria');
+            }}
           >
             <span>📱</span> Finvaria On-Device
           </button>
           <button
+            type="button"
             className={`arch-tab-btn ${activeArch === 'pageshield' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveArch('pageshield'); }}
+            onClick={() => {
+              SoundFX.playClick();
+              setActiveArch('pageshield');
+            }}
           >
             <span>🥷</span> Page Shield AI
           </button>
           <button
+            type="button"
             className={`arch-tab-btn ${activeArch === 'yggdrasil' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveArch('yggdrasil'); }}
+            onClick={() => {
+              SoundFX.playClick();
+              setActiveArch('yggdrasil');
+            }}
           >
             <span>🌲</span> Yggdrasil Platform
           </button>
           <button
+            type="button"
             className={`arch-tab-btn ${activeArch === 'carbon' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playClick(); setActiveArch('carbon'); }}
+            onClick={() => {
+              SoundFX.playClick();
+              setActiveArch('carbon');
+            }}
           >
             <span>🌱</span> Carbon Guardian
           </button>
         </div>
 
         <div className="modal-body custom-scroll">
-          <div className="arch-sub-heading">// {current.subtitle}</div>
+          <div className="arch-sub-heading">
+            {/*  */}
+            {current.subtitle}
+          </div>
 
           <div className="arch-steps-grid">
-            {current.steps.map((step, idx) => (
-              <div key={idx} className="arch-step-card">
+            {current.steps.map((step) => (
+              <div key={`stage-${step.step}-${step.title}`} className="arch-step-card">
                 <div className="arch-step-header">
                   <span className="arch-step-num">STAGE {step.step}</span>
                   <span className="arch-step-dot"></span>
@@ -89,8 +129,12 @@ export default function ArchitectureModal({ onClose }) {
 
         <div className="modal-footer">
           <button
+            type="button"
             className="btn-modal-close"
-            onClick={() => { SoundFX.playClick(); onClose(); }}
+            onClick={() => {
+              SoundFX.playClick();
+              onClose();
+            }}
           >
             DISMISS ARCHITECTURE
           </button>

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { SoundFX } from '../components/SoundFX';
 
 describe('SoundFX Acoustic Synthesis Engine', () => {

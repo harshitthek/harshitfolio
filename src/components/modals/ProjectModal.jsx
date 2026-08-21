@@ -1,20 +1,28 @@
-import React from 'react';
 import { SoundFX } from '../SoundFX';
 
 export default function ProjectModal({ card, onClose, onLaunch }) {
   if (!card) return null;
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-card glass-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-backdrop" onClick={onClose} role="presentation">
+      <div
+        className="modal-card glass-modal"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
         <div className="modal-header">
           <div className="modal-title-group">
             <span className="modal-category">{card.categoryLabel || 'CLASSIFIED DOSSIER'}</span>
             <h2 className="modal-title">{card.title}</h2>
           </div>
           <button
+            type="button"
             className="modal-close-btn"
-            onClick={() => { SoundFX.playClick(); onClose(); }}
+            onClick={() => {
+              SoundFX.playClick();
+              onClose();
+            }}
             aria-label="Close modal"
           >
             ✕
@@ -46,7 +54,7 @@ export default function ProjectModal({ card, onClose, onLaunch }) {
               <div className="section-label">KEY ARCHITECTURAL HIGHLIGHTS</div>
               <ul className="modal-highlights-list">
                 {card.highlights.map((item, idx) => (
-                  <li key={idx}>
+                  <li key={`hl-${idx}-${item.slice(0, 15)}`}>
                     <span className="bullet-glow">▸</span>
                     <span>{item}</span>
                   </li>
@@ -58,8 +66,10 @@ export default function ProjectModal({ card, onClose, onLaunch }) {
           <div className="modal-section">
             <div className="section-label">ENGINEERING TECH STACK</div>
             <div className="modal-tags-grid">
-              {card.tags.map((t, idx) => (
-                <span key={idx} className="modal-tag">{t}</span>
+              {card.tags.map((t) => (
+                <span key={`tag-${t}`} className="modal-tag">
+                  {t}
+                </span>
               ))}
             </div>
           </div>
@@ -67,13 +77,18 @@ export default function ProjectModal({ card, onClose, onLaunch }) {
 
         <div className="modal-footer">
           <button
+            type="button"
             className="btn-modal-close"
-            onClick={() => { SoundFX.playClick(); onClose(); }}
+            onClick={() => {
+              SoundFX.playClick();
+              onClose();
+            }}
           >
             CLOSE DOSSIER
           </button>
 
           <button
+            type="button"
             className="btn-modal-launch"
             onClick={() => {
               SoundFX.playClick();

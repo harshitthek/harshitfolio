@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function CyberRadarTelemetry({ isActive }) {
   const canvasRef = useRef(null);
@@ -80,13 +80,13 @@ export default function CyberRadarTelemetry({ isActive }) {
       ctx.restore();
 
       // 4. Draw Targets / Blips with proximity illumination
-      blips.forEach(b => {
+      blips.forEach((b) => {
         const bx = cx + Math.cos(b.a) * b.r;
         const by = cy + Math.sin(b.a) * b.r;
 
         // Proximity to sweep angle
-        let diff = (sweepAngle - b.a + Math.PI * 4) % (Math.PI * 2);
-        const glow = diff < 0.6 ? 1 - diff / 0.6 : 0.2;
+        const diff = (sweepAngle - b.a + Math.PI * 4) % (Math.PI * 2);
+        const _glow = diff < 0.6 ? 1 - diff / 0.6 : 0.2;
 
         ctx.fillStyle = diff < 0.6 ? '#ffffff' : '#38bdf8';
         ctx.shadowColor = '#00ff88';
@@ -100,7 +100,12 @@ export default function CyberRadarTelemetry({ isActive }) {
       // 5. Bottom Hex Telemetry Matrix snippet
       ctx.font = '8px monospace';
       ctx.fillStyle = 'rgba(56, 189, 248, 0.75)';
-      const hexLine = '0x' + Math.floor(Math.sin(sweepAngle) * 0xFFFFFF + 0xFFFFFF).toString(16).toUpperCase().padStart(6, '0');
+      const hexLine =
+        '0x' +
+        Math.floor(Math.sin(sweepAngle) * 0xffffff + 0xffffff)
+          .toString(16)
+          .toUpperCase()
+          .padStart(6, '0');
       ctx.fillText(`SYS_RADAR // ${hexLine}`, 14, 180);
       ctx.fillStyle = 'rgba(0, 255, 136, 0.6)';
       ctx.fillText(`LAT: 28.61° N`, 14, 194);

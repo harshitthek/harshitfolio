@@ -1,10 +1,10 @@
 /**
  * AutoValuate AI & ML Microservices Pre-Warm / Wake-Up Engine
- * 
+ *
  * Free-tier cloud instances (e.g. Render, Railway, HuggingFace) spin down
  * after 15 minutes of inactivity. This utility immediately sends an asynchronous,
  * non-blocking background wake-up ping the moment a visitor opens the portfolio.
- * 
+ *
  * By the time the user explores the intro screens and reaches the ML Simulator
  * (~15-30s later), the backend container has finished cold-starting and is 100% hot.
  */
@@ -25,12 +25,11 @@ export async function warmupAllBackends() {
     }
   })();
 
-  const targets = Array.from(new Set([
-    ...(customUrl ? [customUrl] : []),
-    ...DEFAULT_ENDPOINTS
-  ]));
+  const targets = Array.from(new Set([...(customUrl ? [customUrl] : []), ...DEFAULT_ENDPOINTS]));
 
-  console.log('[⚡ ML BACKEND WARM-UP] Initiating background pre-warm pulses for automotive ML engines...');
+  console.log(
+    '[⚡ ML BACKEND WARM-UP] Initiating background pre-warm pulses for automotive ML engines...'
+  );
 
   targets.forEach(async (baseUrl) => {
     try {

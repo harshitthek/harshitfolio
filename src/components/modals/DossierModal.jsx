@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { dossierData } from '../../data/dossierData';
-import { skillsData, skillsCategories } from '../../data/skillsData';
+import { skillsCategories, skillsData } from '../../data/skillsData';
 import { SoundFX } from '../SoundFX';
 
-export default function DossierModal({ onClose, onOpenContact }) {
+export default function DossierModal({ onClose, _onOpenContact }) {
   const [activeTab, setActiveTab] = useState('summary');
   const [activeSkillCategory, setActiveSkillCategory] = useState('all');
   const [copied, setCopied] = useState(false);
@@ -11,9 +11,10 @@ export default function DossierModal({ onClose, onOpenContact }) {
 
   const { personal, stats, experience, education, competencies, certifications } = dossierData;
 
-  const filteredSkills = activeSkillCategory === 'all'
-    ? skillsData
-    : skillsData.filter(s => s.category === activeSkillCategory);
+  const filteredSkills =
+    activeSkillCategory === 'all'
+      ? skillsData
+      : skillsData.filter((s) => s.category === activeSkillCategory);
 
   const handleCopyIntel = () => {
     SoundFX.playClick();
@@ -204,7 +205,9 @@ Summary: ${personal.summary}
 
           <div class="section">
             <div class="sec-title">Education</div>
-            ${education.map(edu => `
+            ${education
+              .map(
+                (edu) => `
               <div style="margin-bottom: 6px;">
                 <div class="row-between">
                   <span class="item-role">${edu.degree} — ${edu.major}</span>
@@ -215,24 +218,32 @@ Summary: ${personal.summary}
                   <strong>Core Coursework:</strong> ${edu.coursework.join(', ')}
                 </div>
               </div>
-            `).join('')}
+            `
+              )
+              .join('')}
           </div>
 
           <div class="section">
             <div class="sec-title">Technical Arsenal</div>
             <table class="skills-table">
-              ${competencies.map(c => `
+              ${competencies
+                .map(
+                  (c) => `
                 <tr>
                   <td class="label">${c.area}:</td>
                   <td class="val">${c.skills.join(', ')}</td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join('')}
             </table>
           </div>
 
           <div class="section">
             <div class="sec-title">Engineering Experience & Deployed Systems</div>
-            ${experience.map(exp => `
+            ${experience
+              .map(
+                (exp) => `
               <div style="margin-bottom: 8px;">
                 <div class="row-between">
                   <span class="item-role">${exp.role}</span>
@@ -241,18 +252,24 @@ Summary: ${personal.summary}
                 <div class="item-sub">${exp.organization} · ${exp.badge}</div>
                 <p class="item-desc">${exp.description}</p>
                 <ul class="bullets">
-                  ${exp.highlights.map(h => `<li>${h}</li>`).join('')}
+                  ${exp.highlights.map((h) => `<li>${h}</li>`).join('')}
                 </ul>
               </div>
-            `).join('')}
+            `
+              )
+              .join('')}
           </div>
 
           <div class="section">
             <div class="sec-title">Certifications & Research Milestones</div>
             <div class="certs-list">
-              ${certifications.map(cert => `
+              ${certifications
+                .map(
+                  (cert) => `
                 <div>• <strong>${cert.title}</strong> — ${cert.issuer} (${cert.year}) [${cert.tag}]</div>
-              `).join('')}
+              `
+                )
+                .join('')}
             </div>
           </div>
 
@@ -280,8 +297,13 @@ Summary: ${personal.summary}
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-card glass-modal dossier-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-backdrop" onClick={onClose} role="presentation">
+      <div
+        className="modal-card glass-modal dossier-modal"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
         <span className="corner tl"></span>
         <span className="corner tr"></span>
         <span className="corner bl"></span>
@@ -290,32 +312,57 @@ Summary: ${personal.summary}
         {/* Modal Top Header */}
         <div className="modal-header">
           <div className="modal-title-group">
-            <span className="modal-category">CLASSIFIED PERSONNEL DOSSIER // TOP SECRET</span>
+            <span className="modal-category">CLASSIFIED PERSONNEL DOSSIER {/* TOP SECRET */}</span>
             <h2 className="modal-title">{personal.name}</h2>
           </div>
 
           <div className="dossier-header-actions">
             <button
+              type="button"
               className="dossier-action-btn print-btn"
               onClick={handlePrintResume}
               title="Print or Save as PDF Resume"
             >
-              <svg className="action-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              <svg
+                className="action-svg-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="6 9 6 2 18 2 18 9" />
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                <rect x="6" y="14" width="12" height="8" />
+              </svg>
               <span>{isPrinting ? 'GENERATING...' : 'SAVE PDF / PRINT'}</span>
             </button>
 
             <button
+              type="button"
               className={`dossier-action-btn copy-btn ${copied ? 'success' : ''}`}
               onClick={handleCopyIntel}
               title="Copy Summary Intel to Clipboard"
             >
-              <svg className="action-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <svg
+                className="action-svg-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
               <span>{copied ? 'COPIED!' : 'COPY INTEL'}</span>
             </button>
 
             <button
+              type="button"
               className="modal-close-btn"
-              onClick={() => { SoundFX.playClick(); onClose(); }}
+              onClick={() => {
+                SoundFX.playClick();
+                onClose();
+              }}
               aria-label="Close modal"
             >
               ✕
@@ -326,29 +373,45 @@ Summary: ${personal.summary}
         {/* Dossier Navigation Tab Strip */}
         <div className="dossier-tabs-strip">
           <button
+            type="button"
             className={`dossier-tab ${activeTab === 'summary' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playKey(); setActiveTab('summary'); }}
+            onClick={() => {
+              SoundFX.playKey();
+              setActiveTab('summary');
+            }}
           >
             <span className="tab-num">01</span>
             <span>EXECUTIVE SUMMARY</span>
           </button>
           <button
+            type="button"
             className={`dossier-tab ${activeTab === 'experience' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playKey(); setActiveTab('experience'); }}
+            onClick={() => {
+              SoundFX.playKey();
+              setActiveTab('experience');
+            }}
           >
             <span className="tab-num">02</span>
             <span>EXPERIENCE & OPS</span>
           </button>
           <button
+            type="button"
             className={`dossier-tab ${activeTab === 'skills' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playKey(); setActiveTab('skills'); }}
+            onClick={() => {
+              SoundFX.playKey();
+              setActiveTab('skills');
+            }}
           >
             <span className="tab-num">03</span>
             <span>TECHNICAL MATRIX</span>
           </button>
           <button
+            type="button"
             className={`dossier-tab ${activeTab === 'education' ? 'active' : ''}`}
-            onClick={() => { SoundFX.playKey(); setActiveTab('education'); }}
+            onClick={() => {
+              SoundFX.playKey();
+              setActiveTab('education');
+            }}
           >
             <span className="tab-num">04</span>
             <span>EDUCATION & CERTS</span>
@@ -357,7 +420,6 @@ Summary: ${personal.summary}
 
         {/* Printable & Scrollable Modal Body */}
         <div className="modal-body custom-scroll dossier-body-scrollable">
-          
           {/* TAB 1: EXECUTIVE SUMMARY */}
           {activeTab === 'summary' && (
             <div className="dossier-tab-pane tab-summary animate-fade-in">
@@ -382,7 +444,9 @@ Summary: ${personal.summary}
                     </div>
                     <div className="meta-item">
                       <span className="meta-lbl">DEGREE / BATCH</span>
-                      <span className="meta-val">{personal.degree} ({personal.duration})</span>
+                      <span className="meta-val">
+                        {personal.degree} ({personal.duration})
+                      </span>
                     </div>
                     <div className="meta-item">
                       <span className="meta-lbl">PRIMARY COMMS</span>
@@ -392,7 +456,12 @@ Summary: ${personal.summary}
                     </div>
                     <div className="meta-item">
                       <span className="meta-lbl">GITHUB / CODE REPO</span>
-                      <a href={personal.github} target="_blank" rel="noopener noreferrer" className="meta-val link">
+                      <a
+                        href={personal.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="meta-val link"
+                      >
                         {personal.githubHandle} ↗
                       </a>
                     </div>
@@ -402,7 +471,7 @@ Summary: ${personal.summary}
 
               {/* Bio Description Narrative */}
               <div className="dossier-narrative-box">
-                <div className="narrative-label">// MISSION STATEMENT & SPECIALIZATION</div>
+                <div className="narrative-label">{/* MISSION STATEMENT & SPECIALIZATION */}</div>
                 <p className="narrative-text">{personal.summary}</p>
               </div>
 
@@ -423,7 +492,9 @@ Summary: ${personal.summary}
                     <h5 className="comp-area-title">{comp.area}</h5>
                     <div className="comp-tags-wrap">
                       {comp.skills.map((sk, sIdx) => (
-                        <span key={sIdx} className="comp-tag-pill">{sk}</span>
+                        <span key={sIdx} className="comp-tag-pill">
+                          {sk}
+                        </span>
                       ))}
                     </div>
                   </div>
@@ -435,7 +506,9 @@ Summary: ${personal.summary}
           {/* TAB 2: EXPERIENCE & OPS */}
           {activeTab === 'experience' && (
             <div className="dossier-tab-pane tab-experience animate-fade-in">
-              <div className="section-label">// ENGINEERING CHRONOLOGY & DEPLOYED OPERATIONS</div>
+              <div className="section-label">
+                {/* ENGINEERING CHRONOLOGY & DEPLOYED OPERATIONS */}
+              </div>
 
               <div className="dossier-timeline">
                 {experience.map((exp, idx) => (
@@ -477,11 +550,12 @@ Summary: ${personal.summary}
           {/* TAB 3: TECHNICAL MATRIX */}
           {activeTab === 'skills' && (
             <div className="dossier-tab-pane tab-skills animate-fade-in">
-              <div className="section-label">// TECHNICAL ARSENAL & PROFICIENCIES</div>
+              <div className="section-label">{/* TECHNICAL ARSENAL & PROFICIENCIES */}</div>
 
               <div className="skills-filter-chips">
-                {skillsCategories.map(cat => (
+                {skillsCategories.map((cat) => (
                   <button
+                    type="button"
                     key={cat.id}
                     className={`skill-filter-chip ${activeSkillCategory === cat.id ? 'active' : ''}`}
                     onClick={() => {
@@ -495,8 +569,8 @@ Summary: ${personal.summary}
               </div>
 
               <div className="skills-card-grid">
-                {filteredSkills.map((skill, idx) => (
-                  <div key={idx} className="skill-item-card">
+                {filteredSkills.map((skill) => (
+                  <div key={`skill-${skill.name}`} className="skill-item-card">
                     <div className="skill-card-top">
                       <span className="skill-icon-emoji">{skill.icon}</span>
                       <span className="skill-level-tag">{skill.level}</span>
@@ -512,15 +586,17 @@ Summary: ${personal.summary}
           {/* TAB 4: EDUCATION & CERTIFICATIONS */}
           {activeTab === 'education' && (
             <div className="dossier-tab-pane tab-education animate-fade-in">
-              <div className="section-label">// ACADEMIC BACKGROUND & CURRICULUM</div>
+              <div className="section-label">{/* ACADEMIC BACKGROUND & CURRICULUM */}</div>
 
-              {education.map((edu, idx) => (
-                <div key={idx} className="education-card">
+              {education.map((edu) => (
+                <div key={`edu-${edu.degree}-${edu.period}`} className="education-card">
                   <div className="edu-header-row">
                     <div>
                       <h4 className="edu-degree">{edu.degree}</h4>
                       <div className="edu-major">{edu.major}</div>
-                      <div className="edu-inst">{edu.institution} — {edu.university}</div>
+                      <div className="edu-inst">
+                        {edu.institution} — {edu.university}
+                      </div>
                     </div>
                     <div className="edu-period-tag">{edu.period}</div>
                   </div>
@@ -529,18 +605,22 @@ Summary: ${personal.summary}
                     <span className="coursework-label">CORE COURSEWORK & RESEARCH FOCUS:</span>
                     <div className="coursework-chips">
                       {edu.coursework.map((course, cIdx) => (
-                        <span key={cIdx} className="coursework-chip">{course}</span>
+                        <span key={`course-${cIdx}-${course}`} className="coursework-chip">
+                          {course}
+                        </span>
                       ))}
                     </div>
                   </div>
                 </div>
               ))}
 
-              <div className="section-label" style={{ marginTop: '24px' }}>// CREDENTIALS & CERTIFICATIONS</div>
+              <div className="section-label" style={{ marginTop: '24px' }}>
+                {/* CREDENTIALS & CERTIFICATIONS */}
+              </div>
 
               <div className="certifications-grid">
-                {certifications.map((cert, idx) => (
-                  <div key={idx} className="cert-card">
+                {certifications.map((cert) => (
+                  <div key={`cert-${cert.tag}-${cert.title}`} className="cert-card">
                     <div className="cert-top-row">
                       <span className="cert-tag">{cert.tag}</span>
                       <span className="cert-year">{cert.year}</span>
@@ -558,20 +638,21 @@ Summary: ${personal.summary}
         <div className="modal-footer dossier-footer-wrap">
           <div className="footer-left-status">
             <span className="status-indicator-dot"></span>
-            <span>CLEARANCE VERIFIED // READY FOR EMPLOYMENT & COLLABORATION</span>
+            <span>CLEARANCE VERIFIED {/* READY FOR EMPLOYMENT & COLLABORATION */}</span>
           </div>
 
           <div className="footer-btns-group">
-            <button
-              className="btn-modal-action print"
-              onClick={handlePrintResume}
-            >
+            <button type="button" className="btn-modal-action print" onClick={handlePrintResume}>
               📄 SAVE PDF
             </button>
 
             <button
+              type="button"
               className="btn-modal-close"
-              onClick={() => { SoundFX.playClick(); onClose(); }}
+              onClick={() => {
+                SoundFX.playClick();
+                onClose();
+              }}
             >
               DISMISS DOSSIER
             </button>
@@ -604,10 +685,14 @@ Summary: ${personal.summary}
           {education.map((edu, idx) => (
             <div key={idx} className="print-edu-item">
               <div className="print-row-between">
-                <strong>{edu.degree} — {edu.major}</strong>
+                <strong>
+                  {edu.degree} — {edu.major}
+                </strong>
                 <span>{edu.period}</span>
               </div>
-              <div className="print-inst">{edu.institution}, {edu.university}</div>
+              <div className="print-inst">
+                {edu.institution}, {edu.university}
+              </div>
               <div className="print-coursework">
                 <em>Core Coursework:</em> {edu.coursework.join(', ')}
               </div>

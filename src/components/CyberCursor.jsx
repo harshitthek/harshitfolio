@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function CyberCursor({ activeScreen }) {
   const dotWrapperRef = useRef(null);
@@ -79,7 +79,7 @@ export default function CyberCursor({ activeScreen }) {
       document.body.removeEventListener('mouseenter', handleMouseEnter);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [isVisible]);
 
   // Keep touch devices clean
   if (isTouch || activeScreen === 's-video') return null;
@@ -93,7 +93,9 @@ export default function CyberCursor({ activeScreen }) {
 
       {/* 2. Trailing Precision Target Crosshair Ring Wrapper */}
       <div ref={ringWrapperRef} className="cursor-pos-wrapper">
-        <div className={`cursor-reticle-inner ${isHovered ? 'hovered' : ''} ${isClicking ? 'clicking' : ''}`}>
+        <div
+          className={`cursor-reticle-inner ${isHovered ? 'hovered' : ''} ${isClicking ? 'clicking' : ''}`}
+        >
           <span className="reticle-pip top"></span>
           <span className="reticle-pip right"></span>
           <span className="reticle-pip bottom"></span>
@@ -103,7 +105,9 @@ export default function CyberCursor({ activeScreen }) {
 
       {/* 3. Precision Laser Center Dot Wrapper (Zero Latency) */}
       <div ref={dotWrapperRef} className="cursor-pos-wrapper">
-        <div className={`cursor-dot-inner ${isHovered ? 'hovered' : ''} ${isClicking ? 'clicking' : ''}`} />
+        <div
+          className={`cursor-dot-inner ${isHovered ? 'hovered' : ''} ${isClicking ? 'clicking' : ''}`}
+        />
       </div>
     </div>
   );

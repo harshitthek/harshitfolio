@@ -14,7 +14,8 @@ export const projectsData = [
     category: 'ml-models',
     categoryLabel: 'DUAL-ENGINE STACKING ML',
     desc: 'Enterprise vehicle valuation suite trained on 40,000+ Indian market transactions, achieving 97.4% R² on motorcycles and 97.3% R² on passenger cars with 5-year forward TCO simulators and SHA-256 certificates.',
-    longDesc: 'Full-stack enterprise automotive resale intelligence platform trained on 40,000+ real-world vehicle listings across India. Features dual CatBoost and XGBoost gradient-boosted stacking ensembles with native categorical brand embeddings, 5-year forward TCO & fuel lifecycle simulator, dealership fleet batch appraisals (up to 50 vehicles), immutable SHA-256 cryptographic valuation certificates, real-time Population Stability Index (PSI) drift monitoring, and 102 passing automated unit tests (58 Pytest + 44 Vitest).',
+    longDesc:
+      'Full-stack enterprise automotive resale intelligence platform trained on 40,000+ real-world vehicle listings across India. Features dual CatBoost and XGBoost gradient-boosted stacking ensembles with native categorical brand embeddings, 5-year forward TCO & fuel lifecycle simulator, dealership fleet batch appraisals (up to 50 vehicles), immutable SHA-256 cryptographic valuation certificates, real-time Population Stability Index (PSI) drift monitoring, and 102 passing automated unit tests (58 Pytest + 44 Vitest).',
     tags: ['CATBOOST', 'XGBOOST', 'FASTAPI', 'REACT 19', '5-YR TCO', 'DOCKER', '102 TESTS'],
     badge: '🏎️ PORT_01',
     stats: {
@@ -48,7 +49,8 @@ export const projectsData = [
     category: 'ai-agents',
     categoryLabel: 'EMPIRICAL BENCHMARK & PIPELINE',
     desc: 'Autonomous Open-Source AI Coding Agent Leaderboard & Remediation Pipeline dispatching agents in isolated git sandboxes to solve real unit-tested issues.',
-    longDesc: 'Resilient is an enterprise-grade autonomous pipeline and empirical benchmarking platform that continuously scans GitHub trending repositories, dispatches AI coding agents in isolated branch sandboxes, executes local test suites (pytest, npm, cargo, go), enforces 24h rolling rate caps, and submits authenticated pull requests upstream using a dedicated GitHub App (RS256 JWT auth). Served live on a Three.js 3D Web Dashboard.',
+    longDesc:
+      'Resilient is an enterprise-grade autonomous pipeline and empirical benchmarking platform that continuously scans GitHub trending repositories, dispatches AI coding agents in isolated branch sandboxes, executes local test suites (pytest, npm, cargo, go), enforces 24h rolling rate caps, and submits authenticated pull requests upstream using a dedicated GitHub App (RS256 JWT auth). Served live on a Three.js 3D Web Dashboard.',
     tags: ['AI AGENTS', 'FASTAPI', 'POSTGRESQL', 'THREE.JS', 'PYTEST (47 PASSED)', 'DOCKER'],
     badge: '🤖 PORT_02',
     stats: {
@@ -81,7 +83,8 @@ export const projectsData = [
     category: 'ml-models',
     categoryLabel: 'PHISHING INTELLIGENCE & HEURISTICS',
     desc: 'Real-time email security engine combining Random Forest (250 Estimators) & sublinear TF-IDF NLP with a 15-dimensional heuristic feature matrix, Shannon entropy, and brand typosquatting detectors.',
-    longDesc: 'PhishShield AI is an intelligent security analysis system designed to intercept email phishing attacks, Business Email Compromise (BEC), credential harvesting, and malicious hyperlink vectors. Combines sublinear TF-IDF text representations with 15 structural heuristic features (raw IP hosting, high-risk TLDs, typosquatting targeting 50+ global brands, Shannon domain entropy) yielding 94.29% 5-fold CV accuracy and 100% holdout test accuracy with explainable diagnostic logs.',
+    longDesc:
+      'PhishShield AI is an intelligent security analysis system designed to intercept email phishing attacks, Business Email Compromise (BEC), credential harvesting, and malicious hyperlink vectors. Combines sublinear TF-IDF text representations with 15 structural heuristic features (raw IP hosting, high-risk TLDs, typosquatting targeting 50+ global brands, Shannon domain entropy) yielding 94.29% 5-fold CV accuracy and 100% holdout test accuracy with explainable diagnostic logs.',
     tags: ['PYTHON 3.9+', 'RANDOM FOREST', 'TF-IDF', 'FASTAPI', 'TAILWIND CSS', 'SHANNON ENTROPY'],
     badge: '🛡️ PORT_03',
     stats: {
@@ -114,7 +117,8 @@ export const projectsData = [
     category: 'ai-agents',
     categoryLabel: 'ON-DEVICE LLM & KOTLIN APP',
     desc: 'Comprehensive Android app empowering Indian youth with offline, on-device AI guidance on loans, legal rights, and education across 11 Indian languages.',
-    longDesc: 'Built for the Startup Hackathon 2.0 with 100% Kotlin and Jetpack Compose (Material 3). Addresses youth information asymmetry across education loans (SBI Scholar, Vidyalakshmi), legal rights (consumer, employment, cyber crime), and scholarships. Features a 100% private, on-device local LLM (RunAnywhere SDK / Llama.cpp ARM64) executing on-device inferences with dynamic knowledge-base prompt injection across 11 Indian languages.',
+    longDesc:
+      'Built for the Startup Hackathon 2.0 with 100% Kotlin and Jetpack Compose (Material 3). Addresses youth information asymmetry across education loans (SBI Scholar, Vidyalakshmi), legal rights (consumer, employment, cyber crime), and scholarships. Features a 100% private, on-device local LLM (RunAnywhere SDK / Llama.cpp ARM64) executing on-device inferences with dynamic knowledge-base prompt injection across 11 Indian languages.',
     tags: ['KOTLIN', 'JETPACK COMPOSE', 'ON-DEVICE LLM', 'LLAMA.CPP', '11 LANGUAGES', 'MATERIAL 3'],
     badge: '📱 PORT_04',
     stats: {
@@ -147,7 +151,8 @@ export const projectsData = [
     category: 'systems',
     categoryLabel: 'MANIFEST V3 & STEALTH AI',
     desc: 'Dual-layer Chrome Extension (MV3) disguised as a privacy defender with an ultra-stealthy LLM form solver powered by Groq Llama 3.3 70B & Gemini 2.0 Flash Lite.',
-    longDesc: 'High-performance Manifest V3 Chrome Extension featuring a dual persona: a sleek glassmorphic ad & tracker protection popup on the surface, paired with an intelligent, undetectable Google Forms autofiller inside. Powered by Groq Llama 3.3 70B and Gemini 2.0 Flash Lite with dual-speed human typing simulation (keystrokes + chunk pasting), rolling context memory, secret version badge drawer, and zero-DevTools-log stealth.',
+    longDesc:
+      'High-performance Manifest V3 Chrome Extension featuring a dual persona: a sleek glassmorphic ad & tracker protection popup on the surface, paired with an intelligent, undetectable Google Forms autofiller inside. Powered by Groq Llama 3.3 70B and Gemini 2.0 Flash Lite with dual-speed human typing simulation (keystrokes + chunk pasting), rolling context memory, secret version badge drawer, and zero-DevTools-log stealth.',
     tags: ['MANIFEST V3', 'GROQ LLAMA 3.3 70B', 'GEMINI 2.0 FLASH', 'JAVASCRIPT', 'STEALTH MODE'],
     badge: '🥷 PORT_05',
     stats: {
@@ -180,7 +185,8 @@ export const projectsData = [
     category: 'systems',
     categoryLabel: 'DISCORD PLATFORM & ENCRYPTED API',
     desc: 'Self-hosted modular Discord platform with Fastify REST API, encrypted AES-256-GCM sessions with HKDF key derivation, and multi-source audio streaming.',
-    longDesc: 'World Tree is an enterprise-grade modular backend platform running on antiX Linux. Features a single-process architecture where Discord.js and Fastify coexist with strict service boundaries, AES-256-GCM encrypted session tokens with HKDF key derivation, Discord OAuth2 + PKCE authentication, and MongoDB Atlas persistence.',
+    longDesc:
+      'World Tree is an enterprise-grade modular backend platform running on antiX Linux. Features a single-process architecture where Discord.js and Fastify coexist with strict service boundaries, AES-256-GCM encrypted session tokens with HKDF key derivation, Discord OAuth2 + PKCE authentication, and MongoDB Atlas persistence.',
     tags: ['NODE.JS', 'FASTIFY', 'DISCORD.JS', 'AES-256-GCM', 'HKDF', 'MONGODB'],
     badge: '🌲 PORT_06',
     stats: {
@@ -213,7 +219,8 @@ export const projectsData = [
     category: 'systems',
     categoryLabel: 'MANIFEST V3 & PRIVACY ENGINE',
     desc: 'High-performance Manifest V3 ad, tracker, and anti-adblock blocker with native DNR engine, 16x Spotify/YouTube ad speed bypass, and real-time network logger.',
-    longDesc: 'Ultra-fast Chrome extension engineered for Manifest V3. Intercepts ads, telemetry, and trackers at the browser network core using native declarativeNetRequest (DNR) without consuming main-thread CPU. Features a 16x Spotify & YouTube ad speed accelerator, live streaming network debug logger, element zapper/picker, anti-adblock overlay cleaner, and zero-innerHTML security.',
+    longDesc:
+      'Ultra-fast Chrome extension engineered for Manifest V3. Intercepts ads, telemetry, and trackers at the browser network core using native declarativeNetRequest (DNR) without consuming main-thread CPU. Features a 16x Spotify & YouTube ad speed accelerator, live streaming network debug logger, element zapper/picker, anti-adblock overlay cleaner, and zero-innerHTML security.',
     tags: ['MANIFEST V3', 'DECLARATIVE NET REQUEST', 'CHROME API', 'JAVASCRIPT', 'CYBERSECURITY'],
     badge: '🛡️ PORT_07',
     stats: {
@@ -246,7 +253,8 @@ export const projectsData = [
     category: 'systems',
     categoryLabel: 'AI SUSTAINABILITY & TELEMETRY',
     desc: 'Enterprise ESG sustainability platform with TensorFlow Recommenders analyzing user telemetry to optimize transit, energy, and carbon footprints.',
-    longDesc: 'Full-stack AI sustainability and ESG compliance platform. Powered by TensorFlow Recommender models analyzing user logs to generate high-impact personalized ecological action suggestions. Includes an RBAC gamification economy, dark-mode Glassmorphism UI with Framer Motion, real-time audit logging, and interactive CSV data exports.',
+    longDesc:
+      'Full-stack AI sustainability and ESG compliance platform. Powered by TensorFlow Recommender models analyzing user logs to generate high-impact personalized ecological action suggestions. Includes an RBAC gamification economy, dark-mode Glassmorphism UI with Framer Motion, real-time audit logging, and interactive CSV data exports.',
     tags: ['REACT', 'FASTAPI', 'TENSORFLOW', 'SQLITE', 'ESG SUSTAINABILITY', 'JWT RBAC'],
     badge: '🌱 PORT_08',
     stats: {
@@ -279,7 +287,8 @@ export const projectsData = [
     category: 'ml-models',
     categoryLabel: 'BERT NLP & INTELLIGENT DISPATCHER',
     desc: 'Deep learning NLP classification engine using fine-tuned BERT transformers to intelligently route incoming customer emails to teams and predict real-time urgency scores.',
-    longDesc: 'Automated deep learning support ticket routing and triage system. Powered by fine-tuned BERT transformer neural networks trained to understand customer semantic intent, categorize queries across technical, billing, logistics, and account teams, and compute calibrated urgency probability scores to prioritize mission-critical escalations.',
+    longDesc:
+      'Automated deep learning support ticket routing and triage system. Powered by fine-tuned BERT transformer neural networks trained to understand customer semantic intent, categorize queries across technical, billing, logistics, and account teams, and compute calibrated urgency probability scores to prioritize mission-critical escalations.',
     tags: ['BERT', 'TRANSFORMERS', 'PYTORCH', 'FASTAPI', 'STREAMLIT', 'NLP CLASSIFIER'],
     badge: '📩 PORT_09',
     stats: {
@@ -312,7 +321,8 @@ export const projectsData = [
     category: 'systems',
     categoryLabel: 'DETERMINISTIC SOLVER & ALGORITHMS',
     desc: 'Offline desktop constraint analysis and candidate generation engine featuring conservative regex extraction, search-space estimation, and SQLite session persistence.',
-    longDesc: 'High-performance offline desktop application engineered for deterministic candidate generation, constraint reduction, ranking algorithms, and search-space budgeting. Features dictionary, random-string, and hybrid modes, advanced wildcard templates, conservative regex-to-constraint analysis, time/memory bounded executions, and complete replay provenance.',
+    longDesc:
+      'High-performance offline desktop application engineered for deterministic candidate generation, constraint reduction, ranking algorithms, and search-space budgeting. Features dictionary, random-string, and hybrid modes, advanced wildcard templates, conservative regex-to-constraint analysis, time/memory bounded executions, and complete replay provenance.',
     tags: ['PYTHON', 'SQLITE', 'REGEX PARSER', 'CONSTRAINT SOLVER', 'ALGORITHMS'],
     badge: '🔤 PORT_10',
     stats: {
@@ -345,7 +355,8 @@ export const projectsData = [
     category: 'web-3d',
     categoryLabel: 'PRIVACY LAUNCHPAD & 13 THEMES',
     desc: 'Zero-dependency browser homepage replacement with 13 premium themes, drag-and-drop bookmarks, live weather radar, and strict privacy controls.',
-    longDesc: 'A privacy-hardened developer new tab launchpad with 13 premium themes (Cyberpunk particles, Aurora Wave, Northern Lights, Sunset, Midnight, Dark Slate). Includes drag-and-drop smart bookmarks, multi-engine search switcher (Google, DuckDuckGo, Brave), live OpenWeatherMap radar, GitHub profile telemetry, and zero external tracking.',
+    longDesc:
+      'A privacy-hardened developer new tab launchpad with 13 premium themes (Cyberpunk particles, Aurora Wave, Northern Lights, Sunset, Midnight, Dark Slate). Includes drag-and-drop smart bookmarks, multi-engine search switcher (Google, DuckDuckGo, Brave), live OpenWeatherMap radar, GitHub profile telemetry, and zero external tracking.',
     tags: ['JAVASCRIPT', 'HTML5', 'CSS3', 'LOCAL STORAGE', 'OPENWEATHERMAP', 'ZERO-DEP'],
     badge: '🖥️ PORT_11',
     stats: {
@@ -378,7 +389,8 @@ export const projectsData = [
     category: 'web-3d',
     categoryLabel: '3D GRAPHICS & THREE.JS',
     desc: '6-in-1 real-time 3D WebGL physics portfolio featuring Cyberpunk Gravitational Vortex, Retrowave Highway, DNA double helix, and Matrix rain.',
-    longDesc: 'A showcase of GPU-accelerated WebGL physics, raycasting pointer tracking, and real-time custom shader effects. Built with vanilla Three.js without bloat, achieving a locked 60fps across desktop and mobile devices.',
+    longDesc:
+      'A showcase of GPU-accelerated WebGL physics, raycasting pointer tracking, and real-time custom shader effects. Built with vanilla Three.js without bloat, achieving a locked 60fps across desktop and mobile devices.',
     tags: ['THREE.JS', 'WEBGL', 'GLSL SHADERS', 'VANILLA JS', '60 FPS'],
     badge: '🌌 PORT_12',
     stats: {
@@ -400,7 +412,7 @@ export const projectsData = [
   },
   {
     id: 'terminal-console-port',
-    title: 'Harshit\'s Cyber Terminal & Inspector',
+    title: "Harshit's Cyber Terminal & Inspector",
     url: 'https://github.com/harshitthek',
     githubUrl: 'https://github.com/harshitthek',
     demoUrl: 'https://github.com/harshitthek',
@@ -411,7 +423,8 @@ export const projectsData = [
     category: 'systems',
     categoryLabel: 'INTERACTIVE CLI & AI SHELL',
     desc: 'Interactive lab terminal console executing commands (neofetch, snake 60fps, hack, top, ai, cat, whoami) with cryptographic inspection suites.',
-    longDesc: 'A fully interactive in-browser Zsh shell workstation featuring 18+ built-in commands (neofetch, 60fps arcade canvas snake game, matrix stream simulations, system diagnostic cards, and AI query engine) combined with cryptographic HMAC-SHA256 signature verifiers and PostgreSQL relational schema inspectors.',
+    longDesc:
+      'A fully interactive in-browser Zsh shell workstation featuring 18+ built-in commands (neofetch, 60fps arcade canvas snake game, matrix stream simulations, system diagnostic cards, and AI query engine) combined with cryptographic HMAC-SHA256 signature verifiers and PostgreSQL relational schema inspectors.',
     tags: ['ZSH SHELL', 'INTERACTIVE CLI', 'SNAKE 60FPS', 'HMAC-SHA256', 'FASTAPI'],
     badge: '⚡ PORT_13',
     stats: {
@@ -425,7 +438,7 @@ export const projectsData = [
     highlights: [
       'Interactive command parsing with autocomplete for commands and code files',
       '60fps HTML5 Canvas arcade snake game with particle bursts and speed controls',
-      'Neofetch system diagnostic card summarizing Harshit\'s hardware, OS, and stack',
+      "Neofetch system diagnostic card summarizing Harshit's hardware, OS, and stack",
       'Production cryptographic HMAC signature validator and PostgreSQL transaction schema viewer'
     ],
     hasInteractiveModal: 'terminal',

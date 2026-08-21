@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { projectsData } from '../../data/projectsData';
 import { SoundFX } from '../SoundFX';
 import { useVoice } from '../VoiceContext';
-import { projectsData } from '../../data/projectsData';
 
 export default function CommandPaletteModal({
   isOpen,
@@ -143,7 +143,9 @@ export default function CommandPaletteModal({
         category: 'AUDIO & SYSTEM',
         icon: voiceEnabled ? '🔊' : '🔇',
         title: voiceEnabled ? 'Mute AI Voice Transceiver' : 'Enable AI Voice Transceiver',
-        subtitle: voiceEnabled ? 'AI speech synthesis is currently active' : 'AI speech synthesis is currently muted',
+        subtitle: voiceEnabled
+          ? 'AI speech synthesis is currently active'
+          : 'AI speech synthesis is currently muted',
         shortcut: 'VOICE',
         action: () => {
           toggleVoice();
@@ -216,14 +218,23 @@ export default function CommandPaletteModal({
     });
 
     return list;
-  }, [voiceEnabled, sfxOn, currentScreen, onJumpToScreen, onOpenModal, onLaunchProject, onTriggerQuantumBlast, toggleVoice]);
+  }, [
+    voiceEnabled,
+    sfxOn,
+    currentScreen,
+    onJumpToScreen,
+    onOpenModal,
+    onLaunchProject,
+    onTriggerQuantumBlast,
+    toggleVoice
+  ]);
 
   // Filter commands by search query
   const filteredCommands = useMemo(() => {
     if (!query.trim()) return allCommands;
     const q = query.toLowerCase().trim();
     return allCommands.filter(
-      cmd =>
+      (cmd) =>
         cmd.title.toLowerCase().includes(q) ||
         cmd.subtitle.toLowerCase().includes(q) ||
         cmd.category.toLowerCase().includes(q) ||
@@ -234,7 +245,7 @@ export default function CommandPaletteModal({
   // Keep selected index within bounds
   useEffect(() => {
     setSelectedIndex(0);
-  }, [filteredCommands.length]);
+  }, []);
 
   // Scroll active item into view
   useEffect(() => {
@@ -244,18 +255,20 @@ export default function CommandPaletteModal({
         activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
     }
-  }, [selectedIndex]);
+  }, []);
 
   // Handle keyboard navigation inside command palette
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       SoundFX.playKey();
-      setSelectedIndex(prev => (prev + 1) % Math.max(1, filteredCommands.length));
+      setSelectedIndex((prev) => (prev + 1) % Math.max(1, filteredCommands.length));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       SoundFX.playKey();
-      setSelectedIndex(prev => (prev - 1 + filteredCommands.length) % Math.max(1, filteredCommands.length));
+      setSelectedIndex(
+        (prev) => (prev - 1 + filteredCommands.length) % Math.max(1, filteredCommands.length)
+      );
     } else if (e.key === 'Enter') {
       e.preventDefault();
       const target = filteredCommands[selectedIndex];
@@ -285,8 +298,13 @@ export default function CommandPaletteModal({
   if (!isOpen) return null;
 
   return (
-    <div className="cmd-palette-backdrop" onClick={onClose}>
-      <div className="cmd-palette-container" onClick={e => e.stopPropagation()}>
+    <div className="cmd-palette-backdrop" onClick={onClose} role="presentation">
+      <div
+        className="cmd-palette-container"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
         <span className="corner tl"></span>
         <span className="corner tr"></span>
         <span className="corner bl"></span>
@@ -312,7 +330,16 @@ export default function CommandPaletteModal({
           />
 
           <div className="cmd-header-badges">
-            <span className="cmd-esc-badge" onClick={onClose} title="Close palette">
+            <span
+              className="cmd-esc-badge"
+              role="button"
+              tabIndex={0}
+              onClick={onClose}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') onClose();
+              }}
+              title="Close palette"
+            >
               ESC
             </span>
           </div>
@@ -320,9 +347,10 @@ export default function CommandPaletteModal({
 
         {/* Results Counter & Telemetry Strip */}
         <div className="cmd-telemetry-strip">
-          <span className="telemetry-label">SYSTEM_INDEX // COMMAND_MATRIX</span>
+          <span className="telemetry-label">SYSTEM_INDEX {/* COMMAND_MATRIX */}</span>
           <span className="telemetry-count">
-            {filteredCommands.length} {filteredCommands.length === 1 ? 'COMMAND' : 'COMMANDS'} AVAILABLE
+            {filteredCommands.length} {filteredCommands.length === 1 ? 'COMMAND' : 'COMMANDS'}{' '}
+            AVAILABLE
           </span>
         </div>
 
@@ -332,7 +360,9 @@ export default function CommandPaletteModal({
             <div className="cmd-empty-state">
               <span className="empty-glyph">∅</span>
               <p className="empty-title">NO MATCHING COMMANDS FOUND</p>
-              <p className="empty-sub">Try searching for "terminal", "resume", "projects", or "audio"</p>
+              <p className="empty-sub">
+                Try searching for "terminal", "resume", "projects", or "audio"
+              </p>
             </div>
           ) : (
             filteredCommands.map((cmd, idx) => {
@@ -345,13 +375,21 @@ export default function CommandPaletteModal({
                   {showCategoryHeader && (
                     <div className="cmd-category-divider">
                       <span className="cat-line"></span>
-                      <span className="cat-text">// {cmd.category}</span>
+                      <span className="cat-text">
+                        {/*  */}
+                        {cmd.category}
+                      </span>
                     </div>
                   )}
 
                   <div
+                    role="button"
+                    tabIndex={0}
                     className={`cmd-item ${isSelected ? 'selected' : ''}`}
                     onClick={() => handleItemClick(cmd)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') handleItemClick(cmd);
+                    }}
                     onMouseEnter={() => setSelectedIndex(idx)}
                   >
                     <div className="cmd-item-left">
@@ -365,9 +403,7 @@ export default function CommandPaletteModal({
                     </div>
 
                     <div className="cmd-item-right">
-                      {cmd.shortcut && (
-                        <span className="cmd-shortcut-tag">{cmd.shortcut}</span>
-                      )}
+                      {cmd.shortcut && <span className="cmd-shortcut-tag">{cmd.shortcut}</span>}
                       <span className="cmd-enter-arrow">↵</span>
                     </div>
                   </div>
@@ -390,7 +426,7 @@ export default function CommandPaletteModal({
               <kbd>ESC</kbd> CLOSE
             </span>
           </div>
-          <span className="footer-status">HARSHIT.EXE // CMD_V2.0</span>
+          <span className="footer-status">HARSHIT.EXE {/* CMD_V2.0 */}</span>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function NeuralOscilloscope({ isActive }) {
   const canvasRef = useRef(null);
@@ -48,10 +48,13 @@ export default function NeuralOscilloscope({ isActive }) {
       const barCount = 14;
       const barWidth = 7;
       const gap = 3;
-      const startX = (width - (barCount * (barWidth + gap))) / 2;
+      const startX = (width - barCount * (barWidth + gap)) / 2;
 
       for (let i = 0; i < barCount; i++) {
-        const barHeight = Math.abs(Math.sin(time * 2 + i * 0.45) * 32) + Math.abs(Math.cos(time * 1.2 + i * 0.7) * 18) + 4;
+        const barHeight =
+          Math.abs(Math.sin(time * 2 + i * 0.45) * 32) +
+          Math.abs(Math.cos(time * 1.2 + i * 0.7) * 18) +
+          4;
         const bx = startX + i * (barWidth + gap);
         const by = 75 - barHeight;
 

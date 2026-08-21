@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+import { describe, expect, it } from 'vitest';
 
 describe('Production Build & SEO Asset Integrity', () => {
   it('should have a valid index.html with meta tags and title', () => {
@@ -10,7 +10,9 @@ describe('Production Build & SEO Asset Integrity', () => {
 
     expect(content.toLowerCase()).toContain('<!doctype html>');
     expect(content).toContain('<meta name="viewport"');
-    expect(content).toContain('<title>HARSHIT.EXE | Harshit Sharma — AI & Systems Engineer</title>');
+    expect(content).toContain(
+      '<title>HARSHIT.EXE | Harshit Sharma — AI & Systems Engineer</title>'
+    );
     expect(content).toContain('<meta property="og:title"');
     expect(content).toContain('<meta name="twitter:card"');
     expect(content).toContain('application/ld+json');
@@ -36,11 +38,12 @@ describe('Production Build & SEO Asset Integrity', () => {
     expect(content).toContain('add_header Cache-Control');
   });
 
-  it('should have valid eslint.config.js configuration', () => {
-    const eslintPath = path.resolve(process.cwd(), 'eslint.config.js');
-    expect(fs.existsSync(eslintPath)).toBe(true);
-    const content = fs.readFileSync(eslintPath, 'utf-8');
-    expect(content).toContain('ecmaVersion: 2024');
-    expect(content).toContain('AbortController');
+  it('should have valid biome.json configuration', () => {
+    const biomePath = path.resolve(process.cwd(), 'biome.json');
+    expect(fs.existsSync(biomePath)).toBe(true);
+    const content = fs.readFileSync(biomePath, 'utf-8');
+    expect(content).toContain('biomejs.dev');
+    expect(content).toContain('formatter');
+    expect(content).toContain('linter');
   });
 });

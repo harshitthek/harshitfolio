@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
 import confetti from 'canvas-confetti';
-import { SoundFX } from '../SoundFX';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { projectsData } from '../../data/projectsData';
+import { SoundFX } from '../SoundFX';
 
 // Full Virtual Filesystem Structure
 const VIRTUAL_FS = {
@@ -34,25 +34,30 @@ Core Technical Arsenal:
       'contact.json': {
         type: 'file',
         size: '620 B',
-        content: JSON.stringify({
-          name: "Harshit Sharma",
-          role: "AI Engineer & ML Systems Architect",
-          degree: "B.Tech AI & ML (Class of 2029)",
-          location: "New Delhi, India",
-          email: "codewithharshitsharma@gmail.com",
-          github: "https://github.com/harshitthek",
-          linkedin: "https://www.linkedin.com/in/devharshitsharma",
-          discord: "harshit0",
-          domains: ["harshitthek.is-a.dev", "harshit.thedev.id"],
-          status: "Open to AI/ML Research, LLM Agent Engineering & Systems Roles"
-        }, null, 2)
+        content: JSON.stringify(
+          {
+            name: 'Harshit Sharma',
+            role: 'AI Engineer & ML Systems Architect',
+            degree: 'B.Tech AI & ML (Class of 2029)',
+            location: 'New Delhi, India',
+            email: 'codewithharshitsharma@gmail.com',
+            github: 'https://github.com/harshitthek',
+            linkedin: 'https://www.linkedin.com/in/devharshitsharma',
+            discord: 'harshit0',
+            domains: ['harshitthek.is-a.dev', 'harshit.thedev.id'],
+            status: 'Open to AI/ML Research, LLM Agent Engineering & Systems Roles'
+          },
+          null,
+          2
+        )
       },
       'id_rsa.pub': {
         type: 'file',
         size: '740 B',
-        content: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHarshitSharmaProductionAIKey2026 harshit@neural-core'
+        content:
+          'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHarshitSharmaProductionAIKey2026 harshit@neural-core'
       },
-      'projects': {
+      projects: {
         type: 'dir',
         children: {
           '01_yggdrasil.py': {
@@ -286,22 +291,54 @@ const positions = new Float32Array(particleCount * 3);`
           }
         }
       },
-      'skills': {
+      skills: {
         type: 'dir',
         children: {
           'stack.json': {
             type: 'file',
             size: '980 B',
-            content: JSON.stringify({
-              languages: ["Python 3.12", "JavaScript (ES6+)", "TypeScript", "C/C++", "SQL", "Bash"],
-              ai_machine_learning: ["CatBoost", "XGBoost", "Scikit-Learn", "PyTorch", "BERT Transformers", "TensorFlow", "FastAPI"],
-              frontend_3d: ["React 19 / 18", "Three.js / WebGL", "HTML5 Canvas 2D", "Vite", "Tailwind CSS"],
-              devops_systems: ["Docker Containers", "PostgreSQL", "Async SQLite", "Manifest V3", "Linux (antiX / Ubuntu)", "GitHub CI/CD"]
-            }, null, 2)
+            content: JSON.stringify(
+              {
+                languages: [
+                  'Python 3.12',
+                  'JavaScript (ES6+)',
+                  'TypeScript',
+                  'C/C++',
+                  'SQL',
+                  'Bash'
+                ],
+                ai_machine_learning: [
+                  'CatBoost',
+                  'XGBoost',
+                  'Scikit-Learn',
+                  'PyTorch',
+                  'BERT Transformers',
+                  'TensorFlow',
+                  'FastAPI'
+                ],
+                frontend_3d: [
+                  'React 19 / 18',
+                  'Three.js / WebGL',
+                  'HTML5 Canvas 2D',
+                  'Vite',
+                  'Tailwind CSS'
+                ],
+                devops_systems: [
+                  'Docker Containers',
+                  'PostgreSQL',
+                  'Async SQLite',
+                  'Manifest V3',
+                  'Linux (antiX / Ubuntu)',
+                  'GitHub CI/CD'
+                ]
+              },
+              null,
+              2
+            )
           }
         }
       },
-      'secrets': {
+      secrets: {
         type: 'dir',
         children: {
           'flag.txt': {
@@ -324,18 +361,18 @@ const THEMES = {
 };
 
 const FORTUNES = [
-  "\"Simplicity is prerequisite for reliability.\" — Edsger W. Dijkstra",
-  "\"The best way to predict the future is to invent it.\" — Alan Kay",
-  "\"Autonomous agents will write code, verify code, and deploy code — engineer the harness.\" — Harshit Sharma",
-  "\"Programs must be written for people to read, and only incidentally for machines to execute.\" — Hal Abelson",
-  "\"Talk is cheap. Show me the code.\" — Linus Torvalds",
-  "\"Any sufficiently advanced technology is indistinguishable from magic.\" — Arthur C. Clarke"
+  '"Simplicity is prerequisite for reliability." — Edsger W. Dijkstra',
+  '"The best way to predict the future is to invent it." — Alan Kay',
+  '"Autonomous agents will write code, verify code, and deploy code — engineer the harness." — Harshit Sharma',
+  '"Programs must be written for people to read, and only incidentally for machines to execute." — Hal Abelson',
+  '"Talk is cheap. Show me the code." — Linus Torvalds',
+  '"Any sufficiently advanced technology is indistinguishable from magic." — Arthur C. Clarke'
 ];
 
 // Helper: Normalize Unix-like path relative to virtual filesystem
 function resolvePath(targetPath, currentPath) {
   if (!targetPath || targetPath === '~' || targetPath === '/') return '~';
-  
+
   let parts;
   if (targetPath.startsWith('~/')) {
     parts = targetPath.slice(2).split('/').filter(Boolean);
@@ -364,7 +401,7 @@ function getNodeFromVFS(normalizedPath) {
   const parts = normalizedPath.slice(2).split('/').filter(Boolean);
   let curr = VIRTUAL_FS['~'];
   for (const part of parts) {
-    if (!curr || curr.type !== 'dir' || !curr.children || !curr.children[part]) {
+    if (curr?.type !== 'dir' || !curr.children || !curr.children[part]) {
       return null;
     }
     curr = curr.children[part];
@@ -374,11 +411,26 @@ function getNodeFromVFS(normalizedPath) {
 
 export default function TerminalModal({ onClose, onLaunch }) {
   const [history, setHistory] = useState([
-    { type: 'sys', text: '╔══════════════════════════════════════════════════════════════════════╗' },
-    { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.9.0-PRO]      ║' },
-    { type: 'sys', text: '║     Host: Neural AI Engine · Clearance: LEVEL 5 ROOT                 ║' },
-    { type: 'sys', text: '╚══════════════════════════════════════════════════════════════════════╝' },
-    { type: 'info', text: "Type 'help' for full command suite, or try: 'neofetch', 'ai <query>', 'snake', 'hack', 'top'." },
+    {
+      type: 'sys',
+      text: '╔══════════════════════════════════════════════════════════════════════╗'
+    },
+    {
+      type: 'sys',
+      text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.9.0-PRO]      ║'
+    },
+    {
+      type: 'sys',
+      text: '║     Host: Neural AI Engine · Clearance: LEVEL 5 ROOT                 ║'
+    },
+    {
+      type: 'sys',
+      text: '╚══════════════════════════════════════════════════════════════════════╝'
+    },
+    {
+      type: 'info',
+      text: "Type 'help' for full command suite, or try: 'neofetch', 'ai <query>', 'snake', 'hack', 'top'."
+    },
     { type: 'space', text: '' }
   ]);
 
@@ -410,7 +462,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const [snakeGameOver, setSnakeGameOver] = useState(false);
   const [isNewHighScore, setIsNewHighScore] = useState(false);
 
-  const getHighScoreKey = useCallback(() => `harshit_snake_hi_${snakeMode}_${snakeSpeed}`, [snakeMode, snakeSpeed]);
+  const getHighScoreKey = useCallback(
+    () => `harshit_snake_hi_${snakeMode}_${snakeSpeed}`,
+    [snakeMode, snakeSpeed]
+  );
 
   const [snakeHighScore, setSnakeHighScore] = useState(() => {
     try {
@@ -435,7 +490,12 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
   // Mutable Game State Ref for zero-lag 60fps execution
   const snakeStateRef = useRef({
-    snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }, { x: 4, y: 7 }],
+    snake: [
+      { x: 7, y: 7 },
+      { x: 6, y: 7 },
+      { x: 5, y: 7 },
+      { x: 4, y: 7 }
+    ],
     food: { x: 18, y: 7 },
     goldenFood: null,
     powerUpItem: null,
@@ -472,16 +532,15 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
   useEffect(() => {
     scrollToBottom();
-  }, [history, snakeGameActive, scrollToBottom]);
+  }, [scrollToBottom]);
 
   // Turn buffer queue
   const changeSnakeDirection = useCallback((dirKey) => {
     const state = snakeStateRef.current;
     if (state.isDying) return;
 
-    const currentOrLastQueued = state.dirQueue.length > 0 
-      ? state.dirQueue[state.dirQueue.length - 1] 
-      : state.dir;
+    const currentOrLastQueued =
+      state.dirQueue.length > 0 ? state.dirQueue[state.dirQueue.length - 1] : state.dir;
 
     let nextDir = null;
     if (dirKey === 'UP' && currentOrLastQueued.y === 0) nextDir = { x: 0, y: -1 };
@@ -495,15 +554,55 @@ export default function TerminalModal({ onClose, onLaunch }) {
     }
   }, []);
 
+  const startSnakeGame = useCallback(() => {
+    lastTickTimeRef.current = 0;
+    snakeStateRef.current = {
+      snake: [
+        { x: 7, y: 7 },
+        { x: 6, y: 7 },
+        { x: 5, y: 7 },
+        { x: 4, y: 7 }
+      ],
+      food: { x: 18, y: 7 },
+      goldenFood: null,
+      powerUpItem: null,
+      dir: { x: 1, y: 0 },
+      dirQueue: [],
+      particles: [],
+      floatingTexts: [],
+      deathFragments: [],
+      shockwave: null,
+      isDying: false,
+      deathFrames: 0,
+      lastEatTime: 0,
+      hasShield: false,
+      hasMagnet: false,
+      score: 0,
+      combo: 1,
+      maxCombo: 1,
+      apples: 0
+    };
+    setSnakeScore(0);
+    setCombo(1);
+    setMaxCombo(1);
+    setApplesEaten(0);
+    setActivePowerUp(null);
+    setIsPaused(false);
+    setSnakeGameOver(false);
+    setIsNewHighScore(false);
+    setSnakeGameActive(true);
+    SoundFX.playClick();
+  }, []);
+
   // Mobile Touch Swipe Handling
   const touchStartPosRef = useRef({ x: 0, y: 0 });
   const handleCanvasTouchStart = (e) => {
-    if (e.touches && e.touches[0]) {
+    if (e.touches?.[0]) {
       touchStartPosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
     }
   };
   const handleCanvasTouchEnd = (e) => {
-    if (e.changedTouches && e.changedTouches[0]) {
+    if (e.changedTouches?.[0]) {
       const dx = e.changedTouches[0].clientX - touchStartPosRef.current.x;
       const dy = e.changedTouches[0].clientY - touchStartPosRef.current.y;
       const absX = Math.abs(dx);
@@ -542,7 +641,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
     const getRandomEmptyCell = () => {
       const state = snakeStateRef.current;
       let cell;
-      while (!cell || state.snake.some(s => s.x === cell.x && s.y === cell.y)) {
+      while (!cell || state.snake.some((s) => s.x === cell.x && s.y === cell.y)) {
         cell = {
           x: Math.floor(Math.random() * cols),
           y: Math.floor(Math.random() * rows)
@@ -607,7 +706,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         }
       }
 
-      const hitSelf = state.snake.some(seg => seg.x === head.x && seg.y === head.y);
+      const hitSelf = state.snake.some((seg) => seg.x === head.x && seg.y === head.y);
 
       // 💥 TRIGGER CYBERPUNK VOXEL DISINTEGRATION
       if (hitWall || hitSelf) {
@@ -816,8 +915,12 @@ export default function TerminalModal({ onClose, onLaunch }) {
       // ── TACTICAL CYBER MATRIX GRID WITH AMBIENT OLED DEPTH ──
       // 1. Deep Ambient Radial Field
       const bgGrad = ctx.createRadialGradient(
-        canvas.width / 2, canvas.height / 2, 40,
-        canvas.width / 2, canvas.height / 2, canvas.width * 0.7
+        canvas.width / 2,
+        canvas.height / 2,
+        40,
+        canvas.width / 2,
+        canvas.height / 2,
+        canvas.width * 0.7
       );
       bgGrad.addColorStop(0, '#0c1218');
       bgGrad.addColorStop(1, '#040507');
@@ -873,22 +976,30 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
       // Top-Left Bracket
       ctx.beginPath();
-      ctx.moveTo(14, 5); ctx.lineTo(5, 5); ctx.lineTo(5, 14);
+      ctx.moveTo(14, 5);
+      ctx.lineTo(5, 5);
+      ctx.lineTo(5, 14);
       ctx.stroke();
 
       // Top-Right Bracket
       ctx.beginPath();
-      ctx.moveTo(canvas.width - 14, 5); ctx.lineTo(canvas.width - 5, 5); ctx.lineTo(canvas.width - 5, 14);
+      ctx.moveTo(canvas.width - 14, 5);
+      ctx.lineTo(canvas.width - 5, 5);
+      ctx.lineTo(canvas.width - 5, 14);
       ctx.stroke();
 
       // Bottom-Left Bracket
       ctx.beginPath();
-      ctx.moveTo(5, canvas.height - 14); ctx.lineTo(5, canvas.height - 5); ctx.lineTo(14, canvas.height - 5);
+      ctx.moveTo(5, canvas.height - 14);
+      ctx.lineTo(5, canvas.height - 5);
+      ctx.lineTo(14, canvas.height - 5);
       ctx.stroke();
 
       // Bottom-Right Bracket
       ctx.beginPath();
-      ctx.moveTo(canvas.width - 14, canvas.height - 5); ctx.lineTo(canvas.width - 5, canvas.height - 5); ctx.lineTo(canvas.width - 5, canvas.height - 14);
+      ctx.moveTo(canvas.width - 14, canvas.height - 5);
+      ctx.lineTo(canvas.width - 5, canvas.height - 5);
+      ctx.lineTo(canvas.width - 5, canvas.height - 14);
       ctx.stroke();
 
       // 6. Perimeter Frame
@@ -937,7 +1048,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
       // Orbiting Micro-Data Nodes
       for (let o = 0; o < 3; o++) {
-        const orbitAngle = rotAngle + (o * Math.PI * 2 / 3);
+        const orbitAngle = rotAngle + (o * Math.PI * 2) / 3;
         const ox = fx + Math.cos(orbitAngle) * (gridSize / 2 + 1);
         const oy = fy + Math.sin(orbitAngle) * (gridSize / 2 + 1);
         ctx.fillStyle = '#38bdf8';
@@ -966,7 +1077,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         // Draw 8-point Cyber Diamond Star
         ctx.beginPath();
         for (let p = 0; p < 8; p++) {
-          const a = p * Math.PI / 4;
+          const a = (p * Math.PI) / 4;
           const r = p % 2 === 0 ? gridSize / 2.2 : gridSize / 4.5;
           const px = Math.cos(a) * r;
           const py = Math.sin(a) * r;
@@ -981,7 +1092,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(gx, gy, gridSize / 1.8, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * goldRatio));
+        ctx.arc(gx, gy, gridSize / 1.8, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * goldRatio);
         ctx.stroke();
         ctx.shadowBlur = 0;
       }
@@ -991,7 +1102,14 @@ export default function TerminalModal({ onClose, onLaunch }) {
         const px = state.powerUpItem.x * gridSize + gridSize / 2;
         const py = state.powerUpItem.y * gridSize + gridSize / 2;
         const pType = state.powerUpItem.type;
-        const iconColor = pType === 'SHIELD' ? '#38bdf8' : pType === '2X' ? '#fbbf24' : pType === 'MAGNET' ? '#f43f5e' : '#c084fc';
+        const iconColor =
+          pType === 'SHIELD'
+            ? '#38bdf8'
+            : pType === '2X'
+              ? '#fbbf24'
+              : pType === 'MAGNET'
+                ? '#f43f5e'
+                : '#c084fc';
 
         ctx.fillStyle = iconColor;
         ctx.shadowColor = iconColor;
@@ -1004,7 +1122,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
         ctx.font = 'bold 9px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        const glyph = pType === 'SHIELD' ? 'S' : pType === '2X' ? '2X' : pType === 'MAGNET' ? 'M' : 'T';
+        const glyph =
+          pType === 'SHIELD' ? 'S' : pType === '2X' ? '2X' : pType === 'MAGNET' ? 'M' : 'T';
         ctx.fillText(glyph, px, py);
         ctx.shadowBlur = 0;
       }
@@ -1062,16 +1181,32 @@ export default function TerminalModal({ onClose, onLaunch }) {
             ctx.shadowColor = '#00ff88';
             ctx.shadowBlur = 14;
             ctx.beginPath();
-            ctx.roundRect(seg.x * gridSize + 1.5, seg.y * gridSize + 1.5, gridSize - 3, gridSize - 3, 5);
+            ctx.roundRect(
+              seg.x * gridSize + 1.5,
+              seg.y * gridSize + 1.5,
+              gridSize - 3,
+              gridSize - 3,
+              5
+            );
             ctx.fill();
 
             // Directional Cyber Visor / Robot Eyes
             ctx.fillStyle = '#050505';
-            let e1 = { x: cx - 4, y: cy - 4 }, e2 = { x: cx + 4, y: cy - 4 };
-            if (state.dir.x === 1) { e1 = { x: cx + 3, y: cy - 4 }; e2 = { x: cx + 3, y: cy + 4 }; }
-            else if (state.dir.x === -1) { e1 = { x: cx - 3, y: cy - 4 }; e2 = { x: cx - 3, y: cy + 4 }; }
-            else if (state.dir.y === 1) { e1 = { x: cx - 4, y: cy + 3 }; e2 = { x: cx + 4, y: cy + 3 }; }
-            else if (state.dir.y === -1) { e1 = { x: cx - 4, y: cy - 3 }; e2 = { x: cx + 4, y: cy - 3 }; }
+            let e1 = { x: cx - 4, y: cy - 4 },
+              e2 = { x: cx + 4, y: cy - 4 };
+            if (state.dir.x === 1) {
+              e1 = { x: cx + 3, y: cy - 4 };
+              e2 = { x: cx + 3, y: cy + 4 };
+            } else if (state.dir.x === -1) {
+              e1 = { x: cx - 3, y: cy - 4 };
+              e2 = { x: cx - 3, y: cy + 4 };
+            } else if (state.dir.y === 1) {
+              e1 = { x: cx - 4, y: cy + 3 };
+              e2 = { x: cx + 4, y: cy + 3 };
+            } else if (state.dir.y === -1) {
+              e1 = { x: cx - 4, y: cy - 3 };
+              e2 = { x: cx + 4, y: cy - 3 };
+            }
 
             ctx.beginPath();
             ctx.arc(e1.x, e1.y, 2.2, 0, Math.PI * 2);
@@ -1084,7 +1219,6 @@ export default function TerminalModal({ onClose, onLaunch }) {
             ctx.arc(e1.x, e1.y, 1.0, 0, Math.PI * 2);
             ctx.arc(e2.x, e2.y, 1.0, 0, Math.PI * 2);
             ctx.fill();
-
           } else {
             // Body Node Chromatic Luminescence Gradient
             const r = Math.round(0 + t * 40);
@@ -1120,7 +1254,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           state.shockwave.alpha -= 0.035;
         }
 
-        state.deathFragments.forEach(f => {
+        state.deathFragments.forEach((f) => {
           f.x += f.vx;
           f.y += f.vy;
           f.vx *= 0.95;
@@ -1145,7 +1279,9 @@ export default function TerminalModal({ onClose, onLaunch }) {
           setSnakeGameOver(true);
           if (state.score > snakeHighScore) {
             setIsNewHighScore(true);
-            try { localStorage.setItem(getHighScoreKey(), String(state.score)); } catch {}
+            try {
+              localStorage.setItem(getHighScoreKey(), String(state.score));
+            } catch {}
             confetti({
               particleCount: 75,
               spread: 70,
@@ -1197,7 +1333,16 @@ export default function TerminalModal({ onClose, onLaunch }) {
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     };
-  }, [snakeGameActive, snakeGameOver, isPaused, snakeMode, snakeSpeed, snakeHighScore, activePowerUp, getHighScoreKey]);
+  }, [
+    snakeGameActive,
+    snakeGameOver,
+    isPaused,
+    snakeMode,
+    snakeSpeed,
+    snakeHighScore,
+    activePowerUp,
+    getHighScoreKey
+  ]);
 
   // ── 60FPS MATRIX DIGITAL RAIN ENGINE ──
   useEffect(() => {
@@ -1280,7 +1425,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
         if (k === 'p' || (e.key === ' ' && !snakeGameOver)) {
           e.preventDefault();
           e.stopPropagation();
-          setIsPaused(prev => !prev);
+          setIsPaused((prev) => !prev);
           SoundFX.playClick();
           return;
         }
@@ -1321,7 +1466,7 @@ export default function TerminalModal({ onClose, onLaunch }) {
           e.preventDefault();
           e.stopPropagation();
           setSnakeGameActive(false);
-          setHistory(h => [
+          setHistory((h) => [
             ...h,
             { type: 'info', text: `🎮 Arcade Snake Session Terminated. Score: ${snakeScore} PTS` }
           ]);
@@ -1344,7 +1489,15 @@ export default function TerminalModal({ onClose, onLaunch }) {
 
     window.addEventListener('keydown', handleGlobalKeyDown, true);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown, true);
-  }, [snakeGameActive, snakeGameOver, isPaused, snakeScore, changeSnakeDirection]);
+  }, [
+    snakeGameActive,
+    snakeGameOver,
+    isPaused,
+    snakeScore,
+    changeSnakeDirection,
+    startSnakeGame,
+    matrixActive
+  ]);
 
   useEffect(() => {
     if (snakeGameActive) {
@@ -1354,46 +1507,11 @@ export default function TerminalModal({ onClose, onLaunch }) {
     }
   }, [snakeGameActive]);
 
-  const startSnakeGame = () => {
-    lastTickTimeRef.current = 0;
-    snakeStateRef.current = {
-      snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }, { x: 4, y: 7 }],
-      food: { x: 18, y: 7 },
-      goldenFood: null,
-      powerUpItem: null,
-      dir: { x: 1, y: 0 },
-      dirQueue: [],
-      particles: [],
-      floatingTexts: [],
-      deathFragments: [],
-      shockwave: null,
-      isDying: false,
-      deathFrames: 0,
-      lastEatTime: 0,
-      hasShield: false,
-      hasMagnet: false,
-      score: 0,
-      combo: 1,
-      maxCombo: 1,
-      apples: 0
-    };
-    setSnakeScore(0);
-    setCombo(1);
-    setMaxCombo(1);
-    setApplesEaten(0);
-    setActivePowerUp(null);
-    setIsPaused(false);
-    setSnakeGameOver(false);
-    setIsNewHighScore(false);
-    setSnakeGameActive(true);
-    SoundFX.playClick();
-  };
-
   const handleCommand = (raw) => {
     const trimmed = raw.trim();
     if (!trimmed) return;
 
-    setCmdHistory(prev => [...prev, trimmed]);
+    setCmdHistory((prev) => [...prev, trimmed]);
     setHistoryIndex(-1);
     setDraftInput('');
 
@@ -1401,7 +1519,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
     const cmd = parts[0].toLowerCase();
     const arg = parts.slice(1).join(' ');
 
-    const newHistory = [...history, { type: 'cmd', text: `harshit@neural-core ${currentPath} % ${trimmed}` }];
+    const newHistory = [
+      ...history,
+      { type: 'cmd', text: `harshit@neural-core ${currentPath} % ${trimmed}` }
+    ];
 
     switch (cmd) {
       case 'help':
@@ -1409,38 +1530,98 @@ export default function TerminalModal({ onClose, onLaunch }) {
         newHistory.push(
           { type: 'sys', text: '⚡ HARSHIT.EXE SHELL COMMAND DIRECTORY:' },
           { type: 'info', text: '── SYSTEM TELEMETRY & PROFILE ──' },
-          { type: 'out', text: '  neofetch          - Hardware specs, OS telemetry & Harshit\'s ASCII crest' },
-          { type: 'out', text: '  whoami            - Current session UID, clearance level & host' },
-          { type: 'out', text: '  uptime            - Server uptime, active load average & memory stats' },
-          { type: 'out', text: '  uname [-a]        - Operating system & Linux kernel architecture' },
-          { type: 'out', text: '  bio / about       - Full personal bio, degree program & engineering background' },
-          { type: 'out', text: '  skills / stack    - Breakdown of AI/ML, full-stack, and systems proficiencies' },
-          { type: 'out', text: `  projects          - List all ${projectsData.length} flagship engineering universes with live links` },
-          { type: 'out', text: '  contact / socials - Direct email, GitHub, LinkedIn, and Discord endpoints' },
-          { type: 'out', text: '  top / ps          - Real-time running background daemon telemetry' },
+          {
+            type: 'out',
+            text: "  neofetch          - Hardware specs, OS telemetry & Harshit's ASCII crest"
+          },
+          {
+            type: 'out',
+            text: '  whoami            - Current session UID, clearance level & host'
+          },
+          {
+            type: 'out',
+            text: '  uptime            - Server uptime, active load average & memory stats'
+          },
+          {
+            type: 'out',
+            text: '  uname [-a]        - Operating system & Linux kernel architecture'
+          },
+          {
+            type: 'out',
+            text: '  bio / about       - Full personal bio, degree program & engineering background'
+          },
+          {
+            type: 'out',
+            text: '  skills / stack    - Breakdown of AI/ML, full-stack, and systems proficiencies'
+          },
+          {
+            type: 'out',
+            text: `  projects          - List all ${projectsData.length} flagship engineering universes with live links`
+          },
+          {
+            type: 'out',
+            text: '  contact / socials - Direct email, GitHub, LinkedIn, and Discord endpoints'
+          },
+          {
+            type: 'out',
+            text: '  top / ps          - Real-time running background daemon telemetry'
+          },
           { type: 'out', text: '  weather           - Live telemetry weather radar for New Delhi' },
           { type: 'info', text: '── NETWORKING & CLOUD INFRASTRUCTURE ──' },
-          { type: 'out', text: '  ping [<host>]     - ICMP latency probe to Oracle Cloud & DNS nodes' },
+          {
+            type: 'out',
+            text: '  ping [<host>]     - ICMP latency probe to Oracle Cloud & DNS nodes'
+          },
           { type: 'out', text: '  curl [<url>]      - Inspect HTTP headers & response payloads' },
           { type: 'info', text: '── FILESYSTEM NAVIGATION ──' },
-          { type: 'out', text: '  ls [-l] [<path>]  - List directory contents (e.g. ls, ls -l, ls projects)' },
-          { type: 'out', text: '  cd <dir>          - Change directory (e.g. cd projects, cd .., cd ~)' },
+          {
+            type: 'out',
+            text: '  ls [-l] [<path>]  - List directory contents (e.g. ls, ls -l, ls projects)'
+          },
+          {
+            type: 'out',
+            text: '  cd <dir>          - Change directory (e.g. cd projects, cd .., cd ~)'
+          },
           { type: 'out', text: '  pwd               - Print current working directory path' },
-          { type: 'out', text: '  cat <file>        - Inspect formatted source code files (e.g. cat bio.txt, cat 03_autovaluate_model.py)' },
-          { type: 'out', text: '  tree              - Render complete hierarchical directory tree' },
+          {
+            type: 'out',
+            text: '  cat <file>        - Inspect formatted source code files (e.g. cat bio.txt, cat 03_autovaluate_model.py)'
+          },
+          {
+            type: 'out',
+            text: '  tree              - Render complete hierarchical directory tree'
+          },
           { type: 'info', text: '── AI ASSISTANT & LAUNCHER ──' },
-          { type: 'out', text: '  ai / ask <query>  - Ask the built-in AI reasoning engine technical questions' },
-          { type: 'out', text: `  deploy <1-${projectsData.length}|name> - Initiate deployment sequence for a target universe` },
+          {
+            type: 'out',
+            text: '  ai / ask <query>  - Ask the built-in AI reasoning engine technical questions'
+          },
+          {
+            type: 'out',
+            text: `  deploy <1-${projectsData.length}|name> - Initiate deployment sequence for a target universe`
+          },
           { type: 'info', text: '── GAMES, CYBER FX & CUSTOMIZATION ──' },
           { type: 'out', text: '  matrix / rain     - 60FPS Cascading Neural Digital Rain Canvas' },
-          { type: 'out', text: '  snake             - Full-Terminal 60fps Cyber-Serpent Arcade Engine' },
-          { type: 'out', text: '  hack / pwn        - Cinematic Hollywood cyber penetration sequence' },
+          {
+            type: 'out',
+            text: '  snake             - Full-Terminal 60fps Cyber-Serpent Arcade Engine'
+          },
+          {
+            type: 'out',
+            text: '  hack / pwn        - Cinematic Hollywood cyber penetration sequence'
+          },
           { type: 'out', text: '  cowsay <text>     - Classic ASCII cow wisdom speech' },
           { type: 'out', text: '  fortune           - Random developer & AI aphorism' },
-          { type: 'out', text: '  echo <text>       - Print text with $USER, $HOST, $IP variable expansion' },
+          {
+            type: 'out',
+            text: '  echo <text>       - Print text with $USER, $HOST, $IP variable expansion'
+          },
           { type: 'out', text: '  date              - Current system timestamp & timezone' },
           { type: 'out', text: '  history           - Chronological log of entered commands' },
-          { type: 'out', text: '  theme <name>      - Switch palette (green, cyan, amber, purple, red)' },
+          {
+            type: 'out',
+            text: '  theme <name>      - Switch palette (green, cyan, amber, purple, red)'
+          },
           { type: 'out', text: '  clear / banner    - Clear screen or render MOTD header' },
           { type: 'out', text: '  exit              - Dismiss terminal window' }
         );
@@ -1488,9 +1669,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
       case 'uname':
         newHistory.push({
           type: 'out',
-          text: arg.includes('-a') || !arg
-            ? 'Linux ygg 6.12.0-204.92.4.2.el9uek.aarch64 #2 SMP Thu Jul 2 08:13:04 PDT 2026 aarch64 aarch64 aarch64 GNU/Linux'
-            : 'Linux'
+          text:
+            arg.includes('-a') || !arg
+              ? 'Linux ygg 6.12.0-204.92.4.2.el9uek.aarch64 #2 SMP Thu Jul 2 08:13:04 PDT 2026 aarch64 aarch64 aarch64 GNU/Linux'
+              : 'Linux'
         });
         break;
 
@@ -1517,7 +1699,10 @@ export default function TerminalModal({ onClose, onLaunch }) {
       case 'history':
         newHistory.push(
           { type: 'sys', text: '📜 SESSION COMMAND HISTORY:' },
-          ...cmdHistory.map((h, i) => ({ type: 'out', text: `  ${(i + 1).toString().padStart(3, ' ')}  ${h}` }))
+          ...cmdHistory.map((h, i) => ({
+            type: 'out',
+            text: `  ${(i + 1).toString().padStart(3, ' ')}  ${h}`
+          }))
         );
         break;
 
@@ -1528,13 +1713,16 @@ export default function TerminalModal({ onClose, onLaunch }) {
           { type: 'out', text: `64 bytes from 144.24.104.31: icmp_seq=0 ttl=64 time=11.4 ms` },
           { type: 'out', text: `64 bytes from 144.24.104.31: icmp_seq=1 ttl=64 time=12.1 ms` },
           { type: 'out', text: `64 bytes from 144.24.104.31: icmp_seq=2 ttl=64 time=10.9 ms` },
-          { type: 'ok', text: `--- ${host} ping statistics ---\n3 packets transmitted, 3 packets received, 0.0% packet loss\nround-trip min/avg/max/stddev = 10.9/11.4/12.1/0.48 ms` }
+          {
+            type: 'ok',
+            text: `--- ${host} ping statistics ---\n3 packets transmitted, 3 packets received, 0.0% packet loss\nround-trip min/avg/max/stddev = 10.9/11.4/12.1/0.48 ms`
+          }
         );
         break;
       }
 
       case 'curl': {
-        const target = arg || 'http://144.24.104.31/';
+        const _target = arg || 'http://144.24.104.31/';
         newHistory.push({
           type: 'code',
           text: `HTTP/1.1 200 OK
@@ -1556,10 +1744,22 @@ Strict-Transport-Security: max-age=31536000
       case 'banner':
       case 'motd':
         newHistory.push(
-          { type: 'sys', text: '╔══════════════════════════════════════════════════════════════════════╗' },
-          { type: 'sys', text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.9.0-PRO]      ║' },
-          { type: 'sys', text: '║     Host: Neural AI Engine · Clearance: LEVEL 5 ROOT                 ║' },
-          { type: 'sys', text: '╚══════════════════════════════════════════════════════════════════════╝' }
+          {
+            type: 'sys',
+            text: '╔══════════════════════════════════════════════════════════════════════╗'
+          },
+          {
+            type: 'sys',
+            text: '║     HARSHIT SHARMA CYBER LAB INTERACTIVE ZSH SHELL [v6.9.0-PRO]      ║'
+          },
+          {
+            type: 'sys',
+            text: '║     Host: Neural AI Engine · Clearance: LEVEL 5 ROOT                 ║'
+          },
+          {
+            type: 'sys',
+            text: '╚══════════════════════════════════════════════════════════════════════╝'
+          }
         );
         break;
 
@@ -1568,10 +1768,16 @@ Strict-Transport-Security: max-age=31536000
         newHistory.push(
           { type: 'sys', text: '👤 HARSHIT SHARMA — BIOGRAPHICAL DOSSIER' },
           { type: 'out', text: '  Name: Harshit Sharma' },
-          { type: 'out', text: '  Degree: B.Tech in Artificial Intelligence & Machine Learning (Class of 2029)' },
+          {
+            type: 'out',
+            text: '  Degree: B.Tech in Artificial Intelligence & Machine Learning (Class of 2029)'
+          },
           { type: 'out', text: '  Location: New Delhi, India' },
           { type: 'out', text: '  Server: Oracle Cloud VM (144.24.104.31) · harshitthek.is-a.dev' },
-          { type: 'out', text: '  Focus: Autonomous AI Agent Benchmarks, Dual-Engine ML Regression, BERT Transformers, 3D WebGL' },
+          {
+            type: 'out',
+            text: '  Focus: Autonomous AI Agent Benchmarks, Dual-Engine ML Regression, BERT Transformers, 3D WebGL'
+          },
           { type: 'out', text: '  GitHub: https://github.com/harshitthek' },
           { type: 'out', text: '  LinkedIn: https://www.linkedin.com/in/devharshitsharma' },
           { type: 'out', text: '  Email: codewithharshitsharma@gmail.com' }
@@ -1581,7 +1787,10 @@ Strict-Transport-Security: max-age=31536000
       case 'snake':
       case 'game':
         startSnakeGame();
-        newHistory.push({ type: 'info', text: '🎮 INITIATING FULL-TERMINAL 60FPS ARCADE SNAKE. Use Arrow Keys / WASD. Press ESC or Q to quit.' });
+        newHistory.push({
+          type: 'info',
+          text: '🎮 INITIATING FULL-TERMINAL 60FPS ARCADE SNAKE. Use Arrow Keys / WASD. Press ESC or Q to quit.'
+        });
         break;
 
       case 'hack':
@@ -1589,11 +1798,26 @@ Strict-Transport-Security: max-age=31536000
         SoundFX.playDeploy();
         newHistory.push(
           { type: 'info', text: '⚡ INITIATING PENETRATION SEQUENCE: TARGET = HARSHIT_MAINFRAME' },
-          { type: 'out', text: '[01/05] Resolving satellite proxy hop... 185.220.101.4 -> 10.0.4.1 [CONNECTED]' },
-          { type: 'out', text: '[02/05] Injecting payload into sandbox firewall (Bypassing WAF & CORS)... [100% OK]' },
-          { type: 'out', text: '[03/05] Exploiting zero-day in memory buffer [0x7ffeefbff490]... [OVERFLOW INJECTED]' },
-          { type: 'ok', text: '[04/05] Cracking 4096-bit RSA master key... [FOUND: HARSHIT_AI_ACCESS_GRANTED]' },
-          { type: 'ok', text: `[05/05] 🚀 ACCESS GRANTED. LEVEL 5 ROOT CLEARANCE UNLOCKED. ALL ${projectsData.length} UNIVERSES LIVE.` }
+          {
+            type: 'out',
+            text: '[01/05] Resolving satellite proxy hop... 185.220.101.4 -> 10.0.4.1 [CONNECTED]'
+          },
+          {
+            type: 'out',
+            text: '[02/05] Injecting payload into sandbox firewall (Bypassing WAF & CORS)... [100% OK]'
+          },
+          {
+            type: 'out',
+            text: '[03/05] Exploiting zero-day in memory buffer [0x7ffeefbff490]... [OVERFLOW INJECTED]'
+          },
+          {
+            type: 'ok',
+            text: '[04/05] Cracking 4096-bit RSA master key... [FOUND: HARSHIT_AI_ACCESS_GRANTED]'
+          },
+          {
+            type: 'ok',
+            text: `[05/05] 🚀 ACCESS GRANTED. LEVEL 5 ROOT CLEARANCE UNLOCKED. ALL ${projectsData.length} UNIVERSES LIVE.`
+          }
         );
         break;
 
@@ -1631,19 +1855,22 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
       case 'ls':
       case 'dir': {
         const isLong = parts.includes('-l');
-        const targetArg = parts.slice(1).find(p => !p.startsWith('-')) || '';
+        const targetArg = parts.slice(1).find((p) => !p.startsWith('-')) || '';
         const targetPath = targetArg ? resolvePath(targetArg, currentPath) : currentPath;
         const dirNode = getNodeFromVFS(targetPath);
 
         if (!dirNode) {
-          newHistory.push({ type: 'err', text: `ls: cannot access '${targetArg || currentPath}': No such file or directory` });
+          newHistory.push({
+            type: 'err',
+            text: `ls: cannot access '${targetArg || currentPath}': No such file or directory`
+          });
         } else if (dirNode.type === 'file') {
           newHistory.push({ type: 'out', text: `📄 ${targetArg} (${dirNode.size || '1.0 KB'})` });
         } else {
           const entries = Object.keys(dirNode.children || {});
           if (isLong) {
             newHistory.push({ type: 'info', text: `total ${entries.length * 4}` });
-            entries.forEach(e => {
+            entries.forEach((e) => {
               const item = dirNode.children[e];
               const perm = item.type === 'dir' ? 'drwxr-xr-x' : '-rw-r--r--';
               const size = item.size || (item.type === 'dir' ? '4.0 KB' : '1.2 KB');
@@ -1653,7 +1880,9 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
               });
             });
           } else {
-            const list = entries.map(e => dirNode.children[e].type === 'dir' ? `📁 ${e}/` : `📄 ${e}`).join('   ');
+            const list = entries
+              .map((e) => (dirNode.children[e].type === 'dir' ? `📁 ${e}/` : `📄 ${e}`))
+              .join('   ');
             newHistory.push({ type: 'out', text: list || '(empty directory)' });
           }
         }
@@ -1683,15 +1912,24 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
 
       case 'cat': {
         if (!arg) {
-          newHistory.push({ type: 'err', text: "Usage: cat <filename> (e.g. 'cat bio.txt', 'cat projects/01_yggdrasil.py', 'cat contact.json')" });
+          newHistory.push({
+            type: 'err',
+            text: "Usage: cat <filename> (e.g. 'cat bio.txt', 'cat projects/01_yggdrasil.py', 'cat contact.json')"
+          });
         } else {
           const targetPath = resolvePath(arg, currentPath);
           const targetNode = getNodeFromVFS(targetPath);
 
           if (!targetNode) {
-            newHistory.push({ type: 'err', text: `cat: ${arg}: No such file. Try 'ls' to see available files.` });
+            newHistory.push({
+              type: 'err',
+              text: `cat: ${arg}: No such file. Try 'ls' to see available files.`
+            });
           } else if (targetNode.type === 'dir') {
-            newHistory.push({ type: 'err', text: `cat: ${arg}: Is a directory. Use 'ls ${arg}' to list contents.` });
+            newHistory.push({
+              type: 'err',
+              text: `cat: ${arg}: Is a directory. Use 'ls ${arg}' to list contents.`
+            });
           } else {
             newHistory.push({ type: 'code', text: targetNode.content });
           }
@@ -1729,35 +1967,99 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
       case 'ai':
       case 'ask':
         if (!arg) {
-          newHistory.push({ type: 'err', text: "Usage: ai <query> (e.g. 'ai why hire Harshit?', 'ai explain AutoValuate AI', 'ai what is Resilient?')" });
+          newHistory.push({
+            type: 'err',
+            text: "Usage: ai <query> (e.g. 'ai why hire Harshit?', 'ai explain AutoValuate AI', 'ai what is Resilient?')"
+          });
         } else {
           const lower = arg.toLowerCase();
-          let ans = "Harshit Sharma specializes in autonomous agent architecture, multi-turn LLM reasoning trees, dual-engine ML regression stacking, and production systems engineering. He studies B.Tech in Artificial Intelligence & Machine Learning (Class of 2029).";
+          let ans =
+            'Harshit Sharma specializes in autonomous agent architecture, multi-turn LLM reasoning trees, dual-engine ML regression stacking, and production systems engineering. He studies B.Tech in Artificial Intelligence & Machine Learning (Class of 2029).';
 
           if (lower.includes('why hire') || lower.includes('hire') || lower.includes('recruit')) {
-            ans = "🌟 Why hire Harshit:\nHe bridges deep algorithmic foundations (CatBoost/XGBoost, BERT Transformers, TensorFlow Recommenders) with elite production systems engineering (Docker, FastAPI, Three.js WebGL, Fastify). He builds real, production-tested architectures with full test matrices (56 tests in AutoValuate, 47 tests in Resilient).";
-          } else if (lower.includes('yggdrasil') || lower.includes('world tree') || lower.includes('discord')) {
-            ans = "🌲 Yggdrasil Platform:\nA self-hosted modular Discord platform combining a Fastify REST API with Discord.js inside a single Node.js runtime, secured with AES-256-GCM + HKDF cryptographic sessions.";
-          } else if (lower.includes('resilient') || lower.includes('benchmark') || lower.includes('docker') || lower.includes('sandbox')) {
-            ans = "🤖 Resilient AI Benchmark:\nAn automated testing harness for autonomous software engineering agents with isolated Docker git sandboxes and 47/47 passing Pytests.";
-          } else if (lower.includes('bike') || lower.includes('car') || lower.includes('price') || lower.includes('autovaluate') || lower.includes('ml')) {
-            ans = "📊 AutoValuate AI — Dual-Engine Valuation Suite:\nA 97.4% R² gradient-boosted stacking regressor (CatBoost + XGBoost) trained on 40,000+ real transactions across 32k motorcycles and 8k passenger cars. Features 5-year TCO lifecycle simulation, fleet batch appraisal for 50 vehicles, cryptographic SHA-256 valuation certificates, and 56 passing automated tests. Live on Vercel at https://moto-value-ai.vercel.app/";
-          } else if (lower.includes('ticket') || lower.includes('support') || lower.includes('bert') || lower.includes('dispatcher')) {
-            ans = "📩 Customer Support Ticket Dispatcher ML:\nA fine-tuned BERT transformer NLP model for automated departmental email classification and real-time urgency scoring with sub-120ms inference latency.";
-          } else if (lower.includes('shield') || lower.includes('block') || lower.includes('mv3') || lower.includes('extension')) {
-            ans = "🛡️ ShieldBlock MV3 Blocker:\nHigh-performance Manifest V3 ad and tracker blocker using native declarativeNetRequest (DNR) with 16x audio ad bypass and real-time network streaming debug logger.";
+            ans =
+              '🌟 Why hire Harshit:\nHe bridges deep algorithmic foundations (CatBoost/XGBoost, BERT Transformers, TensorFlow Recommenders) with elite production systems engineering (Docker, FastAPI, Three.js WebGL, Fastify). He builds real, production-tested architectures with full test matrices (56 tests in AutoValuate, 47 tests in Resilient).';
+          } else if (
+            lower.includes('yggdrasil') ||
+            lower.includes('world tree') ||
+            lower.includes('discord')
+          ) {
+            ans =
+              '🌲 Yggdrasil Platform:\nA self-hosted modular Discord platform combining a Fastify REST API with Discord.js inside a single Node.js runtime, secured with AES-256-GCM + HKDF cryptographic sessions.';
+          } else if (
+            lower.includes('resilient') ||
+            lower.includes('benchmark') ||
+            lower.includes('docker') ||
+            lower.includes('sandbox')
+          ) {
+            ans =
+              '🤖 Resilient AI Benchmark:\nAn automated testing harness for autonomous software engineering agents with isolated Docker git sandboxes and 47/47 passing Pytests.';
+          } else if (
+            lower.includes('bike') ||
+            lower.includes('car') ||
+            lower.includes('price') ||
+            lower.includes('autovaluate') ||
+            lower.includes('ml')
+          ) {
+            ans =
+              '📊 AutoValuate AI — Dual-Engine Valuation Suite:\nA 97.4% R² gradient-boosted stacking regressor (CatBoost + XGBoost) trained on 40,000+ real transactions across 32k motorcycles and 8k passenger cars. Features 5-year TCO lifecycle simulation, fleet batch appraisal for 50 vehicles, cryptographic SHA-256 valuation certificates, and 56 passing automated tests. Live on Vercel at https://moto-value-ai.vercel.app/';
+          } else if (
+            lower.includes('ticket') ||
+            lower.includes('support') ||
+            lower.includes('bert') ||
+            lower.includes('dispatcher')
+          ) {
+            ans =
+              '📩 Customer Support Ticket Dispatcher ML:\nA fine-tuned BERT transformer NLP model for automated departmental email classification and real-time urgency scoring with sub-120ms inference latency.';
+          } else if (
+            lower.includes('shield') ||
+            lower.includes('block') ||
+            lower.includes('mv3') ||
+            lower.includes('extension')
+          ) {
+            ans =
+              '🛡️ ShieldBlock MV3 Blocker:\nHigh-performance Manifest V3 ad and tracker blocker using native declarativeNetRequest (DNR) with 16x audio ad bypass and real-time network streaming debug logger.';
           } else if (lower.includes('carbon') || lower.includes('green') || lower.includes('esg')) {
-            ans = "🌱 Carbon Guardian AI:\nEnterprise ESG sustainability platform powered by TensorFlow Recommenders and dynamic gamification economy to optimize corporate carbon footprints.";
-          } else if (lower.includes('letter') || lower.includes('guess') || lower.includes('constraint')) {
-            ans = "🔤 LetterGuess Deterministic Solver:\nOffline Python / SQLite candidate generation and search-space reduction engine with conservative regex constraint analysis.";
-          } else if (lower.includes('startpage') || lower.includes('browser') || lower.includes('theme')) {
-            ans = "🖥️ Custom Browser Startpage v2.0:\nPrivacy launchpad with 13 premium themes, CSP hardening, and live weather radar telemetry. Live on Netlify at https://dailycosmos.netlify.app/";
-          } else if (lower.includes('cosmic') || lower.includes('3d') || lower.includes('webgl') || lower.includes('three')) {
-            ans = "🌌 3D Cosmic WebGL Engine:\nGPU-accelerated Three.js r128 visualizer featuring 6-in-1 physics modes (Galaxy Vortex, Solar System, Supernova, Retrowave Sun) running at 60 FPS.";
-          } else if (lower.includes('college') || lower.includes('degree') || lower.includes('university') || lower.includes('grad') || lower.includes('education')) {
-            ans = "🎓 Harshit is pursuing his B.Tech in Artificial Intelligence & Machine Learning (Class of 2029) based in New Delhi.";
-          } else if (lower.includes('contact') || lower.includes('email') || lower.includes('reach')) {
-            ans = "📬 Reach Harshit:\n- Email: codewithharshitsharma@gmail.com\n- GitHub: https://github.com/harshitthek\n- LinkedIn: https://www.linkedin.com/in/devharshitsharma\n- Discord: harshit0";
+            ans =
+              '🌱 Carbon Guardian AI:\nEnterprise ESG sustainability platform powered by TensorFlow Recommenders and dynamic gamification economy to optimize corporate carbon footprints.';
+          } else if (
+            lower.includes('letter') ||
+            lower.includes('guess') ||
+            lower.includes('constraint')
+          ) {
+            ans =
+              '🔤 LetterGuess Deterministic Solver:\nOffline Python / SQLite candidate generation and search-space reduction engine with conservative regex constraint analysis.';
+          } else if (
+            lower.includes('startpage') ||
+            lower.includes('browser') ||
+            lower.includes('theme')
+          ) {
+            ans =
+              '🖥️ Custom Browser Startpage v2.0:\nPrivacy launchpad with 13 premium themes, CSP hardening, and live weather radar telemetry. Live on Netlify at https://dailycosmos.netlify.app/';
+          } else if (
+            lower.includes('cosmic') ||
+            lower.includes('3d') ||
+            lower.includes('webgl') ||
+            lower.includes('three')
+          ) {
+            ans =
+              '🌌 3D Cosmic WebGL Engine:\nGPU-accelerated Three.js r128 visualizer featuring 6-in-1 physics modes (Galaxy Vortex, Solar System, Supernova, Retrowave Sun) running at 60 FPS.';
+          } else if (
+            lower.includes('college') ||
+            lower.includes('degree') ||
+            lower.includes('university') ||
+            lower.includes('grad') ||
+            lower.includes('education')
+          ) {
+            ans =
+              '🎓 Harshit is pursuing his B.Tech in Artificial Intelligence & Machine Learning (Class of 2029) based in New Delhi.';
+          } else if (
+            lower.includes('contact') ||
+            lower.includes('email') ||
+            lower.includes('reach')
+          ) {
+            ans =
+              '📬 Reach Harshit:\n- Email: codewithharshitsharma@gmail.com\n- GitHub: https://github.com/harshitthek\n- LinkedIn: https://www.linkedin.com/in/devharshitsharma\n- Discord: harshit0';
           } else {
             ans = `Harshit Sharma is an AI Systems Engineer specializing in Machine Learning, Deep Learning (BERT), LLM Agent sandboxes, and full-stack systems (Class of 2029).`;
           }
@@ -1779,25 +2081,38 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
       case 'deploy':
       case 'launch':
         if (!arg) {
-          newHistory.push({ type: 'err', text: `Usage: deploy <1-${projectsData.length}> or deploy <name> (e.g. 'deploy 1' or 'deploy autovaluate')` });
+          newHistory.push({
+            type: 'err',
+            text: `Usage: deploy <1-${projectsData.length}> or deploy <name> (e.g. 'deploy 1' or 'deploy autovaluate')`
+          });
         } else {
           const num = parseInt(arg, 10);
           let target = null;
-          if (!isNaN(num) && num >= 1 && num <= projectsData.length) {
+          if (!Number.isNaN(num) && num >= 1 && num <= projectsData.length) {
             target = projectsData[num - 1];
           } else {
-            target = projectsData.find(p => p.id.toLowerCase().includes(arg.toLowerCase()) || p.title.toLowerCase().includes(arg.toLowerCase()));
+            target = projectsData.find(
+              (p) =>
+                p.id.toLowerCase().includes(arg.toLowerCase()) ||
+                p.title.toLowerCase().includes(arg.toLowerCase())
+            );
           }
 
           if (target) {
-            newHistory.push({ type: 'ok', text: `🚀 INITIATING DEPLOYMENT SEQUENCE FOR: ${target.title.toUpperCase()}...` });
+            newHistory.push({
+              type: 'ok',
+              text: `🚀 INITIATING DEPLOYMENT SEQUENCE FOR: ${target.title.toUpperCase()}...`
+            });
             SoundFX.playDeploy();
             setTimeout(() => {
               onClose();
               if (onLaunch) onLaunch(target.title, target.demoUrl || target.url);
             }, 750);
           } else {
-            newHistory.push({ type: 'err', text: `Portal '${arg}' not found. Type 'projects' to list all ${projectsData.length} portals.` });
+            newHistory.push({
+              type: 'err',
+              text: `Portal '${arg}' not found. Type 'projects' to list all ${projectsData.length} portals.`
+            });
           }
         }
         break;
@@ -1806,10 +2121,22 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
       case 'stack':
         newHistory.push(
           { type: 'sys', text: "🛠️ HARSHIT'S TECHNICAL ARSENAL:" },
-          { type: 'out', text: '  Languages: Python 3.12, JavaScript (ES6+), TypeScript, C/C++, Bash, SQL' },
-          { type: 'out', text: '  AI & ML: CatBoost, XGBoost, Scikit-Learn, PyTorch, BERT Transformers, TensorFlow, FastAPI' },
-          { type: 'out', text: '  Frontend & 3D: React 19 / 18, Three.js / WebGL, HTML5 Canvas 2D, Vite, Tailwind CSS' },
-          { type: 'out', text: '  DevOps & Systems: Docker, Manifest V3, PostgreSQL, Async SQLite, antiX Linux, Git CI/CD' }
+          {
+            type: 'out',
+            text: '  Languages: Python 3.12, JavaScript (ES6+), TypeScript, C/C++, Bash, SQL'
+          },
+          {
+            type: 'out',
+            text: '  AI & ML: CatBoost, XGBoost, Scikit-Learn, PyTorch, BERT Transformers, TensorFlow, FastAPI'
+          },
+          {
+            type: 'out',
+            text: '  Frontend & 3D: React 19 / 18, Three.js / WebGL, HTML5 Canvas 2D, Vite, Tailwind CSS'
+          },
+          {
+            type: 'out',
+            text: '  DevOps & Systems: Docker, Manifest V3, PostgreSQL, Async SQLite, antiX Linux, Git CI/CD'
+          }
         );
         break;
 
@@ -1833,7 +2160,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         break;
 
       case 'cowsay': {
-        const msg = arg || "Harshit Sharma builds resilient autonomous AI systems!";
+        const msg = arg || 'Harshit Sharma builds resilient autonomous AI systems!';
         const bar = '-'.repeat(msg.length + 2);
         newHistory.push({
           type: 'code',
@@ -1859,7 +2186,10 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
       case 'rain':
         setMatrixActive(true);
         SoundFX.playDeploy();
-        newHistory.push({ type: 'ok', text: '⚡ INITIATING MATRIX DIGITAL RAIN. Press ESC, Q, or click anywhere to exit.' });
+        newHistory.push({
+          type: 'ok',
+          text: '⚡ INITIATING MATRIX DIGITAL RAIN. Press ESC, Q, or click anywhere to exit.'
+        });
         break;
 
       case 'clear':
@@ -1871,7 +2201,10 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         return;
 
       default:
-        newHistory.push({ type: 'err', text: `zsh: command not found: ${cmd}. Type 'help' to see all commands.` });
+        newHistory.push({
+          type: 'err',
+          text: `zsh: command not found: ${cmd}. Type 'help' to see all commands.`
+        });
         break;
     }
 
@@ -1882,7 +2215,10 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
     if (e.ctrlKey && (e.key === 'c' || e.key === 'C')) {
       e.preventDefault();
       e.stopPropagation();
-      setHistory(prev => [...prev, { type: 'cmd', text: `harshit@neural-core ${currentPath} % ${inputVal}^C` }]);
+      setHistory((prev) => [
+        ...prev,
+        { type: 'cmd', text: `harshit@neural-core ${currentPath} % ${inputVal}^C` }
+      ]);
       setInputVal('');
       setHistoryIndex(-1);
       return;
@@ -1913,38 +2249,76 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
       if (!curr) return;
 
       const allCommands = [
-        'help', 'neofetch', 'whoami', 'uptime', 'uname', 'ping', 'curl', 'history', 'date',
-        'echo', 'banner', 'motd', 'bio', 'about', 'skills', 'stack', 'projects', 'contact',
-        'socials', 'top', 'ps', 'weather', 'ls', 'cd', 'pwd', 'cat', 'tree', 'ai',
-        'ask', 'deploy', 'launch', 'snake', 'hack', 'pwn', 'matrix', 'rain', 'cowsay',
-        'fortune', 'theme', 'clear', 'exit'
+        'help',
+        'neofetch',
+        'whoami',
+        'uptime',
+        'uname',
+        'ping',
+        'curl',
+        'history',
+        'date',
+        'echo',
+        'banner',
+        'motd',
+        'bio',
+        'about',
+        'skills',
+        'stack',
+        'projects',
+        'contact',
+        'socials',
+        'top',
+        'ps',
+        'weather',
+        'ls',
+        'cd',
+        'pwd',
+        'cat',
+        'tree',
+        'ai',
+        'ask',
+        'deploy',
+        'launch',
+        'snake',
+        'hack',
+        'pwn',
+        'matrix',
+        'rain',
+        'cowsay',
+        'fortune',
+        'theme',
+        'clear',
+        'exit'
       ];
 
       const parts = curr.split(/\s+/);
-      
+
       if (parts.length === 1) {
-        const match = allCommands.find(c => c.startsWith(parts[0].toLowerCase()));
+        const match = allCommands.find((c) => c.startsWith(parts[0].toLowerCase()));
         if (match) setInputVal(match);
       } else if (parts[0].toLowerCase() === 'cat') {
         const filePrefix = parts[1].toLowerCase();
         const dirNode = getNodeFromVFS(currentPath);
-        if (dirNode && dirNode.children) {
+        if (dirNode?.children) {
           const files = Object.keys(dirNode.children);
-          const matchFile = files.find(f => f.toLowerCase().startsWith(filePrefix));
+          const matchFile = files.find((f) => f.toLowerCase().startsWith(filePrefix));
           if (matchFile) setInputVal(`cat ${matchFile}`);
         }
       } else if (parts[0].toLowerCase() === 'cd') {
         const dirPrefix = parts[1].toLowerCase();
         const dirNode = getNodeFromVFS(currentPath);
-        if (dirNode && dirNode.children) {
-          const dirs = Object.keys(dirNode.children).filter(k => dirNode.children[k].type === 'dir');
-          const matchDir = dirs.find(d => d.toLowerCase().startsWith(dirPrefix));
+        if (dirNode?.children) {
+          const dirs = Object.keys(dirNode.children).filter(
+            (k) => dirNode.children[k].type === 'dir'
+          );
+          const matchDir = dirs.find((d) => d.toLowerCase().startsWith(dirPrefix));
           if (matchDir) setInputVal(`cd ${matchDir}`);
         }
       } else if (parts[0].toLowerCase() === 'theme') {
         const themePrefix = parts[1].toLowerCase();
         const themeKeys = Object.keys(THEMES);
-        const matchTheme = themeKeys.find(t => t.startsWith(themePrefix));
+        const matchTheme = themeKeys.find((t) => t.startsWith(themePrefix));
         if (matchTheme) setInputVal(`theme ${matchTheme}`);
       }
     } else if (e.key === 'ArrowUp') {
@@ -1982,7 +2356,7 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
   ];
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className="modal-backdrop" onClick={onClose} role="presentation">
       <div
         className={`modal-card glass-modal terminal-modal ${isFullScreen ? 'fullscreen-terminal' : ''}`}
         style={{
@@ -1990,20 +2364,54 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
           boxShadow: `0 25px 90px rgba(0,0,0,0.95), 0 0 45px ${activeThemeObj.glow}`
         }}
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
       >
         <div className="modal-header terminal-hud-header">
           <div className="terminal-dots">
-            <span className="t-dot red" onClick={onClose} title="Close Terminal"></span>
-            <span className="t-dot yellow" onClick={() => setHistory([])} title="Clear Terminal (Ctrl+L)"></span>
-            <span className="t-dot green" onClick={() => setIsFullScreen(!isFullScreen)} title="Toggle Fullscreen"></span>
+            <span
+              className="t-dot red"
+              role="button"
+              tabIndex={0}
+              onClick={onClose}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') onClose();
+              }}
+              title="Close Terminal"
+            ></span>
+            <span
+              className="t-dot yellow"
+              role="button"
+              tabIndex={0}
+              onClick={() => setHistory([])}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') setHistory([]);
+              }}
+              title="Clear Terminal (Ctrl+L)"
+            ></span>
+            <span
+              className="t-dot green"
+              role="button"
+              tabIndex={0}
+              onClick={() => setIsFullScreen(!isFullScreen)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') setIsFullScreen(!isFullScreen);
+              }}
+              title="Toggle Fullscreen"
+            ></span>
           </div>
 
           <div className="terminal-title-text" style={{ color: activeThemeObj.primary }}>
-            {matrixActive ? `MATRIX DIGITAL RAIN · 60FPS STREAM · [${activeThemeObj.label}]` : snakeGameActive ? `CYBER-VIPER ARCADE 60FPS · ${activeThemeObj.label}` : `harshit@neural-core: ${currentPath} (zsh) · [${activeThemeObj.label}]`}
+            {matrixActive
+              ? `MATRIX DIGITAL RAIN · 60FPS STREAM · [${activeThemeObj.label}]`
+              : snakeGameActive
+                ? `CYBER-VIPER ARCADE 60FPS · ${activeThemeObj.label}`
+                : `harshit@neural-core: ${currentPath} (zsh) · [${activeThemeObj.label}]`}
           </div>
 
           <div className="terminal-header-actions">
             <button
+              type="button"
               className="btn-term-fs"
               onClick={() => setIsFullScreen(!isFullScreen)}
               title={isFullScreen ? 'Restore Window' : 'Expand Fullscreen'}
@@ -2011,8 +2419,12 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
               {isFullScreen ? '🗗 RESTORE' : '🗖 FULLSCREEN'}
             </button>
             <button
+              type="button"
               className="modal-close-btn"
-              onClick={() => { SoundFX.playClick(); onClose(); }}
+              onClick={() => {
+                SoundFX.playClick();
+                onClose();
+              }}
               aria-label="Close modal"
             >
               ✕
@@ -2112,15 +2524,20 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
             <div
               className="arcade-snake-container full-terminal-arcade"
               style={{ borderColor: activeThemeObj.primary }}
-              tabIndex={0}
               onClick={() => snakeCanvasRef.current?.focus()}
             >
               {/* Arcade Top Telemetry Bar */}
               <div className="snake-arcade-hud">
                 <div className="snake-stats-left">
-                  <span className="snake-badge" style={{ color: activeThemeObj.primary }}>🐍 CYBER ARCADE</span>
-                  <span className="snake-score-display">SCORE: <strong>{snakeScore}</strong></span>
-                  <span className="snake-hi-display">HI: <strong>{snakeHighScore}</strong></span>
+                  <span className="snake-badge" style={{ color: activeThemeObj.primary }}>
+                    🐍 CYBER ARCADE
+                  </span>
+                  <span className="snake-score-display">
+                    SCORE: <strong>{snakeScore}</strong>
+                  </span>
+                  <span className="snake-hi-display">
+                    HI: <strong>{snakeHighScore}</strong>
+                  </span>
                   {combo > 1 && (
                     <span className="snake-combo-badge" style={{ color: activeThemeObj.primary }}>
                       COMBO x{combo} 🔥
@@ -2128,7 +2545,13 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                   )}
                   {activePowerUp && (
                     <span className="snake-powerup-badge">
-                      {activePowerUp.type === 'SHIELD' ? '🛡️ SHIELD' : activePowerUp.type === 'SLOW' ? '❄️ MATRIX TIME' : activePowerUp.type === 'MAGNET' ? '🧲 MAGNET' : '⚡ 2X OVERCLOCK'}
+                      {activePowerUp.type === 'SHIELD'
+                        ? '🛡️ SHIELD'
+                        : activePowerUp.type === 'SLOW'
+                          ? '❄️ MATRIX TIME'
+                          : activePowerUp.type === 'MAGNET'
+                            ? '🧲 MAGNET'
+                            : '⚡ 2X OVERCLOCK'}
                     </span>
                   )}
                 </div>
@@ -2136,15 +2559,23 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                 <div className="snake-controls-right">
                   <div className="snake-mode-selector">
                     <button
+                      type="button"
                       className={`btn-mode-chip ${snakeMode === 'wrap' ? 'active' : ''}`}
-                      onClick={() => { SoundFX.playKey(); setSnakeMode('wrap'); }}
+                      onClick={() => {
+                        SoundFX.playKey();
+                        setSnakeMode('wrap');
+                      }}
                       title="Wrap around borders"
                     >
                       WRAP
                     </button>
                     <button
+                      type="button"
                       className={`btn-mode-chip ${snakeMode === 'walls' ? 'active' : ''}`}
-                      onClick={() => { SoundFX.playKey(); setSnakeMode('walls'); }}
+                      onClick={() => {
+                        SoundFX.playKey();
+                        setSnakeMode('walls');
+                      }}
                       title="Lethal electrified perimeter"
                     >
                       WALLS ⚡
@@ -2152,11 +2583,15 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                   </div>
 
                   <div className="snake-speed-selector">
-                    {['normal', 'fast', 'insane'].map(s => (
+                    {['normal', 'fast', 'insane'].map((s) => (
                       <button
+                        type="button"
                         key={s}
                         className={`btn-speed-chip ${snakeSpeed === s ? 'active' : ''}`}
-                        onClick={() => { SoundFX.playKey(); setSnakeSpeed(s); }}
+                        onClick={() => {
+                          SoundFX.playKey();
+                          setSnakeSpeed(s);
+                        }}
                       >
                         {s.toUpperCase()}
                       </button>
@@ -2183,7 +2618,11 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                   <div className="snake-pause-overlay">
                     <span className="pause-title">⏸ SYSTEM PAUSED</span>
                     <span className="pause-subtitle">PRESS [P] OR [SPACE] TO RESUME</span>
-                    <button className="btn-snake-act retry" onClick={() => setIsPaused(false)}>
+                    <button
+                      type="button"
+                      className="btn-snake-act retry"
+                      onClick={() => setIsPaused(false)}
+                    >
                       RESUME MISSION
                     </button>
                   </div>
@@ -2192,23 +2631,42 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                 {/* Game Over Mission Summary Overlay */}
                 {snakeGameOver && (
                   <div className="snake-gameover-overlay">
-                    <span className="over-title">💀 MISSION TERMINATED // SCORE: {snakeScore} PTS</span>
+                    <span className="over-title">
+                      💀 MISSION TERMINATED {/* SCORE: */}
+                      {snakeScore} PTS
+                    </span>
                     {isNewHighScore && (
                       <span className="new-hi-banner" style={{ color: activeThemeObj.primary }}>
                         🏆 NEW RECORD SET IN {snakeMode.toUpperCase()} MODE!
                       </span>
                     )}
                     <div className="gameover-stats-grid">
-                      <span>Data Orbs: <strong>{applesEaten}</strong></span>
-                      <span>Max Combo: <strong>x{maxCombo}</strong></span>
-                      <span>Difficulty: <strong>{snakeSpeed.toUpperCase()}</strong></span>
-                      <span>Arena: <strong>{snakeMode.toUpperCase()}</strong></span>
+                      <span>
+                        Data Orbs: <strong>{applesEaten}</strong>
+                      </span>
+                      <span>
+                        Max Combo: <strong>x{maxCombo}</strong>
+                      </span>
+                      <span>
+                        Difficulty: <strong>{snakeSpeed.toUpperCase()}</strong>
+                      </span>
+                      <span>
+                        Arena: <strong>{snakeMode.toUpperCase()}</strong>
+                      </span>
                     </div>
                     <div className="over-buttons">
-                      <button className="btn-snake-act retry" onClick={startSnakeGame}>
+                      <button
+                        type="button"
+                        className="btn-snake-act retry"
+                        onClick={startSnakeGame}
+                      >
                         ↺ RESTART (R / ENTER)
                       </button>
-                      <button className="btn-snake-act quit" onClick={() => setSnakeGameActive(false)}>
+                      <button
+                        type="button"
+                        className="btn-snake-act quit"
+                        onClick={() => setSnakeGameActive(false)}
+                      >
                         QUIT TO SHELL (Q / ESC)
                       </button>
                     </div>
@@ -2221,20 +2679,33 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                     type="button"
                     className="dpad-btn up"
                     onClick={() => changeSnakeDirection('UP')}
-                    onTouchStart={(e) => { e.preventDefault(); changeSnakeDirection('UP'); }}
-                  >▲</button>
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      changeSnakeDirection('UP');
+                    }}
+                  >
+                    ▲
+                  </button>
                   <div className="dpad-mid-row">
                     <button
                       type="button"
                       className="dpad-btn left"
                       onClick={() => changeSnakeDirection('LEFT')}
-                      onTouchStart={(e) => { e.preventDefault(); changeSnakeDirection('LEFT'); }}
-                    >◀</button>
+                      onTouchStart={(e) => {
+                        e.preventDefault();
+                        changeSnakeDirection('LEFT');
+                      }}
+                    >
+                      ◀
+                    </button>
                     <button
                       type="button"
                       className="dpad-btn pause"
                       onClick={() => setIsPaused(!isPaused)}
-                      onTouchStart={(e) => { e.preventDefault(); setIsPaused(!isPaused); }}
+                      onTouchStart={(e) => {
+                        e.preventDefault();
+                        setIsPaused(!isPaused);
+                      }}
                     >
                       {isPaused ? '▶' : '⏸'}
                     </button>
@@ -2242,27 +2713,53 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
                       type="button"
                       className="dpad-btn right"
                       onClick={() => changeSnakeDirection('RIGHT')}
-                      onTouchStart={(e) => { e.preventDefault(); changeSnakeDirection('RIGHT'); }}
-                    >▶</button>
+                      onTouchStart={(e) => {
+                        e.preventDefault();
+                        changeSnakeDirection('RIGHT');
+                      }}
+                    >
+                      ▶
+                    </button>
                   </div>
                   <button
                     type="button"
                     className="dpad-btn down"
                     onClick={() => changeSnakeDirection('DOWN')}
-                    onTouchStart={(e) => { e.preventDefault(); changeSnakeDirection('DOWN'); }}
-                  >▼</button>
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      changeSnakeDirection('DOWN');
+                    }}
+                  >
+                    ▼
+                  </button>
                 </div>
               </div>
 
               {!snakeGameOver && (
                 <div className="snake-game-footer-bar">
-                  <span>Steer: <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> or <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span>
+                  <span>
+                    Steer: <kbd>↑</kbd>
+                    <kbd>↓</kbd>
+                    <kbd>←</kbd>
+                    <kbd>→</kbd> or <kbd>W</kbd>
+                    <kbd>A</kbd>
+                    <kbd>S</kbd>
+                    <kbd>D</kbd>
+                  </span>
                   <span>·</span>
-                  <span><kbd>P</kbd> Pause</span>
+                  <span>
+                    <kbd>P</kbd> Pause
+                  </span>
                   <span>·</span>
-                  <span><kbd>R</kbd> Restart</span>
+                  <span>
+                    <kbd>R</kbd> Restart
+                  </span>
                   <span>·</span>
-                  <button className="btn-snake-quit-inline" onClick={() => setSnakeGameActive(false)}>
+                  <button
+                    type="button"
+                    className="btn-snake-quit-inline"
+                    onClick={() => setSnakeGameActive(false)}
+                  >
                     QUIT TO SHELL (ESC)
                   </button>
                 </div>
@@ -2275,9 +2772,10 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         {!snakeGameActive && (
           <div className="terminal-quick-chips-bar">
             <span className="chips-label">QUICK CMDS:</span>
-            {quickChips.map((chip, idx) => (
+            {quickChips.map((chip) => (
               <button
-                key={idx}
+                type="button"
+                key={chip.cmd || chip.label}
                 className="term-chip-btn"
                 onClick={() => {
                   SoundFX.playClick();
@@ -2292,9 +2790,15 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
 
         <div className="modal-footer terminal-footer-tips">
           {snakeGameActive ? (
-            <span>ARCADE CONTROLS: <kbd>Arrow Keys</kbd> or <kbd>WASD</kbd> · <kbd>P</kbd> Pause · <kbd>R</kbd> Quick Restart · <kbd>ESC</kbd> Exit to Terminal</span>
+            <span>
+              ARCADE CONTROLS: <kbd>Arrow Keys</kbd> or <kbd>WASD</kbd> · <kbd>P</kbd> Pause ·{' '}
+              <kbd>R</kbd> Quick Restart · <kbd>ESC</kbd> Exit to Terminal
+            </span>
           ) : (
-            <span>TIPS: Press <kbd>Tab</kbd> to autocomplete · <kbd>Ctrl+C</kbd> cancel · <kbd>Ctrl+L</kbd> clear · <kbd>↑</kbd>/<kbd>↓</kbd> history</span>
+            <span>
+              TIPS: Press <kbd>Tab</kbd> to autocomplete · <kbd>Ctrl+C</kbd> cancel ·{' '}
+              <kbd>Ctrl+L</kbd> clear · <kbd>↑</kbd>/<kbd>↓</kbd> history
+            </span>
           )}
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { projectsData } from '../data/projectsData';
 
 describe('Projects Data Matrix Integrity', () => {
@@ -8,7 +8,7 @@ describe('Projects Data Matrix Integrity', () => {
   });
 
   it('should have unique IDs for all projects', () => {
-    const ids = projectsData.map(p => p.id);
+    const ids = projectsData.map((p) => p.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });

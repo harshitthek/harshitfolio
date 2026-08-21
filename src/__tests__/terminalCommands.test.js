@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 const THEMES = {
   green: { label: 'CLASSIC MATRIX GREEN', primary: '#00ff88' },

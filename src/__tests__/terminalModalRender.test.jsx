@@ -1,6 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import TerminalModal from '../components/modals/TerminalModal';
 
 // Mock HTML5 Canvas getContext
@@ -29,9 +28,7 @@ describe('TerminalModal React Component Smoke & Mount Test', () => {
     const handleClose = vi.fn();
     const handleLaunch = vi.fn();
 
-    const { container } = render(
-      <TerminalModal onClose={handleClose} onLaunch={handleLaunch} />
-    );
+    const { container } = render(<TerminalModal onClose={handleClose} onLaunch={handleLaunch} />);
 
     expect(container.querySelector('.terminal-modal')).toBeTruthy();
     expect(screen.getByPlaceholderText("type 'help'...")).toBeTruthy();

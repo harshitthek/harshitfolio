@@ -2,7 +2,8 @@ export const snippetsData = {
   phish: {
     filename: 'custom_transformers.py',
     language: 'Python',
-    description: 'PhishShield AI: Shannon Domain Entropy calculation and multi-brand typosquatting heuristic feature extraction.',
+    description:
+      'PhishShield AI: Shannon Domain Entropy calculation and multi-brand typosquatting heuristic feature extraction.',
     code: `import math
 from collections import Counter
 from urllib.parse import urlparse
@@ -58,7 +59,8 @@ class PhishShieldHeuristicExtractor(BaseEstimator, TransformerMixin):
   pageshield: {
     filename: 'background.js',
     language: 'JavaScript',
-    description: 'Page Shield: Groq Llama 3.3 70B & Gemini 2.0 Flash background service worker with human-like persona prompting.',
+    description:
+      'Page Shield: Groq Llama 3.3 70B & Gemini 2.0 Flash background service worker with human-like persona prompting.',
     code: `/**
  * Page Shield — Service Worker
  * Handles ultra-fast Groq Llama 3.3 70B & Gemini 2.0 Flash Lite form solving
@@ -114,7 +116,8 @@ Options: \${options ? JSON.stringify(options) : 'N/A'}
   ml: {
     filename: 'autovaluate_stacking_model.py',
     language: 'Python',
-    description: 'CatBoost + XGBoost Dual-Engine Stacking Regressor pipeline trained on 40,000+ vehicle transactions with native categorical embeddings and OOD bounds.',
+    description:
+      'CatBoost + XGBoost Dual-Engine Stacking Regressor pipeline trained on 40,000+ vehicle transactions with native categorical embeddings and OOD bounds.',
     code: `import numpy as np
 import pandas as pd
 from catboost import CatBoostRegressor
@@ -158,7 +161,8 @@ class AutoValuateDualEngine:
   webhook: {
     filename: 'webhook_receiver.py',
     language: 'Python',
-    description: 'Constant-time cryptographic signature verification for GitHub App webhooks, preventing timing side-channel attacks.',
+    description:
+      'Constant-time cryptographic signature verification for GitHub App webhooks, preventing timing side-channel attacks.',
     code: `import hashlib
 import hmac
 import os
@@ -202,7 +206,8 @@ def handle_webhook():
   yggdrasil: {
     filename: 'yggdrasil_tree_agent.py',
     language: 'Python',
-    description: 'Yggdrasil multi-branch reasoning tree decomposition agent with async event loop and structured thought chains.',
+    description:
+      'Yggdrasil multi-branch reasoning tree decomposition agent with async event loop and structured thought chains.',
     code: `import asyncio
 from typing import List, Dict, Any
 from pydantic import BaseModel
@@ -243,7 +248,8 @@ class YggdrasilTreeEngine:
   schema: {
     filename: 'schema.sql',
     language: 'SQL',
-    description: 'Relational database schema for the Resilient issue discovery queue and agent test matrices.',
+    description:
+      'Relational database schema for the Resilient issue discovery queue and agent test matrices.',
     code: `-- Resilient Autonomous Benchmark Database Schema
 CREATE TABLE IF NOT EXISTS repos (
     id SERIAL PRIMARY KEY,

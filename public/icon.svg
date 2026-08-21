@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <title>HARSHIT.EXE Portfolio Logo</title>
   <rect width="100" height="100" rx="20" fill="#080808"/>
   <rect x="8" y="8" width="84" height="84" rx="14" fill="none" stroke="#00ff88" stroke-width="4"/>
   <path d="M30 24v52M70 24v52M30 50h40" stroke="#00ff88" stroke-width="8" stroke-linecap="round"/>

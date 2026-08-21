@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 // Virtual Filesystem logic isolated for testing
 const VIRTUAL_FS = {
@@ -14,20 +14,20 @@ const VIRTUAL_FS = {
         type: 'file',
         size: '620 B',
         content: JSON.stringify({
-          name: "Harshit Sharma",
-          role: "AI Engineer & ML Systems Architect",
-          degree: "B.Tech AI & ML (Class of 2029)",
-          email: "codewithharshitsharma@gmail.com"
+          name: 'Harshit Sharma',
+          role: 'AI Engineer & ML Systems Architect',
+          degree: 'B.Tech AI & ML (Class of 2029)',
+          email: 'codewithharshitsharma@gmail.com'
         })
       },
-      'projects': {
+      projects: {
         type: 'dir',
         children: {
           '01_yggdrasil.py': { type: 'file', content: 'class YggdrasilOrchestrator:' },
           '02_resilient_agent.py': { type: 'file', content: 'class AgentSandboxTestRunner:' }
         }
       },
-      'secrets': {
+      secrets: {
         type: 'dir',
         children: {
           'flag.txt': { type: 'file', content: 'FLAG{HARSHIT_AI_ROOT_ACCESS_GRANTED_2026}' }
@@ -40,9 +40,9 @@ const VIRTUAL_FS = {
 const resolvePath = (input, current = '~') => {
   if (input === '~' || input === '/') return '~';
   if (input.startsWith('~/')) input = input.slice(2);
-  let parts = current === '~' ? [] : current.replace(/^~\/?/, '').split('/').filter(Boolean);
+  const parts = current === '~' ? [] : current.replace(/^~\/?/, '').split('/').filter(Boolean);
 
-  input.split('/').forEach(seg => {
+  input.split('/').forEach((seg) => {
     if (!seg || seg === '.') return;
     if (seg === '..') {
       if (parts.length > 0) parts.pop();
@@ -61,7 +61,7 @@ const getNodeFromVFS = (path) => {
   let curr = VIRTUAL_FS['~'];
 
   for (const seg of segments) {
-    if (!curr || curr.type !== 'dir' || !curr.children[seg]) {
+    if (curr?.type !== 'dir' || !curr.children[seg]) {
       return null;
     }
     curr = curr.children[seg];

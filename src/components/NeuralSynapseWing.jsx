@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function NeuralSynapseWing({ isActive }) {
   const canvasRef = useRef(null);
@@ -72,7 +72,7 @@ export default function NeuralSynapseWing({ isActive }) {
       };
     });
 
-    let mouse = { x: -100, y: -100 };
+    const mouse = { x: -100, y: -100 };
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
@@ -89,7 +89,7 @@ export default function NeuralSynapseWing({ isActive }) {
       // 1. Draw Synaptic Axon Connections
       connections.forEach((conn) => {
         const dx = conn.to.x - conn.from.x;
-        const dy = conn.to.y - conn.from.y;
+        const _dy = conn.to.y - conn.from.y;
         const cp1x = conn.from.x + dx * 0.5;
         const cp1y = conn.from.y;
         const cp2x = conn.from.x + dx * 0.5;
@@ -122,8 +122,8 @@ export default function NeuralSynapseWing({ isActive }) {
 
         // Cubic Bezier interpolation
         const u = 1 - t;
-        const px = u*u*u*f.x + 3*u*u*t*cp1x + 3*u*t*t*cp2x + t*t*t*to.x;
-        const py = u*u*u*f.y + 3*u*u*t*cp1y + 3*u*t*t*cp2y + t*t*t*to.y;
+        const px = u * u * u * f.x + 3 * u * u * t * cp1x + 3 * u * t * t * cp2x + t * t * t * to.x;
+        const py = u * u * u * f.y + 3 * u * u * t * cp1y + 3 * u * t * t * cp2y + t * t * t * to.y;
 
         ctx.fillStyle = p.color;
         ctx.shadowColor = p.color;
@@ -150,7 +150,7 @@ export default function NeuralSynapseWing({ isActive }) {
           ctx.stroke();
 
           // Node Core
-          ctx.fillStyle = isHovered ? '#ffffff' : (lIdx === 1 ? '#00ff88' : '#38bdf8');
+          ctx.fillStyle = isHovered ? '#ffffff' : lIdx === 1 ? '#00ff88' : '#38bdf8';
           ctx.shadowColor = lIdx === 1 ? '#00ff88' : '#38bdf8';
           ctx.shadowBlur = isHovered ? 12 : 6;
           ctx.beginPath();
@@ -182,7 +182,7 @@ export default function NeuralSynapseWing({ isActive }) {
         <div className="synapse-header">
           <div className="synapse-title-left">
             <span className="synapse-pulse-dot"></span>
-            <span className="synapse-title">SYNAPSE MATRIX // v2.4</span>
+            <span className="synapse-title">SYNAPSE MATRIX {/* v2.4 */}</span>
           </div>
           <span className="synapse-badge">LIVE</span>
         </div>

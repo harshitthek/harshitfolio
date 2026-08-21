@@ -1,16 +1,16 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SoundFX } from './SoundFX';
 import { useVoice } from './VoiceContext';
 
 export default function VideoScreen({ isActive, onComplete }) {
   const vidRef = useRef(null);
   const [videoStarted, setVideoStarted] = useState(false);
-  const [videoEnded, setVideoEnded] = useState(false);
+  const [_videoEnded, setVideoEnded] = useState(false);
   const fallbackTimerRef = useRef(null);
   const { voiceEnabled, toggleVoice } = useVoice();
   const [sfxOn, setSfxOn] = useState(SoundFX.isEnabled());
 
-  const killAllAudio = () => {
+  const killAllAudio = useCallback(() => {
     if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
 
     // Stop and mute HTML5 video completely
@@ -20,7 +20,7 @@ export default function VideoScreen({ isActive, onComplete }) {
         vidRef.current.currentTime = 0;
         vidRef.current.muted = true;
         vidRef.current.volume = 0;
-      } catch (err) {
+      } catch (_err) {
         // Ignore
       }
     }
@@ -29,11 +29,11 @@ export default function VideoScreen({ isActive, onComplete }) {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       try {
         window.speechSynthesis.cancel();
-      } catch (err) {
+      } catch (_err) {
         // Ignore
       }
     }
-  };
+  }, []);
 
   const handleToggleSFX = (e) => {
     e.preventDefault();
@@ -54,48 +54,54 @@ export default function VideoScreen({ isActive, onComplete }) {
     toggleVoice();
   };
 
-  const afterVideo = (e) => {
-    if (e) {
-      if (e.preventDefault) e.preventDefault();
-      if (e.stopPropagation) e.stopPropagation();
-    }
-    setVideoEnded(true);
-    killAllAudio();
-
-    if (sfxOn) SoundFX.playClick();
-    if (onComplete) onComplete();
-  };
-
-  const unmuteVideo = (e) => {
-    if (e) {
-      if (e.preventDefault) e.preventDefault();
-      if (e.stopPropagation) e.stopPropagation();
-    }
-    if (videoStarted) return;
-
-    setVideoStarted(true);
-    if (sfxOn) SoundFX.playClick();
-
-    if (vidRef.current) {
-      vidRef.current.currentTime = 0;
-      vidRef.current.muted = !sfxOn;
-      vidRef.current.volume = 1;
-      const playPromise = vidRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          console.warn('Playback error fallback:', err);
-          afterVideo();
-        });
+  const afterVideo = useCallback(
+    (e) => {
+      if (e) {
+        if (e.preventDefault) e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
       }
-    } else {
-      afterVideo();
-    }
+      setVideoEnded(true);
+      killAllAudio();
 
-    if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
-    fallbackTimerRef.current = setTimeout(() => {
-      afterVideo();
-    }, 8500);
-  };
+      if (sfxOn) SoundFX.playClick();
+      if (onComplete) onComplete();
+    },
+    [killAllAudio, sfxOn, onComplete]
+  );
+
+  const unmuteVideo = useCallback(
+    (e) => {
+      if (e) {
+        if (e.preventDefault) e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
+      }
+      if (videoStarted) return;
+
+      setVideoStarted(true);
+      if (sfxOn) SoundFX.playClick();
+
+      if (vidRef.current) {
+        vidRef.current.currentTime = 0;
+        vidRef.current.muted = !sfxOn;
+        vidRef.current.volume = 1;
+        const playPromise = vidRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            console.warn('Playback error fallback:', err);
+            afterVideo();
+          });
+        }
+      } else {
+        afterVideo();
+      }
+
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+      fallbackTimerRef.current = setTimeout(() => {
+        afterVideo();
+      }, 8500);
+    },
+    [videoStarted, sfxOn, afterVideo]
+  );
 
   const handleSkip = (e) => {
     if (e) {
@@ -118,14 +124,14 @@ export default function VideoScreen({ isActive, onComplete }) {
           vidRef.current.currentTime = 0;
           vidRef.current.muted = !sfxOn;
           vidRef.current.volume = 1;
-        } catch (err) {
+        } catch (_err) {
           // Ignore
         }
       }
     } else {
       killAllAudio();
     }
-  }, [isActive, sfxOn]);
+  }, [isActive, sfxOn, killAllAudio]);
 
   // Keyboard accessibility: Space or Enter to unmute and start video
   useEffect(() => {
@@ -144,7 +150,7 @@ export default function VideoScreen({ isActive, onComplete }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isActive, videoStarted, sfxOn]);
+  }, [isActive, videoStarted, unmuteVideo]);
 
   return (
     <div id="s-video" className={`screen ${isActive ? 'active' : ''}`}>
@@ -176,7 +182,9 @@ export default function VideoScreen({ isActive, onComplete }) {
         <div className="video-hud-left">
           <div className="video-brand-pill">
             <span className="brand-dot live"></span>
-            <span className="brand-title">HARSHIT<span className="text-glow">.EXE</span></span>
+            <span className="brand-title">
+              HARSHIT<span className="text-glow">.EXE</span>
+            </span>
             <span className="brand-badge">NEURAL_AI</span>
           </div>
         </div>
@@ -231,10 +239,16 @@ export default function VideoScreen({ isActive, onComplete }) {
           id="unmute-overlay"
           className="unmute-overlay"
           onClick={unmuteVideo}
+          onKeyDown={(e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+              e.preventDefault();
+              unmuteVideo();
+            }
+          }}
           role="button"
           tabIndex={0}
         >
-          <div className="unmute-box" onClick={unmuteVideo}>
+          <div className="unmute-box">
             <span className="corner tl"></span>
             <span className="corner tr"></span>
             <span className="corner bl"></span>
@@ -242,12 +256,10 @@ export default function VideoScreen({ isActive, onComplete }) {
 
             <div className="unmute-badge">
               <span className="unmute-pulse-dot"></span>
-              <span>AUDIO TRANSMISSION READY // 48kHz</span>
+              <span>AUDIO TRANSMISSION READY {/* 48kHz */}</span>
             </div>
 
-            <h2 className="unmute-headline">
-              INITIALIZE THE EXPERIENCE
-            </h2>
+            <h2 className="unmute-headline">INITIALIZE THE EXPERIENCE</h2>
 
             <div className="unmute-sub">
               <span>HARSHIT SHARMA</span>
@@ -283,7 +295,8 @@ export default function VideoScreen({ isActive, onComplete }) {
             </button>
 
             <div className="unmute-hint">
-              <span className="hint-bracket">[</span> CLICK ANYWHERE OR PRESS SPACE TO UNMUTE <span className="hint-bracket">]</span>
+              <span className="hint-bracket">[</span> CLICK ANYWHERE OR PRESS SPACE TO UNMUTE{' '}
+              <span className="hint-bracket">]</span>
             </div>
           </div>
         </div>

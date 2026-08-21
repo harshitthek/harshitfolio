@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SoundFX } from '../SoundFX';
 
 export default function ContactModal({ onClose }) {
@@ -13,7 +13,9 @@ export default function ContactModal({ onClose }) {
 
     // Open real email transmission prefilled with operator's data
     const subject = encodeURIComponent(`Transmission from ${form.name} via Harshit.exe Portfolio`);
-    const body = encodeURIComponent(`Operator Name: ${form.name}\nReturn Email: ${form.email}\n\nTransmission Payload:\n${form.message}\n\n---\nSent via Harshit.exe Neural Portfolio`);
+    const body = encodeURIComponent(
+      `Operator Name: ${form.name}\nReturn Email: ${form.email}\n\nTransmission Payload:\n${form.message}\n\n---\nSent via Harshit.exe Neural Portfolio`
+    );
     const mailtoUrl = `mailto:codewithharshitsharma@gmail.com?subject=${subject}&body=${body}`;
 
     try {
@@ -38,16 +40,25 @@ export default function ContactModal({ onClose }) {
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-card glass-modal contact-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-backdrop" onClick={onClose} role="presentation">
+      <div
+        className="modal-card glass-modal contact-modal"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
         <div className="modal-header">
           <div className="modal-title-group">
             <span className="modal-category">DIRECT COMMS CHANNEL</span>
             <h2 className="modal-title">Transmit Message to Harshit</h2>
           </div>
           <button
+            type="button"
             className="modal-close-btn"
-            onClick={() => { SoundFX.playClick(); onClose(); }}
+            onClick={() => {
+              SoundFX.playClick();
+              onClose();
+            }}
             aria-label="Close modal"
           >
             ✕
@@ -58,9 +69,10 @@ export default function ContactModal({ onClose }) {
           <div className="contact-grid-container">
             {/* Contact Details Column */}
             <div className="contact-details-col">
-              <div className="comms-header-tag">// SECURE COMMS ENDPOINTS</div>
+              <div className="comms-header-tag">{/* SECURE COMMS ENDPOINTS */}</div>
               <p className="comms-intro">
-                Open for AI/ML engineering roles, autonomous agent research collaborations, and creative systems architecture.
+                Open for AI/ML engineering roles, autonomous agent research collaborations, and
+                creative systems architecture.
               </p>
 
               <div className="comms-endpoint-list">
@@ -168,7 +180,10 @@ export default function ContactModal({ onClose }) {
 
                 {submitted && (
                   <div className="transmission-feedback-alert">
-                    <span>TRANSMISSION INITIATED TO codewithharshitsharma@gmail.com. Email client opened.</span>
+                    <span>
+                      TRANSMISSION INITIATED TO codewithharshitsharma@gmail.com. Email client
+                      opened.
+                    </span>
                   </div>
                 )}
               </form>
@@ -178,8 +193,12 @@ export default function ContactModal({ onClose }) {
 
         <div className="modal-footer">
           <button
+            type="button"
             className="btn-modal-close"
-            onClick={() => { SoundFX.playClick(); onClose(); }}
+            onClick={() => {
+              SoundFX.playClick();
+              onClose();
+            }}
           >
             DISMISS COMMS
           </button>
