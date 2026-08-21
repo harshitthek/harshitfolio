@@ -34,6 +34,65 @@ export default function App() {
     warmupAllBackends();
   }, []);
 
+  // URL Deep-Linking & Referral Telemetry Parser (?ref=..., ?modal=..., ?screen=...)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const ref = (params.get('ref') || params.get('source') || '').toLowerCase();
+      const modalParam = (params.get('modal') || '').toLowerCase();
+      const screenParam = (params.get('screen') || '').toLowerCase();
+
+      // Screen navigation override
+      if (['cards', '4', 'projects', 'multiverse'].includes(screenParam)) {
+        setCurrentScreen('s-cards');
+      } else if (['mission', '3', 'hub'].includes(screenParam)) {
+        setCurrentScreen('s-mission');
+      }
+
+      // Referral routing
+      if (ref === 'resume' || ref === 'cv' || ref === 'dossier') {
+        setCurrentScreen('s-cards');
+        setActiveModal('dossier');
+        speak('Welcome operator. Executive dossier and technical resume loaded.');
+        return;
+      }
+
+      if (ref) {
+        console.log(`[HARSHIT.EXE TELEMETRY] Inbound referral detected: source=${ref}`);
+      }
+
+      // Modal deep linking
+      const modalMap = {
+        dossier: 'dossier',
+        resume: 'dossier',
+        terminal: 'terminal',
+        snake: 'terminal',
+        arcade: 'terminal',
+        ml: 'ml-sim',
+        autovaluate: 'ml-sim',
+        simulator: 'ml-sim',
+        inspector: 'code-inspect',
+        code: 'code-inspect',
+        architecture: 'architecture',
+        system: 'architecture',
+        telemetry: 'telemetry',
+        github: 'telemetry',
+        contact: 'contact',
+        email: 'contact',
+        cmd: 'cmd-palette',
+        palette: 'cmd-palette'
+      };
+
+      if (modalParam && modalMap[modalParam]) {
+        setCurrentScreen('s-cards');
+        setActiveModal(modalMap[modalParam]);
+      }
+    } catch (_e) {
+      // Safe fallback if URL parsing fails
+    }
+  }, [speak]);
+
   // Screen 1 Video -> Screen 2 Intermediate
   const handleVideoComplete = useCallback(() => {
     setCurrentScreen('s-intermediate');

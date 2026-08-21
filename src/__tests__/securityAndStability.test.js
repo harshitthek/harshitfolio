@@ -95,4 +95,64 @@ describe('Security, Edge Case & Stability Integrity Matrix', () => {
     expect(validateForm('Operator', 'test@test.com', '   ')).toBe(false);
     expect(validateForm('Harshit', 'test@example.com', 'Hello world')).toBe(true);
   });
+
+  it('should parse URL query parameters for deep linking and referrals', () => {
+    const parseUrlParams = (queryString) => {
+      const params = new URLSearchParams(queryString);
+      const ref = (params.get('ref') || params.get('source') || '').toLowerCase();
+      const modalParam = (params.get('modal') || '').toLowerCase();
+      const screenParam = (params.get('screen') || '').toLowerCase();
+
+      const modalMap = {
+        dossier: 'dossier',
+        resume: 'dossier',
+        terminal: 'terminal',
+        snake: 'terminal',
+        ml: 'ml-sim',
+        autovaluate: 'ml-sim',
+        inspector: 'code-inspect',
+        code: 'code-inspect',
+        architecture: 'architecture',
+        telemetry: 'telemetry',
+        contact: 'contact'
+      };
+
+      let targetScreen = 's-video';
+      let activeModal = null;
+
+      if (['cards', '4'].includes(screenParam)) targetScreen = 's-cards';
+      if (['mission', '3'].includes(screenParam)) targetScreen = 's-mission';
+
+      if (ref === 'resume' || ref === 'cv') {
+        targetScreen = 's-cards';
+        activeModal = 'dossier';
+      } else if (modalParam && modalMap[modalParam]) {
+        targetScreen = 's-cards';
+        activeModal = modalMap[modalParam];
+      }
+
+      return { targetScreen, activeModal, ref };
+    };
+
+    // Test resume referral
+    expect(parseUrlParams('?ref=resume')).toEqual({
+      targetScreen: 's-cards',
+      activeModal: 'dossier',
+      ref: 'resume'
+    });
+
+    // Test snake modal deep link
+    expect(parseUrlParams('?modal=snake')).toEqual({
+      targetScreen: 's-cards',
+      activeModal: 'terminal',
+      ref: ''
+    });
+
+    // Test screen bypass
+    expect(parseUrlParams('?screen=cards')).toEqual({
+      targetScreen: 's-cards',
+      activeModal: null,
+      ref: ''
+    });
+  });
 });
