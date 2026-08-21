@@ -17,6 +17,15 @@ import Navbar from '../components/Navbar';
 import VideoScreen from '../components/VideoScreen';
 import { VoiceProvider } from '../components/VoiceContext';
 
+// Mock HTMLMediaElement (play, pause, load) to silence jsdom stubs
+window.HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue();
+window.HTMLMediaElement.prototype.pause = vi.fn();
+window.HTMLMediaElement.prototype.load = vi.fn();
+
+// Mock window.scrollTo and scrollIntoView
+window.scrollTo = vi.fn();
+window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
 // Mock Canvas 2D Context
 HTMLCanvasElement.prototype.getContext = () => ({
   fillRect: vi.fn(),
