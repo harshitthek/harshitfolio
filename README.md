@@ -8,10 +8,12 @@
 
 [![React](https://img.shields.io/badge/React_18-61dafb?style=for-the-badge&logo=react&logoColor=000)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite_5-646cff?style=for-the-badge&logo=vite&logoColor=fff)](https://vitejs.dev)
-[![Canvas 2D Engine](https://img.shields.io/badge/Canvas_2D-Custom_3D_Quantum_Engine-00ff88?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+[![Biome](https://img.shields.io/badge/Biome_2.5-60a5fa?style=for-the-badge&logo=biome&logoColor=fff)](https://biomejs.dev)
+[![Vitest](https://img.shields.io/badge/Vitest-40_Tests_Passing-6ee7b7?style=for-the-badge&logo=vitest&logoColor=000)](https://vitest.dev)
+[![Canvas 2D Engine](https://img.shields.io/badge/Canvas_2D-60--120FPS_Quantum_Engine-00ff88?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 [![Web Audio API](https://img.shields.io/badge/Web_Audio-Procedural_Synthesizer-38bdf8?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
 [![Web Speech API](https://img.shields.io/badge/Web_Speech-AI_Voice_Transceiver-a855f7?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
-[![Deploy](https://img.shields.io/badge/GitHub_Pages-Live_Deployment-00ff88?style=for-the-badge&logo=github)](https://harshitthek.github.io/harshitfolio)
+[![Deploy](https://img.shields.io/badge/Dual_Deployment-GitHub_Pages_%2B_Oracle_Cloud_VM-00ff88?style=for-the-badge&logo=github)](https://harshitthek.github.io/harshitfolio)
 
 **A cinematic cyberpunk AI mission control command center — engineered like an operational military terminal, not a static webpage.**
 
@@ -62,9 +64,11 @@ Every component serves a purpose. Every animation is hardware-accelerated. Every
 * Articulated Jac Jacobsen L-1 flared bell shade with multi-stage keyframe physics.
 * The lamp enters from above, bounces across the letters, stomps the letter **"I"** into a squashed pancake plate, inspects the impact, and swivels forward to project a volumetric spotlight beam.
 
-### 🐍 Autonomous Terminal & Retro Cyber Snake Arcade
-* **Linux Hacker Sandbox**: Autotyping live system logs, system architecture specs, and interactive terminal commands.
-* **Playable Arcade Snake**: Touch swipe gestures, tactile D-Pad controls, dynamic score multiplier, and shimmering **Golden Glitch** bonus star orbs.
+### 🐍 60–120FPS Cyber Snake Arcade & Terminal Sandbox
+* **Hardware-Accelerated Zero-Lag Engine**: Pre-rendered offscreen matrix background buffer reducing draw calls from 3,000+ per frame to a single `0.01ms` drawImage operation.
+* **Shield Forcefield & 2.5s Phase Immunity**: Active 4-node orbiting plasma forcefield with crash absorption, inward bounce deflection, expanding shockwave burst, and 2.5-second phase-through invulnerability.
+* **Snappy Arcade Velocity & Combos**: Dynamic length-based acceleration, 3-keystroke turn queue, Golden Glitch 8-point diamond stars, and 4 power-ups (`SHIELD`, `MATRIX TIME`, `2X OVERCLOCK`, `MAGNET`).
+* **Linux Hacker Sandbox**: Interactive shell emulator with 25+ real-time commands (`whoami`, `projects`, `skills`, `snake`, `matrix`, `fetch`, `sudo`).
 
 ### 🧠 In-Browser Machine Learning Valuation Simulator
 * Real-time client-side polynomial valuation engine estimating vehicle market value based on mileage, brand tier, condition chips, and age with animated confidence metrics.
@@ -98,13 +102,13 @@ Every component serves a purpose. Every animation is hardware-accelerated. Every
 
 | Layer | Technology | Key Capabilities |
 | :--- | :--- | :--- |
-| **Framework** | React 18 + Vite 5 | Reactive state machine, fast HMR, and ultra-compact production bundle (< 115 kB gzip) |
-| **3D Rendering** | HTML5 Canvas 2D API | Custom vector/matrix rotation engine, perspective projection, depth-sorted luminance |
+| **Framework** | React 18 + Vite 5 | Reactive state machine, fast HMR, and ultra-compact production bundle (< 128 kB gzip) |
+| **Tooling & Quality** | Biome 2.5 + Vitest | Zero-warning static analysis, strict undeclared variable checking, and 40 automated unit tests |
+| **3D & Canvas Graphics** | HTML5 Canvas 2D API | Custom vector/matrix rotation engine, pre-rendered offscreen buffers, perspective projection |
 | **Audio Engine** | Web Audio API | Procedural oscillator synthesis, frequency modulation, and zero audio file footprint |
 | **Speech Engine** | Web Speech Synthesis API | AI narration with utterance garbage-collection protection |
 | **Styling & FX** | Vanilla CSS3 (Custom Design System) | HSL tokens, backdrop blurs, CRT scanline raster, responsive bottom sheets |
-| **Performance** | `requestAnimationFrame` + Batched Draws | Zero `shadowBlur` bottlenecks, squared Euclidean distance checks, locked 60/120 FPS |
-| **Deployment** | GitHub Pages + Automated CI/CD | `npm run deploy` via `gh-pages` |
+| **CI/CD & Deployment** | GitHub Actions + Dual Deployment | Multi-stage pipeline deploying to GitHub Pages CDN + Oracle Cloud Infrastructure VM via Nginx |
 
 ---
 
@@ -112,6 +116,10 @@ Every component serves a purpose. Every animation is hardware-accelerated. Every
 
 ```
 harshitfolio/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml              Enterprise 3-stage CI/CD pipeline (Biome, Vitest, Pages, Oracle VM)
+│
 ├── public/
 │   ├── banner.jpg                  Cinematic HUD banner
 │   ├── icon.svg                    Vector favicon
@@ -140,27 +148,41 @@ harshitfolio/
 │   │   │
 │   │   └── modals/
 │   │       ├── CommandPaletteModal.jsx  Ctrl+K Spotlight HUD search engine
-│   │       ├── TerminalModal.jsx        Interactive Linux terminal & Snake arcade
+│   │       ├── TerminalModal.jsx        60-120FPS Snake arcade & Linux shell emulator
 │   │       ├── MLSimulatorModal.jsx     Live machine learning inference sandbox
 │   │       ├── CodeInspectorModal.jsx   Python AST & production code viewer
 │   │       ├── ArchitectureModal.jsx    Full-stack system blueprints
 │   │       ├── DossierModal.jsx         Executive resume & experience log
+│   │       ├── GitHubTelemetryModal.jsx Live GitHub REST API telemetry feed
 │   │       └── ContactModal.jsx         Direct COMMS transmission portal
 │   │
+│   ├── __tests__/                  40 Automated Vitest Test Matrix across 9 Suites
+│   │   ├── allComponentsMount.test.jsx Comprehensive render & ReferenceError integrity
+│   │   ├── arcadeSnakeEngine.test.js   Physics, wrap mode, shield deflection & phase immunity
+│   │   ├── buildIntegrity.test.js      Clean code, Biome config, zero legacy string assertions
+│   │   ├── dossierData.test.js         Resume structure, education & skills integrity
+│   │   ├── projectsData.test.js        13 Multiverse project data validation
+│   │   ├── soundEngine.test.js         Procedural Web Audio synthesizer assertions
+│   │   ├── terminalCommands.test.js    Command parsing & output validation
+│   │   ├── terminalModalRender.test.jsx Terminal component mount smoke test
+│   │   └── virtualFs.test.js           Virtual file system navigation & CAT commands
+│   │
 │   ├── data/
+│   │   ├── dossierData.json        Categorized engineering experience & certifications
 │   │   └── projectsData.js         Production project catalog & metadata
 │   │
 │   └── utils/
 │       └── backendWarmup.js        Asynchronous backend warmup triggers
 │
-├── index.html                      SEO metadata, OpenGraph, PWA headers
-├── package.json                    Dependencies and deployment scripts
+├── biome.json                      Strict Biome 2.5 linter, formatter & undeclared variable config
+├── index.html                      SEO metadata, OpenGraph, PWA headers & structured JSON-LD
+├── package.json                    Dependencies, Biome CI, Vitest & build scripts
 └── vite.config.js                  Vite production bundle configuration
 ```
 
 ---
 
-## 🚀 Local Development Setup
+## 🚀 Local Development & Verification
 
 ```bash
 # 1. Clone the repository
@@ -174,6 +196,15 @@ npm install
 
 # 4. Start local development server
 npm run dev
+
+# 5. Run Biome static analysis & format check
+npm run ci
+
+# 6. Execute full Vitest automated test suite (40 tests)
+npm test
+
+# 7. Compile optimized production bundle
+npm run build
 ```
 
 Visit `http://localhost:5173` in your browser. (Chrome, Edge, or Firefox recommended for optimal Web Audio and Canvas performance).
@@ -186,7 +217,7 @@ Visit `http://localhost:5173` in your browser. (Chrome, Edge, or Firefox recomme
 
 **Harshit Sharma**  
 *AI & Machine Learning Engineer (Class of 2029) · New Delhi, India*  
-*Specializing in Agentic Workflows, Machine Learning Engines, and Real-Time Systems*
+*Specializing in Agentic Workflows, Machine Learning Engines, and High-Performance Systems*
 
 📧 [codewithharshitsharma@gmail.com](mailto:codewithharshitsharma@gmail.com) &nbsp;·&nbsp;
 💼 [LinkedIn](https://www.linkedin.com/in/devharshitsharma) &nbsp;·&nbsp;
@@ -195,7 +226,7 @@ Visit `http://localhost:5173` in your browser. (Chrome, Edge, or Firefox recomme
 <br/>
 
 ```
-[ SYSTEM_ONLINE // 13 UNIVERSES ACTIVE // ALL CHANNELS NOMINAL ]
+[ SYSTEM_ONLINE // 13 UNIVERSES ACTIVE // ALL CHANNELS NOMINAL // 100% CI/CD PASS ]
 ```
 
 </div>
