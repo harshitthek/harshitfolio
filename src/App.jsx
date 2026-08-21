@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import CardsScreen from './components/CardsScreen';
 import CyberCursor from './components/CyberCursor';
+import CyberGodModeFX from './components/CyberGodModeFX';
 import IntermediateScreen from './components/IntermediateScreen';
 import LoadingScreen from './components/LoadingScreen';
 import MissionScreen from './components/MissionScreen';
@@ -243,6 +244,14 @@ export default function App() {
   }, [closeModal, currentScreen, activeModal, launchPortfolio]);
 
   // 🕹️ EASTER EGG: The Legendary Konami Code (↑ ↑ ↓ ↓ ← → ← → B A)
+  const triggerGodMode = useCallback(() => {
+    SoundFX.setEnabled(true);
+    SoundFX.playWarp();
+    SoundFX.playExplosion();
+    setGodModeActive(true);
+    speak('God Mode protocol initiated. You have unlocked root level clearance, Harshit.');
+  }, [speak]);
+
   useEffect(() => {
     const KONAMI_SEQUENCE = [
       'arrowup',
@@ -257,78 +266,46 @@ export default function App() {
       'a'
     ];
 
+    const normalizeKey = (e) => {
+      const k = (e.key || '').toLowerCase();
+      const code = (e.code || '').toLowerCase();
+
+      if (k === 'arrowup' || code === 'arrowup' || k === 'up') return 'arrowup';
+      if (k === 'arrowdown' || code === 'arrowdown' || k === 'down') return 'arrowdown';
+      if (k === 'arrowleft' || code === 'arrowleft' || k === 'left') return 'arrowleft';
+      if (k === 'arrowright' || code === 'arrowright' || k === 'right') return 'arrowright';
+      if (k === 'b' || code === 'keyb') return 'b';
+      if (k === 'a' || code === 'keya') return 'a';
+      return k;
+    };
+
     const handleKonamiKey = (e) => {
       if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
-      const key = e.key.toLowerCase();
+      const key = normalizeKey(e);
+
+      if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
+        if (konamiSeqRef.current.length > 0 || key === 'arrowup') {
+          e.preventDefault();
+        }
+      }
+
       konamiSeqRef.current = [...konamiSeqRef.current, key].slice(-10);
 
       if (konamiSeqRef.current.join(',') === KONAMI_SEQUENCE.join(',')) {
-        SoundFX.playWarp();
-        SoundFX.playExplosion();
-        setGodModeActive((prev) => !prev);
-        speak('God Mode protocol initiated. You have unlocked root level clearance, Harshit.');
+        triggerGodMode();
         konamiSeqRef.current = [];
       }
     };
 
-    window.addEventListener('keydown', handleKonamiKey);
-    return () => window.removeEventListener('keydown', handleKonamiKey);
-  }, [speak]);
+    window.addEventListener('keydown', handleKonamiKey, { capture: true });
+    return () => window.removeEventListener('keydown', handleKonamiKey, { capture: true });
+  }, [triggerGodMode]);
 
   return (
     <div className={`app-container ${godModeActive ? 'god-mode-active' : ''}`}>
-      {/* Easter Egg: Floating God Mode Overdrive Badge */}
-      {godModeActive && (
-        <div
-          className="godmode-floating-banner"
-          style={{
-            position: 'fixed',
-            top: '12px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 999999,
-            background: 'linear-gradient(90deg, #ff007f, #00ff88, #38bdf8, #fbbf24)',
-            padding: '2px',
-            borderRadius: '8px',
-            boxShadow: '0 0 35px rgba(0, 255, 136, 0.7)'
-          }}
-        >
-          <div
-            style={{
-              background: '#050508',
-              padding: '8px 18px',
-              borderRadius: '6px',
-              color: '#00ff88',
-              fontFamily: "'Fira Code', monospace",
-              fontSize: '0.78rem',
-              fontWeight: 700,
-              letterSpacing: '2px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}
-          >
-            <span style={{ color: '#fbbf24' }}>⚡</span>
-            <span>CYBER OVERDRIVE // GOD MODE ACTIVE</span>
-            <span style={{ color: '#ff007f' }}>[CLEARANCE: 999]</span>
-            <button
-              type="button"
-              onClick={() => setGodModeActive(false)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#94a3b8',
-                cursor: 'pointer',
-                marginLeft: '8px',
-                fontWeight: 700
-              }}
-              title="Dismiss God Mode"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Easter Egg: Fullscreen Supernova Shockwave Blast & Overdrive Badge */}
+      <CyberGodModeFX isActive={godModeActive} onClose={() => setGodModeActive(false)} />
+
       {/* Precision Theme-Matched Cyber Cursor */}
       <CyberCursor activeScreen={currentScreen} />
 
@@ -340,6 +317,7 @@ export default function App() {
         activeScreen={currentScreen}
         onOpenModal={(modalName) => setActiveModal(modalName)}
         onJumpToScreen={(screenName) => setCurrentScreen(screenName)}
+        onTriggerGodMode={triggerGodMode}
       />
 
       {/* 5 Main Cinematic Screen Sequence */}

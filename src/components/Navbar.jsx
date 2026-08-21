@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SoundFX } from './SoundFX';
 import { useVoice } from './VoiceContext';
 
-export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
+export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen, onTriggerGodMode }) {
   const { voiceEnabled, isSpeaking, toggleVoice } = useVoice();
   const [sfxOn, setSfxOn] = useState(SoundFX.isEnabled());
+  const brandClicksRef = useRef([]);
 
   useEffect(() => {
     return SoundFX.subscribe((val) => {
@@ -31,6 +32,18 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
     toggleVoice();
   };
 
+  const handleBrandClick = () => {
+    if (sfxOn) SoundFX.playClick();
+    onJumpToScreen('s-cards');
+
+    const now = Date.now();
+    brandClicksRef.current = [...brandClicksRef.current.filter((t) => now - t < 2500), now];
+    if (brandClicksRef.current.length >= 5) {
+      brandClicksRef.current = [];
+      if (onTriggerGodMode) onTriggerGodMode();
+    }
+  };
+
   const isCardsScreen = activeScreen === 's-cards';
 
   return (
@@ -40,11 +53,8 @@ export default function Navbar({ onOpenModal, activeScreen, onJumpToScreen }) {
         <button
           type="button"
           className="brand-badge-btn"
-          onClick={() => {
-            if (sfxOn) SoundFX.playClick();
-            onJumpToScreen('s-cards');
-          }}
-          title="Go to Multiverse Hub"
+          onClick={handleBrandClick}
+          title="Go to Multiverse Hub (Secret: 5 taps for God Mode)"
         >
           <span className="brand-dot live"></span>
           <span className="brand-title">
