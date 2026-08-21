@@ -390,6 +390,8 @@ export default function TerminalModal({ onClose, onLaunch }) {
   const [currentTheme, setCurrentTheme] = useState('green');
   const [isFullScreen, setIsFullScreen] = useState(false);
 
+  const activeThemeObj = THEMES[currentTheme] || THEMES.green;
+
   // ── MATRIX DIGITAL RAIN STATE ──
   const [matrixActive, setMatrixActive] = useState(false);
   const matrixCanvasRef = useRef(null);
@@ -1978,8 +1980,6 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
     { label: '🤖 ai why hire?', cmd: 'ai why hire Harshit?' },
     { label: '🎨 theme cyan', cmd: 'theme cyan' }
   ];
-
-  const activeThemeObj = THEMES[currentTheme] || THEMES.green;
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
