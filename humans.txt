@@ -14,6 +14,6 @@ Google DeepMind, Open Source Community, React & Vite teams
 Standards: HTML5, CSS3, ES2024, Web Audio API, Canvas 2D API, Web Speech API, Schema.org JSON-LD
 Components: React 18, Vite 5, Lucide Icons, Canvas Confetti
 Typography: Bebas Neue, Space Mono, Fira Code, Plus Jakarta Sans
-Design: Cyberpunk Mission Control HUD / Operational Matrix Interface
+Design: Interactive Developer Console / High-Tech Command Hub
 Software: Visual Studio Code, Git, Google Antigravity
 Last update: 2026-08-16
