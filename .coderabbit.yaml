@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+tone_instructions: "You are reviewing HARSHIT.EXE — a high-performance cyberpunk developer interface built with React 18, Vite 5, HTML5 Canvas 2D, Web Audio API, and Biome 2.5. Provide concise, high-signal reviews focusing on performance, memory leaks, hook dependencies, and security."
+
+early_access: false
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "master"
+      - "main"
+  path_filters:
+    - "!dist/**"
+    - "!node_modules/**"
+    - "!*.lock"
+    - "!package-lock.json"
+  path_instructions:
+    - path: "src/components/**/*.jsx"
+      instructions: "Verify React 18 hook dependency arrays, TDZ ordering, and ensure high-frequency game loops do not trigger unnecessary React component re-renders."
+    - path: "src/components/modals/TerminalModal.jsx"
+      instructions: "Review the 60-120FPS Canvas 2D Snake & Terminal engine. Ensure pre-rendered offscreen background buffers are maintained and input queues remain zero-lag."
+    - path: "src/__tests__/**/*.js*"
+      instructions: "Ensure Vitest unit and integration test assertions match exact physics presets and component schemas without external network calls."
+
+chat:
+  auto_reply: true
