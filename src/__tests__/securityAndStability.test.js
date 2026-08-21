@@ -155,4 +155,34 @@ describe('Security, Edge Case & Stability Integrity Matrix', () => {
       ref: ''
     });
   });
+
+  it('should accurately detect the 10-key Konami Code sequence', () => {
+    const KONAMI_SEQUENCE = [
+      'arrowup',
+      'arrowup',
+      'arrowdown',
+      'arrowdown',
+      'arrowleft',
+      'arrowright',
+      'arrowleft',
+      'arrowright',
+      'b',
+      'a'
+    ];
+
+    let buffer = [];
+    const pushKey = (k) => {
+      buffer = [...buffer, k.toLowerCase()].slice(-10);
+      return buffer.join(',') === KONAMI_SEQUENCE.join(',');
+    };
+
+    expect(pushKey('a')).toBe(false);
+    expect(pushKey('b')).toBe(false);
+
+    // Enter full sequence
+    for (const k of KONAMI_SEQUENCE.slice(0, 9)) {
+      expect(pushKey(k)).toBe(false);
+    }
+    expect(pushKey('a')).toBe(true); // Final key completes Konami Code!
+  });
 });

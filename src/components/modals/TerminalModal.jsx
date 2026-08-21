@@ -2277,6 +2277,81 @@ Condition: Clear Cyber Sky · Temp: 29°C / 84°F · Humidity: 54% · Wind: 8 km
         });
         break;
 
+      case 'sudo': {
+        const lowerArg = arg.toLowerCase();
+        if (lowerArg.includes('rm -rf') || lowerArg.includes('rm -r') || lowerArg === 'rm') {
+          SoundFX.playExplosion();
+          newHistory.push(
+            { type: 'err', text: '⚠️ [CRITICAL] INITIATING RECURSIVE PURGE: /' },
+            {
+              type: 'err',
+              text: '  [FIREWALL] Security alert: Root erasure sequence intercepted.'
+            },
+            { type: 'info', text: '  🛡️ SELF-HEALING NEURAL MATRIX ENGAGED.' },
+            {
+              type: 'ok',
+              text: `  [RECOVERY] Restored all ${projectsData.length} universes in 0.02ms. Nice try, operator!`
+            }
+          );
+        } else {
+          SoundFX.playSuccess();
+          newHistory.push(
+            { type: 'ok', text: '[sudo] password for harshit: **********' },
+            {
+              type: 'out',
+              text: 'harshit is in the sudoers file. Level 5 Root Access already active.'
+            }
+          );
+        }
+        break;
+      }
+
+      case '42':
+      case 'meaning':
+        SoundFX.playChirp();
+        newHistory.push(
+          { type: 'sys', text: '🔮 DEEP THOUGHT QUANTUM ORACLE:' },
+          {
+            type: 'ok',
+            text: '  The Answer to the Ultimate Question of Life, the Universe, and Everything is: 42.'
+          },
+          {
+            type: 'info',
+            text: '  (Now training a 70B parameter transformer to formulate the question...)'
+          }
+        );
+        break;
+
+      case 'coffee':
+      case 'tea':
+      case 'brew':
+        SoundFX.playTone(660, 'triangle', 0.3);
+        newHistory.push({
+          type: 'code',
+          text: `   ( (
+    ) )
+ .______.
+ |  ☕  |]   HTTP 418: I'm a teapot (RFC 2324).
+ \\______/    Freshly brewed binary espresso served for Harshit!`
+        });
+        break;
+
+      case 'god':
+      case 'godmode':
+      case 'iddqd':
+        SoundFX.playWarp();
+        SoundFX.playDeploy();
+        setCurrentTheme('amber');
+        newHistory.push(
+          { type: 'sys', text: '⚡ GOD MODE PROTOCOL UNLOCKED:' },
+          {
+            type: 'ok',
+            text: '  Root immunity active. Radiant golden CRT phosphor theme enabled.'
+          },
+          { type: 'info', text: '  [Clearance Level: 999 Architectural Deity]' }
+        );
+        break;
+
       case 'clear':
         setHistory([]);
         return;

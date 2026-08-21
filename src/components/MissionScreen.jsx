@@ -1,12 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import CyberTerminalWing from './CyberTerminalWing';
 import HologramCanvas from './HologramCanvas';
 import QuantumLaboratoryWing from './QuantumLaboratoryWing';
 import { SoundFX } from './SoundFX';
+import { useVoice } from './VoiceContext';
 
 export default function MissionScreen({ isActive, onAccept, _onOpenModal }) {
   const [explosionCount, setExplosionCount] = useState(0);
   const [pixarKey, setPixarKey] = useState(0);
+  const [coreOverloadActive, setCoreOverloadActive] = useState(false);
+  const clickTimestampsRef = useRef([]);
+  const { speak } = useVoice();
 
   useEffect(() => {
     if (isActive) {
@@ -24,7 +28,20 @@ export default function MissionScreen({ isActive, onAccept, _onOpenModal }) {
     onAccept();
   }, [onAccept]);
 
+  // ⚡ EASTER EGG: 7 Clicks on Quantum Core within 3s triggers Hyper-Overload!
   const triggerHologramExplosion = () => {
+    const now = Date.now();
+    clickTimestampsRef.current = [...clickTimestampsRef.current.filter((t) => now - t < 3000), now];
+
+    if (clickTimestampsRef.current.length >= 7) {
+      clickTimestampsRef.current = [];
+      setCoreOverloadActive(true);
+      SoundFX.playWarp();
+      SoundFX.playExplosion();
+      speak('Warning: Quantum Core Overclocked to 1,500 percent!');
+      setTimeout(() => setCoreOverloadActive(false), 5000);
+    }
+
     setExplosionCount((prev) => prev + 1);
   };
 
@@ -345,7 +362,44 @@ export default function MissionScreen({ isActive, onAccept, _onOpenModal }) {
         </div>
 
         {/* Centerpiece 3D 360-Degree Rotating Quantum Hologram (Explosion Reactive) */}
-        <div className="mission-holo-center">
+        <div
+          className="mission-holo-center"
+          onClick={triggerHologramExplosion}
+          style={{ cursor: 'pointer', position: 'relative' }}
+          title="Click to detonate quantum supernova pulse (Secret: click rapidly for core overload)"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              triggerHologramExplosion();
+            }
+          }}
+        >
+          {coreOverloadActive && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '-24px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                background: 'rgba(255, 0, 127, 0.9)',
+                color: '#ffffff',
+                fontFamily: "'Fira Code', monospace",
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                letterSpacing: '1.5px',
+                padding: '4px 12px',
+                borderRadius: '4px',
+                boxShadow: '0 0 20px #ff007f',
+                zIndex: 10,
+                whiteSpace: 'nowrap',
+                pointerEvents: 'none'
+              }}
+            >
+              ⚡ QUANTUM HYPER-OVERLOAD ACTIVE (1,500%) ⚡
+            </div>
+          )}
           <HologramCanvas isActive={isActive} explosionTrigger={explosionCount} />
         </div>
 
