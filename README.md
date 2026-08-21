@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/banner.jpg" alt="HARSHIT.EXE — Sci-Fi Cyberpunk AI Mission Control Portfolio" width="100%"/>
+  <img src="public/banner.jpg" alt="HARSHIT.EXE — Interactive AI & Systems Engineering Portfolio" width="100%"/>
 </div>
 
 <br/>
@@ -9,13 +9,13 @@
 [![React](https://img.shields.io/badge/React_18-61dafb?style=for-the-badge&logo=react&logoColor=000)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite_5-646cff?style=for-the-badge&logo=vite&logoColor=fff)](https://vitejs.dev)
 [![Biome](https://img.shields.io/badge/Biome_2.5-60a5fa?style=for-the-badge&logo=biome&logoColor=fff)](https://biomejs.dev)
-[![Vitest](https://img.shields.io/badge/Vitest-40_Tests_Passing-6ee7b7?style=for-the-badge&logo=vitest&logoColor=000)](https://vitest.dev)
+[![Vitest](https://img.shields.io/badge/Vitest-46_Tests_Passing-6ee7b7?style=for-the-badge&logo=vitest&logoColor=000)](https://vitest.dev)
 [![Canvas 2D Engine](https://img.shields.io/badge/Canvas_2D-60--120FPS_Quantum_Engine-00ff88?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 [![Web Audio API](https://img.shields.io/badge/Web_Audio-Procedural_Synthesizer-38bdf8?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
 [![Web Speech API](https://img.shields.io/badge/Web_Speech-AI_Voice_Transceiver-a855f7?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
 [![Deploy](https://img.shields.io/badge/Dual_Deployment-GitHub_Pages_%2B_Oracle_Cloud_VM-00ff88?style=for-the-badge&logo=github)](https://harshitthek.github.io/harshitfolio)
 
-**A cinematic cyberpunk AI mission control command center — engineered like an operational military terminal, not a static webpage.**
+**An interactive developer interface and engineering command center — engineered with precision physics, real-time telemetry, and modular architecture.**
 
 [🌐 View Live Experience](https://harshitthek.github.io/harshitfolio) &nbsp;·&nbsp;
 [💼 LinkedIn Profile](https://www.linkedin.com/in/devharshitsharma) &nbsp;·&nbsp;
@@ -127,7 +127,7 @@ harshitfolio/
 │
 ├── src/
 │   ├── App.jsx                     Master screen orchestrator & hotkey manager
-│   ├── index.css                   Complete cyberpunk design tokens & responsive styles
+│   ├── index.css                   Complete modern dark-mode design tokens & responsive styles
 │   │
 │   ├── components/
 │   │   ├── VideoScreen.jsx         Screen 1: Cinematic video hologram

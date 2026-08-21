@@ -77,8 +77,8 @@ export default function CommandPaletteModal({
         id: 'modal-terminal',
         category: 'PORTALS & MODALS',
         icon: '💻',
-        title: 'Launch Cyber Terminal & Retro Arcade',
-        subtitle: 'Live command-line sandbox and cyberpunk Snake game',
+        title: 'Launch Interactive Terminal & Retro Arcade',
+        subtitle: 'Live command-line sandbox and 60FPS Arcade Snake game',
         shortcut: 'T',
         action: () => onOpenModal('terminal')
       },

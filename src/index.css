@@ -1,5 +1,5 @@
 /* =====================================================================
-   HARSHIT.EXE — Next-Generation Cinematic Cyberpunk Multiverse Portfolio
+   HARSHIT.EXE — Interactive AI & Systems Engineering Portfolio
    ===================================================================== */
 
 *,
@@ -39,7 +39,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Cyberpunk Selection Highlighting ── */
+/* ── Custom Selection Highlighting ── */
 ::selection {
   background: rgba(0, 255, 136, 0.35);
   color: #ffffff;
@@ -50,7 +50,7 @@ body {
   color: #ffffff;
 }
 
-/* ── Cyberpunk Skeleton Shimmer FX ── */
+/* ── Shimmer Skeleton FX ── */
 @keyframes cyberSkeletonShimmer {
   0% {
     background-position: -200% 0;

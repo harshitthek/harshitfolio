@@ -1,5 +1,5 @@
 /**
- * ⚡ CyberModalSkeleton: Futuristic Cyberpunk Shimmer Skeleton Loader
+ * ⚡ CyberModalSkeleton: Futuristic Shimmer Skeleton Loader
  * Displayed while asynchronous React.lazy modal chunks are streaming.
  */
 export default function CyberModalSkeleton({ onClose }) {

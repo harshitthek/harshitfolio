@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 language: "en-US"
-tone_instructions: "You are reviewing HARSHIT.EXE — a high-performance cyberpunk developer interface built with React 18, Vite 5, HTML5 Canvas 2D, Web Audio API, and Biome 2.5. Provide concise, high-signal reviews focusing on performance, memory leaks, hook dependencies, and security."
+tone_instructions: "You are reviewing HARSHIT.EXE — a high-performance interactive developer interface and engineering portfolio built with React 18, Vite 5, HTML5 Canvas 2D, Web Audio API, and Biome 2.5. Provide concise, high-signal reviews focusing on performance, memory leaks, hook dependencies, and security."
 
 early_access: false
 
