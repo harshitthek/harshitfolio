@@ -443,5 +443,73 @@ export const projectsData = [
     ],
     hasInteractiveModal: 'terminal',
     statusTag: 'LIVE_WORKSTATION'
+  },
+  {
+    id: 'oraclaim',
+    title: 'OraClaim — Cloud Auto-Provisioning Engine',
+    url: 'https://github.com/harshitthek/oraclaim',
+    githubUrl: 'https://github.com/harshitthek/oraclaim',
+    demoUrl: 'https://github.com/harshitthek/oraclaim',
+    hasLiveDemo: false,
+    img: `${BASE_PATH}projects/oraclaim.jpg`,
+    blueprintIcon: '⚡',
+    num: 'PORT_14 / DISTRIBUTED',
+    category: 'systems',
+    categoryLabel: 'OCI SDK & MULTI-WORKER DAEMON',
+    desc: 'Intelligent, ban-resistant multi-worker auto-provisioning engine securing Oracle Cloud Always-Free ARM Ampere (4 OCPU, 24GB RAM) & AMD compute instances with phase-locked cadence and AIMD backoff.',
+    longDesc:
+      'High-performance distributed automation engine engineered to secure out-of-capacity Oracle Cloud Always-Free compute nodes the millisecond capacity drops. Features phase-locked multi-worker interleaving, AIMD adaptive rate-limit threat broadcasting, persistent HTTP connection pooling (<0.6s cycle latency), wildcard fault domain rotation, self-healing systemd Linux daemon (<60MB RAM footprint), and atomic mutual exclusion locks.',
+    tags: ['PYTHON 3.9+', 'OCI SDK', 'SYSTEMD DAEMON', 'ASYNCIO', 'AIMD BACKOFF', 'DOCKER'],
+    badge: '⚡ PORT_14',
+    stats: {
+      stat1: '<0.6s',
+      stat1Lbl: 'CYCLE LATENCY',
+      stat2: '<60MB RAM',
+      stat2Lbl: 'DAEMON FOOTPRINT',
+      stat3: 'Phase-Locked',
+      stat3Lbl: 'WORKER CADENCE'
+    },
+    highlights: [
+      'Phase-locked multi-worker coordinator maintaining equidistant API polling without collisions',
+      'AIMD adaptive threat broadcast preventing HTTP 429 rate-limit bans across Availability Domains',
+      'Self-healing Linux systemd daemon auto-managing low-memory footprint on 1GB instances',
+      'Atomic mutual-exclusion locks terminating all worker threads immediately once capacity is claimed'
+    ],
+    hasInteractiveModal: 'dossier',
+    statusTag: 'OCI_SDK_ENGINE'
+  },
+  {
+    id: 'vintage-music-player',
+    title: 'Bonfire Radio — 50s-20s Vintage Player',
+    url: 'https://github.com/harshitthek/Vintage-Music-Player',
+    githubUrl: 'https://github.com/harshitthek/Vintage-Music-Player',
+    demoUrl: 'https://github.com/harshitthek/Vintage-Music-Player',
+    hasLiveDemo: false,
+    img: `${BASE_PATH}projects/vintage-music-player.jpg`,
+    blueprintIcon: '📻',
+    num: 'PORT_15 / AUDIO_WEB',
+    category: 'web-3d',
+    categoryLabel: 'ITUNES API & GLASS AUDIO UI',
+    desc: 'Vintage-style decade exploration music streaming app (1950s to 2020s) with iTunes Search API integration, 30s audio previews, glassmorphism tape-deck UI, and custom playlist queues.',
+    longDesc:
+      'Bonfire Radio (बोनफायर नाइट्स) is a nostalgic web music player exploring 7 decades of musical evolution from the 1950s to the 2020s. Features real-time iTunes Search API audio streams, 30-second preview caching, random decade discovery engine, local file import support, and responsive glassmorphic tape-deck aesthetics.',
+    tags: ['JAVASCRIPT', 'HTML5 AUDIO', 'ITUNES API', 'CSS3 GLASSMORPHISM', 'WEB AUDIO'],
+    badge: '📻 PORT_15',
+    stats: {
+      stat1: '7 Decades',
+      stat1Lbl: '1950s – 2020s',
+      stat2: 'iTunes API',
+      stat2Lbl: 'STREAM ENGINE',
+      stat3: 'Zero-Dep',
+      stat3Lbl: 'VANILLA JS'
+    },
+    highlights: [
+      'Decade-based music exploration engine querying 70 years of global music archives',
+      'Real-time iTunes Search API integration with seamless 30-second audio stream previews',
+      'Custom glassmorphic tape-deck UI with autoplay next-track queue management',
+      'Local audio file import support allowing users to stream their own offline music library'
+    ],
+    hasInteractiveModal: 'dossier',
+    statusTag: 'AUDIO_PLAYER'
   }
 ];

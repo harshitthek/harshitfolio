@@ -19,8 +19,8 @@ export const dossierData = {
   stats: [
     { value: '600+', label: 'AI MODEL TRAINING RUNS', highlight: true },
     { value: '97.4%', label: 'RANDOMFOREST/CATBOOST R²', highlight: true },
-    { value: '13+', label: 'PRODUCTION FULL-STACK APPS', highlight: false },
-    { value: '850+', label: 'OPEN-SOURCE COMMITS', highlight: false }
+    { value: '15+', label: 'PRODUCTION FULL-STACK APPS', highlight: false },
+    { value: '1,000+', label: 'OPEN-SOURCE COMMITS', highlight: false }
   ],
 
   experience: [
@@ -33,8 +33,8 @@ export const dossierData = {
         'Architecting autonomous AI agent benchmark platforms, localized LLM pipelines, and high-throughput microservices.',
       highlights: [
         'Built Resilient AI: Automated benchmark suite evaluating LLM hallucinations, prompt drift, and adversarial perturbations.',
-        'Engineered Yggdrasil Bot: Multi-agent Discord bot with RS256 cryptographic verification and async dispatch queues.',
-        'Developed Used Bike ML Valuation: Deployed CatBoost/RandomForest ensemble achieving 97.4% R² with sub-15ms FastAPI latency.'
+        'Engineered OraClaim: Multi-worker phase-locked automation engine securing cloud compute nodes with AIMD backoff.',
+        'Developed Yggdrasil & AutoValuate: Deployed CatBoost/XGBoost stacking ensembles and AES-256-GCM Fastify services.'
       ]
     },
     {
@@ -93,6 +93,8 @@ export const dossierData = {
         'Python 3.12',
         'Node.js',
         'Docker',
+        'OCI SDK / Cloud Systems',
+        'Asyncio / Distributed Daemons',
         'PostgreSQL',
         'Async SQLite',
         'Linux/Bash',
