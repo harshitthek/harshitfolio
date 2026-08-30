@@ -1,4 +1,4 @@
-import{r as l,j as e}from"./vendor-react-CvfwqxSD.js";import{S as t}from"./modal-dossier-BC4ZKGlO.js";import"./vendor-J70bcrK3.js";const c={phish:{filename:"custom_transformers.py",language:"Python",description:"PhishShield AI: Shannon Domain Entropy calculation and multi-brand typosquatting heuristic feature extraction.",code:`import math
+import{r as l,j as e}from"./vendor-react-CvfwqxSD.js";import{S as t}from"./modal-dossier-BStinzNb.js";import"./vendor-J70bcrK3.js";const c={phish:{filename:"custom_transformers.py",language:"Python",description:"PhishShield AI: Shannon Domain Entropy calculation and multi-brand typosquatting heuristic feature extraction.",code:`import math
 from collections import Counter
 from urllib.parse import urlparse
 import numpy as np

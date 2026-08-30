@@ -1,4 +1,4 @@
-import{r as m,j as e}from"./vendor-react-CvfwqxSD.js";import{S as i}from"./modal-dossier-BC4ZKGlO.js";import"./vendor-J70bcrK3.js";function I({onClose:t}){const[a,l]=m.useState({name:"",email:"",message:""}),[h,c]=m.useState(!1),[p,r]=m.useState(!1),u=s=>{s.preventDefault();const o=(a.name||"").trim(),n=(a.email||"").trim(),d=(a.message||"").trim();if(!o||!n||!d)return;i.playSuccess(),c(!0);const N=encodeURIComponent(`Transmission from ${o} via Harshit.exe Portfolio`),j=encodeURIComponent(`Operator Name: ${o}
+import{r as m,j as e}from"./vendor-react-CvfwqxSD.js";import{S as i}from"./modal-dossier-BStinzNb.js";import"./vendor-J70bcrK3.js";function I({onClose:t}){const[a,l]=m.useState({name:"",email:"",message:""}),[h,c]=m.useState(!1),[p,r]=m.useState(!1),u=s=>{s.preventDefault();const o=(a.name||"").trim(),n=(a.email||"").trim(),d=(a.message||"").trim();if(!o||!n||!d)return;i.playSuccess(),c(!0);const N=encodeURIComponent(`Transmission from ${o} via Harshit.exe Portfolio`),j=encodeURIComponent(`Operator Name: ${o}
 Return Email: ${n}
 
 Transmission Payload:

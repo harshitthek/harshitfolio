@@ -1,4 +1,4 @@
-import{r as f,j as o}from"./vendor-react-CvfwqxSD.js";import{c as it}from"./vendor-J70bcrK3.js";import{p as F}from"./modal-github-DJT0UlOm.js";import{S as m}from"./modal-dossier-BC4ZKGlO.js";const Ve={"~":{type:"dir",children:{"bio.txt":{type:"file",size:"1.8 KB",content:`=====================================================
+import{r as f,j as o}from"./vendor-react-CvfwqxSD.js";import{c as it}from"./vendor-J70bcrK3.js";import{p as F}from"./modal-github-BOpq1kMQ.js";import{S as m}from"./modal-dossier-BStinzNb.js";const Ve={"~":{type:"dir",children:{"bio.txt":{type:"file",size:"1.8 KB",content:`=====================================================
 HARSHIT SHARMA // ARTIFICIAL INTELLIGENCE & SYSTEMS ENGINEER
 =====================================================
 Degree      : B.Tech in Artificial Intelligence & Machine Learning (Class of 2029)
