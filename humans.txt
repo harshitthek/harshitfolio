@@ -1,6 +1,6 @@
 /* TEAM */
 Developer & Architect: Harshit Sharma
-Site: https://harshitthek.github.io/harshitfolio/
+Site: https://harshitthek.is-a.dev/
 GitHub: https://github.com/harshitthek
 LinkedIn: https://www.linkedin.com/in/devharshitsharma
 Email: contact@harshitthek.is-a.dev
