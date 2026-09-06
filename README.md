@@ -13,11 +13,11 @@
 [![Canvas 2D Engine](https://img.shields.io/badge/Canvas_2D-60--120FPS_Quantum_Engine-00ff88?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 [![Web Audio API](https://img.shields.io/badge/Web_Audio-Procedural_Synthesizer-38bdf8?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
 [![Web Speech API](https://img.shields.io/badge/Web_Speech-AI_Voice_Transceiver-a855f7?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
-[![Deploy](https://img.shields.io/badge/Dual_Deployment-GitHub_Pages_%2B_Oracle_Cloud_VM-00ff88?style=for-the-badge&logo=github)](https://harshitthek.github.io/harshitfolio)
+[![Deploy](https://img.shields.io/badge/Dual_Deployment-GitHub_Pages_%2B_Oracle_Cloud_VM-00ff88?style=for-the-badge&logo=github)](https://harshitthek.is-a.dev)
 
 **An interactive developer interface and engineering command center — engineered with precision physics, real-time telemetry, and modular architecture.**
 
-[🌐 View Live Experience](https://harshitthek.github.io/harshitfolio) &nbsp;·&nbsp;
+[🌐 View Live Experience](https://harshitthek.is-a.dev) &nbsp;·&nbsp;
 [💼 LinkedIn Profile](https://www.linkedin.com/in/devharshitsharma) &nbsp;·&nbsp;
 [🐙 GitHub Repositories](https://github.com/harshitthek)
 

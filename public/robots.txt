@@ -1,8 +1,8 @@
 # Robots.txt for HARSHIT.EXE Portfolio
-# https://harshitthek.github.io/harshitfolio/
+# https://harshitthek.is-a.dev/
 
 User-agent: *
 Allow: /
 
 # Sitemap Location
-Sitemap: https://harshitthek.github.io/harshitfolio/sitemap.xml
+Sitemap: https://harshitthek.is-a.dev/sitemap.xml
