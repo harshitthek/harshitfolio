@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { warmupAllBackends } from '../../utils/backendWarmup';
 import { SoundFX } from '../SoundFX';
 
 export default function MLSimulatorModal({ onClose }) {
@@ -14,11 +15,24 @@ export default function MLSimulatorModal({ onClose }) {
   // Live API Connection State with LocalStorage Persistence
   const [apiBaseUrl, setApiBaseUrl] = useState(() => {
     try {
-      return localStorage.getItem('autovaluate_backend_url') || 'http://127.0.0.1:8000';
-    } catch {
+      const stored = localStorage.getItem('autovaluate_backend_url');
+      if (stored) return stored;
+      if (
+        typeof window !== 'undefined' &&
+        window.location &&
+        window.location.protocol === 'https:'
+      ) {
+        return 'https://used-bike-price.onrender.com';
+      }
       return 'http://127.0.0.1:8000';
+    } catch {
+      return 'https://used-bike-price.onrender.com';
     }
   });
+
+  useEffect(() => {
+    warmupAllBackends(true);
+  }, []);
 
   const handleUpdateApiUrl = (rawUrl) => {
     let clean = (rawUrl || '').trim();

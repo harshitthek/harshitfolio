@@ -11,7 +11,7 @@ import { SoundFX } from './components/SoundFX';
 import VideoScreen from './components/VideoScreen';
 import { useVoice } from './components/VoiceContext';
 import { projectsData } from './data/projectsData';
-import { warmupAllBackends } from './utils/backendWarmup';
+import { registerHumanWarmupTrigger } from './utils/backendWarmup';
 
 // ⚡ Ultra-Fast Code-Splitting: Lazy-load heavy interactive modals on demand
 const ArchitectureModal = lazy(() => import('./components/modals/ArchitectureModal'));
@@ -35,9 +35,9 @@ export default function App() {
 
   const { speak } = useVoice();
 
-  // Pre-warm free-tier backend containers on initial portfolio arrival
+  // Pre-warm free-tier backend containers on first human user interaction
   useEffect(() => {
-    warmupAllBackends();
+    registerHumanWarmupTrigger();
   }, []);
 
   // URL Deep-Linking & Referral Telemetry Parser (?ref=..., ?modal=..., ?screen=...)
