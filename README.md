@@ -219,14 +219,14 @@ Visit `http://localhost:5173` in your browser. (Chrome, Edge, or Firefox recomme
 *AI & Machine Learning Engineer (Class of 2029) · New Delhi, India*  
 *Specializing in Agentic Workflows, Machine Learning Engines, and High-Performance Systems*
 
-📧 [codewithharshitsharma@gmail.com](mailto:codewithharshitsharma@gmail.com) &nbsp;·&nbsp;
+📧 [contact@harshitthek.is-a.dev](mailto:contact@harshitthek.is-a.dev) &nbsp;·&nbsp;
 💼 [LinkedIn](https://www.linkedin.com/in/devharshitsharma) &nbsp;·&nbsp;
 🐙 [GitHub @harshitthek](https://github.com/harshitthek)
 
 <br/>
 
 ```
-[ SYSTEM_ONLINE // 13 UNIVERSES ACTIVE // ALL CHANNELS NOMINAL // 100% CI/CD PASS ]
+[ SYSTEM_ONLINE // 15 UNIVERSES ACTIVE // ALL CHANNELS NOMINAL // 100% CI/CD PASS ]
 ```
 
 </div>

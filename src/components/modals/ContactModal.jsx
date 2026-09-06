@@ -22,7 +22,7 @@ export default function ContactModal({ onClose }) {
     const body = encodeURIComponent(
       `Operator Name: ${cleanName}\nReturn Email: ${cleanEmail}\n\nTransmission Payload:\n${cleanMsg}\n\n---\nSent via Harshit.exe Neural Portfolio`
     );
-    const mailtoUrl = `mailto:codewithharshitsharma@gmail.com?subject=${subject}&body=${body}`;
+    const mailtoUrl = `mailto:contact@harshitthek.is-a.dev?subject=${subject}&body=${body}`;
 
     try {
       window.location.href = mailtoUrl;
@@ -39,7 +39,7 @@ export default function ContactModal({ onClose }) {
   const handleCopyEmail = () => {
     SoundFX.playClick();
     if (navigator.clipboard) {
-      navigator.clipboard.writeText('codewithharshitsharma@gmail.com');
+      navigator.clipboard.writeText('contact@harshitthek.is-a.dev');
       setCopiedEmail(true);
       setTimeout(() => setCopiedEmail(false), 2500);
     }
@@ -86,7 +86,7 @@ export default function ContactModal({ onClose }) {
                   <div className="comms-info">
                     <span className="comms-lbl">DIRECT EMAIL</span>
                     <div className="email-copy-row">
-                      <span className="comms-email-text">codewithharshitsharma@gmail.com</span>
+                      <span className="comms-email-text">contact@harshitthek.is-a.dev</span>
                       <button
                         type="button"
                         className="btn-copy-tag"
@@ -140,43 +140,45 @@ export default function ContactModal({ onClose }) {
             <div className="contact-form-col">
               <form onSubmit={handleSubmit} className="contact-form-wrapper">
                 <div className="form-field-group">
-                  <label htmlFor="user-name">OPERATOR NAME</label>
+                  <label htmlFor="tx-name">OPERATOR NAME</label>
                   <input
-                    id="user-name"
+                    id="tx-name"
                     type="text"
                     required
-                    maxLength={100}
-                    autoComplete="name"
-                    placeholder="e.g. Alex Mercer"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    placeholder="e.g. Sarah Connor / Tech Lead"
+                    className="input-cyber"
                   />
                 </div>
 
-                <div className="form-field-group">
-                  <label htmlFor="user-email">RETURN EMAIL</label>
+                <div className="form-group-cyber">
+                  <label htmlFor="tx-email" className="form-lbl-cyber">
+                    RETURN FREQUENCY (EMAIL)
+                  </label>
                   <input
-                    id="user-email"
+                    id="tx-email"
                     type="email"
                     required
-                    maxLength={120}
-                    autoComplete="email"
-                    placeholder="alex@company.com"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    placeholder="operator@enterprise.com"
+                    className="input-cyber"
                   />
                 </div>
 
-                <div className="form-field-group">
-                  <label htmlFor="user-msg">TRANSMISSION PAYLOAD</label>
+                <div className="form-group-cyber">
+                  <label htmlFor="tx-msg" className="form-lbl-cyber">
+                    MESSAGE PAYLOAD
+                  </label>
                   <textarea
-                    id="user-msg"
-                    rows="4"
+                    id="tx-msg"
                     required
-                    maxLength={3000}
-                    placeholder="Hi Harshit, I'd like to connect on an AI project..."
+                    rows="4"
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    placeholder="Brief description of proposal, project collaboration, or mission brief..."
+                    className="input-cyber textarea-cyber"
                   />
                 </div>
 
@@ -187,8 +189,7 @@ export default function ContactModal({ onClose }) {
                 {submitted && (
                   <div className="transmission-feedback-alert">
                     <span>
-                      TRANSMISSION INITIATED TO codewithharshitsharma@gmail.com. Email client
-                      opened.
+                      TRANSMISSION INITIATED TO contact@harshitthek.is-a.dev. Email client opened.
                     </span>
                   </div>
                 )}

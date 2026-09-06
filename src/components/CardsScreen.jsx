@@ -336,8 +336,8 @@ export default function CardsScreen({ isActive, onLaunch, onOpenModal, onQuickIn
           <span className="strip-divider">·</span>
           <span>
             EMAIL:{' '}
-            <a href="mailto:codewithharshitsharma@gmail.com" className="email-link">
-              codewithharshitsharma@gmail.com
+            <a href="mailto:contact@harshitthek.is-a.dev" className="email-link">
+              contact@harshitthek.is-a.dev
             </a>
           </span>
           <span className="strip-divider">·</span>

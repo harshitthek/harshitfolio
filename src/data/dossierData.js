@@ -7,7 +7,7 @@ export const dossierData = {
     degree: 'B.Tech in Artificial Intelligence & Machine Learning',
     duration: '2025 – 2029',
     location: 'New Delhi, India',
-    email: 'codewithharshitsharma@gmail.com',
+    email: 'contact@harshitthek.is-a.dev',
     github: 'https://github.com/harshitthek',
     githubHandle: '@harshitthek',
     linkedin: 'https://www.linkedin.com/in/devharshitsharma',

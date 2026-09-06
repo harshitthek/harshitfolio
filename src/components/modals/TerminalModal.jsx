@@ -18,8 +18,8 @@ Degree      : B.Tech in Artificial Intelligence & Machine Learning (Class of 202
 Location    : New Delhi, India
 GitHub      : https://github.com/harshitthek
 LinkedIn    : https://www.linkedin.com/in/devharshitsharma
-Email       : codewithharshitsharma@gmail.com
-Server      : Oracle Cloud Infrastructure (OCI Ampere A1 ARM64) [144.24.104.31]
+Email       : contact@harshitthek.is-a.dev
+Server      : Oracle Cloud Infrastructure (OCI Ampere A1 ARM64) [130.210.0.193]
 Domains     : harshitthek.is-a.dev · harshit.thedev.id
 
 Core Technical Arsenal:
@@ -40,7 +40,7 @@ Core Technical Arsenal:
             role: 'AI Engineer & ML Systems Architect',
             degree: 'B.Tech AI & ML (Class of 2029)',
             location: 'New Delhi, India',
-            email: 'codewithharshitsharma@gmail.com',
+            email: 'contact@harshitthek.is-a.dev',
             github: 'https://github.com/harshitthek',
             linkedin: 'https://www.linkedin.com/in/devharshitsharma',
             discord: 'harshit0',
@@ -1865,7 +1865,7 @@ Strict-Transport-Security: max-age=31536000
           },
           { type: 'out', text: '  GitHub: https://github.com/harshitthek' },
           { type: 'out', text: '  LinkedIn: https://www.linkedin.com/in/devharshitsharma' },
-          { type: 'out', text: '  Email: codewithharshitsharma@gmail.com' }
+          { type: 'out', text: '  Email: contact@harshitthek.is-a.dev' }
         );
         break;
 
@@ -2144,7 +2144,7 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
             lower.includes('reach')
           ) {
             ans =
-              '📬 Reach Harshit:\n- Email: codewithharshitsharma@gmail.com\n- GitHub: https://github.com/harshitthek\n- LinkedIn: https://www.linkedin.com/in/devharshitsharma\n- Discord: harshit0';
+              '📬 Reach Harshit:\n- Email: contact@harshitthek.is-a.dev\n- GitHub: https://github.com/harshitthek\n- LinkedIn: https://www.linkedin.com/in/devharshitsharma\n- Discord: harshit0';
           } else {
             ans = `Harshit Sharma is an AI Systems Engineer specializing in Machine Learning, Deep Learning (BERT), LLM Agent sandboxes, and full-stack systems (Class of 2029).`;
           }
@@ -2229,7 +2229,7 @@ Tasks: 172 total, 2 running, 170 sleeping | Load average: 0.45, 0.38, 0.31 | RAM
       case 'socials':
         newHistory.push(
           { type: 'sys', text: '📬 SECURE COMMUNICATIONS DIRECTORY:' },
-          { type: 'out', text: '  Email:    codewithharshitsharma@gmail.com' },
+          { type: 'out', text: '  Email:    contact@harshitthek.is-a.dev' },
           { type: 'out', text: '  GitHub:   https://github.com/harshitthek' },
           { type: 'out', text: '  LinkedIn: https://www.linkedin.com/in/devharshitsharma' },
           { type: 'out', text: '  Discord:  harshit0' }

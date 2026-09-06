@@ -48,7 +48,7 @@ const SCRIPT_SEQUENCE = [
   {
     cmd: 'cat comms.info',
     outputs: [
-      { tag: 'MAIL', text: 'codewithharshitsharma@gmail.com', color: 'cyan' },
+      { tag: 'MAIL', text: 'contact@harshitthek.is-a.dev', color: 'cyan' },
       { tag: 'HUB', text: 'github.com/harshitthek // in/devharshitsharma', color: 'green' }
     ]
   },

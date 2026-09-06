@@ -17,7 +17,7 @@ const VIRTUAL_FS = {
           name: 'Harshit Sharma',
           role: 'AI Engineer & ML Systems Architect',
           degree: 'B.Tech AI & ML (Class of 2029)',
-          email: 'codewithharshitsharma@gmail.com'
+          email: 'contact@harshitthek.is-a.dev'
         })
       },
       projects: {
@@ -109,6 +109,6 @@ describe('Virtual Filesystem & Path Resolution Engine', () => {
     expect(contactNode).toBeTruthy();
     const data = JSON.parse(contactNode.content);
     expect(data.name).toBe('Harshit Sharma');
-    expect(data.email).toBe('codewithharshitsharma@gmail.com');
+    expect(data.email).toBe('contact@harshitthek.is-a.dev');
   });
 });

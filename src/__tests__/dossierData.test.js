@@ -8,7 +8,7 @@ describe('Dossier Executive Data Matrix Integrity', () => {
     expect(personal.role).toBeTruthy();
     expect(personal.degree).toContain('Artificial Intelligence & Machine Learning');
     expect(personal.duration).toContain('2029');
-    expect(personal.email).toBe('codewithharshitsharma@gmail.com');
+    expect(personal.email).toBe('contact@harshitthek.is-a.dev');
     expect(personal.github).toBe('https://github.com/harshitthek');
     expect(personal.linkedin).toContain('linkedin.com/in/devharshitsharma');
     expect(personal.location).toBe('New Delhi, India');
