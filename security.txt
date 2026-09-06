@@ -1,5 +1,5 @@
 # Security Policy for HARSHIT.EXE Portfolio
-Contact: mailto:codewithharshitsharma@gmail.com
+Contact: mailto:contact@harshitthek.is-a.dev
 Canonical: https://harshitthek.github.io/harshitfolio/.well-known/security.txt
 Preferred-Languages: en
 Policy: https://github.com/harshitthek/harshitfolio/blob/master/README.md
